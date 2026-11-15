@@ -1,0 +1,1103 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de Juros Compostos Online — Simule seus Investimentos"
+  description="Calcule juros compostos com investimento inicial e aportes mensais. Simule o crescimento do patrimônio ao longo do tempo com uma calculadora gratuita."
+>
+  <main class="page-container">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <a href="/financas/">Finanças</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Juros Compostos</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="eyebrow">PLANEJAMENTO FINANCEIRO</span>
+      <h1>Calculadora de Juros Compostos</h1>
+      <p>
+        Descubra como o tempo, a rentabilidade e a disciplina dos aportes
+        podem trabalhar juntos para construir seu patrimônio.
+        Simule diferentes cenários e veja quanto seu dinheiro pode acumular.
+      </p>
+    </header>
+
+    <section class="intro-panel">
+      <div class="icon-badge" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M7 17l92-92M7 7h10v10"/>
+        </svg>
+      </div>
+      <div>
+        <h2>Faça o dinheiro trabalhar ao longo do tempo</h2>
+        <p>
+          Nos juros compostos, os rendimentos são incorporados ao saldo
+          acumulado. Nos períodos seguintes, os juros passam a incidir
+          também sobre os rendimentos anteriores.
+        </p>
+      </div>
+    </section>
+
+    <section class="calculator-section" aria-labelledby="calculator-title">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">SIMULADOR GRATUITO</span>
+          <h2 id="calculator-title">Configure sua simulação</h2>
+          <p>Informe os valores e descubra o patrimônio estimado no final do período.</p>
+        </div>
+      </div>
+
+      <div class="calculator-grid">
+        <div class="card input-card">
+          <div class="card-heading">
+            <div class="icon-badge" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Parâmetros do investimento</h3>
+              <p>Personalize os dados da simulação.</p>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="initial">Investimento inicial</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input
+                type="number"
+                id="initial"
+                value="1000"
+                min="0"
+                max="1000000000"
+                step="100"
+                inputmode="decimal"
+              />
+            </div>
+            <small>Valor que você já possui para começar a investir.</small>
+          </div>
+
+          <div class="field-group">
+            <label for="monthly">Aporte mensal</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input
+                type="number"
+                id="monthly"
+                value="500"
+                min="0"
+                max="100000000"
+                step="50"
+                inputmode="decimal"
+              />
+            </div>
+            <small>Quanto pretende investir todos os meses.</small>
+          </div>
+
+          <div class="field-group">
+            <label for="rate">Taxa de juros anual</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="rate"
+                value="10"
+                min="-99.99"
+                max="100"
+                step="0.1"
+                inputmode="decimal"
+              />
+              <span class="input-suffix">% a.a.</span>
+            </div>
+            <small>Rentabilidade anual hipotética do investimento.</small>
+          </div>
+
+          <div class="field-group">
+            <label for="years">Prazo do investimento</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="years"
+                value="10"
+                min="1"
+                max="80"
+                step="1"
+                inputmode="numeric"
+              />
+              <span class="input-suffix">anos</span>
+            </div>
+            <small>Período durante o qual o dinheiro ficará investido.</small>
+          </div>
+
+          <div id="calc-error" class="error-message" role="alert" hidden></div>
+
+          <button id="calc-btn" class="btn-calculate" type="button">
+            <span>Calcular investimento</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </button>
+
+          <p class="auto-calc-note">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <span>Os resultados também são atualizados automaticamente quando você altera os valores.</span>
+          </p>
+        </div>
+
+        <div class="card result-card" aria-live="polite">
+          <div class="card-heading">
+            <div class="icon-badge result-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="m19 9-5 5-4-4-3 3"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Resultado da simulação</h3>
+              <p>Patrimônio estimado ao final do período.</p>
+            </div>
+          </div>
+
+          <div class="main-result">
+            <span class="result-label">Valor total acumulado</span>
+            <strong id="res-final">R$ 0,00</strong>
+            <span class="result-description">Capital estimado no final do investimento</span>
+          </div>
+
+          <div class="result-breakdown">
+            <div class="result-row">
+              <div>
+                <span class="result-dot invested-dot"></span>
+                <span>Total investido</span>
+              </div>
+              <strong id="res-invested">R$ 0,00</strong>
+            </div>
+
+            <div class="result-row">
+              <div>
+                <span class="result-dot interest-dot"></span>
+                <span>Total em juros</span>
+              </div>
+              <strong id="res-interest">R$ 0,00</strong>
+            </div>
+          </div>
+
+          <div class="result-insight">
+            <span class="insight-icon" aria-hidden="true">💡</span>
+            <p>
+              O resultado demonstra a diferença entre o dinheiro colocado
+              por você e o valor adicional estimado pelos juros compostos.
+            </p>
+          </div>
+
+          <p class="result-disclaimer">
+            Simulação teórica com taxa constante e reinvestimento dos rendimentos.
+            Não representa promessa de rentabilidade.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="section-kicker">EDUCAÇÃO FINANCEIRA</span>
+        <h2>O que são juros compostos?</h2>
+      </div>
+
+      <p>
+        Juros compostos são calculados sobre o valor inicial acrescido dos
+        juros acumulados nos períodos anteriores. É o chamado efeito dos
+        juros sobre juros.
+      </p>
+
+      <p>
+        Diferentemente dos juros simples, em que os rendimentos são calculados
+        sempre sobre o capital inicial, nos juros compostos a base de cálculo
+        cresce ao longo do tempo.
+      </p>
+
+      <div class="formula-card">
+        <h3>Fórmula dos juros compostos</h3>
+        <div class="formula">M = C × (1 + i)<sup>n</sup></div>
+        <div class="formula-legend">
+          <span><strong>M</strong> — Montante final</span>
+          <span><strong>C</strong> — Capital inicial</span>
+          <span><strong>i</strong> — Taxa por período</span>
+          <span><strong>n</strong> — Número de períodos</span>
+        </div>
+        <p>
+          Essa é a fórmula básica para um capital sem novos aportes.
+          Quando existem contribuições mensais, o cálculo precisa considerar
+          cada aporte e o tempo em que ele permanece investido.
+        </p>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="section-kicker">EXEMPLO PRÁTICO</span>
+        <h2>Como o tempo pode influenciar seus investimentos?</h2>
+      </div>
+
+      <p>
+        Imagine um investimento inicial de R$ 1.000,00, com aportes mensais
+        de R$ 500,00 e rentabilidade hipotética de 10% ao ano.
+      </p>
+
+      <p>
+        Ao longo dos anos, os rendimentos acumulados podem representar uma
+        parcela cada vez mais significativa do patrimônio. O resultado
+        depende da taxa efetivamente obtida, da regularidade dos aportes
+        e do prazo do investimento.
+      </p>
+
+      <div class="info-grid">
+        <article class="info-card">
+          <span class="step-number">01</span>
+          <h3>Comece cedo</h3>
+          <p>
+            Quanto maior o período de acumulação, mais tempo os rendimentos
+            têm para produzir novos rendimentos.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <span class="step-number">02</span>
+          <h3>Mantenha a regularidade</h3>
+          <p>
+            Aportes consistentes ajudam a aumentar o capital investido
+            ao longo do tempo.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <span class="step-number">03</span>
+          <h3>Considere os custos</h3>
+          <p>
+            Impostos, taxas e inflação podem reduzir o resultado real
+            obtido pelo investidor.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="section-kicker">DÚVIDAS FREQUENTES</span>
+        <h2>Perguntas sobre juros compostos</h2>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Qual é a diferença entre juros simples e compostos?</summary>
+          <p>
+            Nos juros simples, o cálculo considera sempre o capital inicial.
+            Nos juros compostos, os rendimentos acumulados são incorporados
+            ao saldo e também passam a gerar juros.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O que são aportes mensais?</summary>
+          <p>
+            São contribuições periódicas feitas pelo investidor para aumentar
+            o valor aplicado. Nesta calculadora, o aporte informado é
+            considerado mensalmente pelo mecanismo de cálculo.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Uma taxa de 10% ao ano significa ganhar 10% todos os meses?</summary>
+          <p>
+            Não. Uma taxa anual não deve ser confundida com uma taxa mensal.
+            A conversão entre períodos precisa considerar a equivalência
+            das taxas e o método utilizado no cálculo.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Os resultados da calculadora são garantidos?</summary>
+          <p>
+            Não. Os valores são estimativas matemáticas baseadas nos dados
+            informados. Investimentos reais podem apresentar oscilações,
+            custos, impostos e rentabilidades diferentes das simuladas.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>A calculadora considera inflação e impostos?</summary>
+          <p>
+            Esta simulação apresenta valores nominais e não desconta
+            automaticamente inflação, impostos ou taxas de administração.
+            O resultado não deve ser interpretado como poder de compra futuro.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <section class="disclaimer">
+      <div class="notice-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+        </svg>
+        <strong>Importante:</strong>
+      </div>
+      <p>
+        Esta ferramenta possui finalidade exclusivamente educativa e informativa.
+        Os resultados são estimativas e não constituem recomendação de investimento,
+        garantia de rentabilidade ou aconselhamento financeiro. Antes de investir,
+        avalie os riscos, custos, impostos e características de cada produto.
+      </p>
+    </section>
+
+    <div class="back-link">
+      <a href="/financas/">← Voltar para as calculadoras financeiras</a>
+    </div>
+  </main>
+
+  <script>
+    import { calculateCompoundInterest } from '../../engines/finance/compound-interest';
+    import { formatBRL } from '../../engines/common/currency';
+
+    const initialInput = document.getElementById('initial') as HTMLInputElement;
+    const monthlyInput = document.getElementById('monthly') as HTMLInputElement;
+    const rateInput = document.getElementById('rate') as HTMLInputElement;
+    const yearsInput = document.getElementById('years') as HTMLInputElement;
+
+    const errorElement = document.getElementById('calc-error') as HTMLDivElement;
+
+    const finalElement = document.getElementById('res-final')!;
+    const investedElement = document.getElementById('res-invested')!;
+    const interestElement = document.getElementById('res-interest')!;
+
+    function showError(message: string) {
+      errorElement.textContent = message;
+      errorElement.hidden = false;
+
+      finalElement.textContent = '—';
+      investedElement.textContent = '—';
+      interestElement.textContent = '—';
+    }
+
+    function clearError() {
+      errorElement.textContent = '';
+      errorElement.hidden = true;
+    }
+
+    function runCalc() {
+      const initial = Number(initialInput.value);
+      const monthly = Number(monthlyInput.value);
+      const rate = Number(rateInput.value);
+      const years = Number(yearsInput.value);
+
+      if (
+        initialInput.value.trim() === '' ||
+        monthlyInput.value.trim() === '' ||
+        rateInput.value.trim() === '' ||
+        yearsInput.value.trim() === ''
+      ) {
+        showError('Preencha todos os campos para realizar a simulação.');
+        return;
+      }
+
+      if (
+        !Number.isFinite(initial) ||
+        !Number.isFinite(monthly) ||
+        !Number.isFinite(rate) ||
+        !Number.isFinite(years)
+      ) {
+        showError('Informe valores numéricos válidos.');
+        return;
+      }
+
+      if (initial < 0 || initial > 1000000000) {
+        showError('O investimento inicial deve estar entre R$ 0 e R$ 1 bilhão.');
+        return;
+      }
+
+      if (monthly < 0 || monthly > 100000000) {
+        showError('O aporte mensal deve estar entre R$ 0 e R$ 100 milhões.');
+        return;
+      }
+
+      if (rate <= -100 || rate > 100) {
+        showError('Informe uma taxa anual maior que -100% e de até 100%.');
+        return;
+      }
+
+      if (years < 1 || years > 80) {
+        showError('O prazo deve estar entre 1 e 80 anos.');
+        return;
+      }
+
+      const months = Math.round(years * 12);
+
+      try {
+        const result = calculateCompoundInterest({
+          initialCapital: initial,
+          monthlyContribution: monthly,
+          annualInterestRate: rate,
+          months
+        });
+
+        const values = [
+          result.finalAmount,
+          result.totalInvested,
+          result.totalInterest
+        ];
+
+        if (!values.every((value) => Number.isFinite(value) && value >= 0)) {
+          showError('Não foi possível gerar um resultado válido. Revise os valores informados.');
+          return;
+        }
+
+        clearError();
+
+        finalElement.textContent = formatBRL(result.finalAmount);
+        investedElement.textContent = formatBRL(result.totalInvested);
+        interestElement.textContent = formatBRL(result.totalInterest);
+      } catch (error) {
+        console.error('Erro ao calcular juros compostos:', error);
+        showError('Ocorreu um erro durante o cálculo. Tente novamente.');
+      }
+    }
+
+    document.getElementById('calc-btn')?.addEventListener('click', runCalc);
+
+    [initialInput, monthlyInput, rateInput, yearsInput].forEach((input) => {
+      input.addEventListener('input', runCalc);
+    });
+
+    runCalc();
+  </script>
+
+  <style>
+    .page-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0.5rem 0 4rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1.75rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a,
+    .back-link a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover,
+    .back-link a:hover {
+      color: var(--color-primary);
+    }
+
+    .page-header {
+      max-width: 790px;
+      margin-bottom: 3rem;
+    }
+
+    .eyebrow,
+    .section-kicker,
+    .section-label {
+      display: inline-block;
+      margin-bottom: 0.75rem;
+      color: var(--color-primary);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .page-header h1 {
+      margin: 0 0 0.9rem;
+      color: var(--text-primary);
+      font-size: clamp(2rem, 5vw, 2.7rem);
+      line-height: 1.2;
+    }
+
+    .page-header > p {
+      max-width: 790px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .icon-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    :global([data-theme="dark"]) .icon-badge {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    .intro-panel {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.1rem;
+      margin-bottom: 3rem;
+      padding: 1.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .intro-panel h2 {
+      margin: 0 0 0.45rem;
+      color: var(--text-primary);
+      font-size: 1.15rem;
+    }
+
+    .intro-panel p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .calculator-section {
+      margin-bottom: 3.5rem;
+      scroll-margin-top: 2rem;
+    }
+
+    .section-heading {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 0.6rem;
+      font-size: 1.65rem;
+      line-height: 1.3;
+    }
+
+    .section-heading > p {
+      max-width: 760px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 1.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .card-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .card-heading h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .card-heading p {
+      margin: 0.2rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+    }
+
+    .input-card .card-heading h3 {
+      color: var(--color-primary);
+    }
+
+    .field-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .field-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 650;
+      line-height: 1.5;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border-color);
+      border-radius: 9px;
+      background: var(--bg-primary);
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.12);
+    }
+
+    :global([data-theme="dark"]) .input-wrapper:focus-within {
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.16);
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      min-width: 0;
+      min-height: 46px;
+      padding: 0.75rem 0.9rem;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text-primary);
+      font: inherit;
+      box-sizing: border-box;
+    }
+
+    .input-prefix,
+    .input-suffix {
+      padding: 0 0.85rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .input-prefix {
+      border-right: 1px solid var(--border-color);
+    }
+
+    .input-suffix {
+      border-left: 1px solid var(--border-color);
+    }
+
+    .field-group small {
+      display: block;
+      margin-top: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .btn-calculate {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      width: 100%;
+      min-height: 48px;
+      padding: 0.85rem 1.1rem;
+      border: 0;
+      border-radius: 9px;
+      background: var(--color-primary);
+      color: #ffffff;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .btn-calculate:hover {
+      opacity: 0.88;
+    }
+
+    .auto-calc-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      margin: 0.9rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    .auto-calc-note svg {
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+      color: var(--color-primary);
+    }
+
+    .error-message {
+      margin-top: 1rem;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid #dc2626;
+      border-radius: 8px;
+      color: #dc2626;
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .error-message[hidden] {
+      display: none;
+    }
+
+    .result-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .result-icon {
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+    }
+
+    :global([data-theme="dark"]) .result-icon {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    .main-result {
+      padding: 1.35rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: rgba(6, 95, 70, 0.08);
+    }
+
+    :global([data-theme="dark"]) .main-result {
+      background: rgba(16, 185, 129, 0.12);
+    }
+
+    .main-result span {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .main-result strong {
+      display: block;
+      color: var(--color-primary);
+      font-size: clamp(1.8rem, 4vw, 2.3rem);
+      overflow-wrap: anywhere;
+    }
+
+    .result-description {
+      display: block;
+      margin-top: 0.4rem;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+    }
+
+    .result-breakdown {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.9rem;
+    }
+
+    .result-row > div {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    .result-row strong {
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .result-row:last-child strong {
+      color: #16a34a;
+    }
+
+    :global([data-theme="dark"]) .result-row:last-child strong {
+      color: #4ade80;
+    }
+
+    .result-dot {
+      width: 9px;
+      height: 9px;
+      flex-shrink: 0;
+      border-radius: 50%;
+    }
+
+    .invested-dot {
+      background: var(--color-primary);
+    }
+
+    .interest-dot {
+      background: #16a34a;
+    }
+
+    :global([data-theme="dark"]) .interest-dot {
+      background: #4ade80;
+    }
+
+    .result-insight {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      margin-top: 1.5rem;
+      padding: 1rem 1.15rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-primary);
+    }
+
+    .insight-icon {
+      flex-shrink: 0;
+      font-size: 1.15rem;
+    }
+
+    .result-insight p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      line-height: 1.65;
+    }
+
+    .result-disclaimer {
+      margin-top: 1.5rem;
+      padding-top: 1.1rem;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      line-height: 1.65;
+    }
+
+    .content-section {
+      margin-bottom: 3.5rem;
+    }
+
+    .content-section > p {
+      margin: 0 0 1rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .formula-card {
+      margin-top: 1.5rem;
+      padding: 1.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .formula-card h3 {
+      margin: 0 0 1rem;
+      font-size: 1.1rem;
+    }
+
+    .formula {
+      margin: 1.2rem 0;
+      color: var(--color-primary);
+      font-family: Georgia, serif;
+      font-size: clamp(1.5rem, 4vw, 2.1rem);
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .formula-legend {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin: 1.3rem 0;
+    }
+
+    .formula-legend span {
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+    }
+
+    .formula-legend strong {
+      color: var(--text-primary);
+    }
+
+    .formula-card > p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .info-card {
+      padding: 1.4rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .step-number {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      margin-bottom: 0.95rem;
+      border-radius: 10px;
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    :global([data-theme="dark"]) .step-number {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    .info-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .faq-item summary {
+      padding: 1.2rem 2rem 1.2rem 0;
+      position: relative;
+      cursor: pointer;
+      color: var(--text-primary);
+      font-weight: 650;
+      line-height: 1.5;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      content: '+';
+      position: absolute;
+      right: 0.3rem;
+      color: var(--color-primary);
+      font-size: 1.35rem;
+    }
+
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+
+    .faq-item p {
+      margin: 0;
+      padding: 0 1rem 1.2rem 0;
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+      line-height: 1.75;
+    }
+
+    .disclaimer {
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--color-primary);
+      border-radius: 10px;
+      background: var(--bg-secondary);
+    }
+
+    .notice-title {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 0.5rem;
+      color: var(--color-primary);
+    }
+
+    .notice-title strong {
+      color: var(--text-primary);
+    }
+
+    .disclaimer p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.75;
+    }
+
+    .back-link {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .btn-calculate:focus-visible,
+    .breadcrumb a:focus-visible,
+    .back-link a:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 768px) {
+      .calculator-grid,
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card,
+      .intro-panel,
+      .formula-card,
+      .info-card {
+        padding: 1.25rem;
+      }
+
+      .formula-legend {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</BaseLayout>

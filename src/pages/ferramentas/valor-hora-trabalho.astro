@@ -1,0 +1,1734 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de Valor da Hora de Trabalho para Freelancer | Calculadora de Ganhos"
+  description="Descubra quanto cobrar por hora como freelancer. Calcule seu valor profissional considerando renda desejada, custos pessoais, despesas do negócio, impostos e horas trabalhadas."
+>
+  <div class="freelance-page">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <a href="/ferramentas/">Ferramentas</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Valor da Hora de Trabalho</span>
+    </nav>
+
+    <header class="hero">
+      <span class="eyebrow">PLANEJAMENTO FINANCEIRO PROFISSIONAL</span>
+
+      <h1>Calculadora de Valor da Hora de Trabalho para Freelancers</h1>
+
+      <p>
+        Descubra quanto cobrar pelo seu trabalho considerando sua renda
+        desejada, seus custos pessoais, as despesas profissionais, os
+        impostos e a quantidade de horas disponíveis para atender clientes.
+        Planeje seus preços com mais clareza e evite trabalhar sem saber
+        quanto realmente precisa faturar.
+      </p>
+
+      <div class="hero-highlights">
+        <div class="highlight">
+          <span class="highlight-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </span>
+          <span>Valor da hora profissional</span>
+        </div>
+
+        <div class="highlight">
+          <span class="highlight-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </span>
+          <span>Planejamento de custos</span>
+        </div>
+
+        <div class="highlight">
+          <span class="highlight-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </span>
+          <span>Meta de faturamento</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- CALCULADORA -->
+    <section class="calculator-section" id="calculadora" aria-labelledby="calculator-title">
+      <div class="section-heading">
+        <span class="section-label">FERRAMENTA GRATUITA</span>
+        <h2 id="calculator-title">Calcule quanto cobrar pela sua hora de trabalho</h2>
+        <p>
+          Informe sua renda desejada, os custos mensais e sua disponibilidade
+          de trabalho para estimar o valor necessário por hora.
+        </p>
+      </div>
+
+      <div class="calc-grid">
+        <!-- ENTRADAS -->
+        <div class="card input-card">
+          <h3>Custos e metas profissionais</h3>
+
+          <div class="field-group">
+            <label for="desired-income">Renda líquida mensal desejada (R$)</label>
+            <input
+              type="number"
+              id="desired-income"
+              value="5000"
+              min="0"
+              step="100"
+              inputmode="decimal"
+            />
+            <small>
+              Valor que você deseja ter disponível para si, além dos valores
+              necessários para cobrir os custos pessoais e profissionais informados.
+            </small>
+          </div>
+
+          <div class="field-group">
+            <label for="personal-exp">Custos pessoais e de vida (R$ / mês)</label>
+            <input
+              type="number"
+              id="personal-exp"
+              value="3500"
+              min="0"
+              step="100"
+              inputmode="decimal"
+            />
+            <small>
+              Despesas pessoais, moradia, alimentação, transporte,
+              saúde e demais gastos mensais.
+            </small>
+          </div>
+
+          <div class="field-group">
+            <label for="business-exp">Custos do negócio e softwares (R$ / mês)</label>
+            <input
+              type="number"
+              id="business-exp"
+              value="300"
+              min="0"
+              step="50"
+              inputmode="decimal"
+            />
+            <small>
+              Internet, equipamentos, licenças, hospedagem, ferramentas
+              e outras despesas profissionais.
+            </small>
+          </div>
+
+          <div class="field-group">
+            <label for="taxes">Impostos estimados (%)</label>
+            <input
+              type="number"
+              id="taxes"
+              value="6"
+              min="0"
+              max="99.99"
+              step="0.5"
+              inputmode="decimal"
+            />
+            <small>
+              Percentual estimado de tributos e encargos sobre o faturamento.
+            </small>
+          </div>
+
+          <div class="hours-grid">
+            <div class="field-group">
+              <label for="hours-day">Horas por dia</label>
+              <input
+                type="number"
+                id="hours-day"
+                value="6"
+                min="1"
+                max="12"
+                step="0.5"
+                inputmode="decimal"
+              />
+              <small>Horas disponíveis para trabalho.</small>
+            </div>
+
+            <div class="field-group">
+              <label for="days-week">Dias por semana</label>
+              <input
+                type="number"
+                id="days-week"
+                value="5"
+                min="1"
+                max="7"
+                step="1"
+                inputmode="numeric"
+              />
+              <small>Dias de trabalho semanais.</small>
+            </div>
+          </div>
+
+          <button type="button" id="calc-btn" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="16" height="20" x="4" y="2" rx="2"/>
+              <line x1="8" x2="16" y1="6" y2="6"/>
+              <line x1="16" x2="16" y1="14" y2="18"/>
+              <path d="M16 10h.01"/>
+              <path d="M12 10h.01"/>
+              <path d="M8 10h.01"/>
+              <path d="M12 14h.01"/>
+              <path d="M8 14h.01"/>
+              <path d="M12 18h.01"/>
+              <path d="M8 18h.01"/>
+            </svg>
+            <span>Calcular valor da hora</span>
+          </button>
+
+          <p class="input-note">
+            A ferramenta considera quatro semanas de férias por ano
+            como configuração padrão do cálculo. A renda desejada é
+            somada aos custos pessoais e profissionais informados.
+          </p>
+        </div>
+
+        <!-- RESULTADOS -->
+        <div class="card result-card" aria-live="polite">
+          <div>
+            <span class="section-label">RESULTADO DA SIMULAÇÃO</span>
+            <h3>Seu preço profissional</h3>
+
+            <div class="main-result">
+              <span>Valor estimado por hora</span>
+              <strong id="res-hourly">R$ 0,00</strong>
+            </div>
+
+            <div class="result-line">
+              <span>Valor estimado por dia</span>
+              <strong id="res-daily">R$ 0,00</strong>
+            </div>
+
+            <div class="result-line">
+              <span>Faturamento bruto mensal necessário</span>
+              <strong id="res-monthly-gross">R$ 0,00</strong>
+            </div>
+
+            <p id="calc-error" class="calc-error" role="alert" hidden></p>
+          </div>
+
+          <div class="result-observation">
+            <strong>Como interpretar:</strong>
+            <p>
+              O valor por hora representa uma estimativa de cobrança
+              necessária para cobrir as despesas informadas, atingir
+              a renda desejada e considerar os impostos estimados.
+              O resultado depende das horas disponíveis e da configuração
+              de férias utilizada no cálculo.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- O QUE É -->
+    <section class="content-section" aria-labelledby="what-title">
+      <div class="section-heading">
+        <span class="section-label">ENTENDA O CONCEITO</span>
+        <h2 id="what-title">O que é o valor da hora de trabalho?</h2>
+      </div>
+
+      <p>
+        O valor da hora de trabalho representa quanto um profissional
+        precisa cobrar por cada hora dedicada a uma atividade para
+        remunerar seu trabalho e manter sua operação financeiramente
+        sustentável.
+      </p>
+
+      <p>
+        Para freelancers, profissionais autônomos e prestadores de
+        serviços, definir esse valor é uma etapa importante do planejamento
+        financeiro. Diferentemente de um trabalhador assalariado, o
+        profissional independente precisa considerar despesas que
+        normalmente seriam administradas por uma empresa empregadora.
+      </p>
+
+      <p>
+        Entre essas despesas estão equipamentos, internet, softwares,
+        impostos, períodos sem projetos, férias, capacitação profissional
+        e outros custos necessários para manter a atividade.
+      </p>
+
+      <p>
+        Cobrar apenas pelas horas efetivamente executadas, sem considerar
+        os períodos dedicados à administração, prospecção de clientes
+        e organização do negócio, pode resultar em uma remuneração
+        inferior à necessária.
+      </p>
+    </section>
+
+    <!-- COMO UTILIZAR -->
+    <section class="content-section" aria-labelledby="how-title">
+      <div class="section-heading">
+        <span class="section-label">GUIA DE UTILIZAÇÃO</span>
+        <h2 id="how-title">Como utilizar a calculadora?</h2>
+        <p>
+          Preencha os campos com informações próximas da sua realidade
+          financeira para obter uma estimativa mais útil.
+        </p>
+      </div>
+
+      <div class="instruction-list">
+        <article class="instruction-card">
+          <span class="step-number">01</span>
+          <div>
+            <h3>Defina sua renda mensal desejada</h3>
+            <p>
+              Informe quanto deseja ter disponível mensalmente para si,
+              além dos valores reservados para cobrir os custos pessoais
+              e profissionais informados. Essa quantia representa sua
+              meta de renda líquida no planejamento.
+            </p>
+          </div>
+        </article>
+
+        <article class="instruction-card">
+          <span class="step-number">02</span>
+          <div>
+            <h3>Informe seus custos pessoais</h3>
+            <p>
+              Considere despesas como moradia, alimentação, transporte,
+              saúde, educação e demais compromissos financeiros pessoais.
+              Esses valores são somados à renda desejada no cálculo.
+            </p>
+          </div>
+        </article>
+
+        <article class="instruction-card">
+          <span class="step-number">03</span>
+          <div>
+            <h3>Informe as despesas profissionais</h3>
+            <p>
+              Inclua os gastos necessários para manter sua atividade,
+              como equipamentos, internet, ferramentas digitais,
+              licenças de software e serviços contratados.
+            </p>
+          </div>
+        </article>
+
+        <article class="instruction-card">
+          <span class="step-number">04</span>
+          <div>
+            <h3>Estime os impostos</h3>
+            <p>
+              Informe o percentual aproximado dos tributos incidentes
+              sobre o faturamento. Utilize uma estimativa compatível
+              com seu enquadramento e sua atividade profissional.
+            </p>
+          </div>
+        </article>
+
+        <article class="instruction-card">
+          <span class="step-number">05</span>
+          <div>
+            <h3>Defina sua jornada de trabalho</h3>
+            <p>
+              Informe quantas horas pretende trabalhar por dia e quantos
+              dias por semana. Esses dados ajudam a estimar sua
+              capacidade de atendimento ao longo do mês.
+            </p>
+          </div>
+        </article>
+
+        <article class="instruction-card">
+          <span class="step-number">06</span>
+          <div>
+            <h3>Analise o resultado</h3>
+            <p>
+              Clique em calcular valor da hora para visualizar sua
+              estimativa de cobrança por hora, por dia e o faturamento
+              bruto mensal necessário.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- FORMULA -->
+    <section class="content-section" aria-labelledby="formula-title">
+      <div class="section-heading">
+        <span class="section-label">METODOLOGIA DE CÁLCULO</span>
+        <h2 id="formula-title">Como é calculado o valor da hora?</h2>
+      </div>
+
+      <p>
+        A calculadora utiliza as informações financeiras e a disponibilidade
+        de trabalho para estimar quanto o profissional precisa faturar
+        mensalmente e quanto deve cobrar por hora.
+      </p>
+
+      <div class="formula-box">
+        <span>Etapa 1 — Necessidade financeira mensal</span>
+        <code>
+          Necessidade mensal = Renda desejada + Custos pessoais + Custos profissionais
+        </code>
+      </div>
+
+      <div class="formula-box">
+        <span>Etapa 2 — Consideração dos impostos</span>
+        <code>
+          Faturamento necessário = Necessidade mensal ÷ (1 − Impostos)
+        </code>
+      </div>
+
+      <div class="formula-box">
+        <span>Etapa 3 — Capacidade de trabalho</span>
+        <code>
+          Horas semanais = Horas por dia × Dias por semana
+        </code>
+      </div>
+
+      <div class="formula-box">
+        <span>Etapa 4 — Ajuste das horas disponíveis no ano</span>
+        <code>
+          Semanas trabalhadas = 52 − Semanas de férias
+        </code>
+        <code>
+          Horas produtivas mensais = (Semanas trabalhadas × Dias por semana × Horas por dia) ÷ 12
+        </code>
+      </div>
+
+      <div class="formula-box">
+        <span>Etapa 5 — Valor da hora</span>
+        <code>
+          Valor da hora = Faturamento mensal necessário ÷ Horas produtivas mensais
+        </code>
+      </div>
+
+      <p>
+        O valor diário é estimado multiplicando o valor da hora pela
+        quantidade de horas de trabalho informada. O motor considera
+        quatro semanas de férias por ano como padrão nesta ferramenta.
+      </p>
+
+      <p>
+        <strong>Observação técnica:</strong> as expressões apresentam
+        a lógica utilizada pelo motor
+        <code>calculateFreelanceRate</code>. O cálculo considera a renda
+        desejada somada aos custos pessoais e profissionais, aplica
+        o percentual de impostos sobre a necessidade mensal e distribui
+        o faturamento pelas horas mensais estimadas após o ajuste de férias.
+      </p>
+    </section>
+
+    <!-- EXEMPLO -->
+    <section class="content-section" aria-labelledby="example-title">
+      <div class="section-heading">
+        <span class="section-label">EXEMPLO PRÁTICO</span>
+        <h2 id="example-title">Exemplo de planejamento financeiro de um freelancer</h2>
+        <p>
+          Imagine um profissional independente que deseja organizar
+          seus custos e estabelecer uma meta de faturamento mensal.
+        </p>
+      </div>
+
+      <div class="example-card">
+        <h3>Dados utilizados na simulação</h3>
+
+        <div class="example-data">
+          <div>
+            <span>Renda mensal desejada</span>
+            <strong>R$ 5.000,00</strong>
+          </div>
+
+          <div>
+            <span>Custos pessoais</span>
+            <strong>R$ 3.500,00</strong>
+          </div>
+
+          <div>
+            <span>Custos profissionais</span>
+            <strong>R$ 300,00</strong>
+          </div>
+
+          <div>
+            <span>Impostos estimados</span>
+            <strong>6%</strong>
+          </div>
+
+          <div>
+            <span>Horas por dia</span>
+            <strong>6 horas</strong>
+          </div>
+
+          <div>
+            <span>Dias por semana</span>
+            <strong>5 dias</strong>
+          </div>
+
+          <div>
+            <span>Férias consideradas</span>
+            <strong>4 semanas por ano</strong>
+          </div>
+        </div>
+
+        <div class="example-calculation">
+          <span>Necessidade financeira mensal</span>
+          <code>R$ 5.000 + R$ 3.500 + R$ 300 = R$ 8.800</code>
+
+          <span>Faturamento bruto mensal necessário</span>
+          <code>R$ 8.800 ÷ (1 − 0,06) = R$ 9.361,70</code>
+
+          <span>Horas produtivas mensais estimadas</span>
+          <code>(52 − 4) × 5 × 6 ÷ 12 = 120 horas</code>
+
+          <span>Valor estimado por hora</span>
+          <code>R$ 9.361,70 ÷ 120 = R$ 78,01</code>
+        </div>
+
+        <p>
+          Nesse cenário ilustrativo, o profissional precisaria faturar
+          aproximadamente R$ 9.361,70 por mês. Considerando 120 horas
+          produtivas mensais, o valor de referência seria de aproximadamente
+          R$ 78,01 por hora. Os resultados podem apresentar pequenas
+          diferenças de centavos conforme as regras de arredondamento.
+        </p>
+      </div>
+    </section>
+
+    <!-- RESULTADOS -->
+    <section class="content-section" aria-labelledby="results-title">
+      <div class="section-heading">
+        <span class="section-label">INTERPRETAÇÃO DOS RESULTADOS</span>
+        <h2 id="results-title">O que significa cada resultado?</h2>
+      </div>
+
+      <div class="explanation-grid">
+        <article class="explanation-card">
+          <div class="icon-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"/>
+              <polyline points="12 6 12 12 16 14"/>
+            </svg>
+          </div>
+          <h3>Valor estimado por hora</h3>
+          <p>
+            Representa o valor estimado que deve ser cobrado por hora
+            de trabalho para alcançar a necessidade financeira mensal,
+            considerando as despesas e os impostos informados.
+          </p>
+        </article>
+
+        <article class="explanation-card">
+          <div class="icon-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+              <line x1="16" x2="16" y1="2" y2="6"/>
+              <line x1="8" x2="8" y1="2" y2="6"/>
+              <line x1="3" x2="21" y1="10" y2="10"/>
+            </svg>
+          </div>
+          <h3>Valor estimado por dia</h3>
+          <p>
+            Corresponde ao valor de cobrança estimado para um dia
+            de trabalho, considerando a quantidade de horas diárias
+            informada na calculadora.
+          </p>
+        </article>
+
+        <article class="explanation-card">
+          <div class="icon-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+              <polyline points="16 7 22 7 22 13"/>
+            </svg>
+          </div>
+          <h3>Faturamento bruto mensal necessário</h3>
+          <p>
+            Indica quanto o profissional precisa faturar mensalmente
+            para cobrir a renda desejada, os custos informados e os
+            impostos estimados.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- CUIDADOS -->
+    <section class="attention-section" aria-labelledby="attention-title">
+      <div class="icon-badge icon-badge-amber attention-badge" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>
+          <path d="M12 9v4"/>
+          <path d="M12 17h.01"/>
+        </svg>
+      </div>
+
+      <div>
+        <span class="section-label">PLANEJAMENTO PROFISSIONAL</span>
+        <h2 id="attention-title">O que a calculadora não deve deixar de considerar?</h2>
+
+        <p>
+          Uma das principais dificuldades de quem trabalha por conta
+          própria é calcular apenas o tempo dedicado à execução dos
+          serviços e esquecer atividades necessárias para manter
+          o negócio funcionando.
+        </p>
+
+        <ul>
+          <li>Tempo dedicado à prospecção e negociação com clientes.</li>
+          <li>Reuniões, atendimento e comunicação profissional.</li>
+          <li>Organização administrativa e emissão de documentos.</li>
+          <li>Capacitação, cursos e atualização profissional.</li>
+          <li>Manutenção e substituição de equipamentos.</li>
+          <li>Períodos sem projetos ou com menor volume de trabalho.</li>
+          <li>Taxas bancárias, comissões e despesas não incluídas.</li>
+          <li>Reserva financeira para emergências e imprevistos.</li>
+        </ul>
+
+        <p>
+          Esses fatores podem reduzir a quantidade real de horas
+          faturáveis. Por isso, a disponibilidade de trabalho não
+          deve ser confundida automaticamente com horas efetivamente
+          cobradas dos clientes.
+        </p>
+      </div>
+    </section>
+
+    <!-- PREÇO POR PROJETO -->
+    <section class="content-section" aria-labelledby="project-title">
+      <div class="section-heading">
+        <span class="section-label">APLICAÇÃO COMERCIAL</span>
+        <h2 id="project-title">Como utilizar o valor da hora para cobrar por projeto?</h2>
+      </div>
+
+      <p>
+        Muitos freelancers não trabalham exclusivamente por hora.
+        Projetos de desenvolvimento, design, consultoria, redação,
+        manutenção e suporte técnico costumam ser negociados por
+        entrega ou escopo definido.
+      </p>
+
+      <p>
+        Nesses casos, o valor da hora calculado pode servir como
+        referência para estimar o preço do projeto.
+      </p>
+
+      <div class="formula-box">
+        <span>Exemplo de formação de preço por projeto</span>
+        <code>Preço de referência = Horas estimadas × Valor da hora</code>
+      </div>
+
+      <p>
+        Se um serviço exigir aproximadamente 12 horas de trabalho,
+        o orçamento inicial poderá ser calculado multiplicando essas
+        horas pelo valor profissional encontrado na ferramenta.
+      </p>
+
+      <p>
+        O orçamento final também deve considerar complexidade,
+        responsabilidades, prazo, revisões, riscos, direitos de uso
+        e eventuais despesas adicionais. O tempo estimado precisa
+        ser realista para evitar prejuízos.
+      </p>
+    </section>
+
+    <!-- DIFERENÇAS -->
+    <section class="content-section" aria-labelledby="difference-title">
+      <div class="section-heading">
+        <span class="section-label">CONCEITOS IMPORTANTES</span>
+        <h2 id="difference-title">Qual é a diferença entre faturamento e renda líquida?</h2>
+      </div>
+
+      <div class="comparison-card">
+        <div>
+          <h3>Faturamento bruto</h3>
+          <p>
+            É o valor total faturado pelos serviços antes da dedução
+            dos impostos e demais despesas da atividade.
+          </p>
+        </div>
+
+        <div>
+          <h3>Renda líquida desejada</h3>
+          <p>
+            É a meta de valor que o profissional deseja ter disponível
+            para si, depois de reservar os recursos necessários para
+            cobrir os custos pessoais, profissionais e os impostos
+            considerados no planejamento.
+          </p>
+        </div>
+      </div>
+
+      <p>
+        Essa distinção é especialmente importante para freelancers.
+        Receber um pagamento elevado por um projeto não significa
+        necessariamente que todo o valor representa ganho pessoal.
+      </p>
+
+      <p>
+        Uma gestão financeira adequada exige separar o dinheiro
+        destinado às despesas profissionais, aos impostos, aos
+        compromissos pessoais e às reservas financeiras.
+      </p>
+    </section>
+
+    <!-- PRIVACIDADE -->
+    <section class="privacy-section" aria-labelledby="privacy-title">
+      <div class="icon-badge attention-badge" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/>
+          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+        </svg>
+      </div>
+
+      <div>
+        <span class="section-label">PRIVACIDADE E SEGURANÇA</span>
+        <h2 id="privacy-title">Como seus dados são utilizados?</h2>
+
+        <p>
+          Os valores informados nesta calculadora são utilizados
+          para executar os cálculos e apresentar os resultados
+          na própria página.
+        </p>
+
+        <p>
+          O código desta ferramenta não implementa uma rotina própria
+          de envio ou armazenamento dos valores financeiros informados.
+          Entretanto, a navegação no site pode envolver serviços de
+          hospedagem, métricas, publicidade ou outros recursos de terceiros,
+          conforme as configurações gerais do portal.
+        </p>
+
+        <p>
+          Evite inserir informações bancárias, senhas ou dados pessoais
+          confidenciais em campos que não foram projetados para recebê-los.
+          Consulte também nossa Política de Privacidade.
+        </p>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section" aria-labelledby="faq-title">
+      <div class="section-heading">
+        <span class="section-label">DÚVIDAS FREQUENTES</span>
+        <h2 id="faq-title">Perguntas frequentes sobre o valor da hora de trabalho</h2>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Como calcular quanto cobrar por hora como freelancer?</summary>
+          <p>
+            Considere sua renda desejada, seus custos pessoais,
+            as despesas profissionais, os impostos e a quantidade
+            de horas disponíveis para faturamento. Nesta calculadora,
+            a renda desejada é somada aos custos informados e o resultado
+            é ajustado pelo percentual de impostos e pelas horas produtivas.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Qual é um bom valor para cobrar por hora?</summary>
+          <p>
+            Não existe um valor universal. A cobrança depende da
+            experiência profissional, especialização, complexidade
+            dos serviços, custos operacionais, demanda e posicionamento
+            no mercado.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O que devo incluir nos meus custos mensais?</summary>
+          <p>
+            Considere despesas pessoais e profissionais, como moradia,
+            alimentação, internet, equipamentos, softwares, ferramentas,
+            serviços contratados e demais compromissos financeiros.
+            Informe cada grupo no campo correspondente para evitar
+            contar uma mesma despesa duas vezes.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Por que preciso considerar impostos no cálculo?</summary>
+          <p>
+            Porque os tributos podem representar uma parcela importante
+            do faturamento. Ignorá-los pode resultar em uma cobrança
+            insuficiente para manter a atividade profissional.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O que são horas produtivas?</summary>
+          <p>
+            São as horas consideradas disponíveis para a execução
+            de atividades profissionais. O tempo dedicado à administração,
+            divulgação, reuniões e outras tarefas também precisa ser
+            considerado no planejamento, pois nem sempre pode ser
+            cobrado diretamente dos clientes.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Por que a calculadora considera férias?</summary>
+          <p>
+            Porque profissionais independentes também precisam
+            considerar períodos de descanso. A ferramenta utiliza
+            uma configuração padrão de quatro semanas de férias
+            por ano no motor de cálculo.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Posso utilizar o resultado para cobrar por projeto?</summary>
+          <p>
+            Sim. O valor da hora pode ser utilizado como referência
+            multiplicando-o pela quantidade estimada de horas necessárias
+            para executar o serviço. Também considere complexidade,
+            revisões e despesas adicionais.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>A calculadora serve para profissionais autônomos?</summary>
+          <p>
+            Sim. Pode auxiliar freelancers, consultores, designers,
+            desenvolvedores, redatores, técnicos, profissionais de
+            suporte e outros prestadores de serviços.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O valor calculado representa meu salário?</summary>
+          <p>
+            Não. O resultado representa uma referência de cobrança
+            profissional. A renda efetiva depende dos serviços
+            contratados, pagamentos recebidos, impostos e despesas
+            reais da atividade.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Os valores informados são armazenados?</summary>
+          <p>
+            Esta calculadora não possui, em seu código de interface,
+            uma rotina própria de envio ou gravação dos valores
+            preenchidos. Outros serviços utilizados pelo site devem
+            ser considerados conforme a Política de Privacidade.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Posso alterar meus valores e fazer novas simulações?</summary>
+          <p>
+            Sim. Você pode modificar os campos quantas vezes desejar
+            para comparar diferentes cenários de renda, custos,
+            impostos e disponibilidade de trabalho.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <!-- AVISO -->
+    <aside class="final-notice">
+      <div class="notice-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 16v-4"/>
+          <path d="M12 8h.01"/>
+        </svg>
+        <strong>Informações importantes:</strong>
+      </div>
+      <p>
+        Esta calculadora possui finalidade informativa e de planejamento.
+        Os resultados são estimativas matemáticas baseadas nos valores
+        fornecidos e nas regras implementadas no motor de cálculo. O
+        resultado não representa garantia de faturamento, contratação de
+        serviços ou recebimento de valores. A tributação pode variar
+        conforme a atividade, o regime tributário, o município e outras
+        condições legais. Para decisões tributárias e contábeis, consulte
+        um profissional habilitado.
+      </p>
+    </aside>
+
+    <!-- CTA -->
+    <section class="final-cta">
+      <span class="section-label">CALCULADORA DE GANHOS</span>
+
+      <h2>Valorize seu trabalho e organize suas finanças</h2>
+
+      <p>
+        Explore outras ferramentas para auxiliar no planejamento
+        financeiro, na formação de preços e na administração
+        da sua atividade profissional.
+      </p>
+
+      <a href="/ferramentas/" class="cta-link">
+        <span>Explorar outras ferramentas</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14"/>
+          <path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
+    </section>
+  </div>
+
+  <script>
+    import { calculateFreelanceRate } from '../../engines/business/freelance-rate-engine';
+    import { formatBRL } from '../../engines/common/currency';
+
+    let pageController: AbortController | null = null;
+
+    function initPage() {
+      // Remove os eventos da inicialização anterior.
+      pageController?.abort();
+
+      pageController = new AbortController();
+      const { signal } = pageController;
+
+      const desiredIncomeInput = document.getElementById('desired-income') as HTMLInputElement | null;
+      const personalExpInput = document.getElementById('personal-exp') as HTMLInputElement | null;
+      const businessExpInput = document.getElementById('business-exp') as HTMLInputElement | null;
+      const taxesInput = document.getElementById('taxes') as HTMLInputElement | null;
+      const hoursDayInput = document.getElementById('hours-day') as HTMLInputElement | null;
+      const daysWeekInput = document.getElementById('days-week') as HTMLInputElement | null;
+      const calcBtn = document.getElementById('calc-btn');
+
+      const hourlyOutput = document.getElementById('res-hourly');
+      const dailyOutput = document.getElementById('res-daily');
+      const monthlyOutput = document.getElementById('res-monthly-gross');
+      const errorOutput = document.getElementById('calc-error');
+
+      if (
+        !desiredIncomeInput ||
+        !personalExpInput ||
+        !businessExpInput ||
+        !taxesInput ||
+        !hoursDayInput ||
+        !daysWeekInput ||
+        !calcBtn ||
+        !hourlyOutput ||
+        !dailyOutput ||
+        !monthlyOutput ||
+        !errorOutput
+      ) {
+        return;
+      }
+
+      function showError(message: string) {
+        errorOutput.textContent = message;
+        errorOutput.hidden = false;
+
+        hourlyOutput.textContent = '—';
+        dailyOutput.textContent = '—';
+        monthlyOutput.textContent = '—';
+      }
+
+      function runCalc() {
+        const rawValues = [
+          desiredIncomeInput.value,
+          personalExpInput.value,
+          businessExpInput.value,
+          taxesInput.value,
+          hoursDayInput.value,
+          daysWeekInput.value,
+        ];
+
+        if (rawValues.some(value => value.trim() === '')) {
+          showError('Preencha todos os campos antes de calcular.');
+          return;
+        }
+
+        const desiredIncome = Number(desiredIncomeInput.value);
+        const personalExp = Number(personalExpInput.value);
+        const businessExp = Number(businessExpInput.value);
+        const taxes = Number(taxesInput.value);
+        const hoursDay = Number(hoursDayInput.value);
+        const daysWeek = Number(daysWeekInput.value);
+
+        const values = [
+          desiredIncome,
+          personalExp,
+          businessExp,
+          taxes,
+          hoursDay,
+          daysWeek,
+        ];
+
+        if (values.some(value => !Number.isFinite(value))) {
+          showError('Preencha todos os campos com valores numéricos válidos.');
+          return;
+        }
+
+        if (
+          desiredIncome < 0 ||
+          personalExp < 0 ||
+          businessExp < 0
+        ) {
+          showError('Os valores financeiros não podem ser negativos.');
+          return;
+        }
+
+        if (taxes < 0 || taxes >= 100) {
+          showError('O percentual de impostos deve estar entre 0% e 99,99%.');
+          return;
+        }
+
+        if (hoursDay < 1 || hoursDay > 12) {
+          showError('Informe uma jornada diária entre 1 e 12 horas.');
+          return;
+        }
+
+        if (!Number.isInteger(daysWeek) || daysWeek < 1 || daysWeek > 7) {
+          showError('Informe uma quantidade de 1 a 7 dias por semana.');
+          return;
+        }
+
+        if (desiredIncome + personalExp + businessExp <= 0) {
+          showError('Informe uma meta de renda ou algum custo mensal.');
+          return;
+        }
+
+        // Limpa o erro antes de executar uma nova simulação.
+        errorOutput.textContent = '';
+        errorOutput.hidden = true;
+
+        try {
+          const result = calculateFreelanceRate({
+            desiredNetIncome: desiredIncome,
+            personalExpenses: personalExp,
+            businessExpenses: businessExp,
+            estimatedTaxesPercentage: taxes,
+            hoursPerDay: hoursDay,
+            daysPerWeek: daysWeek,
+            vacationWeeksPerYear: 4,
+          });
+
+          if (
+            !Number.isFinite(result.hourlyRate) ||
+            !Number.isFinite(result.dailyRate) ||
+            !Number.isFinite(result.totalMonthlyNeeds) ||
+            result.hourlyRate <= 0 ||
+            result.dailyRate <= 0 ||
+            result.totalMonthlyNeeds <= 0
+          ) {
+            showError('Não foi possível calcular os valores informados. Confira os dados e tente novamente.');
+            return;
+          }
+
+          hourlyOutput.textContent = formatBRL(result.hourlyRate);
+          dailyOutput.textContent = formatBRL(result.dailyRate);
+          monthlyOutput.textContent = formatBRL(result.totalMonthlyNeeds);
+        } catch (error) {
+          console.error('Erro ao calcular valor da hora:', error);
+          showError('Ocorreu um erro durante o cálculo. Confira os dados informados.');
+        }
+      }
+
+      calcBtn.addEventListener('click', runCalc, { signal });
+
+      [
+        desiredIncomeInput,
+        personalExpInput,
+        businessExpInput,
+        taxesInput,
+        hoursDayInput,
+        daysWeekInput,
+      ].forEach(input => {
+        input.addEventListener('input', runCalc, { signal });
+        input.addEventListener('change', runCalc, { signal });
+      });
+
+      runCalc();
+    }
+
+    // Inicialização inicial e compatibilidade com navegação do Astro.
+    initPage();
+    document.addEventListener('astro:page-load', initPage);
+  </script>
+
+  <style>
+    .freelance-page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0.5rem 0 4rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1.75rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .eyebrow,
+    .section-label {
+      display: inline-block;
+      margin-bottom: 0.75rem;
+      color: var(--color-primary);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .hero h1 {
+      margin: 0 0 0.9rem;
+      color: var(--text-primary);
+      font-size: clamp(2rem, 5vw, 2.7rem);
+      line-height: 1.2;
+    }
+
+    .hero > p {
+      max-width: 790px;
+      margin: 0 auto;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .hero-highlights {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.25rem 1.75rem;
+      margin-top: 1.75rem;
+    }
+
+    .highlight {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .highlight-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    :global([data-theme="dark"]) .highlight-icon {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    /* ÍCONES SVG PADRONIZADOS */
+
+    .icon-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    .icon-badge-amber {
+      background: rgba(217, 119, 6, 0.12);
+      color: #d97706;
+    }
+
+    :global([data-theme="dark"]) .icon-badge {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    :global([data-theme="dark"]) .icon-badge-amber {
+      background: rgba(251, 191, 36, 0.14);
+      color: #fbbf24;
+    }
+
+    .calculator-section {
+      margin-bottom: 3.5rem;
+      scroll-margin-top: 2rem;
+    }
+
+    .section-heading {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 0.6rem;
+      font-size: 1.65rem;
+      line-height: 1.3;
+    }
+
+    .section-heading > p {
+      max-width: 760px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+
+    .card {
+      padding: 1.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .card h3 {
+      margin: 0 0 1.4rem;
+      font-size: 1.2rem;
+    }
+
+    .input-card h3 {
+      color: var(--color-primary);
+    }
+
+    .field-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .field-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 650;
+      line-height: 1.5;
+    }
+
+    .field-group input {
+      width: 100%;
+      min-height: 46px;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid var(--border-color);
+      border-radius: 9px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font: inherit;
+      box-sizing: border-box;
+    }
+
+    .field-group input:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    .field-group small {
+      display: block;
+      margin-top: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .hours-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.85rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      width: 100%;
+      min-height: 48px;
+      padding: 0.85rem 1.1rem;
+      border: 0;
+      border-radius: 9px;
+      background: var(--color-primary);
+      color: #ffffff;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .btn:hover {
+      opacity: 0.88;
+    }
+
+    .input-note {
+      margin: 0.9rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    .result-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .result-card .section-label {
+      margin-bottom: 0.35rem;
+    }
+
+    .result-card h3 {
+      margin-bottom: 1.35rem;
+    }
+
+    .main-result {
+      padding: 1.35rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: rgba(6, 95, 70, 0.08);
+    }
+
+    :global([data-theme="dark"]) .main-result {
+      background: rgba(16, 185, 129, 0.12);
+    }
+
+    .main-result span {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .main-result strong {
+      display: block;
+      color: var(--color-primary);
+      font-size: clamp(1.8rem, 4vw, 2.3rem);
+      overflow-wrap: anywhere;
+    }
+
+    .result-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.9rem;
+    }
+
+    .result-line span {
+      color: var(--text-secondary);
+    }
+
+    .result-line strong {
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .result-observation {
+      margin-top: 1.5rem;
+      padding-top: 1.1rem;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.8rem;
+    }
+
+    .result-observation p {
+      margin: 0.45rem 0 0;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    .calc-error {
+      margin-top: 1rem;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid #dc2626;
+      border-radius: 8px;
+      color: #dc2626;
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .content-section {
+      margin-bottom: 3.5rem;
+    }
+
+    .content-section > p {
+      margin: 1rem 0;
+      color: var(--text-secondary);
+      font-size: 0.97rem;
+      line-height: 1.85;
+    }
+
+    .instruction-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .instruction-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.35rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .step-number {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    :global([data-theme="dark"]) .step-number {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    .instruction-card h3,
+    .explanation-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    .instruction-card p,
+    .explanation-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .formula-box {
+      display: grid;
+      gap: 0.85rem;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .formula-box > span,
+    .example-calculation > span {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .formula-box code,
+    .example-calculation code {
+      display: block;
+      padding: 0.85rem 1rem;
+      border-radius: 8px;
+      background: var(--bg-primary);
+      color: var(--color-primary);
+      font-size: 0.95rem;
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+
+    .example-card {
+      padding: 1.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .example-card h3 {
+      margin: 0 0 1.35rem;
+    }
+
+    .example-data {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+    .example-data > div {
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-primary);
+    }
+
+    .example-data span {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+    }
+
+    .example-data strong {
+      font-size: 1.1rem;
+    }
+
+    .example-calculation {
+      display: grid;
+      gap: 0.65rem;
+      margin-top: 1.5rem;
+    }
+
+    .example-card > p {
+      margin: 1.25rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.75;
+    }
+
+    .explanation-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .explanation-card {
+      padding: 1.4rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .explanation-card .icon-badge {
+      margin-bottom: 0.95rem;
+    }
+
+    .attention-section,
+    .privacy-section {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      padding: 1.65rem;
+      margin-bottom: 3.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      background: var(--bg-secondary);
+    }
+
+    .attention-badge {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+    }
+
+    .attention-section h2,
+    .privacy-section h2 {
+      margin: 0 0 0.85rem;
+      font-size: 1.45rem;
+    }
+
+    .attention-section p,
+    .attention-section li,
+    .privacy-section p {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.8;
+    }
+
+    .attention-section ul {
+      padding-left: 1.35rem;
+    }
+
+    .comparison-card {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .comparison-card > div {
+      padding: 1.4rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .comparison-card h3 {
+      margin: 0 0 0.6rem;
+      color: var(--color-primary);
+    }
+
+    .comparison-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      line-height: 1.75;
+    }
+
+    .faq-section {
+      margin-bottom: 3.5rem;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .faq-item summary {
+      padding: 1.2rem 2rem 1.2rem 0;
+      position: relative;
+      cursor: pointer;
+      color: var(--text-primary);
+      font-weight: 650;
+      line-height: 1.5;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      content: '+';
+      position: absolute;
+      right: 0.3rem;
+      color: var(--color-primary);
+      font-size: 1.35rem;
+    }
+
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+
+    .faq-item p {
+      margin: 0;
+      padding: 0 1rem 1.2rem 0;
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+      line-height: 1.75;
+    }
+
+    .final-notice {
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 2.5rem;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--color-primary);
+      border-radius: 10px;
+      background: var(--bg-secondary);
+    }
+
+    .notice-title {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 0.5rem;
+      color: var(--color-primary);
+    }
+
+    .notice-title strong {
+      color: var(--text-primary);
+    }
+
+    .final-notice p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.75;
+    }
+
+    .final-cta {
+      padding: 2.25rem 1.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+      text-align: center;
+    }
+
+    .final-cta h2 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(1.45rem, 3vw, 1.85rem);
+    }
+
+    .final-cta p {
+      max-width: 650px;
+      margin: 0 auto 1.5rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .cta-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.8rem 1.4rem;
+      border-radius: 9px;
+      background: var(--color-primary);
+      color: #ffffff;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .cta-link:hover {
+      opacity: 0.88;
+    }
+
+    .cta-link:focus-visible,
+    .btn:focus-visible,
+    .breadcrumb a:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 768px) {
+      .calc-grid,
+      .explanation-grid,
+      .comparison-card {
+        grid-template-columns: 1fr;
+      }
+
+      .attention-section,
+      .privacy-section {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hours-grid,
+      .example-data {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 1.25rem;
+      }
+
+      .hero-highlights {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</BaseLayout>

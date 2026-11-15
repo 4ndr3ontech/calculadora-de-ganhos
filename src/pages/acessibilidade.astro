@@ -1,0 +1,612 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Acessibilidade | Calculadora de Ganhos"
+  description="Conheça nosso compromisso com a acessibilidade digital, inclusão e melhoria contínua da experiência de navegação no Calculadora de Ganhos."
+>
+  <div class="accessibility-page">
+
+    <!-- CABEÇALHO -->
+    <header class="accessibility-hero">
+      <span class="eyebrow">INCLUSÃO E EXPERIÊNCIA DIGITAL</span>
+
+      <h1>Acessibilidade</h1>
+
+      <p class="hero-description">
+        O <strong>Calculadora de Ganhos</strong> acredita que o acesso à
+        informação e às ferramentas digitais deve ser facilitado para todas as
+        pessoas, independentemente de suas condições, habilidades ou tecnologias
+        assistivas utilizadas para navegar na internet.
+      </p>
+
+      <p class="updated">
+        Última atualização: 14 de novembro de 2026.
+      </p>
+    </header>
+
+    <!-- 1 -->
+    <section class="accessibility-section">
+      <h2>1. Nosso compromisso com a acessibilidade</h2>
+
+      <p>
+        A acessibilidade digital é um compromisso contínuo no desenvolvimento do
+        portal. Nosso objetivo é estruturar cada página para que qualquer pessoa
+        possa consultar informações, preencher campos e utilizar nossas
+        calculadoras com autonomia e clareza.
+      </p>
+
+      <p>
+        Aplicamos boas práticas de desenvolvimento web e recomendações
+        internacionais de usabilidade para tornar a navegação simples, previsível
+        e compreensível.
+      </p>
+
+      <p>
+        Entendemos que acessibilidade vai além da aparência visual: ela envolve
+        semântica do código, hierarquia lógica de títulos, legibilidade dos
+        textos, operação por teclado e compatibilidade com tecnologias assistivas.
+      </p>
+    </section>
+
+    <!-- 2 -->
+    <section class="accessibility-section">
+      <h2>2. Recursos de acessibilidade implementados</h2>
+
+      <p>
+        Incorporamos recursos técnicos em toda a estrutura do portal para
+        oferecer uma navegação inclusiva:
+      </p>
+
+      <h3>2.1. Navegação por teclado</h3>
+
+      <p>
+        Os menus, links, botões e campos das calculadoras são estruturados para
+        operação completa via teclado, sem depender exclusivamente do mouse ou
+        de telas sensíveis ao toque:
+      </p>
+
+      <ul>
+        <li>Uso da tecla <strong>Tab</strong> para avançar entre elementos interativos</li>
+        <li>Uso de <strong>Shift + Tab</strong> para retornar aos controles anteriores</li>
+        <li>Ativação de botões e links por meio das teclas <strong>Enter</strong> ou <strong>Espaço</strong></li>
+        <li>Indicador visual nítido de foco (<em>focus-visible</em>) durante a navegação</li>
+        <li>Ordem sequencial e lógica de tabulação entre os componentes</li>
+      </ul>
+
+      <h3>2.2. Compatibilidade com leitores de tela</h3>
+
+      <p>
+        Estruturamos nossas páginas com HTML5 semântico, marcos de navegação bem
+        definidos e hierarquia clara de cabeçalhos para facilitar a leitura por
+        softwares como NVDA, JAWS, VoiceOver e TalkBack.
+      </p>
+
+      <p>
+        Campos de formulário, botões e controles interativos contam com rótulos
+        descritivos (<code>label</code> e atributos <code>aria-*</code>) que
+        identificam claramente sua finalidade.
+      </p>
+
+      <h3>2.3. Contraste, tipografia e modos de exibição</h3>
+
+      <p>
+        Utilizamos tipografia legível, espaçamento generoso entre linhas e
+        relação de contraste adequada entre textos e planos de fundo, além de
+        oferecer alternância entre <strong>modo claro e modo escuro</strong> para
+        maior conforto visual.
+      </p>
+
+      <h3>2.4. Responsividade e adaptação de tela</h3>
+
+      <p>
+        O layout do <strong>Calculadora de Ganhos</strong> adapta-se
+        automaticamente a computadores, notebooks, tablets e smartphones,
+        permitindo ampliação de zoom no navegador sem perda de conteúdo ou
+        sobreposição de elementos.
+      </p>
+    </section>
+
+    <!-- 3 -->
+    <section class="accessibility-section">
+      <h2>3. Acessibilidade das calculadoras e simuladores</h2>
+
+      <p>
+        Como nossas calculadoras são o núcleo do portal, dedicamos atenção
+        especial à clareza dos formulários e da apresentação dos resultados:
+      </p>
+
+      <ul>
+        <li>Identificação clara de cada campo de entrada e sua unidade (R$, %, meses, anos)</li>
+        <li>Instruções objetivas sobre os parâmetros solicitados</li>
+        <li>Mensagens de validação claras e fáceis de compreender</li>
+        <li>Apresentação estruturada dos resultados e memórias de cálculo</li>
+        <li>Uso de texto e ícones além de cores para destacar alertas ou resultados</li>
+      </ul>
+    </section>
+
+    <!-- 4 -->
+    <section class="accessibility-section">
+      <h2>4. Padrões e diretrizes de referência</h2>
+
+      <p>
+        Adotamos como referência técnica as Diretrizes de Acessibilidade para
+        Conteúdo Web (<strong>WCAG</strong>), publicadas pelo World Wide Web
+        Consortium (W3C), baseadas em quatro princípios fundamentais:
+      </p>
+
+      <ul>
+        <li>
+          <strong>Perceptível:</strong> informações e componentes de interface
+          apresentados de forma que possam ser percebidos por todos os usuários.
+        </li>
+        <li>
+          <strong>Operável:</strong> componentes de interface e navegação
+          totalmente utilizáveis por diferentes métodos de entrada.
+        </li>
+        <li>
+          <strong>Compreensível:</strong> textos, instruções e funcionamento
+          das ferramentas claros e previsíveis.
+        </li>
+        <li>
+          <strong>Robusto:</strong> conteúdo compatível com diferentes
+          navegadores e tecnologias assistivas atuais e futuras.
+        </li>
+      </ul>
+
+      <p class="section-link-center">
+        <a
+          href="https://www.w3.org/WAI/standards-guidelines/wcag/"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Diretrizes de Acessibilidade para Conteúdo Web (WCAG) →
+        </a>
+      </p>
+    </section>
+
+    <!-- 5 -->
+    <section class="accessibility-section">
+      <h2>5. Limitações conhecidas</h2>
+
+      <p>
+        Embora trabalhemos continuamente para manter todas as páginas acessíveis,
+        reconhecemos que alguns componentes externos — como blocos de anúncios
+        fornecidos por redes parceiras ou gráficos interativos específicos —
+        podem apresentar limitações pontuais em determinadas combinações de
+        navegadores e leitores de tela.
+      </p>
+
+      <p>
+        Monitoramos constantemente essas situações para aplicar melhorias e
+        alternativas sempre que possível.
+      </p>
+    </section>
+
+    <!-- 6 -->
+    <section class="accessibility-section">
+      <h2>6. Como relatar dificuldades de acessibilidade</h2>
+
+      <p>
+        Se você encontrar qualquer barreira de acesso, dificuldade de navegação
+        por teclado ou problema de leitura em alguma página ou calculadora,
+        incentivamos que nos avise. Seu relato nos ajuda a tornar o portal mais
+        inclusivo.
+      </p>
+
+      <p>Sempre que possível, inclua na mensagem:</p>
+
+      <ul>
+        <li>O endereço (URL) ou nome da calculadora acessada</li>
+        <li>Uma descrição clara da dificuldade encontrada</li>
+        <li>O navegador, sistema operacional e dispositivo utilizados</li>
+        <li>O leitor de tela ou tecnologia assistiva empregada, se aplicável</li>
+      </ul>
+
+      <div class="contact-card">
+        <h3>Canal de Acessibilidade — Calculadora de Ganhos</h3>
+
+        <p>
+          <strong>E-mail oficial:</strong>
+          <a href="mailto:contato@calculadoradeganhos.com.br?subject=Acessibilidade%20-%20Calculadora%20de%20Ganhos">
+            contato@calculadoradeganhos.com.br
+          </a>
+        </p>
+
+        <p>
+          Você também pode enviar sua mensagem diretamente pela nossa
+          <a href="/contato/">página de contato</a>.
+        </p>
+      </div>
+    </section>
+
+    <!-- 7 -->
+    <section class="accessibility-section">
+      <h2>7. Melhorias contínuas</h2>
+
+      <p>
+        A acessibilidade digital é um processo permanente. Revisamos
+        periodicamente o contraste visual, a semântica HTML, o comportamento de
+        foco, a responsividade móvel e a experiência de preenchimento das
+        ferramentas para eliminar barreiras e aprimorar o uso do portal.
+      </p>
+    </section>
+
+    <!-- 8 -->
+    <section class="accessibility-section">
+      <h2>8. Legislação e referências normativas</h2>
+
+      <p>
+        Nossa atuação em acessibilidade digital considera as principais normas
+        brasileiras e internacionais de inclusão:
+      </p>
+
+      <ul>
+        <li>
+          <strong>Lei Brasileira de Inclusão (Lei nº 13.146/2015):</strong>
+          estatuto da pessoa com deficiência e diretrizes de acessibilidade na web.
+          <a
+            href="https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2015/lei/l13146.htm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Consultar legislação →
+          </a>
+        </li>
+        <li>
+          <strong>WCAG (W3C):</strong> diretrizes internacionais de
+          acessibilidade para conteúdo web.
+          <a
+            href="https://www.w3.org/WAI/standards-guidelines/wcag/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Consultar diretrizes →
+          </a>
+        </li>
+        <li>
+          <strong>eMAG:</strong> Modelo de Acessibilidade em Governo Eletrônico.
+          <a
+            href="https://emag.governoeletronico.gov.br/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Consultar modelo →
+          </a>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 9 -->
+    <section class="accessibility-section">
+      <h2>9. Atualizações desta declaração</h2>
+
+      <p>
+        Esta Declaração de Acessibilidade pode ser atualizada periodicamente para
+        refletir novos recursos implementados e avanços contínuos na experiência
+        dos visitantes. A data da última revisão estará sempre visível no topo
+        desta página.
+      </p>
+    </section>
+
+    <!-- ENCERRAMENTO -->
+    <section class="accessibility-footer">
+      <span class="eyebrow">CALCULADORA DE GANHOS</span>
+
+      <h2>Tecnologia acessível e inclusão para todos.</h2>
+
+      <p>
+        Continuaremos aprimorando nossas ferramentas e conteúdos para oferecer
+        uma experiência cada vez mais clara, autônoma e inclusiva.
+      </p>
+
+      <div class="footer-links">
+        <a href="/sobre/">Sobre Nós</a>
+        <span>•</span>
+        <a href="/privacidade/">Política de Privacidade</a>
+        <span>•</span>
+        <a href="/cookies/">Política de Cookies</a>
+        <span>•</span>
+        <a href="/termos/">Termos de Uso</a>
+      </div>
+
+      <div class="footer-actions">
+        <a href="/" class="primary-button">
+          Voltar à página inicial
+        </a>
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>
+
+<style>
+  .accessibility-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: min(100% - 2rem, 860px);
+    margin: 0 auto;
+    padding: 1rem 0 4rem;
+    text-align: center !important;
+  }
+
+  .accessibility-page *,
+  .accessibility-page h1,
+  .accessibility-page h2,
+  .accessibility-page h3,
+  .accessibility-page p,
+  .accessibility-page li,
+  .accessibility-page header,
+  .accessibility-page section,
+  .accessibility-page div {
+    text-align: center !important;
+  }
+
+  .accessibility-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 0.5rem auto 3.5rem;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    margin: 0 auto 1rem;
+    color: var(--color-primary);
+    font-size: 0.76rem;
+    font-weight: 800;
+    letter-spacing: 0.13em;
+  }
+
+  .accessibility-hero h1 {
+    width: 100%;
+    margin: 0 auto 1.2rem;
+    color: var(--text-primary);
+    font-size: clamp(2rem, 5vw, 3rem);
+    line-height: 1.2;
+    letter-spacing: -0.04em;
+  }
+
+  .hero-description {
+    max-width: 740px;
+    margin: 0 auto;
+    color: var(--text-secondary);
+    font-size: 1.08rem;
+    line-height: 1.85;
+  }
+
+  .updated {
+    margin: 1.4rem auto 0;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+  }
+
+  .accessibility-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto 3rem;
+  }
+
+  .accessibility-section h2 {
+    width: 100%;
+    margin: 0 auto 1.2rem;
+    color: var(--text-primary);
+    font-size: clamp(1.35rem, 3vw, 1.7rem);
+    line-height: 1.35;
+    letter-spacing: -0.02em;
+  }
+
+  .accessibility-section h3 {
+    width: 100%;
+    margin: 1.75rem auto 0.75rem;
+    color: var(--text-primary);
+    font-size: 1.08rem;
+  }
+
+  .accessibility-section p {
+    width: 100%;
+    margin: 0 auto 1rem;
+    color: var(--text-secondary);
+    font-size: 0.96rem;
+    line-height: 1.9;
+  }
+
+  .accessibility-section code {
+    padding: 0.15rem 0.4rem;
+    border-radius: 4px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 0.88em;
+  }
+
+  .section-link-center {
+    margin: 1.25rem auto 0;
+  }
+
+  .accessibility-section ul {
+    display: grid;
+    justify-items: center;
+    gap: 0.65rem;
+    width: 100%;
+    max-width: 680px;
+    margin: 0 auto 1.3rem;
+    padding: 0;
+    list-style: none;
+    color: var(--text-secondary);
+  }
+
+  .accessibility-section li {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    font-size: 0.94rem;
+    line-height: 1.7;
+  }
+
+  .accessibility-section strong {
+    color: var(--text-primary);
+  }
+
+  .accessibility-section a {
+    color: var(--color-primary);
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .accessibility-section a:hover {
+    text-decoration: underline;
+  }
+
+  .accessibility-page a:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 4px;
+    border-radius: 4px;
+  }
+
+  .contact-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 680px;
+    margin: 1.5rem auto;
+    padding: 1.6rem;
+    border: 1px solid var(--border-color);
+    border-top: 3px solid var(--color-primary);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .contact-card h3 {
+    margin-top: 0;
+  }
+
+  .contact-card p:last-child {
+    margin-bottom: 0;
+  }
+
+  .accessibility-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-top: 4rem;
+    padding: 2.5rem 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .accessibility-footer h2 {
+    max-width: 650px;
+    margin: 0 auto 1rem;
+    color: var(--text-primary);
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    line-height: 1.3;
+  }
+
+  .accessibility-footer p {
+    max-width: 650px;
+    margin: 0 auto 1.25rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.8;
+  }
+
+  .footer-links {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin: 0 auto 1.75rem;
+    font-size: 0.92rem;
+    color: var(--text-secondary);
+  }
+
+  .footer-links a {
+    color: var(--color-primary);
+    font-weight: 650;
+    text-decoration: none;
+  }
+
+  .footer-links a:hover {
+    text-decoration: underline;
+  }
+
+  .footer-actions {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 46px;
+    padding: 0.75rem 1.4rem;
+    border-radius: var(--radius-md);
+    background: var(--color-primary);
+    color: #fff !important;
+    font-size: 0.92rem;
+    font-weight: 700;
+    text-decoration: none !important;
+    transition: opacity 0.2s ease;
+  }
+
+  .primary-button:hover {
+    opacity: 0.85;
+  }
+
+  @media (max-width: 600px) {
+    .accessibility-page {
+      width: min(100% - 1.5rem, 860px);
+      padding-top: 0.5rem;
+    }
+
+    .accessibility-hero {
+      margin-bottom: 2.5rem;
+    }
+
+    .accessibility-hero h1 {
+      font-size: 2.1rem;
+    }
+
+    .hero-description {
+      font-size: 0.98rem;
+    }
+
+    .accessibility-section {
+      margin-bottom: 2.4rem;
+    }
+
+    .contact-card {
+      padding: 1.25rem;
+    }
+
+    .accessibility-footer {
+      padding: 2rem 1.2rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .accessibility-page *,
+    .accessibility-page *::before,
+    .accessibility-page *::after {
+      scroll-behavior: auto !important;
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+</style>

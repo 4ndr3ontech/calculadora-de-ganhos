@@ -1,0 +1,1322 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de 13º Salário 2026 — Primeira e Segunda Parcela"
+  description="Calcule seu décimo terceiro salário proporcional, veja a primeira e segunda parcela e estime os descontos de INSS e Imposto de Renda."
+>
+  <main class="page-container">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <a href="/trabalhista/">Trabalhista</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">13º Salário</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="eyebrow">DIREITOS TRABALHISTAS</span>
+      <h1>Calculadora de 13º Salário</h1>
+      <p>
+        Descubra quanto você pode receber de décimo terceiro salário.
+        Simule o valor proporcional, confira as duas parcelas e visualize
+        os descontos estimados de INSS e Imposto de Renda.
+      </p>
+    </header>
+
+    <section class="intro-card">
+      <div class="intro-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+        </svg>
+      </div>
+      <div>
+        <h2>Planeje seu décimo terceiro</h2>
+        <p>
+          Informe seu salário bruto e a quantidade de meses trabalhados.
+          A calculadora apresenta o valor bruto da gratificação, a primeira
+          parcela, os descontos estimados e o valor líquido da segunda parcela.
+        </p>
+      </div>
+    </section>
+
+    <section class="calculator-layout" aria-label="Calculadora de décimo terceiro">
+      <div class="card form-card">
+        <div class="section-heading">
+          <div>
+            <span class="section-label">SIMULAÇÃO</span>
+            <h2>Dados do trabalhador</h2>
+          </div>
+          <div class="heading-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="salary">Salário bruto mensal</label>
+          <div class="input-wrapper">
+            <span class="input-prefix">R$</span>
+            <input
+              type="number"
+              id="salary"
+              value="4000"
+              min="0.01"
+              max="100000000"
+              step="0.01"
+              inputmode="decimal"
+            />
+          </div>
+          <small>
+            Informe sua remuneração bruta mensal, antes dos descontos.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="months">Meses trabalhados no ano</label>
+          <select id="months">
+            <option value="12" selected>12 meses — Ano completo</option>
+            <option value="11">11 meses</option>
+            <option value="10">10 meses</option>
+            <option value="9">9 meses</option>
+            <option value="8">8 meses</option>
+            <option value="7">7 meses</option>
+            <option value="6">6 meses</option>
+            <option value="5">5 meses</option>
+            <option value="4">4 meses</option>
+            <option value="3">3 meses</option>
+            <option value="2">2 meses</option>
+            <option value="1">1 mês</option>
+          </select>
+          <small>
+            Cada mês com pelo menos 15 dias de trabalho é considerado
+            para o cálculo proporcional, observadas as regras aplicáveis.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="year">Ano de referência</label>
+          <input
+            type="text"
+            id="year"
+            value="2026"
+            disabled
+          />
+          <small>
+            As estimativas de INSS e IRRF utilizam as tabelas de 2026.
+          </small>
+        </div>
+
+        <div id="form-error" class="form-error" role="alert" hidden></div>
+
+        <button type="button" id="calc-btn" class="calculate-button">
+          <span>Calcular meu 13º salário</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </button>
+
+        <p class="privacy-note">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Seus valores são processados diretamente nesta página.
+        </p>
+      </div>
+
+      <div class="card results-card" aria-live="polite">
+        <div class="section-heading">
+          <div>
+            <span class="section-label">RESULTADO</span>
+            <h2>Estimativa do pagamento</h2>
+          </div>
+          <div class="heading-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </div>
+        </div>
+
+        <div id="results-placeholder" class="results-placeholder">
+          <div class="placeholder-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+              <polyline points="16 7 22 7 22 13"></polyline>
+            </svg>
+          </div>
+          <h3>Seu resultado aparecerá aqui</h3>
+          <p>
+            Informe seu salário e os meses trabalhados para visualizar
+            a estimativa do décimo terceiro.
+          </p>
+        </div>
+
+        <div id="results-content" hidden>
+          <div class="gross-result">
+            <span>13º salário bruto proporcional</span>
+            <strong id="res-gross">R$ 0,00</strong>
+            <small>Valor antes dos descontos legais estimados.</small>
+          </div>
+
+          <div class="installments">
+            <div class="installment-card first-installment">
+              <div class="installment-heading">
+                <span class="installment-number">01</span>
+                <span>Primeira parcela</span>
+              </div>
+              <strong id="res-first">R$ 0,00</strong>
+              <small>Adiantamento sem descontos de INSS e IRRF.</small>
+            </div>
+
+            <div class="installment-card second-installment">
+              <div class="installment-heading">
+                <span class="installment-number">02</span>
+                <span>Segunda parcela</span>
+              </div>
+              <strong id="res-second">R$ 0,00</strong>
+              <small>Saldo após os descontos estimados sobre o 13º.</small>
+            </div>
+          </div>
+
+          <div class="deductions">
+            <h3>Detalhamento dos descontos</h3>
+
+            <div class="detail-row">
+              <span>13º salário bruto</span>
+              <strong id="detail-gross">R$ 0,00</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>INSS estimado</span>
+              <strong id="detail-inss">R$ 0,00</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>IRRF estimado</span>
+              <strong id="detail-irrf">R$ 0,00</strong>
+            </div>
+
+            <div class="detail-row total-row">
+              <span>13º salário líquido estimado</span>
+              <strong id="detail-net">R$ 0,00</strong>
+            </div>
+          </div>
+
+          <div class="net-result">
+            <span>Total líquido estimado das duas parcelas</span>
+            <strong id="res-net">R$ 0,00</strong>
+          </div>
+
+          <p class="result-explanation" id="result-explanation"></p>
+        </div>
+
+        <p class="result-disclaimer">
+          Resultado estimativo. O valor efetivo depende da remuneração,
+          das verbas variáveis, das deduções e das regras vigentes.
+        </p>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2>Como funciona o cálculo do 13º salário?</h2>
+      <p>
+        O décimo terceiro salário é uma gratificação anual garantida
+        aos trabalhadores que possuem vínculo empregatício, conforme
+        a legislação brasileira.
+      </p>
+
+      <div class="formula-card">
+        <span class="formula-label">FÓRMULA DO CÁLCULO PROPORCIONAL</span>
+        <div class="formula">
+          <strong>Salário bruto ÷ 12 × meses trabalhados</strong>
+        </div>
+        <p>
+          O resultado corresponde ao valor bruto proporcional do décimo
+          terceiro salário.
+        </p>
+      </div>
+
+      <div class="info-grid">
+        <article class="info-card">
+          <div class="info-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <h3>Primeira parcela</h3>
+          <p>
+            Corresponde, em regra, à metade do valor bruto do 13º salário.
+            É paga como adiantamento, sem os descontos de INSS e IRRF
+            próprios da apuração final.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <div class="info-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+              <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>
+          </div>
+          <h3>Segunda parcela</h3>
+          <p>
+            Corresponde ao saldo restante, com os descontos legais
+            aplicáveis calculados sobre o valor total do décimo terceiro.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2>Quais descontos incidem sobre o décimo terceiro?</h2>
+      <p>
+        A primeira parcela normalmente é paga sem os descontos de INSS
+        e Imposto de Renda. A apuração desses tributos ocorre na segunda
+        parcela, considerando o valor integral do décimo terceiro.
+      </p>
+
+      <div class="checklist">
+        <div class="check-item">
+          <span aria-hidden="true">✓</span>
+          <div>
+            <strong>INSS</strong>
+            <p>
+              A contribuição previdenciária do trabalhador utiliza alíquotas
+              progressivas. Cada faixa de remuneração possui uma alíquota
+              específica, respeitado o teto previdenciário.
+            </p>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <span aria-hidden="true">✓</span>
+          <div>
+            <strong>Imposto de Renda (IRRF)</strong>
+            <p>
+              O imposto pode incidir sobre o décimo terceiro conforme
+              a base tributável e as regras específicas de tributação.
+              Em 2026, também existe uma regra adicional de redução
+              para determinadas faixas de rendimento.
+            </p>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <span aria-hidden="true">✓</span>
+          <div>
+            <strong>FGTS</strong>
+            <p>
+              O FGTS é uma obrigação do empregador. Não é descontado
+              diretamente do valor que o trabalhador recebe.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2>Exemplo de cálculo do décimo terceiro</h2>
+      <p>
+        Considere um trabalhador com salário bruto de R$ 4.000,00
+        que tenha trabalhado durante os 12 meses do ano.
+      </p>
+
+      <div class="example-table">
+        <div class="example-row">
+          <span>Salário bruto</span>
+          <strong>R$ 4.000,00</strong>
+        </div>
+        <div class="example-row">
+          <span>Meses trabalhados</span>
+          <strong>12 meses</strong>
+        </div>
+        <div class="example-row">
+          <span>13º bruto</span>
+          <strong>R$ 4.000,00</strong>
+        </div>
+        <div class="example-row">
+          <span>Primeira parcela</span>
+          <strong>R$ 2.000,00</strong>
+        </div>
+        <div class="example-row">
+          <span>Segunda parcela</span>
+          <strong>Saldo após descontos</strong>
+        </div>
+      </div>
+
+      <p class="example-note">
+        O exemplo apresenta valores brutos e não representa uma
+        apuração individual de impostos.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>O que você precisa saber sobre o 13º salário?</h2>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Quem tem direito ao décimo terceiro salário?</summary>
+          <p>
+            Em regra, trabalhadores com vínculo empregatício regido pela CLT
+            têm direito ao décimo terceiro salário, incluindo trabalhadores
+            urbanos, rurais e domésticos. A gratificação também é devida
+            proporcionalmente nas situações previstas em lei.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Como calcular o 13º salário proporcional?</summary>
+          <p>
+            Divida o salário bruto por 12 e multiplique pelo número
+            de meses trabalhados no ano. Para contar um mês, é necessário
+            ter trabalhado pelo menos 15 dias naquele mês.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Quando a primeira parcela deve ser paga?</summary>
+          <p>
+            A primeira parcela deve ser paga entre fevereiro e novembro,
+            até o dia 30 de novembro, conforme as regras legais.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Quando a segunda parcela deve ser paga?</summary>
+          <p>
+            O pagamento deve ocorrer até 20 de dezembro, com a apuração
+            dos descontos legais incidentes sobre a gratificação.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Quem trabalhou menos de 12 meses recebe 13º?</summary>
+          <p>
+            Sim. O trabalhador pode receber o décimo terceiro proporcional
+            aos meses computáveis trabalhados durante o ano.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O décimo terceiro tem desconto de INSS?</summary>
+          <p>
+            Sim. A contribuição previdenciária incide sobre o décimo terceiro
+            separadamente da remuneração mensal, utilizando a tabela
+            progressiva aplicável.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O décimo terceiro tem desconto de Imposto de Renda?</summary>
+          <p>
+            Pode ter. O décimo terceiro possui tributação exclusiva na fonte.
+            A incidência depende da base de cálculo e das regras vigentes
+            no ano de referência.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O FGTS é descontado do décimo terceiro?</summary>
+          <p>
+            Não. O depósito do FGTS é uma obrigação do empregador
+            e não representa um desconto no valor recebido pelo trabalhador.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <section class="final-note">
+      <strong>Importante:</strong>
+      Esta ferramenta possui finalidade informativa e educacional.
+      Os resultados são estimativas e não substituem o demonstrativo
+      oficial de pagamento da empresa ou a orientação de um profissional
+      de contabilidade.
+    </section>
+  </main>
+
+  <script>
+    import { formatBRL } from '../../engines/common/currency';
+
+    const getInput = (id: string): HTMLInputElement =>
+      document.getElementById(id) as HTMLInputElement;
+
+    const getElement = (id: string): HTMLElement =>
+      document.getElementById(id)!;
+
+    // Tabela progressiva do INSS para empregado em 2026.
+    const INSS_LIMITS = [
+      { limit: 1621.00, rate: 0.075 },
+      { limit: 2902.84, rate: 0.09 },
+      { limit: 4354.27, rate: 0.12 },
+      { limit: 8475.55, rate: 0.14 },
+    ];
+
+    // Tabela progressiva do IRRF para 2026.
+    const IRRF_BRACKETS = [
+      { limit: 2428.80, rate: 0, deduction: 0 },
+      { limit: 2826.65, rate: 0.075, deduction: 182.16 },
+      { limit: 3751.05, rate: 0.15, deduction: 394.16 },
+      { limit: 4664.68, rate: 0.225, deduction: 675.49 },
+      { limit: Infinity, rate: 0.275, deduction: 908.73 },
+    ];
+
+    const IRRF_SIMPLIFIED_LIMIT = 607.20;
+
+    function calculateINSS(value: number): number {
+      let contribution = 0;
+      let previousLimit = 0;
+
+      const base = Math.min(value, 8475.55);
+
+      for (const bracket of INSS_LIMITS) {
+        if (base <= previousLimit) break;
+
+        const taxableRange = Math.min(
+          base - previousLimit,
+          bracket.limit - previousLimit
+        );
+
+        contribution += taxableRange * bracket.rate;
+        previousLimit = bracket.limit;
+      }
+
+      return Math.round(contribution * 100) / 100;
+    }
+
+    function calculateIRRF(gross: number, inss: number): number {
+      // O décimo terceiro possui tributação exclusiva na fonte.
+      // Nesta simulação são consideradas as deduções legais de INSS,
+      // sem dependentes ou outras deduções individuais.
+
+      const taxableBase = Math.max(0, gross - inss);
+
+      // A legislação de 2026 prevê redução do imposto para
+      // rendimentos de até R$ 7.350,00, inclusive no 13º.
+      if (gross <= 5000) {
+        return 0;
+      }
+
+      const bracket = IRRF_BRACKETS.find(
+        (item) => taxableBase <= item.limit
+      )!;
+
+      const tax = Math.max(
+        0,
+        taxableBase * bracket.rate - bracket.deduction
+      );
+
+      let reduction = 0;
+
+      if (gross <= 7350) {
+        reduction = 978.62 - (0.133145 * gross);
+      }
+
+      const finalTax = Math.max(0, tax - reduction);
+
+      return Math.round(finalTax * 100) / 100;
+    }
+
+    function setText(id: string, value: string): void {
+      getElement(id).textContent = value;
+    }
+
+    function showError(message: string): void {
+      const error = getElement('form-error');
+
+      error.textContent = message;
+      error.hidden = false;
+
+      getElement('results-content').hidden = true;
+      getElement('results-placeholder').hidden = false;
+    }
+
+    function clearError(): void {
+      const error = getElement('form-error');
+
+      error.textContent = '';
+      error.hidden = true;
+    }
+
+    function runCalc(): void {
+      clearError();
+
+      const salary = Number(getInput('salary').value);
+      const selectedMonths = Number(
+        (document.getElementById('months') as HTMLSelectElement).value
+      );
+
+      if (!Number.isFinite(salary) || !Number.isFinite(selectedMonths)) {
+        showError('Informe valores numéricos válidos.');
+        return;
+      }
+
+      if (salary <= 0 || salary > 100000000) {
+        showError('Informe um salário bruto maior que zero e válido.');
+        getInput('salary').focus();
+        return;
+      }
+
+      if (
+        !Number.isInteger(selectedMonths) ||
+        selectedMonths < 1 ||
+        selectedMonths > 12
+      ) {
+        showError('Selecione uma quantidade válida de meses trabalhados.');
+        return;
+      }
+
+      const button = getElement('calc-btn') as HTMLButtonElement;
+
+      button.disabled = true;
+
+      try {
+        // Valor bruto proporcional do décimo terceiro.
+        const gross = Math.round(
+          ((salary / 12) * selectedMonths) * 100
+        ) / 100;
+
+        // Primeira parcela sem descontos.
+        const firstInstallment = Math.round(
+          (gross / 2) * 100
+        ) / 100;
+
+        // INSS e IRRF calculados sobre o 13º integral.
+        const inss = calculateINSS(gross);
+        const irrf = calculateIRRF(gross, inss);
+
+        // A segunda parcela corresponde ao saldo restante,
+        // descontados os encargos calculados sobre o total.
+        const secondInstallment = Math.max(
+          0,
+          Math.round(
+            (gross - firstInstallment - inss - irrf) * 100
+          ) / 100
+        );
+
+        const net = Math.max(
+          0,
+          Math.round((gross - inss - irrf) * 100) / 100
+        );
+
+        setText('res-gross', formatBRL(gross));
+        setText('res-first', formatBRL(firstInstallment));
+        setText('res-second', formatBRL(secondInstallment));
+        setText('res-net', formatBRL(net));
+
+        setText('detail-gross', formatBRL(gross));
+        setText('detail-inss', formatBRL(inss));
+        setText('detail-irrf', formatBRL(irrf));
+        setText('detail-net', formatBRL(net));
+
+        setText(
+          'result-explanation',
+          `Seu décimo terceiro foi calculado considerando ${selectedMonths} ${selectedMonths === 1 ? 'mês' : 'meses'} de trabalho. Os descontos previdenciários e tributários foram estimados sobre o valor integral da gratificação e atribuídos à segunda parcela.`
+        );
+
+        getElement('results-placeholder').hidden = true;
+        getElement('results-content').hidden = false;
+
+      } catch (error) {
+        console.error('Erro ao calcular o décimo terceiro:', error);
+
+        showError(
+          'Não foi possível realizar o cálculo. Verifique os dados e tente novamente.'
+        );
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    getElement('calc-btn').addEventListener('click', runCalc);
+
+    getInput('salary').addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') runCalc();
+    });
+
+    getElement('months').addEventListener('change', runCalc);
+
+    getInput('salary').addEventListener('change', runCalc);
+
+    runCalc();
+  </script>
+
+  <style>
+    .page-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 0 3rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 2rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+
+    .page-header {
+      margin-bottom: 1.75rem;
+    }
+
+    .eyebrow,
+    .section-label {
+      display: inline-block;
+      margin-bottom: 0.55rem;
+      color: var(--color-primary);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+    }
+
+    .page-header h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2rem, 5vw, 2.7rem);
+      line-height: 1.15;
+      letter-spacing: -0.045em;
+    }
+
+    .page-header > p {
+      max-width: 750px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.75;
+    }
+
+    .intro-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem;
+      margin-bottom: 1.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+
+    .intro-icon,
+    .placeholder-icon,
+    .info-icon {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      background: var(--bg-primary);
+      color: var(--color-primary);
+      font-size: 1.4rem;
+    }
+
+    .intro-card h2 {
+      margin: 0 0 0.35rem;
+      font-size: 1.05rem;
+    }
+
+    .intro-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
+    .calculator-layout {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+      gap: 1.5rem;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.035);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .section-heading .section-label {
+      margin-bottom: 0.3rem;
+    }
+
+    .heading-icon {
+      color: var(--color-primary);
+      font-size: 1.5rem;
+      display: grid;
+      place-items: center;
+    }
+
+    .field {
+      margin-bottom: 1.25rem;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 0.45rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .field small {
+      display: block;
+      margin-top: 0.4rem;
+      color: var(--text-secondary);
+      font-size: 0.77rem;
+      line-height: 1.5;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+    }
+
+    .input-prefix {
+      padding-left: 0.85rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 650;
+    }
+
+    .input-wrapper input,
+    .field > input,
+    .field select {
+      width: 100%;
+      min-width: 0;
+      padding: 0.85rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      outline: none;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font: inherit;
+      font-size: 0.95rem;
+    }
+
+    .input-wrapper input {
+      border: none;
+      background: transparent;
+    }
+
+    .input-wrapper:focus-within,
+    .field select:focus,
+    .field > input:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .field > input:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+    }
+
+    .calculate-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      width: 100%;
+      padding: 0.95rem 1.2rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      background: var(--color-primary);
+      color: white;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 750;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .calculate-button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .calculate-button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 0.85rem 0 0;
+      color: var(--text-secondary);
+      text-align: center;
+      font-size: 0.75rem;
+    }
+
+    .privacy-note svg {
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    .form-error {
+      margin-bottom: 1rem;
+      padding: 0.85rem;
+      border: 1px solid #dc2626;
+      border-radius: var(--radius-sm);
+      background: rgba(220, 38, 38, 0.08);
+      color: #dc2626;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .results-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 440px;
+    }
+
+    .results-placeholder {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+      text-align: center;
+    }
+
+    .placeholder-icon {
+      width: 65px;
+      height: 65px;
+      margin-bottom: 1rem;
+      border-radius: 18px;
+      font-size: 2rem;
+      color: var(--color-primary);
+      display: grid;
+      place-items: center;
+      background: var(--bg-primary);
+    }
+
+    .results-placeholder h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    .results-placeholder p {
+      max-width: 290px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
+
+    .gross-result {
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+    }
+
+    .gross-result span,
+    .gross-result small {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+    }
+
+    .gross-result strong {
+      display: block;
+      margin: 0.45rem 0;
+      font-size: 1.8rem;
+      letter-spacing: -0.04em;
+    }
+
+    .installments {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.8rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .installment-card {
+      min-width: 0;
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+    }
+
+    .first-installment {
+      border-top: 3px solid #3b82f6;
+    }
+
+    .second-installment {
+      border-top: 3px solid #16a34a;
+    }
+
+    .installment-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin-bottom: 0.85rem;
+      font-size: 0.78rem;
+      font-weight: 750;
+    }
+
+    .installment-number {
+      color: var(--color-primary);
+      font-size: 0.72rem;
+      font-weight: 850;
+    }
+
+    .installment-card strong {
+      display: block;
+      overflow-wrap: anywhere;
+      font-size: clamp(1.05rem, 2vw, 1.35rem);
+      letter-spacing: -0.03em;
+    }
+
+    .installment-card small {
+      display: block;
+      margin-top: 0.5rem;
+      color: var(--text-secondary);
+      font-size: 0.7rem;
+      line-height: 1.5;
+    }
+
+    .deductions {
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .deductions h3 {
+      margin: 0 0 0.7rem;
+      font-size: 0.95rem;
+    }
+
+    .detail-row,
+    .example-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.82rem;
+    }
+
+    .detail-row span,
+    .example-row span {
+      color: var(--text-secondary);
+    }
+
+    .detail-row strong,
+    .example-row strong {
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .total-row {
+      font-weight: 750;
+    }
+
+    .net-result {
+      padding: 1rem;
+      margin-top: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+    }
+
+    .net-result span {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+    }
+
+    .net-result strong {
+      display: block;
+      margin-top: 0.4rem;
+      font-size: 1.55rem;
+      letter-spacing: -0.035em;
+    }
+
+    .result-explanation {
+      margin: 1rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    .result-disclaimer {
+      margin: auto 0 0;
+      padding-top: 1.2rem;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      line-height: 1.55;
+    }
+
+    .content-section {
+      margin-top: 3rem;
+    }
+
+    .content-section > h2 {
+      margin: 0 0 0.8rem;
+      font-size: 1.55rem;
+      letter-spacing: -0.035em;
+    }
+
+    .content-section > p {
+      max-width: 850px;
+      margin: 0 0 1.3rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .formula-card {
+      padding: 1.4rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+
+    .formula-label {
+      color: var(--color-primary);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .formula {
+      margin: 0.9rem 0;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      line-height: 1.5;
+    }
+
+    .formula-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .info-card {
+      padding: 1.4rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+
+    .info-icon {
+      margin-bottom: 0.9rem;
+    }
+
+    .info-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.87rem;
+      line-height: 1.7;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-secondary);
+    }
+
+    .check-item > span {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: var(--bg-primary);
+      color: var(--color-primary);
+      font-weight: 800;
+    }
+
+    .check-item strong {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-size: 0.9rem;
+    }
+
+    .check-item p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.65;
+    }
+
+    .example-table {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+
+    .example-note {
+      margin-top: 0.75rem !important;
+      font-size: 0.78rem !important;
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    .faq-item {
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-secondary);
+    }
+
+    .faq-item summary {
+      position: relative;
+      padding-right: 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      position: absolute;
+      right: 0;
+      content: '+';
+      color: var(--color-primary);
+      font-size: 1.2rem;
+    }
+
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+
+    .faq-item p {
+      margin: 0.85rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.87rem;
+      line-height: 1.7;
+    }
+
+    .final-note {
+      padding: 1rem 1.2rem;
+      margin-top: 2rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .final-note strong {
+      color: var(--text-primary);
+    }
+
+    @media (max-width: 800px) {
+      .calculator-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .results-card {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page-container {
+        padding-bottom: 2rem;
+      }
+
+      .card {
+        padding: 1.1rem;
+      }
+
+      .intro-card {
+        padding: 1rem;
+      }
+
+      .installments,
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .content-section {
+        margin-top: 2.3rem;
+      }
+
+      .content-section > h2 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</BaseLayout>

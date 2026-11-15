@@ -1,0 +1,1298 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getToolsByCategory } from '../../data/tools';
+
+const tools = getToolsByCategory('Trabalhista');
+
+const featuredTools = [
+  {
+    keywords: ['salário líquido', 'salario liquido'],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>`,
+    label: 'Salário',
+    color: 'blue'
+  },
+  {
+    keywords: ['férias', 'ferias'],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path><path d="M22 12A10 10 0 0 0 12 2v10z"></path></svg>`,
+    label: 'Férias',
+    color: 'green'
+  },
+  {
+    keywords: ['décimo terceiro', '13º', 'decimo terceiro'],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>`,
+    label: '13º salário',
+    color: 'purple'
+  },
+  {
+    keywords: ['rescisão', 'rescisao'],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>`,
+    label: 'Rescisão',
+    color: 'orange'
+  },
+  {
+    keywords: ['hora extra', 'horas extras'],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>`,
+    label: 'Horas extras',
+    color: 'cyan'
+  },
+  {
+    keywords: ['clt vs pj', 'clt x pj'],
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="m16 16 3-8 3 8c-.87.65-1.93 1-3 1s-2.13-.35-3-1Z"></path><path d="m2 16 3-8 3 8c-.87.65-1.93 1-3 1s-2.13-.35-3-1Z"></path><path d="M7 21h10"></path><path d="M12 3v18"></path><path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path></svg>`,
+    label: 'Comparação',
+    color: 'pink'
+  }
+];
+
+const getToolPresentation = (name: string) => {
+  const normalizedName = name.toLowerCase();
+
+  return featuredTools.find((item) =>
+    item.keywords.some((keyword) => normalizedName.includes(keyword))
+  ) ?? {
+    icon: `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"></rect><line x1="8" y1="6" x2="16" y2="6"></line><line x1="16" y1="14" x2="16" y2="18"></line><path d="M8 10h.01"></path><path d="M12 10h.01"></path><path d="M16 10h.01"></path><path d="M8 14h.01"></path><path d="M12 14h.01"></path><path d="M8 18h.01"></path><path d="M12 18h.01"></path></svg>`,
+    label: 'Calculadora',
+    color: 'blue'
+  };
+};
+---
+
+<BaseLayout
+  title="Calculadoras Trabalhistas Online — CLT, Salário, Férias e Rescisão | Calculadora de Ganhos"
+  description="Acesse calculadoras trabalhistas gratuitas para simular salário líquido, férias, décimo terceiro, horas extras, rescisão e direitos previstos na CLT."
+>
+  <div class="work-page">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Trabalhista</span>
+    </nav>
+
+    <!-- HERO COM MOCKUP FLUTUANTE -->
+    <header class="hero">
+      <div class="hero-glow" aria-hidden="true"></div>
+
+      <div class="hero-grid">
+        <div class="hero-text">
+          <span class="eyebrow">CENTRAL DE FERRAMENTAS</span>
+
+          <h1>
+            Calculadoras
+            <span>Trabalhistas</span>
+          </h1>
+
+          <p class="hero-description">
+            Entenda melhor seus ganhos e direitos trabalhistas. Utilize nossas
+            ferramentas gratuitas para simular salários, férias, décimo terceiro,
+            horas extras e muito mais.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#calculadoras" class="hero-cta">
+              Explorar calculadoras <span aria-hidden="true">↓</span>
+            </a>
+
+            <span class="hero-note">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Gratuitas e fáceis de usar
+            </span>
+          </div>
+        </div>
+
+        <!-- CARTÃO VISUAL ILUSTRATIVO (MOCKUP DE CALCULADORA TRABALHISTA) -->
+        <div class="hero-visual" aria-hidden="true">
+          <span class="floating-symbol symbol-percent">13º</span>
+          <span class="floating-symbol symbol-pi">CLT</span>
+          <span class="floating-symbol symbol-sum">1/3</span>
+
+          <div class="mockup-card calc-mockup">
+            <div class="mockup-top">
+              <div class="window-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <span class="mockup-badge">Simulação online</span>
+            </div>
+
+            <!-- VISOR DA CALCULADORA -->
+            <div class="calc-screen">
+              <div class="calc-expression">Salário + 1/3 Férias =</div>
+              <div class="calc-result">R$ 4.666,67</div>
+            </div>
+
+            <!-- TECLADO -->
+            <div class="calc-keypad">
+              <span class="calc-key is-muted">C</span>
+              <span class="calc-key is-muted">%</span>
+              <span class="calc-key is-muted">÷</span>
+              <span class="calc-key is-op">×</span>
+
+              <span class="calc-key">7</span>
+              <span class="calc-key">8</span>
+              <span class="calc-key">9</span>
+              <span class="calc-key is-op">−</span>
+
+              <span class="calc-key">4</span>
+              <span class="calc-key">5</span>
+              <span class="calc-key">6</span>
+              <span class="calc-key is-op">+</span>
+
+              <span class="calc-key">1</span>
+              <span class="calc-key">2</span>
+              <span class="calc-key">3</span>
+              <span class="calc-key is-equal">=</span>
+            </div>
+
+            <div class="mockup-row-footer">
+              <span>Calculadora de Ganhos</span>
+              <span class="mockup-dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- BARRA DE INDICADORES -->
+    <section class="highlights" aria-label="Características das ferramentas">
+      <div class="highlight-item">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+            <line x1="8" y1="6" x2="16" y2="6"></line>
+            <line x1="16" y1="14" x2="16" y2="18"></line>
+            <path d="M8 10h.01"></path>
+            <path d="M12 10h.01"></path>
+            <path d="M16 10h.01"></path>
+            <path d="M8 14h.01"></path>
+            <path d="M12 14h.01"></path>
+            <path d="M8 18h.01"></path>
+            <path d="M12 18h.01"></path>
+          </svg>
+        </div>
+        <div>
+          <strong>Cálculos práticos</strong>
+          <small>Simulações simples e rápidas</small>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect>
+            <line x1="12" y1="18" x2="12.01" y2="18"></line>
+          </svg>
+        </div>
+        <div>
+          <strong>Responsivo</strong>
+          <small>Funciona em celular e computador</small>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+        </div>
+        <div>
+          <strong>Informação clara</strong>
+          <small>Entenda cada resultado</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- GRADE DE FERRAMENTAS -->
+    <section id="calculadoras" class="tools-section" aria-labelledby="tools-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">FERRAMENTAS DISPONÍVEIS</span>
+          <h2 id="tools-title">Escolha sua calculadora</h2>
+          <p>
+            Selecione a ferramenta desejada e faça sua simulação gratuitamente.
+          </p>
+        </div>
+
+        <span class="tools-count">
+          {tools.length} {tools.length === 1 ? 'ferramenta' : 'ferramentas'}
+        </span>
+      </div>
+
+      {tools.length > 0 ? (
+        <div class="tools-grid">
+          {tools.map((tool) => {
+            const presentation = getToolPresentation(tool.name);
+
+            return (
+              <a
+                href={tool.route}
+                class={`tool-card color-${presentation.color}`}
+                aria-label={`Acessar ${tool.name}`}
+              >
+                <div class="tool-card-top">
+                  <div class="tool-icon" aria-hidden="true" set:html={presentation.icon}></div>
+                  <span class="tool-category">{presentation.label}</span>
+                </div>
+
+                <div class="tool-card-content">
+                  <h3>{tool.name}</h3>
+                  <p>{tool.description}</p>
+                </div>
+
+                <div class="tool-card-footer">
+                  <span>Acessar calculadora</span>
+                  <span class="arrow" aria-hidden="true">→</span>
+                </div>
+              </a>
+            );
+          })}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <div class="empty-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="4" y="2" width="16" height="20" rx="2"></rect>
+              <line x1="8" y1="6" x2="16" y2="6"></line>
+            </svg>
+          </div>
+          <h3>Nenhuma ferramenta disponível no momento</h3>
+          <p>Estamos preparando novas calculadoras para esta categoria.</p>
+        </div>
+      )}
+    </section>
+
+    <!-- ENTENDA SEUS DIREITOS -->
+    <section class="content-section" aria-labelledby="guide-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">ENTENDA SEUS DIREITOS</span>
+          <h2 id="guide-title">O que você pode calcular?</h2>
+          <p>
+            Conheça algumas das principais situações trabalhistas que podem ser
+            simuladas com nossas ferramentas.
+          </p>
+        </div>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <div class="guide-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <h3>Salário e descontos</h3>
+          <p>
+            Estime quanto receberá após os descontos legais, como INSS e Imposto
+            de Renda, conforme os parâmetros da calculadora.
+          </p>
+        </article>
+
+        <article class="guide-card">
+          <div class="guide-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+              <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+            </svg>
+          </div>
+          <h3>Férias e adicional de 1/3</h3>
+          <p>
+            Simule a remuneração de férias, o adicional constitucional e o
+            abono pecuniário, quando aplicável.
+          </p>
+        </article>
+
+        <article class="guide-card">
+          <div class="guide-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <h3>Décimo terceiro salário</h3>
+          <p>
+            Estime o valor proporcional ou integral do décimo terceiro de acordo
+            com os meses trabalhados no ano.
+          </p>
+        </article>
+
+        <article class="guide-card">
+          <div class="guide-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h3>Horas extras</h3>
+          <p>
+            Calcule o valor adicional das horas trabalhadas além da jornada
+            contratual, considerando os percentuais informados.
+          </p>
+        </article>
+
+        <article class="guide-card">
+          <div class="guide-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <h3>Rescisão do contrato</h3>
+          <p>
+            Faça uma estimativa das verbas rescisórias conforme o tipo de
+            desligamento e as informações fornecidas.
+          </p>
+        </article>
+
+        <article class="guide-card">
+          <div class="guide-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m16 16 3-8 3 8c-.87.65-1.93 1-3 1s-2.13-.35-3-1Z"></path>
+              <path d="m2 16 3-8 3 8c-.87.65-1.93 1-3 1s-2.13-.35-3-1Z"></path>
+              <path d="M7 21h10"></path>
+              <path d="M12 3v18"></path>
+              <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
+            </svg>
+          </div>
+          <h3>CLT ou PJ?</h3>
+          <p>
+            Compare os ganhos estimados entre contratação CLT e prestação
+            de serviços como pessoa jurídica.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- BANNER INFORMATIVO -->
+    <aside class="notice">
+      <div class="notice-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+        <strong>Informação importante:</strong>
+      </div>
+      <p>
+        Os resultados das calculadoras são estimativas para fins informativos.
+        Valores efetivos podem variar conforme convenções coletivas, acordos
+        trabalhistas, histórico profissional, incidências legais e regras
+        específicas de cada situação.
+      </p>
+    </aside>
+
+    <!-- FAQ -->
+    <section class="faq-section" aria-labelledby="faq-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">DÚVIDAS FREQUENTES</span>
+          <h2 id="faq-title">Sobre as calculadoras trabalhistas</h2>
+        </div>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>As calculadoras trabalhistas são gratuitas?</summary>
+          <p>
+            Sim. As ferramentas disponibilizadas nesta categoria podem ser
+            utilizadas gratuitamente, sem necessidade de cadastro.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Os resultados são valores oficiais?</summary>
+          <p>
+            Não. Os resultados são simulações calculadas a partir das informações
+            fornecidas. Para confirmar valores devidos, é necessário considerar
+            documentos, histórico contratual e regras aplicáveis ao caso concreto.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>As calculadoras funcionam pelo celular?</summary>
+          <p>
+            Sim. As páginas são adaptadas para celulares, tablets e computadores,
+            permitindo realizar cálculos em diferentes dispositivos.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>As regras e tabelas trabalhistas podem mudar?</summary>
+          <p>
+            Sim. Salário mínimo, faixas de contribuição, tabelas tributárias e
+            legislação podem sofrer alterações. Confira sempre se os parâmetros
+            da ferramenta correspondem ao período que deseja consultar.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="final-cta">
+      <span class="eyebrow">CALCULADORA DE GANHOS</span>
+      <h2>Compreenda melhor seus ganhos e direitos</h2>
+      <p>
+        Explore também nossas calculadoras financeiras, matemáticas e
+        utilitários gratuitos em um só lugar.
+      </p>
+      <a href="/" class="cta-link">
+        <span>Explorar outras ferramentas</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .work-page {
+    width: 100%;
+    padding: 0.5rem 0 2.5rem;
+    color: var(--text-primary);
+  }
+
+  .breadcrumb {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-bottom: 1.75rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  /* HERO (PADRÃO CENTRAL DE FERRAMENTAS) */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 2.75rem 3rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--color-primary) 16%, transparent) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .hero-text {
+    text-align: center;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    color: var(--color-primary);
+    font-size: 0.73rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.85rem;
+  }
+
+  .hero h1 {
+    margin: 0 0 1.15rem;
+    font-size: clamp(2.15rem, 4.5vw, 3.25rem);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    font-weight: 850;
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .hero h1 span {
+    display: block;
+    color: var(--color-primary);
+  }
+
+  .hero-description {
+    max-width: 520px;
+    margin: 0 auto 1.75rem;
+    color: var(--text-secondary);
+    font-size: 0.98rem;
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem 1.35rem;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.85rem 1.45rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 750;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .hero-cta:hover {
+    opacity: 0.92;
+    transform: translateY(-2px);
+  }
+
+  .hero-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary);
+    font-size: 0.84rem;
+    font-weight: 600;
+  }
+
+  .hero-note svg {
+    color: var(--color-primary);
+  }
+
+  /* CARTÃO MOCKUP DE CALCULADORA */
+  .hero-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .floating-symbol {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--bg-primary);
+    color: var(--color-primary);
+    font-size: 0.82rem;
+    font-weight: 850;
+    box-shadow: var(--shadow-md);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .symbol-percent {
+    top: -10px;
+    left: 12px;
+    transform: rotate(-10deg);
+  }
+
+  .symbol-pi {
+    top: 32px;
+    right: 6px;
+    transform: rotate(12deg);
+  }
+
+  .symbol-sum {
+    bottom: 14px;
+    left: 6px;
+    transform: rotate(8deg);
+  }
+
+  .calc-mockup {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 320px;
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-primary);
+    box-shadow: var(--shadow-lg);
+    transform: rotate(-2.5deg);
+    transition: transform 0.3s ease;
+    text-align: left;
+  }
+
+  .calc-mockup:hover {
+    transform: rotate(0deg) translateY(-3px);
+  }
+
+  .mockup-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .window-dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  .window-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-color);
+  }
+
+  .mockup-badge {
+    padding: 0.28rem 0.7rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+    font-size: 0.7rem;
+    font-weight: 750;
+  }
+
+  /* VISOR */
+  .calc-screen {
+    padding: 0.9rem 1rem;
+    margin-bottom: 0.9rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: right;
+  }
+
+  .calc-expression {
+    color: var(--text-secondary);
+    font-size: 0.76rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .calc-result {
+    color: var(--text-primary);
+    font-size: 1.55rem;
+    font-weight: 850;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* TECLADO */
+  .calc-keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.45rem;
+  }
+
+  .calc-key {
+    display: grid;
+    place-items: center;
+    height: 36px;
+    border: 1px solid var(--border-color);
+    border-radius: 9px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 750;
+    user-select: none;
+  }
+
+  .calc-key.is-muted {
+    color: var(--text-secondary);
+    background: color-mix(in srgb, var(--bg-secondary) 65%, var(--bg-primary));
+  }
+
+  .calc-key.is-op {
+    border-color: color-mix(in srgb, var(--color-primary) 25%, var(--border-color));
+    background: color-mix(in srgb, var(--color-primary) 11%, var(--bg-primary));
+    color: var(--color-primary);
+  }
+
+  .calc-key.is-equal {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: #ffffff;
+    font-weight: 850;
+  }
+
+  .mockup-row-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.95rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 0.72rem;
+  }
+
+  .mockup-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+
+  /* BARRA DE INDICADORES */
+  .highlights {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 4.5rem;
+    padding: 1.25rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .highlight-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+    padding: 0.45rem 1rem;
+    text-align: left;
+  }
+
+  .highlight-item + .highlight-item {
+    border-left: 1px solid var(--border-color);
+  }
+
+  .highlight-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+  }
+
+  .highlight-item strong,
+  .highlight-item small {
+    display: block;
+  }
+
+  .highlight-item strong {
+    font-size: 0.88rem;
+    color: var(--text-primary);
+  }
+
+  .highlight-item small {
+    margin-top: 0.15rem;
+    color: var(--text-secondary);
+    font-size: 0.74rem;
+  }
+
+  /* CABEÇALHOS DE SEÇÃO */
+  .tools-section,
+  .content-section,
+  .faq-section {
+    margin-bottom: 4.5rem;
+  }
+
+  .tools-section {
+    scroll-margin-top: 2rem;
+  }
+
+  .section-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.85rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-heading > div {
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .section-heading h2 {
+    margin: 0 0 0.65rem;
+    font-size: clamp(1.55rem, 3.2vw, 2.05rem);
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .section-heading p {
+    margin: 0 auto;
+    color: var(--text-secondary);
+    font-size: 0.96rem;
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .tools-count {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  /* GRADE DE FERRAMENTAS */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .tool-card {
+    --tool-color: #2563eb;
+    --tool-bg: rgba(37, 99, 235, 0.1);
+
+    display: flex;
+    flex-direction: column;
+    min-height: 245px;
+    padding: 1.55rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    color: inherit;
+    text-decoration: none;
+    text-align: center;
+    transition:
+      transform 0.2s ease,
+      border-color 0.2s ease,
+      box-shadow 0.2s ease;
+  }
+
+  .tool-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--tool-color);
+    box-shadow: var(--shadow-md);
+  }
+
+  .tool-card:focus-visible,
+  .cta-link:focus-visible,
+  .hero-cta:focus-visible,
+  .breadcrumb a:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  .color-green {
+    --tool-color: #059669;
+    --tool-bg: rgba(16, 185, 129, 0.12);
+  }
+
+  .color-purple {
+    --tool-color: #8b5cf6;
+    --tool-bg: rgba(139, 92, 246, 0.12);
+  }
+
+  .color-orange {
+    --tool-color: #ea580c;
+    --tool-bg: rgba(234, 88, 12, 0.12);
+  }
+
+  .color-cyan {
+    --tool-color: #0891b2;
+    --tool-bg: rgba(8, 145, 178, 0.12);
+  }
+
+  .color-pink {
+    --tool-color: #db2777;
+    --tool-bg: rgba(219, 39, 119, 0.12);
+  }
+
+  .tool-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.8rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .tool-icon {
+    display: grid;
+    width: 46px;
+    height: 46px;
+    place-items: center;
+    border-radius: 12px;
+    background: var(--tool-bg);
+    color: var(--tool-color);
+  }
+
+  .tool-category {
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background: var(--tool-bg);
+    color: var(--tool-color);
+    font-size: 0.7rem;
+    font-weight: 750;
+  }
+
+  .tool-card-content {
+    flex: 1;
+  }
+
+  .tool-card h3 {
+    margin: 0 0 0.55rem;
+    color: var(--text-primary);
+    font-size: 1.12rem;
+    font-weight: 750;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .tool-card p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.86rem;
+    line-height: 1.65;
+    text-align: center;
+  }
+
+  .tool-card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1.35rem;
+    padding-top: 0.95rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--tool-color);
+    font-size: 0.83rem;
+    font-weight: 750;
+  }
+
+  .arrow {
+    font-size: 1.1rem;
+    transition: transform 0.2s ease;
+  }
+
+  .tool-card:hover .arrow {
+    transform: translateX(4px);
+  }
+
+  .empty-state {
+    padding: 3rem 1.5rem;
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
+  .empty-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 1rem;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+  }
+
+  .empty-state h3 {
+    margin: 0 0 0.5rem;
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .empty-state p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    text-align: center;
+  }
+
+  /* ENTENDA SEUS DIREITOS */
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
+
+  .guide-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
+  .guide-icon {
+    display: grid;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 0.95rem;
+    place-items: center;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+  }
+
+  .guide-card h3 {
+    margin: 0 0 0.55rem;
+    color: var(--text-primary);
+    font-size: 1.02rem;
+    font-weight: 750;
+    text-align: center;
+  }
+
+  .guide-card p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.86rem;
+    line-height: 1.68;
+    text-align: center;
+  }
+
+  /* AVISO */
+  .notice {
+    margin-bottom: 4.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--color-primary);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: left;
+  }
+
+  .notice-title {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary);
+  }
+
+  .notice-title strong {
+    color: var(--text-primary);
+  }
+
+  .notice p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.75;
+  }
+
+  /* FAQ */
+  .faq-list {
+    max-width: 850px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    margin-bottom: 0.75rem;
+    padding: 1.15rem 1.3rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: left;
+  }
+
+  .faq-item summary {
+    position: relative;
+    padding-right: 2rem;
+    cursor: pointer;
+    color: var(--text-primary);
+    font-size: 0.94rem;
+    font-weight: 700;
+    line-height: 1.5;
+    list-style: none;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::after {
+    content: '+';
+    position: absolute;
+    top: -0.1rem;
+    right: 0;
+    color: var(--color-primary);
+    font-size: 1.3rem;
+  }
+
+  .faq-item[open] summary::after {
+    content: '−';
+  }
+
+  .faq-item p {
+    margin: 0.9rem 0 0;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.75;
+  }
+
+  /* CTA FINAL */
+  .final-cta {
+    padding: 2.75rem 1.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
+  .final-cta h2 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-align: center;
+  }
+
+  .final-cta p {
+    max-width: 600px;
+    margin: 0 auto 1.6rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #ffffff;
+    font-size: 0.92rem;
+    font-weight: 750;
+    text-decoration: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .cta-link:hover {
+    opacity: 0.92;
+    transform: translateY(-2px);
+  }
+
+  /* RESPONSIVIDADE */
+  @media (max-width: 900px) {
+    .tools-grid,
+    .guide-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 860px) {
+    .hero {
+      padding: 2.25rem 1.75rem;
+    }
+
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
+    }
+
+    .calc-mockup {
+      transform: rotate(0deg);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .highlights {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 3.25rem;
+    }
+
+    .highlight-item {
+      justify-content: flex-start;
+      padding: 0.65rem 0.5rem;
+    }
+
+    .highlight-item + .highlight-item {
+      border-left: none;
+      border-top: 1px solid var(--border-color);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .work-page {
+      padding-bottom: 2rem;
+    }
+
+    .hero {
+      padding: 1.75rem 1.25rem;
+    }
+
+    .tools-section,
+    .content-section,
+    .faq-section,
+    .notice {
+      margin-bottom: 3.25rem;
+    }
+
+    .tools-grid,
+    .guide-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .tool-card {
+      min-height: 205px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tool-card,
+    .hero-cta,
+    .cta-link,
+    .calc-mockup,
+    .arrow {
+      transition: none;
+    }
+
+    .tool-card:hover,
+    .hero-cta:hover,
+    .cta-link:hover,
+    .calc-mockup:hover {
+      transform: none;
+    }
+  }
+</style>

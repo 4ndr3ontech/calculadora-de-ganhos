@@ -1,0 +1,1046 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de Seguro-Desemprego Online — Calculadora de Ganhos"
+  description="Calcule uma estimativa do valor e da quantidade de parcelas do seguro-desemprego. Simule o benefício conforme seu salário médio e tempo trabalhado."
+>
+  <main class="page-container">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <a href="/trabalhista/">Trabalhista</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Seguro-Desemprego</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="eyebrow">FERRAMENTA TRABALHISTA</span>
+      <h1>Calculadora de Seguro-Desemprego</h1>
+      <p>
+        Descubra quanto você poderá receber por parcela e quantas parcelas
+        poderá ter direito, considerando sua média salarial e o tempo trabalhado.
+      </p>
+    </header>
+
+    <section class="calculator-grid" aria-label="Simulação do seguro-desemprego">
+      <div class="panel input-panel">
+        <div class="panel-heading">
+          <div class="heading-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <div>
+            <h2>Dados da simulação</h2>
+            <p>Informe os dados do seu último vínculo de trabalho.</p>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="sd-salary">Média dos últimos 3 salários</label>
+          <div class="input-wrapper">
+            <span class="input-prefix">R$</span>
+            <input
+              type="number"
+              id="sd-salary"
+              value="3200"
+              min="0.01"
+              max="1000000"
+              step="0.01"
+              inputmode="decimal"
+              aria-describedby="salary-help"
+            />
+          </div>
+          <small id="salary-help">
+            Informe a média dos salários utilizados para o cálculo do benefício.
+          </small>
+        </div>
+
+        <div class="field-group">
+          <label for="sd-months">Meses trabalhados nos últimos 36 meses</label>
+          <div class="input-wrapper">
+            <input
+              type="number"
+              id="sd-months"
+              value="24"
+              min="0"
+              max="36"
+              step="1"
+              inputmode="numeric"
+            />
+            <span class="input-suffix">meses</span>
+          </div>
+          <small>
+            Considere os meses trabalhados dentro dos últimos três anos.
+          </small>
+        </div>
+
+        <div class="info-box">
+          <span class="info-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <line x1="12" y1="16" x2="12" y2="12"></line>
+              <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+          </span>
+          <p>
+            O direito ao benefício também depende de outros requisitos legais,
+            como o motivo do desligamento e o histórico de solicitações.
+          </p>
+        </div>
+
+        <div id="sd-error" class="error-message" role="alert" hidden></div>
+
+        <button type="button" id="calc-btn" class="calculate-button">
+          <span>Calcular meu benefício</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </button>
+
+        <p class="privacy-note">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline; vertical-align:-1px; margin-right:4px;">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Simulação realizada no navegador. Seus dados não são enviados.
+        </p>
+      </div>
+
+      <div class="panel result-panel" aria-live="polite">
+        <div class="result-heading">
+          <div>
+            <span class="result-overline">SUA SIMULAÇÃO</span>
+            <h2>Resultado estimado</h2>
+          </div>
+          <span class="result-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </span>
+        </div>
+
+        <div class="main-result">
+          <span class="result-label">Valor estimado por parcela</span>
+          <strong id="res-parcel">R$ 0,00</strong>
+          <span class="result-caption">Valor individual de cada parcela</span>
+        </div>
+
+        <div class="result-details">
+          <div class="result-row">
+            <div>
+              <span class="detail-label">Quantidade de parcelas</span>
+              <small>Previsão do número de pagamentos</small>
+            </div>
+            <strong id="res-count">0 parcelas</strong>
+          </div>
+
+          <div class="result-row">
+            <div>
+              <span class="detail-label">Total estimado do benefício</span>
+              <small>Soma das parcelas projetadas</small>
+            </div>
+            <strong id="res-total">R$ 0,00</strong>
+          </div>
+
+          <div class="result-row status-row">
+            <div>
+              <span class="detail-label">Resultado da análise</span>
+              <small>Com base nos dados informados</small>
+            </div>
+            <span id="res-status" class="status-badge status-neutral">
+              Aguardando dados
+            </span>
+          </div>
+        </div>
+
+        <p class="result-disclaimer">
+          Esta é uma estimativa para fins informativos. A concessão e o valor
+          definitivo dependem da análise oficial dos órgãos responsáveis.
+        </p>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="eyebrow">ENTENDA O BENEFÍCIO</span>
+        <h2>Como funciona o seguro-desemprego?</h2>
+        <p>
+          O seguro-desemprego é um benefício temporário destinado a oferecer
+          assistência financeira ao trabalhador que atende aos requisitos legais
+          após uma dispensa involuntária.
+        </p>
+      </div>
+
+      <div class="information-grid">
+        <article class="info-card">
+          <span class="card-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </span>
+          <h3>Valor das parcelas</h3>
+          <p>
+            O valor é calculado com base na média salarial utilizada pela regra
+            vigente, respeitando os limites mínimo e máximo estabelecidos
+            oficialmente.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <span class="card-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </span>
+          <h3>Quantidade de parcelas</h3>
+          <p>
+            O número de parcelas varia conforme o tempo de trabalho e a
+            quantidade de solicitações anteriores do benefício.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <span class="card-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m16 16 3-8 3 8c-.87.65-1.93 1-3 1s-2.13-.35-3-1Z"></path>
+              <path d="m2 16 3-8 3 8c-.87.65-1.93 1-3 1s-2.13-.35-3-1Z"></path>
+              <path d="M7 21h10"></path>
+              <path d="M12 3v18"></path>
+              <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
+            </svg>
+          </span>
+          <h3>Direito ao benefício</h3>
+          <p>
+            A dispensa sem justa causa é um dos requisitos fundamentais.
+            Também existem critérios relacionados ao tempo de trabalho,
+            renda e ausência de benefício previdenciário incompatível.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-section rules-section">
+      <div class="section-heading">
+        <span class="eyebrow">REGRAS GERAIS</span>
+        <h2>Quem pode receber o seguro-desemprego?</h2>
+        <p>
+          Para o trabalhador formal, os principais requisitos incluem:
+        </p>
+      </div>
+
+      <ul class="rules-list">
+        <li>
+          <span class="check-icon" aria-hidden="true">✓</span>
+          Ter sido dispensado sem justa causa.
+        </li>
+        <li>
+          <span class="check-icon" aria-hidden="true">✓</span>
+          Estar desempregado no momento da solicitação.
+        </li>
+        <li>
+          <span class="check-icon" aria-hidden="true">✓</span>
+          Cumprir o período mínimo de trabalho exigido para a solicitação.
+        </li>
+        <li>
+          <span class="check-icon" aria-hidden="true">✓</span>
+          Não possuir renda própria suficiente para sua manutenção e de sua família.
+        </li>
+        <li>
+          <span class="check-icon" aria-hidden="true">✓</span>
+          Não receber benefício previdenciário de prestação continuada,
+          salvo as exceções previstas em lei.
+        </li>
+      </ul>
+
+      <div class="legal-note">
+        <strong>Importante:</strong>
+        Os requisitos variam conforme a modalidade do trabalhador e a
+        quantidade de vezes em que o benefício foi solicitado. A simulação
+        simplificada desta página não substitui a análise oficial.
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="eyebrow">DÚVIDAS FREQUENTES</span>
+        <h2>Perguntas sobre o seguro-desemprego</h2>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Quantas parcelas posso receber?</summary>
+          <p>
+            Para trabalhadores formais, o benefício pode variar de três a cinco
+            parcelas, conforme o tempo trabalhado e o histórico de solicitações.
+            A quantidade definitiva depende da análise dos requisitos legais.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O valor do seguro-desemprego é igual ao meu último salário?</summary>
+          <p>
+            Não necessariamente. O cálculo considera a média salarial aplicável
+            e as faixas oficiais de cálculo, além dos limites mínimo e máximo
+            definidos para o período.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Quem pede demissão tem direito ao seguro-desemprego?</summary>
+          <p>
+            Em regra, não. O benefício para o trabalhador formal é destinado
+            principalmente à situação de dispensa involuntária sem justa causa,
+            desde que os demais requisitos sejam atendidos.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Quando posso solicitar o benefício?</summary>
+          <p>
+            Para trabalhadores formais, o pedido normalmente pode ser realizado
+            do 7º ao 120º dia após a data da dispensa, observadas as regras
+            aplicáveis à modalidade do trabalhador.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Esta calculadora garante que vou receber o benefício?</summary>
+          <p>
+            Não. A ferramenta apresenta uma estimativa matemática. A habilitação
+            depende da conferência dos dados e dos requisitos pelo órgão
+            responsável.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <section class="sources-section">
+      <h2>Fontes oficiais e informações adicionais</h2>
+      <p>
+        Consulte as informações atualizadas nos canais oficiais antes de
+        solicitar o benefício.
+      </p>
+      <div class="source-links">
+        <a
+          href="https://www.gov.br/trabalho-e-emprego/pt-br"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Ministério do Trabalho e Emprego ↗
+        </a>
+        <a
+          href="https://www.gov.br/pt-br/servicos/solicitar-o-seguro-desemprego"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Solicitar seguro-desemprego ↗
+        </a>
+        <a
+          href="https://www.planalto.gov.br/ccivil_03/leis/l7998.htm"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Lei nº 7.998/1990 ↗
+        </a>
+      </div>
+      <p class="updated-note">
+        Ferramenta de caráter informativo. As regras, faixas salariais e limites
+        podem ser atualizados pelo governo.
+      </p>
+    </section>
+  </main>
+
+  <script>
+    import { calculateUnemploymentInsurance } from '../../engines/business/labor-advanced-engine';
+    import { formatBRL } from '../../engines/common/currency';
+
+    const salaryInput = document.getElementById('sd-salary') as HTMLInputElement;
+    const monthsInput = document.getElementById('sd-months') as HTMLInputElement;
+
+    const parcelOutput = document.getElementById('res-parcel')!;
+    const countOutput = document.getElementById('res-count')!;
+    const totalOutput = document.getElementById('res-total')!;
+    const statusOutput = document.getElementById('res-status')!;
+    const errorOutput = document.getElementById('sd-error')!;
+
+    function setStatus(message: string, type: 'success' | 'error' | 'neutral') {
+      statusOutput.textContent = message;
+      statusOutput.className = `status-badge status-${type}`;
+    }
+
+    function showError(message: string) {
+      errorOutput.textContent = message;
+      errorOutput.removeAttribute('hidden');
+    }
+
+    function clearError() {
+      errorOutput.textContent = '';
+      errorOutput.setAttribute('hidden', '');
+    }
+
+    function resetResults() {
+      parcelOutput.textContent = 'R$ 0,00';
+      countOutput.textContent = '0 parcelas';
+      totalOutput.textContent = 'R$ 0,00';
+      setStatus('Aguardando dados', 'neutral');
+    }
+
+    function runCalc() {
+      clearError();
+
+      const salary = Number(salaryInput.value);
+      const months = Number(monthsInput.value);
+
+      if (!Number.isFinite(salary) || salary <= 0) {
+        showError('Informe uma média salarial válida e maior que zero.');
+        resetResults();
+        salaryInput.focus();
+        return;
+      }
+
+      if (!Number.isInteger(months) || months < 0 || months > 36) {
+        showError('Informe uma quantidade de meses entre 0 e 36.');
+        resetResults();
+        monthsInput.focus();
+        return;
+      }
+
+      try {
+        const result = calculateUnemploymentInsurance({
+          averageSalary: salary,
+          requestCount: 1,
+          workedMonthsLast3Years: months,
+        });
+
+        if (!result.eligible) {
+          resetResults();
+          setStatus('Não elegível', 'error');
+
+          showError(
+            'Com os dados informados, os requisitos de elegibilidade considerados pelo simulador não foram atingidos.'
+          );
+          return;
+        }
+
+        const parcelValue = Number(result.averageParcelValue);
+        const parcels = Number(result.parcels);
+
+        if (
+          !Number.isFinite(parcelValue) ||
+          parcelValue < 0 ||
+          !Number.isFinite(parcels) ||
+          parcels < 0
+        ) {
+          throw new Error('O motor de cálculo retornou valores inválidos.');
+        }
+
+        parcelOutput.textContent = formatBRL(parcelValue);
+        countOutput.textContent = `${parcels} ${parcels === 1 ? 'parcela' : 'parcelas'}`;
+        totalOutput.textContent = formatBRL(parcelValue * parcels);
+
+        setStatus('Elegibilidade preliminar', 'success');
+      } catch (error) {
+        console.error('Erro ao calcular seguro-desemprego:', error);
+        resetResults();
+        setStatus('Erro no cálculo', 'error');
+        showError(
+          'Não foi possível realizar a simulação. Verifique os dados e tente novamente.'
+        );
+      }
+    }
+
+    document.getElementById('calc-btn')?.addEventListener('click', runCalc);
+
+    salaryInput.addEventListener('input', runCalc);
+    monthsInput.addEventListener('input', runCalc);
+
+    runCalc();
+  </script>
+
+  <style>
+    .page-container {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 0 1rem 4rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      align-items: center;
+      margin: 1.5rem 0 2rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+
+    .page-header {
+      max-width: 760px;
+      margin-bottom: 2.5rem;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: var(--color-primary);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.7rem;
+    }
+
+    .page-header h1 {
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      line-height: 1.15;
+      letter-spacing: -0.045em;
+      font-weight: 800;
+      margin: 0 0 1rem;
+    }
+
+    .page-header > p,
+    .section-heading > p {
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.75;
+      margin: 0;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+
+    .panel {
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      background: var(--bg-secondary);
+      padding: clamp(1.25rem, 3vw, 2rem);
+      min-width: 0;
+    }
+
+    .input-panel {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-heading,
+    .result-heading {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .heading-icon,
+    .result-icon {
+      width: 46px;
+      height: 46px;
+      flex-shrink: 0;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+      color: var(--color-primary);
+    }
+
+    .panel-heading h2,
+    .result-heading h2 {
+      margin: 0 0 0.3rem;
+      font-size: 1.2rem;
+      font-weight: 750;
+    }
+
+    .panel-heading p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .field-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .field-group label {
+      display: block;
+      margin-bottom: 0.55rem;
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      min-height: 49px;
+      border: 1px solid var(--border-color);
+      border-radius: 9px;
+      background: var(--bg-primary);
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      min-width: 0;
+      padding: 0.85rem;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text-primary);
+      font: inherit;
+      font-size: 1rem;
+    }
+
+    .input-prefix,
+    .input-suffix {
+      padding: 0 0.9rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .input-wrapper:has(.input-prefix) input {
+      padding-left: 0;
+    }
+
+    .field-group small {
+      display: block;
+      margin-top: 0.5rem;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      line-height: 1.5;
+    }
+
+    .info-box {
+      display: flex;
+      gap: 0.75rem;
+      padding: 1rem;
+      margin: 0.25rem 0 1.5rem;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--color-primary) 8%, var(--bg-primary));
+      color: var(--text-secondary);
+    }
+
+    .info-icon {
+      color: var(--color-primary);
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
+    .info-box p {
+      margin: 0;
+      font-size: 0.82rem;
+      line-height: 1.6;
+    }
+
+    .error-message {
+      padding: 0.85rem 1rem;
+      margin-bottom: 1rem;
+      border: 1px solid #dc2626;
+      border-radius: 9px;
+      background: rgba(220, 38, 38, 0.08);
+      color: #dc2626;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .calculate-button {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      min-height: 50px;
+      padding: 0.9rem 1.1rem;
+      border: none;
+      border-radius: 10px;
+      background: var(--color-primary);
+      color: white;
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+      transition: filter 0.2s, transform 0.2s;
+    }
+
+    .calculate-button:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+
+    .calculate-button:focus-visible {
+      outline: 3px solid var(--text-primary);
+      outline-offset: 3px;
+    }
+
+    .privacy-note {
+      margin: 1rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    .result-panel {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .result-heading {
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .result-overline {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--text-secondary);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .result-heading h2 {
+      font-size: 1.25rem;
+    }
+
+    .main-result {
+      padding: 1.5rem;
+      border: 1px solid color-mix(in srgb, #16a34a 25%, var(--border-color));
+      border-radius: 13px;
+      background: color-mix(in srgb, #16a34a 8%, var(--bg-primary));
+    }
+
+    .result-label,
+    .result-caption {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .main-result strong {
+      display: block;
+      margin: 0.5rem 0;
+      color: #16a34a;
+      font-size: clamp(2rem, 5vw, 2.6rem);
+      font-weight: 850;
+      letter-spacing: -0.04em;
+      overflow-wrap: anywhere;
+    }
+
+    .result-caption {
+      font-size: 0.75rem;
+    }
+
+    .result-details {
+      margin-top: 1.25rem;
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .detail-label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 650;
+    }
+
+    .result-row small {
+      display: block;
+      margin-top: 0.3rem;
+      color: var(--text-secondary);
+      font-size: 0.73rem;
+      line-height: 1.4;
+    }
+
+    .result-row > strong {
+      flex-shrink: 0;
+      font-size: 0.95rem;
+      text-align: right;
+    }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.4rem 0.65rem;
+      border-radius: 20px;
+      font-size: 0.72rem;
+      font-weight: 750;
+      text-align: center;
+    }
+
+    .status-success {
+      background: rgba(22, 163, 74, 0.12);
+      color: #16a34a;
+    }
+
+    .status-error {
+      background: rgba(220, 38, 38, 0.12);
+      color: #dc2626;
+    }
+
+    .status-neutral {
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+    }
+
+    .result-disclaimer {
+      margin: auto 0 0;
+      padding-top: 1.25rem;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    .content-section {
+      margin-top: 4rem;
+    }
+
+    .section-heading {
+      max-width: 760px;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 0.8rem;
+      font-size: clamp(1.5rem, 3vw, 1.9rem);
+      font-weight: 800;
+      letter-spacing: -0.035em;
+    }
+
+    .information-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .info-card {
+      padding: 1.4rem;
+      border: 1px solid var(--border-color);
+      border-radius: 13px;
+      background: var(--bg-secondary);
+    }
+
+    .card-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      margin-bottom: 1rem;
+      place-items: center;
+      border-radius: 11px;
+      background: color-mix(in srgb, var(--color-primary) 10%, transparent);
+      color: var(--color-primary);
+    }
+
+    .info-card h3 {
+      margin: 0 0 0.65rem;
+      font-size: 1rem;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .rules-list {
+      display: grid;
+      gap: 0.9rem;
+      padding: 0;
+      margin: 1.5rem 0;
+      list-style: none;
+    }
+
+    .rules-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .check-icon {
+      display: grid;
+      place-items: center;
+      width: 23px;
+      height: 23px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: rgba(22, 163, 74, 0.12);
+      color: #16a34a;
+      font-weight: 800;
+    }
+
+    .legal-note {
+      padding: 1.1rem 1.25rem;
+      border-left: 3px solid var(--color-primary);
+      border-radius: 0 9px 9px 0;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .legal-note strong {
+      color: var(--text-primary);
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 0.75rem;
+    }
+
+    .faq-item {
+      padding: 1rem 1.2rem;
+      border: 1px solid var(--border-color);
+      border-radius: 11px;
+      background: var(--bg-secondary);
+    }
+
+    .faq-item summary {
+      position: relative;
+      padding-right: 1.5rem;
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      content: '+';
+      position: absolute;
+      right: 0;
+      color: var(--color-primary);
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+
+    .faq-item p {
+      margin: 0.9rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.86rem;
+      line-height: 1.7;
+    }
+
+    .sources-section {
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .sources-section h2 {
+      margin: 0 0 0.6rem;
+      font-size: 1.15rem;
+    }
+
+    .sources-section > p {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .source-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem 1.4rem;
+      margin: 1.2rem 0;
+    }
+
+    .source-links a {
+      color: var(--color-primary);
+      font-size: 0.85rem;
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    .source-links a:hover {
+      text-decoration: underline;
+    }
+
+    .sources-section .updated-note {
+      margin-top: 1.5rem;
+      font-size: 0.75rem;
+    }
+
+    @media (max-width: 760px) {
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .information-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .page-header {
+        margin-bottom: 1.75rem;
+      }
+
+      .content-section {
+        margin-top: 3rem;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .page-container {
+        padding-right: 0.85rem;
+        padding-left: 0.85rem;
+      }
+
+      .panel {
+        padding: 1.1rem;
+      }
+
+      .result-row {
+        align-items: flex-start;
+      }
+
+      .result-row > strong {
+        max-width: 45%;
+        overflow-wrap: anywhere;
+      }
+    }
+  </style>
+</BaseLayout>

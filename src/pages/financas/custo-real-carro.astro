@@ -1,0 +1,1559 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de Custo Real do Carro (TCO) — Quanto Custa Manter um Veículo? | Calculadora de Ganhos"
+  description="Calcule o custo mensal e anual de manter um carro, considerando combustível, seguro, manutenção, IPVA e desvalorização."
+>
+  <div class="tco-page">
+    <!-- NAVEGAÇÃO -->
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <a href="/financas/">Finanças</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Custo Real do Carro</span>
+    </nav>
+
+    <!-- CABEÇALHO -->
+    <header class="hero">
+      <span class="eyebrow">PLANEJAMENTO FINANCEIRO</span>
+
+      <h1>Calculadora de Custo Real do Carro (TCO)</h1>
+
+      <p>
+        Descubra quanto seu veículo realmente custa para manter.
+        Considere não apenas o combustível, mas também seguro, manutenção,
+        impostos e a perda de valor do automóvel ao longo do tempo.
+      </p>
+
+      <div class="hero-highlights">
+        <div class="highlight">
+          <span class="highlight-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </span>
+          <span>Simulação gratuita</span>
+        </div>
+
+        <div class="highlight">
+          <span class="highlight-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </span>
+          <span>Custo mensal e anual</span>
+        </div>
+
+        <div class="highlight">
+          <span class="highlight-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </span>
+          <span>Inclui desvalorização</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- CALCULADORA -->
+    <section class="calculator-section" id="calculadora" aria-labelledby="calculator-title">
+      <div class="section-heading">
+        <span class="section-label">FERRAMENTA GRATUITA</span>
+        <h2 id="calculator-title">Informe os dados do seu veículo</h2>
+        <p>
+          Preencha os valores médios. Se não souber algum custo, utilize uma
+          estimativa para começar a simulação.
+        </p>
+      </div>
+
+      <div class="calc-grid">
+        <!-- ENTRADAS -->
+        <div class="card input-card">
+          <h3>Parâmetros do veículo</h3>
+
+          <div class="field-group">
+            <label for="v-price">Valor de mercado do carro (R$)</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input
+                type="number"
+                id="v-price"
+                value="70000"
+                min="0"
+                max="100000000"
+                step="1000"
+                inputmode="decimal"
+                aria-describedby="v-price-help"
+              />
+            </div>
+            <small id="v-price-help">
+              Valor aproximado pelo qual o veículo poderia ser vendido atualmente.
+            </small>
+          </div>
+
+          <div class="field-group">
+            <label for="v-fuel">Combustível mensal (R$)</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input
+                type="number"
+                id="v-fuel"
+                value="600"
+                min="0"
+                max="1000000"
+                step="50"
+                inputmode="decimal"
+                aria-describedby="v-fuel-help"
+              />
+            </div>
+            <small id="v-fuel-help">
+              Média mensal gasta com gasolina, etanol, diesel ou energia elétrica.
+            </small>
+          </div>
+
+          <div class="field-group">
+            <label for="v-insurance">Seguro mensal (R$)</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input
+                type="number"
+                id="v-insurance"
+                value="200"
+                min="0"
+                max="1000000"
+                step="20"
+                inputmode="decimal"
+                aria-describedby="v-insurance-help"
+              />
+            </div>
+            <small id="v-insurance-help">
+              Divida o valor anual do seguro por 12, se necessário.
+            </small>
+          </div>
+
+          <div class="field-group">
+            <label for="v-maint">Manutenção média mensal (R$)</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input
+                type="number"
+                id="v-maint"
+                value="150"
+                min="0"
+                max="1000000"
+                step="20"
+                inputmode="decimal"
+                aria-describedby="v-maint-help"
+              />
+            </div>
+            <small id="v-maint-help">
+              Inclua uma média para revisões, óleo, pneus e reparos.
+            </small>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <label for="v-ipva">IPVA (% a.a.)</label>
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="v-ipva"
+                  value="4"
+                  min="0"
+                  max="100"
+                  step="0.5"
+                  inputmode="decimal"
+                  aria-describedby="v-ipva-help"
+                />
+                <span class="input-suffix">%</span>
+              </div>
+              <small id="v-ipva-help">
+                Alíquota aplicável ao veículo no seu estado.
+              </small>
+            </div>
+
+            <div class="field-group">
+              <label for="v-dep">Desvalorização (% a.a.)</label>
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="v-dep"
+                  value="10"
+                  min="0"
+                  max="100"
+                  step="1"
+                  inputmode="decimal"
+                  aria-describedby="v-dep-help"
+                />
+                <span class="input-suffix">%</span>
+              </div>
+              <small id="v-dep-help">
+                Estimativa anual de perda de valor do automóvel.
+              </small>
+            </div>
+          </div>
+
+          <button id="calc-btn" class="btn btn-primary" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="16" height="20" x="4" y="2" rx="2"/>
+              <line x1="8" x2="16" y1="6" y2="6"/>
+              <line x1="16" x2="16" y1="14" y2="18"/>
+              <path d="M16 10h.01"/>
+              <path d="M12 10h.01"/>
+              <path d="M8 10h.01"/>
+              <path d="M12 14h.01"/>
+              <path d="M8 14h.01"/>
+              <path d="M12 18h.01"/>
+              <path d="M8 18h.01"/>
+            </svg>
+            <span>Calcular custo real do carro</span>
+          </button>
+
+          <p class="input-note">
+            A simulação é processada localmente no navegador e não exige
+            dados bancários ou cadastro.
+          </p>
+        </div>
+
+        <!-- RESULTADOS -->
+        <div class="card result-card" aria-live="polite" aria-atomic="true">
+          <div>
+            <span class="section-label">RESULTADO DA SIMULAÇÃO</span>
+            <h3>Resumo dos custos</h3>
+
+            <div class="main-result">
+              <span>Custo total mensal estimado</span>
+              <strong id="res-monthly">R$ 0,00</strong>
+              <small class="result-description">Estimativa mensal de propriedade</small>
+            </div>
+
+            <div class="result-line">
+              <span>
+                <span class="result-dot blue" aria-hidden="true"></span>
+                Custo anual total
+              </span>
+              <strong id="res-annual">R$ 0,00</strong>
+            </div>
+
+            <div class="result-line">
+              <span>
+                <span class="result-dot red" aria-hidden="true"></span>
+                Desvalorização anual
+              </span>
+              <strong id="res-depr" class="interest-value">R$ 0,00</strong>
+            </div>
+
+            <p id="calc-error" class="calc-error" role="alert" hidden></p>
+          </div>
+
+          <div class="result-observation">
+            <strong>Entenda o resultado:</strong>
+            <p>
+              A desvalorização representa a redução estimada do valor de mercado
+              do veículo. Ela é uma perda patrimonial e não necessariamente
+              uma despesa paga mensalmente.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTRODUÇÃO -->
+    <section class="content-section" aria-labelledby="what-title">
+      <div class="section-heading">
+        <span class="section-label">ENTENDA OS CUSTOS</span>
+        <h2 id="what-title">O que entra no custo de manter um carro?</h2>
+        <p>
+          Um veículo representa uma despesa significativa no orçamento que vai
+          muito além do abastecimento. Ao somar os gastos recorrentes e a
+          desvalorização, você visualiza melhor o impacto financeiro real de
+          manter o automóvel.
+        </p>
+      </div>
+
+      <div class="explanation-grid">
+        <article class="explanation-card">
+          <div class="icon-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="3" x2="15" y1="22" y2="22"/>
+              <line x1="4" x2="14" y1="9" y2="9"/>
+              <path d="M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18"/>
+              <path d="M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2a2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5"/>
+            </svg>
+          </div>
+          <h3>Combustível</h3>
+          <p>
+            É uma despesa recorrente que varia conforme a distância percorrida,
+            o consumo do veículo e o preço do combustível.
+          </p>
+        </article>
+
+        <article class="explanation-card">
+          <div class="icon-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+          <h3>Seguro</h3>
+          <p>
+            O seguro protege contra determinados riscos e pode variar conforme
+            o modelo, perfil de utilização, região e cobertura contratada.
+          </p>
+        </article>
+
+        <article class="explanation-card">
+          <div class="icon-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+            </svg>
+          </div>
+          <h3>Manutenção</h3>
+          <p>
+            Inclui revisões, troca de óleo, pneus, freios, peças e reparos.
+            Mesmo quando não há gastos todos os meses, é importante reservar
+            uma média no orçamento.
+          </p>
+        </article>
+
+        <article class="explanation-card">
+          <div class="icon-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/>
+              <path d="M14 2v4a2 2 0 0 0 2 2h4"/>
+              <path d="M10 9H8"/>
+              <path d="M16 13H8"/>
+              <path d="M16 17H8"/>
+            </svg>
+          </div>
+          <h3>IPVA</h3>
+          <p>
+            O Imposto sobre a Propriedade de Veículos Automotores é calculado
+            conforme a legislação estadual e o valor utilizado como base
+            de cálculo.
+          </p>
+        </article>
+
+        <article class="explanation-card">
+          <div class="icon-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/>
+              <polyline points="16 17 22 17 22 11"/>
+            </svg>
+          </div>
+          <h3>Desvalorização</h3>
+          <p>
+            Representa a perda de valor do automóvel com o passar do tempo.
+            Quilometragem, conservação, modelo e mercado influenciam essa perda.
+          </p>
+        </article>
+
+        <article class="explanation-card">
+          <div class="icon-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="18" x="3" y="3" rx="2"/>
+              <path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>
+            </svg>
+          </div>
+          <h3>Outros gastos</h3>
+          <p>
+            Estacionamento, pedágios, lavagem, licenciamento e eventuais
+            despesas de financiamento também podem afetar o orçamento.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- METODOLOGIA -->
+    <section class="content-section" aria-labelledby="methodology-title">
+      <div class="section-heading">
+        <span class="section-label">METODOLOGIA DE CÁLCULO</span>
+        <h2 id="methodology-title">Como funciona o cálculo?</h2>
+        <p>
+          A calculadora utiliza os valores informados para estimar os custos
+          mensais e anuais conforme as regras do motor de cálculo.
+        </p>
+      </div>
+
+      <div class="methodology-box">
+        <div>
+          <h3>Despesas recorrentes</h3>
+          <p>
+            Combustível, seguro e manutenção são informados como valores mensais.
+            O IPVA e a desvalorização são informados como percentuais anuais.
+          </p>
+        </div>
+
+        <div>
+          <h3>IPVA</h3>
+          <p>
+            A alíquota informada representa o percentual anual utilizado pelo
+            cálculo sobre a referência de valor do veículo. O valor efetivo do
+            imposto pode variar conforme a base de cálculo e as regras estaduais.
+          </p>
+        </div>
+
+        <div>
+          <h3>Desvalorização</h3>
+          <p>
+            O percentual informado representa a estimativa anual de perda
+            de valor do veículo. O resultado apresentado deve ser interpretado
+            como perda patrimonial estimada, não como pagamento realizado.
+          </p>
+        </div>
+
+        <div>
+          <h3>Custo mensal e anual</h3>
+          <p>
+            O custo mensal pode considerar o rateio de despesas anuais para
+            facilitar o planejamento. A composição e a forma de rateio dependem
+            das regras implementadas no motor de cálculo.
+          </p>
+        </div>
+
+        <div class="methodology-note">
+          <strong>Importante:</strong>
+          a composição exata do custo mensal e anual depende da implementação
+          de <code>calculateVehicleTCO</code>. O simulador não deve ser tratado
+          como uma apuração completa de todos os gastos possíveis do veículo.
+          Confira quais itens estão incluídos antes de utilizar os resultados
+          como referência financeira definitiva.
+        </div>
+      </div>
+    </section>
+
+    <!-- EXEMPLO PRÁTICO -->
+    <section class="content-section" aria-labelledby="example-title">
+      <div class="section-heading">
+        <span class="section-label">EXEMPLO PRÁTICO</span>
+        <h2 id="example-title">Como analisar os gastos de um veículo?</h2>
+        <p>
+          Imagine um automóvel avaliado em R$ 70.000,00, utilizado diariamente
+          e com despesas mensais de combustível, seguro e manutenção.
+        </p>
+      </div>
+
+      <div class="example-card">
+        <h3>Exemplo ilustrativo — Veículo avaliado em R$ 70.000,00</h3>
+
+        <div class="example-data">
+          <div>
+            <span>Combustível mensal</span>
+            <strong>R$ 600,00</strong>
+          </div>
+
+          <div>
+            <span>Seguro mensal</span>
+            <strong>R$ 200,00</strong>
+          </div>
+
+          <div>
+            <span>Manutenção mensal</span>
+            <strong>R$ 150,00</strong>
+          </div>
+
+          <div>
+            <span>IPVA de referência</span>
+            <strong>4% ao ano</strong>
+          </div>
+
+          <div>
+            <span>Desvalorização estimada</span>
+            <strong>10% ao ano</strong>
+          </div>
+
+          <div>
+            <span>Base de avaliação</span>
+            <strong>R$ 70.000,00</strong>
+          </div>
+        </div>
+
+        <p>
+          Esses são dados de exemplo, não uma cotação ou previsão de mercado.
+          Utilize a calculadora para obter os resultados conforme o motor
+          de cálculo e os valores que você informar.
+        </p>
+      </div>
+    </section>
+
+    <!-- DICAS DE PLANEJAMENTO -->
+    <section class="content-section" aria-labelledby="tips-title">
+      <div class="section-heading">
+        <span class="section-label">PLANEJAMENTO</span>
+        <h2 id="tips-title">Como reduzir o custo de manter um carro?</h2>
+        <p>
+          Pequenos ajustes na gestão e na manutenção preventiva ajudam a
+          evitar gastos inesperados e a otimizar o custo total de propriedade.
+        </p>
+      </div>
+
+      <div class="instruction-list">
+        <article class="instruction-card">
+          <span class="step-number">01</span>
+          <div>
+            <h3>Compare o seguro anualmente</h3>
+            <p>
+              Pesquise diferentes seguradoras e compare coberturas,
+              franquias e condições antes de renovar.
+            </p>
+          </div>
+        </article>
+
+        <article class="instruction-card">
+          <span class="step-number">02</span>
+          <div>
+            <h3>Faça manutenção preventiva</h3>
+            <p>
+              Seguir o plano de revisões pode ajudar a evitar problemas
+              mecânicos e reparos inesperados.
+            </p>
+          </div>
+        </article>
+
+        <article class="instruction-card">
+          <span class="step-number">03</span>
+          <div>
+            <h3>Acompanhe o consumo</h3>
+            <p>
+              Registre os abastecimentos e observe o consumo médio.
+              Hábitos de direção e manutenção influenciam a eficiência.
+            </p>
+          </div>
+        </article>
+
+        <article class="instruction-card">
+          <span class="step-number">04</span>
+          <div>
+            <h3>Considere a desvalorização</h3>
+            <p>
+              Ao escolher um veículo, avalie também seu histórico de
+              revenda, procura no mercado e custo de propriedade.
+            </p>
+          </div>
+        </article>
+
+        <article class="instruction-card">
+          <span class="step-number">05</span>
+          <div>
+            <h3>Organize uma reserva para despesas anuais</h3>
+            <p>
+              Separe recursos para IPVA, seguro, licenciamento e revisões.
+              Isso ajuda a evitar surpresas no orçamento.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section" aria-labelledby="faq-title">
+      <div class="section-heading">
+        <span class="section-label">DÚVIDAS FREQUENTES</span>
+        <h2 id="faq-title">Perguntas sobre o custo real do carro</h2>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>O que significa TCO?</summary>
+          <p>
+            TCO é a sigla de Total Cost of Ownership, expressão em inglês
+            para Custo Total de Propriedade. É uma forma de avaliar os custos
+            associados à aquisição, utilização e manutenção de um bem durante
+            determinado período.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>A desvalorização é uma despesa mensal?</summary>
+          <p>
+            Não necessariamente. Ela representa a perda de valor patrimonial
+            do veículo. Mesmo sem um pagamento mensal, essa perda afeta o
+            patrimônio do proprietário e deve ser considerada ao avaliar
+            o custo de manter o automóvel.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Como calcular o gasto mensal com seguro?</summary>
+          <p>
+            Se você paga o seguro anualmente, pode dividir o valor da apólice
+            por 12 para obter uma média mensal de planejamento. Se houver
+            parcelamento com juros ou taxas, considere o custo efetivo
+            pago no contrato.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O IPVA é igual em todos os estados?</summary>
+          <p>
+            Não. As alíquotas, regras, critérios de avaliação e possíveis
+            isenções variam conforme a legislação de cada estado.
+            Informe uma taxa compatível com a situação do seu veículo.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>A calculadora considera o financiamento?</summary>
+          <p>
+            Os campos desta página não solicitam valor de entrada, parcelas,
+            taxa de juros ou prazo de financiamento. Portanto, o custo do
+            financiamento não está contemplado diretamente nos dados informados.
+            Se o veículo ainda estiver financiado, considere as parcelas e os
+            encargos do contrato separadamente.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>A calculadora inclui estacionamento, pedágios e licenciamento?</summary>
+          <p>
+            Esses gastos não possuem campos próprios nesta versão da ferramenta.
+            Para obter uma estimativa mais próxima da sua realidade, considere
+            essas despesas separadamente no seu orçamento.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Os resultados representam o custo exato do meu carro?</summary>
+          <p>
+            Não. Os resultados são estimativas baseadas nos dados informados
+            e nas regras da ferramenta. Despesas variáveis, mudanças de preços,
+            condições do veículo e particularidades regionais podem alterar
+            o custo efetivo.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <!-- AVISO LEGAL -->
+    <aside class="final-notice">
+      <div class="notice-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 16v-4"/>
+          <path d="M12 8h.01"/>
+        </svg>
+        <strong>Aviso importante:</strong>
+      </div>
+      <p>
+        Esta ferramenta tem finalidade exclusivamente informativa e educacional.
+        Os resultados são estimativas e não constituem aconselhamento financeiro,
+        contábil ou tributário. Confira os valores e as regras aplicáveis ao seu
+        veículo antes de tomar decisões.
+      </p>
+    </aside>
+
+    <!-- CTA -->
+    <section class="final-cta">
+      <span class="section-label">CALCULADORA DE GANHOS</span>
+      <h2>Conheça o verdadeiro impacto do seu carro no orçamento</h2>
+      <p>
+        Utilize a simulação para organizar suas despesas, comparar cenários
+        e tomar decisões mais conscientes sobre seu veículo.
+      </p>
+      <a href="#calculadora" class="cta-link">
+        <span>Voltar à calculadora</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 19V5"/>
+          <path d="m5 12 7-7 7 7"/>
+        </svg>
+      </a>
+    </section>
+  </div>
+
+  <script>
+    import { calculateVehicleTCO } from '../../engines/finance/vehicle-engine';
+    import { formatBRL } from '../../engines/common/currency';
+
+    let pageController: AbortController | null = null;
+
+    function initPage() {
+      // Evita listeners duplicados durante a navegação do Astro.
+      pageController?.abort();
+      pageController = new AbortController();
+
+      const { signal } = pageController;
+
+      const priceInput = document.getElementById('v-price') as HTMLInputElement | null;
+      const fuelInput = document.getElementById('v-fuel') as HTMLInputElement | null;
+      const insuranceInput = document.getElementById('v-insurance') as HTMLInputElement | null;
+      const maintenanceInput = document.getElementById('v-maint') as HTMLInputElement | null;
+      const ipvaInput = document.getElementById('v-ipva') as HTMLInputElement | null;
+      const depreciationInput = document.getElementById('v-dep') as HTMLInputElement | null;
+
+      const errorElement = document.getElementById('calc-error');
+      const calculateButton = document.getElementById('calc-btn');
+
+      const monthlyOutput = document.getElementById('res-monthly');
+      const annualOutput = document.getElementById('res-annual');
+      const deprOutput = document.getElementById('res-depr');
+
+      if (
+        !priceInput ||
+        !fuelInput ||
+        !insuranceInput ||
+        !maintenanceInput ||
+        !ipvaInput ||
+        !depreciationInput ||
+        !errorElement ||
+        !calculateButton ||
+        !monthlyOutput ||
+        !annualOutput ||
+        !deprOutput
+      ) {
+        return;
+      }
+
+      const fields = {
+        price: priceInput,
+        fuel: fuelInput,
+        insurance: insuranceInput,
+        maintenance: maintenanceInput,
+        ipva: ipvaInput,
+        depreciation: depreciationInput,
+      };
+
+      function readNumber(input: HTMLInputElement): number | null {
+        const value = input.value.trim();
+
+        if (value === '') {
+          return null;
+        }
+
+        const number = Number(value);
+
+        if (!Number.isFinite(number)) {
+          return null;
+        }
+
+        return number;
+      }
+
+      function getInputValues() {
+        return {
+          price: readNumber(fields.price),
+          fuel: readNumber(fields.fuel),
+          insurance: readNumber(fields.insurance),
+          maintenance: readNumber(fields.maintenance),
+          ipva: readNumber(fields.ipva),
+          depreciation: readNumber(fields.depreciation),
+        };
+      }
+
+      function validateInputs(values: ReturnType<typeof getInputValues>): string | null {
+        const definitions = [
+          {
+            value: values.price,
+            label: 'valor de mercado do veículo',
+            min: 0,
+            max: 100000000,
+          },
+          {
+            value: values.fuel,
+            label: 'combustível mensal',
+            min: 0,
+            max: 1000000,
+          },
+          {
+            value: values.insurance,
+            label: 'seguro mensal',
+            min: 0,
+            max: 1000000,
+          },
+          {
+            value: values.maintenance,
+            label: 'manutenção mensal',
+            min: 0,
+            max: 1000000,
+          },
+          {
+            value: values.ipva,
+            label: 'alíquota do IPVA',
+            min: 0,
+            max: 100,
+          },
+          {
+            value: values.depreciation,
+            label: 'percentual de desvalorização',
+            min: 0,
+            max: 100,
+          },
+        ];
+
+        for (const field of definitions) {
+          if (field.value === null) {
+            return `Informe um valor válido para ${field.label}.`;
+          }
+
+          if (field.value < field.min || field.value > field.max) {
+            return `O campo "${field.label}" deve estar entre ${field.min} e ${field.max}.`;
+          }
+        }
+
+        return null;
+      }
+
+      function showError(message: string) {
+        errorElement.textContent = message;
+        errorElement.hidden = false;
+
+        monthlyOutput.textContent = '—';
+        annualOutput.textContent = '—';
+        deprOutput.textContent = '—';
+      }
+
+      function clearError() {
+        errorElement.textContent = '';
+        errorElement.hidden = true;
+      }
+
+      function runCalc() {
+        const values = getInputValues();
+        const validationError = validateInputs(values);
+
+        if (validationError) {
+          showError(validationError);
+          return;
+        }
+
+        clearError();
+
+        try {
+          // Após a validação, os valores não podem ser nulos.
+          const result = calculateVehicleTCO({
+            vehiclePrice: values.price!,
+            monthlyFuelCost: values.fuel!,
+            monthlyInsurance: values.insurance!,
+            annualIpvaRate: values.ipva!,
+            monthlyMaintenance: values.maintenance!,
+            annualDepreciationRate: values.depreciation!,
+          });
+
+          const resultValues = [
+            result.totalMonthlyCost,
+            result.costPerYear,
+            result.annualDepreciationValue,
+          ];
+
+          const hasInvalidResult = resultValues.some(
+            (value) => !Number.isFinite(value) || value < 0
+          );
+
+          if (hasInvalidResult) {
+            throw new Error('O motor retornou valores inválidos.');
+          }
+
+          monthlyOutput.textContent = formatBRL(result.totalMonthlyCost);
+          annualOutput.textContent = formatBRL(result.costPerYear);
+          deprOutput.textContent = formatBRL(result.annualDepreciationValue);
+        } catch (error) {
+          console.error('Erro ao calcular o custo real do veículo:', error);
+
+          showError(
+            'Não foi possível realizar o cálculo. Verifique os valores informados e tente novamente.'
+          );
+        }
+      }
+
+      calculateButton.addEventListener('click', runCalc, { signal });
+
+      Object.values(fields).forEach((input) => {
+        input.addEventListener('input', runCalc, { signal });
+        input.addEventListener('change', runCalc, { signal });
+      });
+
+      // Calcula automaticamente com os valores iniciais.
+      runCalc();
+    }
+
+    initPage();
+
+    // Reexecuta a inicialização após navegações feitas pelo Astro.
+    document.addEventListener('astro:page-load', initPage);
+  </script>
+
+  <style>
+    .tco-page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0.5rem 0 4rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1.75rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .eyebrow,
+    .section-label {
+      display: inline-block;
+      margin-bottom: 0.75rem;
+      color: var(--color-primary);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .hero h1 {
+      margin: 0 0 0.9rem;
+      color: var(--text-primary);
+      font-size: clamp(2rem, 5vw, 2.7rem);
+      line-height: 1.2;
+    }
+
+    .hero > p {
+      max-width: 790px;
+      margin: 0 auto;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .hero-highlights {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.25rem 1.75rem;
+      margin-top: 1.75rem;
+    }
+
+    .highlight {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .highlight-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    :global([data-theme="dark"]) .highlight-icon {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    /* ÍCONES SVG PADRONIZADOS */
+
+    .icon-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    :global([data-theme="dark"]) .icon-badge {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    .calculator-section {
+      margin-bottom: 3.5rem;
+      scroll-margin-top: 2rem;
+    }
+
+    .section-heading {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 0.6rem;
+      font-size: 1.65rem;
+      line-height: 1.3;
+    }
+
+    .section-heading > p {
+      max-width: 760px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+
+    .card {
+      padding: 1.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .card h3 {
+      margin: 0 0 1.4rem;
+      font-size: 1.2rem;
+    }
+
+    .input-card h3 {
+      color: var(--color-primary);
+    }
+
+    .field-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.9rem;
+    }
+
+    .field-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 650;
+      line-height: 1.5;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border-color);
+      border-radius: 9px;
+      background: var(--bg-primary);
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.12);
+    }
+
+    :global([data-theme="dark"]) .input-wrapper:focus-within {
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.16);
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      min-width: 0;
+      min-height: 46px;
+      padding: 0.75rem 0.9rem;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text-primary);
+      font: inherit;
+      box-sizing: border-box;
+    }
+
+    .input-prefix,
+    .input-suffix {
+      padding: 0 0.85rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .input-prefix {
+      border-right: 1px solid var(--border-color);
+    }
+
+    .input-suffix {
+      border-left: 1px solid var(--border-color);
+    }
+
+    .field-group small {
+      display: block;
+      margin-top: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      width: 100%;
+      min-height: 48px;
+      padding: 0.85rem 1.1rem;
+      border: 0;
+      border-radius: 9px;
+      background: var(--color-primary);
+      color: #ffffff;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .btn:hover {
+      opacity: 0.88;
+    }
+
+    .input-note {
+      margin: 0.9rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    .result-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .result-card .section-label {
+      margin-bottom: 0.35rem;
+    }
+
+    .result-card h3 {
+      margin-bottom: 1.35rem;
+    }
+
+    .main-result {
+      padding: 1.35rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: rgba(6, 95, 70, 0.08);
+    }
+
+    :global([data-theme="dark"]) .main-result {
+      background: rgba(16, 185, 129, 0.12);
+    }
+
+    .main-result span {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .main-result strong {
+      display: block;
+      color: var(--color-primary);
+      font-size: clamp(1.8rem, 4vw, 2.3rem);
+      overflow-wrap: anywhere;
+    }
+
+    .result-description {
+      display: block;
+      margin-top: 0.4rem;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+    }
+
+    .result-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.9rem;
+    }
+
+    .result-line > span {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    .result-line strong {
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .result-dot {
+      width: 9px;
+      height: 9px;
+      flex-shrink: 0;
+      border-radius: 50%;
+    }
+
+    .result-dot.blue {
+      background: #2563eb;
+    }
+
+    .result-dot.red {
+      background: #dc2626;
+    }
+
+    :global([data-theme="dark"]) .result-dot.red {
+      background: #f87171;
+    }
+
+    .interest-value {
+      color: #dc2626;
+    }
+
+    :global([data-theme="dark"]) .interest-value {
+      color: #f87171;
+    }
+
+    .result-observation {
+      margin-top: 1.5rem;
+      padding-top: 1.1rem;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.8rem;
+    }
+
+    .result-observation p {
+      margin: 0.45rem 0 0;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    .calc-error {
+      margin-top: 1rem;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid #dc2626;
+      border-radius: 8px;
+      color: #dc2626;
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .content-section {
+      margin-bottom: 3.5rem;
+    }
+
+    .explanation-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .explanation-card {
+      padding: 1.4rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .explanation-card .icon-badge {
+      margin-bottom: 0.95rem;
+    }
+
+    .instruction-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .instruction-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.35rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .step-number {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    :global([data-theme="dark"]) .step-number {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    .instruction-card h3,
+    .explanation-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    .instruction-card p,
+    .explanation-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .methodology-box {
+      display: grid;
+      gap: 1.25rem;
+      padding: 1.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .methodology-box h3 {
+      margin: 0 0 0.45rem;
+      font-size: 1.05rem;
+    }
+
+    .methodology-box p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.75;
+    }
+
+    .methodology-note {
+      padding: 1rem 1.15rem;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--color-primary);
+      border-radius: 8px;
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      font-size: 0.86rem;
+      line-height: 1.7;
+    }
+
+    .methodology-note strong {
+      color: var(--text-primary);
+    }
+
+    .methodology-note code {
+      color: var(--color-primary);
+      font-weight: 600;
+      overflow-wrap: anywhere;
+    }
+
+    .example-card {
+      padding: 1.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .example-card h3 {
+      margin: 0 0 1.35rem;
+    }
+
+    .example-data {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+    .example-data > div {
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-primary);
+    }
+
+    .example-data span {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+    }
+
+    .example-data strong {
+      font-size: 1.1rem;
+    }
+
+    .example-card > p {
+      margin: 1.25rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.75;
+    }
+
+    .faq-section {
+      margin-bottom: 3.5rem;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .faq-item summary {
+      padding: 1.2rem 2rem 1.2rem 0;
+      position: relative;
+      cursor: pointer;
+      color: var(--text-primary);
+      font-weight: 650;
+      line-height: 1.5;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      content: '+';
+      position: absolute;
+      right: 0.3rem;
+      color: var(--color-primary);
+      font-size: 1.35rem;
+    }
+
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+
+    .faq-item p {
+      margin: 0;
+      padding: 0 1rem 1.2rem 0;
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+      line-height: 1.75;
+    }
+
+    .final-notice {
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 2.5rem;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--color-primary);
+      border-radius: 10px;
+      background: var(--bg-secondary);
+    }
+
+    .notice-title {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 0.5rem;
+      color: var(--color-primary);
+    }
+
+    .notice-title strong {
+      color: var(--text-primary);
+    }
+
+    .final-notice p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.75;
+    }
+
+    .final-cta {
+      padding: 2.25rem 1.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+      text-align: center;
+    }
+
+    .final-cta h2 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(1.45rem, 3vw, 1.85rem);
+    }
+
+    .final-cta p {
+      max-width: 650px;
+      margin: 0 auto 1.5rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .cta-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.8rem 1.4rem;
+      border-radius: 9px;
+      background: var(--color-primary);
+      color: #ffffff;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .cta-link:hover {
+      opacity: 0.88;
+    }
+
+    .cta-link:focus-visible,
+    .btn:focus-visible,
+    .breadcrumb a:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 768px) {
+      .calc-grid,
+      .explanation-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .field-row,
+      .example-data {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 1.25rem;
+      }
+
+      .hero-highlights {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</BaseLayout>

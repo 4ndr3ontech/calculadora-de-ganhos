@@ -1,0 +1,1094 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de Adicional Noturno CLT — Calculadora de Ganhos"
+  description="Calcule o adicional noturno CLT considerando o percentual de 20%, a hora noturna reduzida de 52 minutos e 30 segundos e sua jornada mensal."
+>
+  <main class="labor-page">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">/</span>
+      <a href="/trabalhista/">Trabalhista</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Adicional Noturno</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="eyebrow">DIREITOS TRABALHISTAS</span>
+      <h1>Calculadora de Adicional Noturno</h1>
+      <p>
+        Calcule uma estimativa do adicional devido ao trabalho noturno urbano,
+        considerando o percentual legal e a hora noturna reduzida prevista na CLT.
+      </p>
+    </header>
+
+    <section class="calculator-grid" aria-label="Calculadora de adicional noturno">
+      <div class="card input-card">
+        <div class="section-heading">
+          <div class="heading-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </div>
+          <div>
+            <h2>Dados da jornada</h2>
+            <p>Informe os valores da sua remuneração e do trabalho noturno.</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="an-salary">Salário bruto mensal</label>
+          <div class="input-wrap">
+            <span class="prefix">R$</span>
+            <input
+              type="number"
+              id="an-salary"
+              value="3500"
+              min="0.01"
+              max="100000000"
+              step="0.01"
+              inputmode="decimal"
+            />
+          </div>
+          <small>Salário-base mensal, sem incluir o adicional noturno.</small>
+        </div>
+
+        <div class="field">
+          <label for="an-hours">Jornada mensal contratual</label>
+          <div class="input-wrap">
+            <input
+              type="number"
+              id="an-hours"
+              value="220"
+              min="1"
+              max="744"
+              step="1"
+              inputmode="numeric"
+            />
+            <span class="suffix">horas</span>
+          </div>
+          <small>Exemplo: 220 horas mensais para uma jornada comum de 44 horas semanais.</small>
+        </div>
+
+        <div class="field">
+          <label for="an-night-hours">Horas efetivamente trabalhadas à noite</label>
+          <div class="input-wrap">
+            <input
+              type="number"
+              id="an-night-hours"
+              value="60"
+              min="0"
+              max="744"
+              step="0.25"
+              inputmode="decimal"
+            />
+            <span class="suffix">horas</span>
+          </div>
+          <small>
+            Informe as horas reais trabalhadas entre 22h e 5h, antes da conversão da hora reduzida.
+          </small>
+        </div>
+
+        <div class="legal-info">
+          <span aria-hidden="true">ⓘ</span>
+          <p>
+            O cálculo utiliza o adicional padrão de 20% e a hora noturna urbana
+            de 52 minutos e 30 segundos.
+          </p>
+        </div>
+
+        <div id="form-error" class="form-error" role="alert" aria-live="polite" hidden></div>
+
+        <button type="button" id="calc-btn" class="calculate-btn">
+          <span>Calcular adicional noturno</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </button>
+
+        <p class="privacy-note">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Cálculos realizados diretamente no navegador.
+        </p>
+      </div>
+
+      <div class="card results-card" aria-live="polite">
+        <div class="section-heading">
+          <div class="heading-icon result-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </div>
+          <div>
+            <h2>Resultado estimado</h2>
+            <p>Resumo da remuneração noturna calculada.</p>
+          </div>
+        </div>
+
+        <div class="main-result">
+          <span class="result-label">Adicional noturno estimado no mês</span>
+          <strong id="res-bonus">R$ 0,00</strong>
+          <span class="result-subtitle">Valor adicional sobre as horas noturnas consideradas</span>
+        </div>
+
+        <div class="result-lines">
+          <div class="result-line">
+            <span>Valor da hora normal</span>
+            <strong id="res-normal">R$ 0,00</strong>
+          </div>
+
+          <div class="result-line">
+            <span>Valor da hora noturna (+20%)</span>
+            <strong id="res-night-rate">R$ 0,00</strong>
+          </div>
+
+          <div class="result-line">
+            <span>Horas reais trabalhadas à noite</span>
+            <strong id="res-real-hours">0,00 h</strong>
+          </div>
+
+          <div class="result-line">
+            <span>Horas noturnas reduzidas</span>
+            <strong id="res-legal-hours">0,00 h</strong>
+          </div>
+        </div>
+
+        <div class="monthly-summary">
+          <span>Remuneração mensal estimada com o adicional</span>
+          <strong id="res-total">R$ 0,00</strong>
+          <small>Salário-base + adicional noturno calculado.</small>
+        </div>
+
+        <p class="result-disclaimer">
+          Resultado ilustrativo, sem considerar outras verbas, reflexos, descontos
+          ou particularidades previstas em convenção coletiva.
+        </p>
+      </div>
+    </section>
+
+    <section class="card explanation-section">
+      <div class="content-heading">
+        <span class="eyebrow">ENTENDA SEUS DIREITOS</span>
+        <h2>Como funciona o adicional noturno?</h2>
+        <p>
+          A legislação trabalhista estabelece regras específicas para a remuneração
+          do trabalho realizado durante o período noturno.
+        </p>
+      </div>
+
+      <div class="explanation-grid">
+        <article class="explanation-card">
+          <div class="explanation-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </div>
+          <h3>Período noturno urbano</h3>
+          <p>
+            Para trabalhadores urbanos abrangidos pela regra geral da CLT,
+            considera-se noturno o trabalho executado entre 22h de um dia
+            e 5h do dia seguinte.
+          </p>
+          <div class="formula">22h às 5h</div>
+        </article>
+
+        <article class="explanation-card">
+          <div class="explanation-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <h3>Adicional mínimo de 20%</h3>
+          <p>
+            O trabalho noturno urbano tem remuneração superior à do trabalho
+            diurno, com acréscimo mínimo de 20% sobre a hora diurna, conforme
+            o artigo 73 da CLT.
+          </p>
+          <div class="formula">Hora normal × 1,20</div>
+        </article>
+
+        <article class="explanation-card">
+          <div class="explanation-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h3>Hora noturna reduzida</h3>
+          <p>
+            No trabalho noturno urbano, cada hora é computada como 52 minutos
+            e 30 segundos. Isso significa que uma hora de relógio corresponde
+            a aproximadamente 1,142857 hora legal.
+          </p>
+          <div class="formula">60 ÷ 52,5 = 1,142857</div>
+        </article>
+
+        <article class="explanation-card">
+          <div class="explanation-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <h3>Reflexos na remuneração</h3>
+          <p>
+            O adicional noturno pode repercutir em outras verbas trabalhistas,
+            conforme as circunstâncias do contrato, a habitualidade e as regras
+            legais aplicáveis.
+          </p>
+          <div class="formula">Verbas dependem de cada situação</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="card calculation-section">
+      <div class="content-heading">
+        <span class="eyebrow">ENTENDA A MATEMÁTICA</span>
+        <h2>Como o cálculo é realizado?</h2>
+        <p>Veja as etapas utilizadas para chegar ao valor estimado.</p>
+      </div>
+
+      <div class="steps-list">
+        <article class="step-item">
+          <span class="step-number">01</span>
+          <div>
+            <h3>Valor da hora normal</h3>
+            <p>O salário mensal é dividido pela jornada mensal contratual.</p>
+            <div class="formula">Salário mensal ÷ Jornada mensal</div>
+          </div>
+        </article>
+
+        <article class="step-item">
+          <span class="step-number">02</span>
+          <div>
+            <h3>Conversão da hora noturna</h3>
+            <p>As horas efetivamente trabalhadas são convertidas para a hora noturna legal reduzida.</p>
+            <div class="formula">Horas reais × 60 ÷ 52,5</div>
+          </div>
+        </article>
+
+        <article class="step-item">
+          <span class="step-number">03</span>
+          <div>
+            <h3>Valor do adicional por hora</h3>
+            <p>O adicional de 20% é aplicado sobre o valor da hora normal.</p>
+            <div class="formula">Hora normal × 20%</div>
+          </div>
+        </article>
+
+        <article class="step-item">
+          <span class="step-number">04</span>
+          <div>
+            <h3>Adicional mensal estimado</h3>
+            <p>O adicional por hora é multiplicado pela quantidade de horas noturnas legais.</p>
+            <div class="formula">Adicional por hora × Horas legais</div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="card example-section">
+      <div class="content-heading">
+        <span class="eyebrow">EXEMPLO PRÁTICO</span>
+        <h2>Simulação de adicional noturno</h2>
+        <p>Considere um trabalhador com os seguintes dados hipotéticos:</p>
+      </div>
+
+      <div class="example-grid">
+        <div class="example-item">
+          <span>Salário mensal</span>
+          <strong>R$ 3.500,00</strong>
+        </div>
+        <div class="example-item">
+          <span>Jornada mensal</span>
+          <strong>220 horas</strong>
+        </div>
+        <div class="example-item">
+          <span>Horas reais noturnas</span>
+          <strong>60 horas</strong>
+        </div>
+        <div class="example-item">
+          <span>Horas noturnas legais</span>
+          <strong>68,57 horas</strong>
+        </div>
+      </div>
+
+      <p class="example-explanation">
+        Nesse exemplo, a hora normal vale R$ 15,91. O adicional de 20% corresponde
+        a aproximadamente R$ 3,18 por hora. Considerando a conversão da hora noturna
+        reduzida, o adicional mensal estimado é de aproximadamente R$ 218,18.
+      </p>
+    </section>
+
+    <section class="card faq-section">
+      <div class="content-heading">
+        <span class="eyebrow">DÚVIDAS FREQUENTES</span>
+        <h2>Perguntas sobre adicional noturno</h2>
+      </div>
+
+      <div class="faq-list">
+        <details>
+          <summary>Qual é o horário considerado noturno pela CLT?</summary>
+          <p>
+            Para o trabalho urbano, a regra geral considera noturno o período
+            entre 22h de um dia e 5h do dia seguinte, conforme o artigo 73 da CLT.
+            O trabalho rural possui regras próprias.
+          </p>
+        </details>
+
+        <details>
+          <summary>Qual é o percentual do adicional noturno?</summary>
+          <p>
+            Para o trabalho urbano, o adicional mínimo previsto na CLT é de 20%
+            sobre o valor da hora diurna. Convenções e acordos coletivos podem
+            estabelecer condições mais favoráveis.
+          </p>
+        </details>
+
+        <details>
+          <summary>O que significa hora noturna reduzida?</summary>
+          <p>
+            Significa que a hora noturna urbana é computada como 52 minutos e
+            30 segundos, em vez dos 60 minutos da hora comum. Por isso, o número
+            de horas legais pode ser maior que o número de horas efetivamente
+            trabalhadas no relógio.
+          </p>
+        </details>
+
+        <details>
+          <summary>O trabalho depois das 5h também pode receber adicional?</summary>
+          <p>
+            Em determinadas situações, sim. A CLT e a interpretação consolidada
+            pela Súmula 60, item II, do TST tratam da prorrogação do trabalho
+            noturno quando cumprida integralmente a jornada no período noturno.
+            A aplicação depende da jornada e das circunstâncias concretas.
+          </p>
+        </details>
+
+        <details>
+          <summary>O adicional noturno é calculado sobre o salário bruto?</summary>
+          <p>
+            O cálculo utiliza o valor da hora normal, obtido a partir da remuneração
+            aplicável e do divisor correspondente à jornada. Esta ferramenta usa
+            o salário-base informado e não considera automaticamente outras parcelas
+            salariais que possam integrar a base de cálculo.
+          </p>
+        </details>
+
+        <details>
+          <summary>Esta calculadora serve para trabalhadores rurais?</summary>
+          <p>
+            Não. A ferramenta utiliza as regras gerais do trabalho noturno urbano.
+            Para trabalhadores rurais, existem períodos e percentuais específicos,
+            conforme a atividade exercida e a legislação aplicável.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <aside class="legal-warning">
+      <strong>Atenção:</strong>
+      Esta calculadora fornece uma estimativa informativa, não um demonstrativo
+      oficial de folha de pagamento. O resultado pode variar conforme convenções
+      coletivas, acordos, jornada efetiva, prorrogação do trabalho noturno,
+      composição da remuneração e outras particularidades contratuais.
+      Em caso de dúvida, consulte um profissional trabalhista.
+    </aside>
+  </main>
+
+  <script>
+    import { calculateNightShift } from '../../engines/business/labor-advanced-engine';
+    import { formatBRL } from '../../engines/common/currency';
+
+    const salaryInput = document.getElementById('an-salary') as HTMLInputElement;
+    const hoursInput = document.getElementById('an-hours') as HTMLInputElement;
+    const nightHoursInput = document.getElementById('an-night-hours') as HTMLInputElement;
+    const calculateButton = document.getElementById('calc-btn') as HTMLButtonElement;
+    const errorElement = document.getElementById('form-error') as HTMLDivElement;
+
+    const bonusOutput = document.getElementById('res-bonus')!;
+    const normalOutput = document.getElementById('res-normal')!;
+    const nightRateOutput = document.getElementById('res-night-rate')!;
+    const realHoursOutput = document.getElementById('res-real-hours')!;
+    const legalHoursOutput = document.getElementById('res-legal-hours')!;
+    const totalOutput = document.getElementById('res-total')!;
+
+    const formatHours = (value: number) =>
+      new Intl.NumberFormat('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(value);
+
+    function showError(message: string) {
+      errorElement.textContent = message;
+      errorElement.hidden = false;
+    }
+
+    function clearError() {
+      errorElement.textContent = '';
+      errorElement.hidden = true;
+    }
+
+    function runCalc() {
+      const salary = Number(salaryInput.value);
+      const monthlyHours = Number(hoursInput.value);
+      const realNightHours = Number(nightHoursInput.value);
+
+      if (!Number.isFinite(salary) || salary <= 0 || salary > 100000000) {
+        showError('Informe um salário válido e maior que zero.');
+        return;
+      }
+
+      if (!Number.isFinite(monthlyHours) || monthlyHours <= 0 || monthlyHours > 744) {
+        showError('Informe uma jornada mensal válida, entre 1 e 744 horas.');
+        return;
+      }
+
+      if (!Number.isFinite(realNightHours) || realNightHours < 0 || realNightHours > 744) {
+        showError('Informe uma quantidade válida de horas noturnas.');
+        return;
+      }
+
+      if (realNightHours > monthlyHours) {
+        showError('As horas noturnas não podem superar a jornada mensal informada.');
+        return;
+      }
+
+      try {
+        clearError();
+
+        // Uma hora noturna urbana corresponde a 52 minutos e 30 segundos.
+        // A quantidade real de horas é convertida para horas legais reduzidas.
+        const legalNightHours = realNightHours * (60 / 52.5);
+
+        const result = calculateNightShift({
+          monthlySalary: salary,
+          monthlyHours,
+          nightHoursCount: legalNightHours,
+          nightBonusPercentage: 20
+        });
+
+        const hourlyRate = Number(result.hourlyRate);
+        const nightHourlyRate = Number(result.nightHourlyRate);
+        const nightBonusTotal = Number(result.nightBonusTotal);
+
+        if (
+          !Number.isFinite(hourlyRate) ||
+          !Number.isFinite(nightHourlyRate) ||
+          !Number.isFinite(nightBonusTotal) ||
+          hourlyRate < 0 ||
+          nightHourlyRate < 0 ||
+          nightBonusTotal < 0
+        ) {
+          throw new Error('O motor de cálculo retornou valores inválidos.');
+        }
+
+        bonusOutput.textContent = formatBRL(nightBonusTotal);
+        normalOutput.textContent = formatBRL(hourlyRate);
+        nightRateOutput.textContent = formatBRL(nightHourlyRate);
+
+        realHoursOutput.textContent = `${formatHours(realNightHours)} h`;
+        legalHoursOutput.textContent = `${formatHours(legalNightHours)} h`;
+
+        totalOutput.textContent = formatBRL(salary + nightBonusTotal);
+      } catch (error) {
+        showError(
+          error instanceof Error
+            ? error.message
+            : 'Não foi possível realizar o cálculo. Verifique os dados informados.'
+        );
+      }
+    }
+
+    calculateButton.addEventListener('click', runCalc);
+
+    [salaryInput, hoursInput, nightHoursInput].forEach((input) => {
+      input.addEventListener('input', runCalc);
+    });
+
+    runCalc();
+  </script>
+
+  <style>
+    .labor-page {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding-bottom: 3rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+      margin-bottom: 1.8rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a {
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .page-header {
+      max-width: 760px;
+      margin-bottom: 2rem;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: var(--color-primary);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.65rem;
+    }
+
+    .page-header h1 {
+      margin: 0 0 0.8rem;
+      color: var(--text-primary);
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+    }
+
+    .page-header p,
+    .content-heading > p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.96rem;
+      line-height: 1.7;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.4rem;
+      align-items: stretch;
+    }
+
+    .card {
+      padding: clamp(1.1rem, 3vw, 1.6rem);
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.035);
+    }
+
+    .input-card,
+    .results-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .heading-icon {
+      display: grid;
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--color-primary);
+    }
+
+    .result-icon {
+      background: rgba(22, 163, 74, 0.1);
+      color: #16a34a;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 0.25rem;
+      color: var(--text-primary);
+      font-size: 1.15rem;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .field {
+      margin-bottom: 1.1rem;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--text-primary);
+      font-size: 0.87rem;
+      font-weight: 650;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input {
+      width: 100%;
+      min-height: 46px;
+      padding: 0.7rem 3.2rem 0.7rem 0.8rem;
+      border: 1px solid var(--border-color);
+      border-radius: 9px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrap .prefix {
+      position: absolute;
+      top: 50%;
+      left: 0.85rem;
+      z-index: 1;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    .input-wrap:has(.prefix) input {
+      padding-left: 2.8rem;
+    }
+
+    .input-wrap .suffix {
+      position: absolute;
+      top: 50%;
+      right: 0.85rem;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      pointer-events: none;
+    }
+
+    .input-wrap input:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .field small {
+      display: block;
+      margin-top: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+      line-height: 1.5;
+    }
+
+    .legal-info {
+      display: flex;
+      gap: 0.65rem;
+      align-items: flex-start;
+      margin-top: 0.3rem;
+      padding: 0.85rem;
+      border-radius: 9px;
+      background: rgba(37, 99, 235, 0.07);
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      line-height: 1.55;
+    }
+
+    .legal-info p {
+      margin: 0;
+    }
+
+    .form-error {
+      margin-top: 1rem;
+      padding: 0.8rem 0.9rem;
+      border: 1px solid rgba(220, 38, 38, 0.25);
+      border-radius: 9px;
+      background: rgba(220, 38, 38, 0.08);
+      color: #dc2626;
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    .calculate-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      min-height: 48px;
+      padding: 0.8rem 1rem;
+      margin-top: 1.4rem;
+      border: 0;
+      border-radius: 10px;
+      background: var(--color-primary);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: filter 0.2s, transform 0.2s;
+    }
+
+    .calculate-btn:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+
+    .calculate-btn:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: 3px;
+    }
+
+    .calculate-btn svg {
+      flex-shrink: 0;
+    }
+
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 0.85rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    .privacy-note svg {
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    .main-result {
+      padding: 1.3rem;
+      border: 1px solid rgba(37, 99, 235, 0.12);
+      border-radius: 12px;
+      background: rgba(37, 99, 235, 0.07);
+    }
+
+    .result-label {
+      display: block;
+      margin-bottom: 0.65rem;
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      font-weight: 600;
+    }
+
+    .main-result strong {
+      display: block;
+      color: var(--color-primary);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      line-height: 1.2;
+      letter-spacing: -0.045em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .result-subtitle {
+      display: block;
+      margin-top: 0.55rem;
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+      line-height: 1.5;
+    }
+
+    .result-lines {
+      margin-top: 1.3rem;
+    }
+
+    .result-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .result-line span {
+      color: var(--text-secondary);
+      font-size: 0.83rem;
+      line-height: 1.5;
+    }
+
+    .result-line strong {
+      color: var(--text-primary);
+      font-size: 0.88rem;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .monthly-summary {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-top: 1.2rem;
+      padding: 1rem;
+      border-radius: 10px;
+      background: rgba(22, 163, 74, 0.08);
+    }
+
+    .monthly-summary span {
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+    }
+
+    .monthly-summary strong {
+      color: #16a34a;
+      font-size: 1.35rem;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .monthly-summary small {
+      color: var(--text-secondary);
+      font-size: 0.72rem;
+    }
+
+    .result-disclaimer {
+      margin: auto 0 0;
+      padding-top: 1rem;
+      color: var(--text-secondary);
+      font-size: 0.74rem;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    .explanation-section,
+    .calculation-section,
+    .example-section,
+    .faq-section {
+      margin-top: 1.5rem;
+    }
+
+    .content-heading {
+      margin-bottom: 1.3rem;
+    }
+
+    .content-heading h2 {
+      margin: 0 0 0.55rem;
+      color: var(--text-primary);
+      font-size: 1.35rem;
+      letter-spacing: -0.025em;
+    }
+
+    .content-heading > p {
+      font-size: 0.88rem;
+    }
+
+    .explanation-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .explanation-card {
+      padding: 1.1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-primary);
+    }
+
+    .explanation-icon {
+      color: var(--color-primary);
+      margin-bottom: 0.65rem;
+    }
+
+    .explanation-card h3,
+    .step-item h3 {
+      margin: 0 0 0.55rem;
+      color: var(--text-primary);
+      font-size: 0.98rem;
+    }
+
+    .explanation-card p,
+    .step-item p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.83rem;
+      line-height: 1.7;
+    }
+
+    .formula {
+      margin: 0.85rem 0 0;
+      padding: 0.75rem;
+      border-radius: 8px;
+      background: rgba(37, 99, 235, 0.07);
+      color: var(--color-primary);
+      font-size: 0.82rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .steps-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .step-number {
+      display: grid;
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--color-primary);
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .step-item > div {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .step-item .formula {
+      display: inline-block;
+      padding: 0.55rem 0.8rem;
+      text-align: left;
+    }
+
+    .example-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+
+    .example-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-primary);
+    }
+
+    .example-item span {
+      color: var(--text-secondary);
+      font-size: 0.77rem;
+    }
+
+    .example-item strong {
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .example-explanation {
+      margin: 1rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .faq-list details {
+      border-top: 1px solid var(--border-color);
+    }
+
+    .faq-list details:last-child {
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .faq-list summary {
+      position: relative;
+      padding: 1rem 2rem 1rem 0;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 650;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq-list summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-list summary::after {
+      position: absolute;
+      top: 50%;
+      right: 0.2rem;
+      transform: translateY(-50%);
+      color: var(--color-primary);
+      content: '+';
+      font-size: 1.3rem;
+      font-weight: 400;
+    }
+
+    .faq-list details[open] summary::after {
+      content: '−';
+    }
+
+    .faq-list details p {
+      margin: 0;
+      padding: 0 0 1rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .legal-warning {
+      margin-top: 1.5rem;
+      padding: 1rem 1.1rem;
+      border-left: 4px solid #d97706;
+      border-radius: 8px;
+      background: rgba(217, 119, 6, 0.07);
+      color: var(--text-secondary);
+      font-size: 0.83rem;
+      line-height: 1.7;
+    }
+
+    .legal-warning strong {
+      color: var(--text-primary);
+    }
+
+    @media (max-width: 760px) {
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .explanation-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .example-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .result-line {
+        align-items: flex-start;
+      }
+
+      .card {
+        border-radius: 12px;
+      }
+    }
+  </style>
+</BaseLayout>

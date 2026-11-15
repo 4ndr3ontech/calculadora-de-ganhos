@@ -1,0 +1,1170 @@
+
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de Desconto Online — Calcule Preços e Economias"
+  description="Calcule descontos percentuais, descubra quanto economizar e veja o preço final de produtos em promoção com nossa calculadora gratuita."
+>
+  <main class="discount-page">
+
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">/</span>
+      <a href="/matematica/">Matemática</a>
+      <span aria-hidden="true">/</span>
+      <span>Calculadora de Desconto</span>
+    </nav>
+
+    <!-- Cabeçalho -->
+    <header class="page-header">
+      <span class="eyebrow">
+        <span class="eyebrow-dot"></span>
+        FERRAMENTAS DE MATEMÁTICA
+      </span>
+
+      <h1>Calculadora de Desconto</h1>
+
+      <p>
+        Descubra quanto você economiza em uma compra e qual será o preço final
+        após aplicar um desconto percentual. Faça simulações gratuitamente,
+        de maneira rápida e simples.
+      </p>
+    </header>
+
+    <!-- Calculadora -->
+    <section class="calculator-section">
+      <div class="calculator-grid">
+
+        <!-- Entradas -->
+        <div class="calculator-card input-card">
+          <div class="card-heading">
+            <div class="heading-icon">%</div>
+            <div>
+              <h2>Dados da compra</h2>
+              <p>Informe o preço original e o desconto oferecido.</p>
+            </div>
+          </div>
+
+          <form id="discount-form">
+            <div class="form-group">
+              <label for="original-price">Preço original do produto</label>
+
+              <div class="input-wrapper">
+                <span class="input-prefix">R$</span>
+                <input
+                  type="number"
+                  id="original-price"
+                  value="250"
+                  min="0.01"
+                  max="1000000000"
+                  step="0.01"
+                  placeholder="Ex.: 250,00"
+                  required
+                />
+              </div>
+
+              <small>Valor do produto antes da promoção.</small>
+            </div>
+
+            <div class="form-group">
+              <label for="discount-pct">Percentual de desconto</label>
+
+              <div class="input-wrapper">
+                <input
+                  type="number"
+                  id="discount-pct"
+                  value="20"
+                  min="0"
+                  max="100"
+                  step="0.01"
+                  placeholder="Ex.: 20"
+                  required
+                />
+                <span class="input-suffix">%</span>
+              </div>
+
+              <small>Informe um percentual entre 0% e 100%.</small>
+            </div>
+
+            <div class="quick-discounts">
+              <span>Descontos comuns:</span>
+
+              <div class="quick-buttons">
+                <button type="button" data-discount="5">5%</button>
+                <button type="button" data-discount="10">10%</button>
+                <button type="button" data-discount="15">15%</button>
+                <button type="button" data-discount="20">20%</button>
+                <button type="button" data-discount="30">30%</button>
+                <button type="button" data-discount="50">50%</button>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="calculate-button" id="calc-btn">
+                Calcular desconto
+                <span aria-hidden="true">→</span>
+              </button>
+
+              <button type="reset" class="reset-button" id="reset-btn">
+                Limpar
+              </button>
+            </div>
+
+            <p class="error-message" id="error-message" role="alert" hidden></p>
+          </form>
+        </div>
+
+        <!-- Resultados -->
+        <div class="calculator-card result-card" aria-live="polite">
+          <div class="card-heading">
+            <div class="heading-icon result-icon">✓</div>
+            <div>
+              <h2>Resultado da simulação</h2>
+              <p>Veja o valor final e sua economia.</p>
+            </div>
+          </div>
+
+          <div class="main-result">
+            <span class="result-label">Preço final com desconto</span>
+
+            <strong id="res-final">R$ 200,00</strong>
+
+            <span class="result-description" id="result-description">
+              Você paga menos pelo produto.
+            </span>
+          </div>
+
+          <div class="result-details">
+            <div class="result-row">
+              <span>Preço original</span>
+              <strong id="res-original">R$ 250,00</strong>
+            </div>
+
+            <div class="result-row">
+              <span>Desconto aplicado</span>
+              <strong id="res-pct">20%</strong>
+            </div>
+
+            <div class="result-row savings-row">
+              <span>Valor economizado</span>
+              <strong id="res-saved">R$ 50,00</strong>
+            </div>
+          </div>
+
+          <div class="savings-message">
+            <span class="savings-icon" aria-hidden="true">↓</span>
+            <div>
+              <strong id="savings-title">Você economiza R$ 50,00</strong>
+              <p>Esse é o valor que deixa de pagar em relação ao preço original.</p>
+            </div>
+          </div>
+
+          <p class="result-note">
+            Simulação matemática baseada no percentual de desconto informado.
+            O preço efetivamente cobrado pode variar conforme as condições da oferta.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Como funciona -->
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="eyebrow">ENTENDA O CÁLCULO</span>
+        <h2>Como calcular um desconto percentual?</h2>
+      </div>
+
+      <p>
+        O desconto percentual representa uma redução aplicada sobre o preço
+        original de um produto ou serviço. Ele indica quanto do valor inicial
+        será abatido durante a compra.
+      </p>
+
+      <p>
+        Para descobrir o preço final, primeiro calculamos o valor correspondente
+        ao percentual de desconto. Depois, subtraímos esse resultado do preço original.
+      </p>
+
+      <div class="formula-card">
+        <span class="formula-label">FÓRMULA DO DESCONTO</span>
+
+        <div class="formula">
+          Desconto = Preço original × (Percentual ÷ 100)
+        </div>
+
+        <div class="formula">
+          Preço final = Preço original − Desconto
+        </div>
+      </div>
+
+      <h3>Exemplo prático de desconto</h3>
+
+      <p>
+        Imagine um produto anunciado por R$ 250,00 com uma promoção de 20% de desconto.
+        O cálculo acontece da seguinte maneira:
+      </p>
+
+      <div class="example-table">
+        <div class="example-row">
+          <span>Preço original</span>
+          <strong>R$ 250,00</strong>
+        </div>
+
+        <div class="example-row">
+          <span>Percentual de desconto</span>
+          <strong>20%</strong>
+        </div>
+
+        <div class="example-row">
+          <span>Valor do desconto</span>
+          <strong>R$ 50,00</strong>
+        </div>
+
+        <div class="example-row example-total">
+          <span>Preço final</span>
+          <strong>R$ 200,00</strong>
+        </div>
+      </div>
+
+      <p>
+        Nesse exemplo, o consumidor economiza R$ 50,00 e paga R$ 200,00 pelo produto.
+      </p>
+    </section>
+
+    <!-- Tabela de referência -->
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="eyebrow">CONSULTA RÁPIDA</span>
+        <h2>Exemplos de descontos</h2>
+      </div>
+
+      <p>
+        Veja como diferentes percentuais alteram o preço de um produto
+        que custa originalmente R$ 100,00.
+      </p>
+
+      <div class="reference-table-wrapper">
+        <table class="reference-table">
+          <thead>
+            <tr>
+              <th>Desconto</th>
+              <th>Economia</th>
+              <th>Preço final</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr>
+              <td>5%</td>
+              <td>R$ 5,00</td>
+              <td>R$ 95,00</td>
+            </tr>
+            <tr>
+              <td>10%</td>
+              <td>R$ 10,00</td>
+              <td>R$ 90,00</td>
+            </tr>
+            <tr>
+              <td>15%</td>
+              <td>R$ 15,00</td>
+              <td>R$ 85,00</td>
+            </tr>
+            <tr>
+              <td>20%</td>
+              <td>R$ 20,00</td>
+              <td>R$ 80,00</td>
+            </tr>
+            <tr>
+              <td>30%</td>
+              <td>R$ 30,00</td>
+              <td>R$ 70,00</td>
+            </tr>
+            <tr>
+              <td>50%</td>
+              <td>R$ 50,00</td>
+              <td>R$ 50,00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Dicas -->
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="eyebrow">COMPRAS CONSCIENTES</span>
+        <h2>Cuidados ao avaliar uma promoção</h2>
+      </div>
+
+      <div class="tips-grid">
+        <div class="tip-card">
+          <span class="tip-number">01</span>
+          <h3>Compare preços</h3>
+          <p>
+            Pesquise o preço do mesmo produto em diferentes lojas antes
+            de concluir a compra.
+          </p>
+        </div>
+
+        <div class="tip-card">
+          <span class="tip-number">02</span>
+          <h3>Verifique o desconto real</h3>
+          <p>
+            Confira se o preço original anunciado corresponde ao histórico
+            de valores praticados pelo vendedor.
+          </p>
+        </div>
+
+        <div class="tip-card">
+          <span class="tip-number">03</span>
+          <h3>Considere os custos extras</h3>
+          <p>
+            Frete, taxas e condições de pagamento podem alterar
+            o custo total da compra.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="content-section faq-section">
+      <div class="section-heading">
+        <span class="eyebrow">DÚVIDAS FREQUENTES</span>
+        <h2>Perguntas sobre descontos</h2>
+      </div>
+
+      <details class="faq-item">
+        <summary>Como calcular 20% de desconto em um produto?</summary>
+        <p>
+          Multiplique o preço original por 0,20 para encontrar o valor
+          do desconto. Depois, subtraia esse valor do preço original.
+          Em um produto de R$ 100,00, o desconto será de R$ 20,00
+          e o preço final será R$ 80,00.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Como descobrir o preço original de um produto com desconto?</summary>
+        <p>
+          Divida o preço final pelo resultado de 1 menos o percentual
+          de desconto em formato decimal. Por exemplo, para um desconto
+          de 20%, divida o preço final por 0,80.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Qual é a diferença entre desconto percentual e desconto fixo?</summary>
+        <p>
+          O desconto percentual corresponde a uma fração do preço original,
+          enquanto o desconto fixo representa uma quantia determinada em dinheiro.
+          Por exemplo, 10% de desconto em R$ 200,00 equivale a R$ 20,00.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>É possível aplicar 100% de desconto?</summary>
+        <p>
+          Matematicamente, sim. Um desconto de 100% significa que o valor
+          integral do produto foi abatido, resultando em preço final igual a zero.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Dois descontos de 10% equivalem a um desconto de 20%?</summary>
+        <p>
+          Não. Quando dois descontos de 10% são aplicados sucessivamente,
+          o segundo é calculado sobre o preço já reduzido. O desconto total
+          equivalente é de 19%, e não de 20%.
+        </p>
+      </details>
+    </section>
+
+    <!-- Aviso -->
+    <aside class="disclaimer">
+      <strong>Sobre os resultados:</strong>
+      Esta ferramenta realiza cálculos matemáticos com base nos valores
+      informados pelo usuário. Os resultados são estimativas e não consideram
+      frete, impostos, taxas ou condições comerciais específicas.
+    </aside>
+
+  </main>
+
+  <script>
+    import { calculateDiscount } from '../../engines/math/percentage';
+    import { formatBRL } from '../../engines/common/currency';
+
+    const form = document.getElementById('discount-form') as HTMLFormElement;
+    const priceInput = document.getElementById('original-price') as HTMLInputElement;
+    const pctInput = document.getElementById('discount-pct') as HTMLInputElement;
+
+    const finalResult = document.getElementById('res-final')!;
+    const originalResult = document.getElementById('res-original')!;
+    const pctResult = document.getElementById('res-pct')!;
+    const savedResult = document.getElementById('res-saved')!;
+
+    const resultDescription = document.getElementById('result-description')!;
+    const savingsTitle = document.getElementById('savings-title')!;
+    const errorMessage = document.getElementById('error-message')!;
+
+    function showError(message: string) {
+      errorMessage.textContent = message;
+      errorMessage.hidden = false;
+    }
+
+    function clearError() {
+      errorMessage.textContent = '';
+      errorMessage.hidden = true;
+    }
+
+    function runCalc() {
+      clearError();
+
+      const price = Number(priceInput.value);
+      const pct = Number(pctInput.value);
+
+      if (
+        priceInput.value.trim() === '' ||
+        !Number.isFinite(price) ||
+        price <= 0 ||
+        price > 1000000000
+      ) {
+        showError('Informe um preço original maior que zero e de até R$ 1 bilhão.');
+        priceInput.focus();
+        return;
+      }
+
+      if (
+        pctInput.value.trim() === '' ||
+        !Number.isFinite(pct) ||
+        pct < 0 ||
+        pct > 100
+      ) {
+        showError('Informe um desconto entre 0% e 100%.');
+        pctInput.focus();
+        return;
+      }
+
+      try {
+        const result = calculateDiscount(price, pct);
+
+        if (
+          !Number.isFinite(result.finalValue) ||
+          !Number.isFinite(result.discountAmount)
+        ) {
+          throw new Error('Resultado inválido.');
+        }
+
+        finalResult.textContent = formatBRL(result.finalValue);
+        originalResult.textContent = formatBRL(price);
+        pctResult.textContent = `${pct.toLocaleString('pt-BR')}%`;
+        savedResult.textContent = formatBRL(result.discountAmount);
+
+        savingsTitle.textContent =
+          `Você economiza ${formatBRL(result.discountAmount)}`;
+
+        if (pct === 0) {
+          resultDescription.textContent = 'Nenhum desconto aplicado.';
+        } else if (pct === 100) {
+          resultDescription.textContent = 'O produto ficou totalmente gratuito.';
+        } else {
+          resultDescription.textContent = `Você paga ${100 - pct}% do preço original.`;
+        }
+      } catch (error) {
+        showError('Não foi possível calcular o desconto. Verifique os valores informados.');
+        console.error('Erro ao calcular desconto:', error);
+      }
+    }
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      runCalc();
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('[data-discount]').forEach((button) => {
+      button.addEventListener('click', () => {
+        pctInput.value = button.dataset.discount || '0';
+        runCalc();
+      });
+    });
+
+    form.addEventListener('reset', () => {
+      clearError();
+
+      window.setTimeout(() => {
+        finalResult.textContent = 'R$ 200,00';
+        originalResult.textContent = 'R$ 250,00';
+        pctResult.textContent = '20%';
+        savedResult.textContent = 'R$ 50,00';
+        savingsTitle.textContent = 'Você economiza R$ 50,00';
+        resultDescription.textContent = 'Você paga menos pelo produto.';
+      }, 0);
+    });
+
+    runCalc();
+  </script>
+
+  <style>
+    .discount-page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 1.5rem 1.5rem 5rem;
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem;
+      margin-bottom: 2rem;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+
+    /* Cabeçalho */
+
+    .page-header {
+      max-width: 800px;
+      margin-bottom: 2.5rem;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--color-primary);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .eyebrow-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--color-primary);
+    }
+
+    .page-header h1 {
+      margin: 1rem 0;
+      color: var(--text-primary);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 850;
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+    }
+
+    .page-header p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    /* Calculadora */
+
+    .calculator-section {
+      margin-bottom: 4rem;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+
+    .calculator-card {
+      padding: 1.6rem;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      background: var(--bg-secondary);
+    }
+
+    .card-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .heading-icon {
+      display: grid;
+      place-items: center;
+      width: 44px;
+      height: 44px;
+      flex-shrink: 0;
+      border-radius: 11px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--color-primary);
+      font-size: 1.35rem;
+      font-weight: 800;
+    }
+
+    .card-heading h2 {
+      margin: 0 0 0.25rem;
+      color: var(--text-primary);
+      font-size: 1.15rem;
+      font-weight: 750;
+    }
+
+    .card-heading p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 1.35rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.55rem;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      min-height: 49px;
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      background: var(--bg-primary);
+      transition: border-color 0.2s;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--color-primary);
+      outline: 2px solid rgba(37, 99, 235, 0.12);
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      min-width: 0;
+      padding: 0.8rem;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--text-primary);
+      font: inherit;
+      font-size: 1rem;
+    }
+
+    .input-prefix,
+    .input-suffix {
+      padding: 0 0.9rem;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .input-prefix {
+      border-right: 1px solid var(--border-color);
+    }
+
+    .input-suffix {
+      border-left: 1px solid var(--border-color);
+    }
+
+    .form-group small {
+      display: block;
+      margin-top: 0.45rem;
+      color: var(--text-muted);
+      font-size: 0.76rem;
+    }
+
+    .quick-discounts {
+      margin: 0.5rem 0 1.5rem;
+    }
+
+    .quick-discounts > span {
+      display: block;
+      margin-bottom: 0.65rem;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      font-weight: 650;
+    }
+
+    .quick-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .quick-buttons button {
+      padding: 0.45rem 0.7rem;
+      border: 1px solid var(--border-color);
+      border-radius: 7px;
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.8rem;
+      transition: all 0.2s;
+    }
+
+    .quick-buttons button:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .calculate-button,
+    .reset-button {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.6rem;
+      min-height: 48px;
+      border-radius: 8px;
+      cursor: pointer;
+      font: inherit;
+      font-size: 0.88rem;
+      font-weight: 750;
+      transition: all 0.2s;
+    }
+
+    .calculate-button {
+      flex: 1;
+      border: 0;
+      background: var(--color-primary);
+      color: white;
+    }
+
+    .calculate-button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .reset-button {
+      padding: 0 1rem;
+      border: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+    }
+
+    .reset-button:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .error-message {
+      margin: 1rem 0 0;
+      padding: 0.8rem;
+      border: 1px solid #ef4444;
+      border-radius: 8px;
+      background: rgba(239, 68, 68, 0.08);
+      color: #dc2626;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    /* Resultados */
+
+    .result-icon {
+      background: rgba(22, 163, 74, 0.1);
+      color: #16a34a;
+    }
+
+    .main-result {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      padding: 1.5rem;
+      border: 1px solid rgba(37, 99, 235, 0.15);
+      border-radius: 11px;
+      background: rgba(37, 99, 235, 0.07);
+    }
+
+    .result-label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .main-result strong {
+      color: var(--color-primary);
+      font-size: clamp(2rem, 4vw, 2.5rem);
+      font-weight: 850;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .result-description {
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    .result-details {
+      margin-top: 1.4rem;
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.88rem;
+    }
+
+    .result-row span {
+      color: var(--text-secondary);
+    }
+
+    .result-row strong {
+      color: var(--text-primary);
+      text-align: right;
+    }
+
+    .result-row.savings-row strong {
+      color: #16a34a;
+    }
+
+    .savings-message {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-top: 1.4rem;
+      padding: 1rem;
+      border: 1px solid rgba(22, 163, 74, 0.2);
+      border-radius: 10px;
+      background: rgba(22, 163, 74, 0.07);
+    }
+
+    .savings-icon {
+      display: grid;
+      place-items: center;
+      width: 35px;
+      height: 35px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: rgba(22, 163, 74, 0.12);
+      color: #16a34a;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .savings-message strong {
+      color: #16a34a;
+      font-size: 0.9rem;
+    }
+
+    .savings-message p {
+      margin: 0.3rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+      line-height: 1.5;
+    }
+
+    .result-note {
+      margin: 1.25rem 0 0;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      line-height: 1.6;
+    }
+
+    /* Conteúdo educativo */
+
+    .content-section {
+      margin-top: 4rem;
+    }
+
+    .section-heading {
+      margin-bottom: 1.4rem;
+    }
+
+    .section-heading h2 {
+      margin: 0.55rem 0 0;
+      color: var(--text-primary);
+      font-size: 1.65rem;
+      font-weight: 800;
+      line-height: 1.3;
+    }
+
+    .content-section > p {
+      margin: 0 0 1.2rem;
+      color: var(--text-secondary);
+      font-size: 0.97rem;
+      line-height: 1.85;
+    }
+
+    .content-section h3 {
+      margin: 2rem 0 0.8rem;
+      color: var(--text-primary);
+      font-size: 1.2rem;
+      font-weight: 750;
+    }
+
+    .formula-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin: 1.75rem 0 2rem;
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .formula-label {
+      color: var(--color-primary);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .formula {
+      padding: 0.8rem;
+      border-radius: 7px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      font-weight: 650;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    /* Tabelas */
+
+    .example-table,
+    .reference-table-wrapper {
+      margin: 1.5rem 0;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+    }
+
+    .example-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.95rem 1.1rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .example-row:last-child {
+      border-bottom: 0;
+    }
+
+    .example-row strong {
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .example-total {
+      background: var(--bg-secondary);
+      font-weight: 750;
+    }
+
+    .example-total strong {
+      color: var(--color-primary);
+    }
+
+    .reference-table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+      font-size: 0.9rem;
+    }
+
+    .reference-table th,
+    .reference-table td {
+      padding: 0.95rem 1.1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .reference-table th {
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-weight: 750;
+    }
+
+    .reference-table td {
+      color: var(--text-secondary);
+    }
+
+    .reference-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    /* Dicas */
+
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .tip-card {
+      padding: 1.3rem;
+      border: 1px solid var(--border-color);
+      border-radius: 11px;
+      background: var(--bg-secondary);
+    }
+
+    .tip-number {
+      color: var(--color-primary);
+      font-size: 0.78rem;
+      font-weight: 850;
+    }
+
+    .tip-card h3 {
+      margin: 0.8rem 0 0.5rem;
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .tip-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    /* FAQ */
+
+    .faq-item {
+      margin-bottom: 0.8rem;
+      padding: 1rem 1.2rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-secondary);
+    }
+
+    .faq-item summary {
+      position: relative;
+      padding-right: 1.5rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      font-size: 0.95rem;
+      font-weight: 700;
+      line-height: 1.5;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      position: absolute;
+      right: 0;
+      content: '+';
+      color: var(--color-primary);
+      font-size: 1.2rem;
+    }
+
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+
+    .faq-item p {
+      margin: 1rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.8;
+    }
+
+    /* Aviso */
+
+    .disclaimer {
+      margin-top: 3rem;
+      padding: 1.2rem 1.4rem;
+      border-left: 3px solid var(--color-primary);
+      border-radius: 0 9px 9px 0;
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .disclaimer strong {
+      color: var(--text-primary);
+    }
+
+    /* Responsividade */
+
+    @media (max-width: 800px) {
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tips-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .discount-page {
+        padding: 1rem 1rem 3rem;
+      }
+
+      .page-header h1 {
+        font-size: 2.15rem;
+      }
+
+      .page-header p {
+        font-size: 0.95rem;
+      }
+
+      .calculator-card {
+        padding: 1.2rem;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+
+      .reset-button {
+        min-height: 44px;
+      }
+
+      .section-heading h2 {
+        font-size: 1.4rem;
+      }
+
+      .formula {
+        font-size: 0.84rem;
+      }
+
+      .reference-table {
+        font-size: 0.82rem;
+      }
+
+      .reference-table th,
+      .reference-table td {
+        padding: 0.75rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</BaseLayout>

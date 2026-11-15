@@ -1,0 +1,1176 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de Horas Extras CLT Online — Calculadora de Ganhos"
+  description="Calcule suas horas extras com adicionais de 50% e 100%. Descubra o valor da hora normal e quanto receberá a mais no salário."
+>
+  <main class="page-container">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <a href="/trabalhista/">Trabalhista</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Horas Extras</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="eyebrow">FERRAMENTA TRABALHISTA</span>
+      <h1>Calculadora de Horas Extras CLT</h1>
+      <p>
+        Descubra quanto vale cada hora extra trabalhada e estime o valor adicional
+        que poderá receber no seu salário.
+      </p>
+    </header>
+
+    <section class="calculator-grid" aria-label="Calculadora de horas extras">
+      <div class="card calculator-card">
+        <div class="section-heading">
+          <div class="heading-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <div>
+            <h2>Dados do seu salário</h2>
+            <p>Informe sua remuneração e jornada de trabalho.</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="oe-salary">Salário bruto mensal</label>
+          <div class="input-wrapper">
+            <span class="input-prefix">R$</span>
+            <input
+              type="number"
+              id="oe-salary"
+              value="4000"
+              min="0.01"
+              step="0.01"
+              inputmode="decimal"
+              placeholder="Ex.: 4000,00"
+            />
+          </div>
+          <small>Informe seu salário bruto, antes dos descontos.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="oe-hours">Jornada mensal contratual</label>
+          <div class="input-wrapper">
+            <input
+              type="number"
+              id="oe-hours"
+              value="220"
+              min="1"
+              step="1"
+              inputmode="numeric"
+              placeholder="Ex.: 220"
+            />
+            <span class="input-suffix">horas</span>
+          </div>
+          <small>
+            Exemplos comuns: 220 horas (44h semanais) ou 180 horas (36h semanais).
+          </small>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <div class="section-heading compact-heading">
+          <div class="heading-icon secondary-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <div>
+            <h2>Horas extras realizadas</h2>
+            <p>Informe a quantidade de horas em cada modalidade.</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="oe-h50">
+            Horas extras com adicional de 50%
+            <span class="rate-badge rate-50">+50%</span>
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="number"
+              id="oe-h50"
+              value="10"
+              min="0"
+              step="0.25"
+              inputmode="decimal"
+              placeholder="Ex.: 10"
+            />
+            <span class="input-suffix">horas</span>
+          </div>
+          <small>Geralmente aplicável às horas extras em dias normais.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="oe-h100">
+            Horas extras com adicional de 100%
+            <span class="rate-badge rate-100">+100%</span>
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="number"
+              id="oe-h100"
+              value="4"
+              min="0"
+              step="0.25"
+              inputmode="decimal"
+              placeholder="Ex.: 4"
+            />
+            <span class="input-suffix">horas</span>
+          </div>
+          <small>
+            Para situações em que o trabalho em domingos ou feriados não é compensado,
+            conforme as regras aplicáveis.
+          </small>
+        </div>
+
+        <div id="calc-error" class="form-error" role="alert" hidden></div>
+
+        <button type="button" id="calc-btn" class="calculate-button">
+          <span>Calcular minhas horas extras</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </button>
+
+        <p class="privacy-note">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Cálculo realizado diretamente no seu navegador.
+        </p>
+      </div>
+
+      <div class="card result-card">
+        <div class="section-heading">
+          <div class="heading-icon result-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <div>
+            <h2>Resultado da simulação</h2>
+            <p>Estimativa do valor bruto das horas extras.</p>
+          </div>
+        </div>
+
+        <div class="total-panel" aria-live="polite">
+          <span class="total-label">Total estimado de horas extras</span>
+          <strong id="res-total">R$ 0,00</strong>
+          <span class="total-caption">Valor bruto adicional estimado</span>
+        </div>
+
+        <div class="result-details">
+          <div class="result-row">
+            <div>
+              <span class="detail-label">Valor da hora normal</span>
+              <small>Salário ÷ jornada mensal</small>
+            </div>
+            <strong id="res-normal">R$ 0,00</strong>
+          </div>
+
+          <div class="result-row">
+            <div>
+              <span class="detail-label">Valor da hora extra 50%</span>
+              <small>Hora normal × 1,5</small>
+            </div>
+            <strong id="res-hour50">R$ 0,00</strong>
+          </div>
+
+          <div class="result-row">
+            <div>
+              <span class="detail-label">Total das horas extras 50%</span>
+              <small id="res-quantity50">0 hora(s) informada(s)</small>
+            </div>
+            <strong id="res-total50">R$ 0,00</strong>
+          </div>
+
+          <div class="result-row">
+            <div>
+              <span class="detail-label">Valor da hora extra 100%</span>
+              <small>Hora normal × 2</small>
+            </div>
+            <strong id="res-hour100">R$ 0,00</strong>
+          </div>
+
+          <div class="result-row">
+            <div>
+              <span class="detail-label">Total das horas extras 100%</span>
+              <small id="res-quantity100">0 hora(s) informada(s)</small>
+            </div>
+            <strong id="res-total100">R$ 0,00</strong>
+          </div>
+
+          <div class="result-row final-row">
+            <div>
+              <span class="detail-label">Quantidade total de horas extras</span>
+            </div>
+            <strong id="res-total-hours">0 hora(s)</strong>
+          </div>
+        </div>
+
+        <div class="result-observation">
+          <span aria-hidden="true">ⓘ</span>
+          <p>
+            O resultado é uma estimativa bruta. Não inclui descontos de INSS e IRRF,
+            descanso semanal remunerado (DSR) sobre horas extras ou outros reflexos.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="content-heading">
+        <span class="eyebrow">ENTENDA O CÁLCULO</span>
+        <h2>Como calcular o valor das horas extras?</h2>
+        <p>
+          O cálculo começa pelo valor da hora normal de trabalho. Depois, aplica-se
+          o adicional correspondente à modalidade da hora extra.
+        </p>
+      </div>
+
+      <div class="info-grid">
+        <article class="info-card">
+          <div class="info-number">01</div>
+          <h3>Descubra o valor da hora normal</h3>
+          <p>
+            Divida o salário bruto mensal pela quantidade de horas da jornada
+            contratual.
+          </p>
+          <div class="formula">
+            Salário mensal ÷ jornada mensal
+          </div>
+        </article>
+
+        <article class="info-card">
+          <div class="info-number">02</div>
+          <h3>Aplique o adicional de 50%</h3>
+          <p>
+            Multiplique o valor da hora normal por 1,5. O resultado corresponde
+            ao valor de cada hora extra com adicional de 50%.
+          </p>
+          <div class="formula">
+            Hora normal × 1,5
+          </div>
+        </article>
+
+        <article class="info-card">
+          <div class="info-number">03</div>
+          <h3>Aplique o adicional de 100%</h3>
+          <p>
+            Quando devido o pagamento em dobro, multiplique o valor da hora normal
+            por 2.
+          </p>
+          <div class="formula">
+            Hora normal × 2
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="example-section">
+      <div>
+        <span class="eyebrow">EXEMPLO PRÁTICO</span>
+        <h2>Simulação com salário de R$ 4.000</h2>
+        <p>
+          Considere um trabalhador com jornada mensal de 220 horas, que realizou
+          10 horas extras com adicional de 50% e 4 horas com adicional de 100%.
+        </p>
+      </div>
+
+      <div class="example-table">
+        <div class="example-row">
+          <span>Valor da hora normal</span>
+          <strong>R$ 18,18</strong>
+        </div>
+        <div class="example-row">
+          <span>Hora extra com 50%</span>
+          <strong>R$ 27,27</strong>
+        </div>
+        <div class="example-row">
+          <span>10 horas com 50%</span>
+          <strong>R$ 272,73</strong>
+        </div>
+        <div class="example-row">
+          <span>Hora extra com 100%</span>
+          <strong>R$ 36,36</strong>
+        </div>
+        <div class="example-row">
+          <span>4 horas com 100%</span>
+          <strong>R$ 145,45</strong>
+        </div>
+        <div class="example-row example-total">
+          <span>Total estimado</span>
+          <strong>R$ 418,18</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="legal-section">
+      <div class="legal-icon" aria-hidden="true">§</div>
+      <div>
+        <h2>O que diz a legislação trabalhista?</h2>
+        <p>
+          O artigo 59, § 1º, da CLT estabelece que a remuneração da hora extra
+          deve ser pelo menos 50% superior à hora normal. Esse percentual também
+          está previsto no artigo 7º, inciso XVI, da Constituição Federal.
+        </p>
+        <p>
+          Já o trabalho realizado em domingos e feriados, quando não compensado,
+          deve ser remunerado em dobro, conforme a Súmula 146 do Tribunal Superior
+          do Trabalho. A aplicação depende da situação concreta e das regras
+          coletivas da categoria.
+        </p>
+        <p class="legal-links">
+          Consulte:
+          <a
+            href="https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Artigo 59 da CLT</a>
+          ·
+          <a
+            href="https://www.planalto.gov.br/ccivil_03/constituicao/constituicao.htm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Constituição Federal, art. 7º</a>
+          ·
+          <a
+            href="https://jurisprudencia-backend.tst.jus.br/rest/documentos/58ebcbe1221a82779995e18d8a4ba19d"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Súmula 146 do TST</a>
+        </p>
+      </div>
+    </section>
+
+    <section class="faq-section">
+      <div class="content-heading">
+        <span class="eyebrow">DÚVIDAS FREQUENTES</span>
+        <h2>Perguntas sobre horas extras</h2>
+      </div>
+
+      <details class="faq-item">
+        <summary>Qual é o adicional mínimo de hora extra?</summary>
+        <p>
+          A Constituição Federal e o artigo 59 da CLT estabelecem adicional mínimo
+          de 50% sobre o valor da hora normal. Acordos ou convenções coletivas
+          podem prever percentuais superiores.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Todo trabalho realizado aos domingos recebe adicional de 100%?</summary>
+        <p>
+          Não necessariamente. O pagamento em dobro é devido nas situações em que
+          o trabalho em domingo ou feriado não é compensado com folga correspondente,
+          observadas as regras legais e coletivas aplicáveis.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>O cálculo inclui o descanso semanal remunerado (DSR)?</summary>
+        <p>
+          Não. Esta ferramenta calcula o valor direto das horas extras. O reflexo
+          no descanso semanal remunerado pode gerar um valor adicional na folha
+          de pagamento e depende de fatores como jornada, dias trabalhados e
+          repousos no período.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Posso informar horas extras com minutos?</summary>
+        <p>
+          Sim. Você pode informar valores decimais. Por exemplo, 1,5 hora
+          corresponde a uma hora e trinta minutos. Utilize ponto ou vírgula
+          conforme o formato aceito pelo navegador.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>O resultado representa o valor líquido que vou receber?</summary>
+        <p>
+          Não. O resultado é bruto e não considera descontos legais, DSR,
+          adicional noturno, reflexos ou particularidades de acordos coletivos.
+          O valor final do contracheque pode ser diferente.
+        </p>
+      </details>
+    </section>
+
+    <p class="disclaimer">
+      <strong>Importante:</strong> esta calculadora oferece uma simulação
+      informativa e não substitui a conferência do contracheque, da convenção
+      coletiva ou a orientação de um profissional especializado.
+    </p>
+  </main>
+
+  <script>
+    import { formatBRL } from '../../engines/common/currency';
+
+    const getInput = (id: string): HTMLInputElement =>
+      document.getElementById(id) as HTMLInputElement;
+
+    const setText = (id: string, value: string) => {
+      const element = document.getElementById(id);
+      if (element) element.textContent = value;
+    };
+
+    const formatHours = (value: number): string => {
+      return `${value.toLocaleString('pt-BR', {
+        maximumFractionDigits: 2
+      })} hora(s)`;
+    };
+
+    function runCalc() {
+      const salary = Number(getInput('oe-salary').value);
+      const monthlyHours = Number(getInput('oe-hours').value);
+      const hours50 = Number(getInput('oe-h50').value);
+      const hours100 = Number(getInput('oe-h100').value);
+
+      const error = document.getElementById('calc-error');
+
+      const showError = (message: string) => {
+        if (error) {
+          error.textContent = message;
+          error.removeAttribute('hidden');
+        }
+      };
+
+      if (error) {
+        error.textContent = '';
+        error.setAttribute('hidden', '');
+      }
+
+      if (!Number.isFinite(salary) || salary <= 0) {
+        showError('Informe um salário bruto maior que zero.');
+        return;
+      }
+
+      if (!Number.isFinite(monthlyHours) || monthlyHours <= 0) {
+        showError('Informe uma jornada mensal válida.');
+        return;
+      }
+
+      if (
+        !Number.isFinite(hours50) ||
+        !Number.isFinite(hours100) ||
+        hours50 < 0 ||
+        hours100 < 0
+      ) {
+        showError('Informe quantidades válidas de horas extras. Os valores não podem ser negativos.');
+        return;
+      }
+
+      const hourlyRate = salary / monthlyHours;
+      const hourlyRate50 = hourlyRate * 1.5;
+      const hourlyRate100 = hourlyRate * 2;
+
+      const total50 = hourlyRate50 * hours50;
+      const total100 = hourlyRate100 * hours100;
+      const total = total50 + total100;
+      const totalHours = hours50 + hours100;
+
+      setText('res-normal', formatBRL(hourlyRate));
+      setText('res-hour50', formatBRL(hourlyRate50));
+      setText('res-hour100', formatBRL(hourlyRate100));
+
+      setText('res-total50', formatBRL(total50));
+      setText('res-total100', formatBRL(total100));
+      setText('res-total', formatBRL(total));
+
+      setText('res-quantity50', formatHours(hours50));
+      setText('res-quantity100', formatHours(hours100));
+      setText('res-total-hours', formatHours(totalHours));
+    }
+
+    document.getElementById('calc-btn')?.addEventListener('click', runCalc);
+
+    ['oe-salary', 'oe-hours', 'oe-h50', 'oe-h100'].forEach((id) => {
+      getInput(id).addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') runCalc();
+      });
+    });
+
+    runCalc();
+  </script>
+
+  <style>
+    .page-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 0 3rem;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-bottom: 2rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+      max-width: 760px;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 0.7rem;
+      color: var(--color-primary);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .page-header h1 {
+      margin: 0 0 0.8rem;
+      color: var(--text-primary);
+      font-size: clamp(2rem, 5vw, 2.7rem);
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+    }
+
+    .page-header > p {
+      max-width: 680px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 1.5rem;
+      align-items: start;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 1.6rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.035);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 0.25rem;
+      color: var(--text-primary);
+      font-size: 1.15rem;
+      font-weight: 750;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    .heading-icon {
+      display: grid;
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--color-primary);
+    }
+
+    .secondary-icon {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+    }
+
+    .result-icon {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      min-height: 48px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      min-width: 0;
+      height: 48px;
+      padding: 0.75rem 0.9rem;
+      border: 0;
+      outline: none;
+      background: transparent;
+      color: var(--text-primary);
+      font: inherit;
+      font-size: 1rem;
+    }
+
+    .input-prefix,
+    .input-suffix {
+      flex-shrink: 0;
+      padding: 0 0.9rem;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+    }
+
+    .input-prefix {
+      border-right: 1px solid var(--border-color);
+    }
+
+    .input-suffix {
+      border-left: 1px solid var(--border-color);
+    }
+
+    .form-group small {
+      display: block;
+      margin-top: 0.4rem;
+      color: var(--text-secondary);
+      font-size: 0.77rem;
+      line-height: 1.5;
+    }
+
+    .form-divider {
+      height: 1px;
+      margin: 1.5rem 0;
+      background: var(--border-color);
+    }
+
+    .compact-heading {
+      margin-bottom: 1.3rem;
+    }
+
+    .rate-badge {
+      padding: 0.2rem 0.5rem;
+      border-radius: 5px;
+      font-size: 0.72rem;
+      font-weight: 800;
+    }
+
+    .rate-50 {
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--color-primary);
+    }
+
+    .rate-100 {
+      background: rgba(16, 185, 129, 0.12);
+      color: #059669;
+    }
+
+    .calculate-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      width: 100%;
+      min-height: 50px;
+      padding: 0.85rem 1.2rem;
+      border: 0;
+      border-radius: var(--radius-sm);
+      background: var(--color-primary);
+      color: #fff;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 750;
+      cursor: pointer;
+      transition: filter 0.2s ease, transform 0.2s ease;
+    }
+
+    .calculate-button:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    .calculate-button:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: 3px;
+    }
+
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 0.85rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    .privacy-note svg {
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    .form-error {
+      margin: 0 0 1rem;
+      padding: 0.8rem 0.9rem;
+      border: 1px solid rgba(220, 38, 38, 0.25);
+      border-radius: var(--radius-sm);
+      background: rgba(220, 38, 38, 0.07);
+      color: #dc2626;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .result-card {
+      position: sticky;
+      top: 1rem;
+    }
+
+    .total-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      margin-bottom: 1.5rem;
+      padding: 1.4rem;
+      border: 1px solid rgba(16, 185, 129, 0.18);
+      border-radius: var(--radius-sm);
+      background: rgba(16, 185, 129, 0.075);
+    }
+
+    .total-label {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .total-panel strong {
+      color: #059669;
+      font-size: clamp(2rem, 5vw, 2.5rem);
+      line-height: 1.2;
+      letter-spacing: -0.04em;
+      overflow-wrap: anywhere;
+    }
+
+    .total-caption {
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+    }
+
+    .result-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .result-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .detail-label {
+      display: block;
+      color: var(--text-primary);
+      font-size: 0.86rem;
+      font-weight: 600;
+    }
+
+    .result-row small {
+      display: block;
+      margin-top: 0.2rem;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+    }
+
+    .result-row strong {
+      flex-shrink: 0;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      text-align: right;
+    }
+
+    .final-row {
+      border-bottom: 0;
+    }
+
+    .final-row strong {
+      color: var(--color-primary);
+    }
+
+    .result-observation {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      margin-top: 1rem;
+      padding: 0.9rem;
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      line-height: 1.55;
+    }
+
+    .result-observation > span {
+      color: var(--color-primary);
+      font-size: 1rem;
+    }
+
+    .result-observation p {
+      margin: 0;
+    }
+
+    .content-section,
+    .example-section,
+    .legal-section,
+    .faq-section {
+      margin-top: 4rem;
+    }
+
+    .content-heading {
+      max-width: 720px;
+      margin-bottom: 1.5rem;
+    }
+
+    .content-heading h2,
+    .example-section h2,
+    .legal-section h2 {
+      margin: 0 0 0.7rem;
+      color: var(--text-primary);
+      font-size: clamp(1.45rem, 3vw, 1.85rem);
+      letter-spacing: -0.025em;
+    }
+
+    .content-heading > p,
+    .example-section > div > p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .info-card {
+      padding: 1.35rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+
+    .info-number {
+      display: grid;
+      width: 34px;
+      height: 34px;
+      margin-bottom: 1rem;
+      place-items: center;
+      border-radius: 9px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--color-primary);
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .info-card h3 {
+      margin: 0 0 0.55rem;
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .info-card p {
+      min-height: 88px;
+      margin: 0 0 1rem;
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      line-height: 1.65;
+    }
+
+    .formula {
+      padding: 0.7rem;
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+      color: var(--color-primary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .example-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: center;
+      padding: 1.7rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+
+    .example-section h2 {
+      font-size: 1.5rem;
+    }
+
+    .example-table {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .example-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .example-row strong {
+      color: var(--text-primary);
+      white-space: nowrap;
+    }
+
+    .example-total {
+      margin-top: 0.25rem;
+      border-bottom: 0;
+      color: var(--text-primary);
+      font-weight: 750;
+    }
+
+    .example-total strong {
+      color: #059669;
+      font-size: 1.1rem;
+    }
+
+    .legal-section {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.2rem;
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+
+    .legal-icon {
+      display: grid;
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--color-primary);
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+
+    .legal-section h2 {
+      font-size: 1.3rem;
+    }
+
+    .legal-section p {
+      margin: 0 0 0.8rem;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.75;
+    }
+
+    .legal-section .legal-links {
+      margin: 0.9rem 0 0;
+      color: var(--text-primary);
+    }
+
+    .legal-links a {
+      color: var(--color-primary);
+      font-weight: 650;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .faq-section {
+      max-width: 850px;
+    }
+
+    .faq-item {
+      margin-bottom: 0.7rem;
+      padding: 1rem 1.15rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-secondary);
+    }
+
+    .faq-item summary {
+      position: relative;
+      padding-right: 1.5rem;
+      color: var(--text-primary);
+      font-size: 0.92rem;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: var(--color-primary);
+      content: "+";
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .faq-item[open] summary::after {
+      content: "−";
+    }
+
+    .faq-item p {
+      margin: 0.85rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.86rem;
+      line-height: 1.7;
+    }
+
+    .disclaimer {
+      margin: 2rem 0 0;
+      padding: 1rem 1.1rem;
+      border-left: 3px solid var(--color-primary);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      line-height: 1.65;
+    }
+
+    .disclaimer strong {
+      color: var(--text-primary);
+    }
+
+    @media (max-width: 800px) {
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .result-card {
+        position: static;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .info-card p {
+        min-height: 0;
+      }
+
+      .example-section {
+        grid-template-columns: 1fr;
+        gap: 1.3rem;
+      }
+    }
+
+    @media (max-width: 520px) {
+      .page-container {
+        padding-bottom: 2rem;
+      }
+
+      .page-header h1 {
+        font-size: 2rem;
+      }
+
+      .card {
+        padding: 1.1rem;
+      }
+
+      .result-row {
+        gap: 0.5rem;
+      }
+
+      .result-row strong {
+        font-size: 0.82rem;
+      }
+
+      .example-section {
+        padding: 1.1rem;
+      }
+
+      .legal-section {
+        gap: 0.8rem;
+        padding: 1.1rem;
+      }
+
+      .legal-icon {
+        width: 36px;
+        height: 36px;
+      }
+
+      .example-row {
+        font-size: 0.8rem;
+      }
+    }
+  </style>
+</BaseLayout>

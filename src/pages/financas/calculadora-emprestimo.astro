@@ -1,0 +1,1640 @@
+
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de Empréstimos e Parcelas — Tabela Price | Calculadora de Ganhos"
+  description="Simule empréstimos e financiamentos pela Tabela Price. Calcule parcelas mensais, juros totais e valor final da operação de forma gratuita."
+>
+  <div class="loan-page">
+    <!-- NAVEGAÇÃO -->
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <a href="/financas/">Finanças</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Calculadora de Empréstimos</span>
+    </nav>
+
+    <!-- CABEÇALHO -->
+    <header class="hero">
+      <span class="eyebrow">PLANEJAMENTO FINANCEIRO</span>
+
+      <h1>Calculadora de Empréstimos e Parcelas (Tabela Price)</h1>
+
+      <p>
+        Descubra quanto você pagará por um empréstimo ou financiamento.
+        Simule parcelas mensais, calcule o total de juros e conheça o custo
+        estimado da operação antes de assumir uma dívida.
+      </p>
+
+      <div class="hero-highlights">
+        <div class="highlight">
+          <span class="highlight-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </span>
+          <span>Simulação gratuita</span>
+        </div>
+
+        <div class="highlight">
+          <span class="highlight-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </span>
+          <span>Parcelas fixas</span>
+        </div>
+
+        <div class="highlight">
+          <span class="highlight-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6 9 17l-5-5"/>
+            </svg>
+          </span>
+          <span>Resultado instantâneo</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- CALCULADORA -->
+    <section class="calculator-section" id="calculadora" aria-labelledby="calculator-title">
+      <div class="section-heading">
+        <span class="section-label">FERRAMENTA GRATUITA</span>
+        <h2 id="calculator-title">Calcule seu empréstimo</h2>
+        <p>
+          Informe o valor solicitado, a taxa de juros anual e o prazo de
+          pagamento para visualizar uma estimativa da operação.
+        </p>
+      </div>
+
+      <div class="calc-grid">
+        <!-- ENTRADAS -->
+        <div class="card input-card">
+          <h3>Dados do empréstimo</h3>
+
+          <div class="field-group">
+            <label for="principal">Valor do empréstimo (R$)</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input
+                type="number"
+                id="principal"
+                value="20000"
+                min="0.01"
+                step="0.01"
+                inputmode="decimal"
+                aria-describedby="principal-help"
+              />
+            </div>
+            <small id="principal-help">
+              Valor que você pretende receber.
+            </small>
+          </div>
+
+          <div class="field-group">
+            <label for="rate">Taxa de juros anual (% a.a.)</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="rate"
+                value="24"
+                min="0"
+                step="0.01"
+                inputmode="decimal"
+                aria-describedby="rate-help"
+              />
+              <span class="input-suffix">% a.a.</span>
+            </div>
+            <small id="rate-help">
+              Informe a taxa anual apresentada pela instituição financeira.
+            </small>
+          </div>
+
+          <div class="field-group">
+            <label for="months">Prazo de pagamento (meses)</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="months"
+                value="24"
+                min="1"
+                step="1"
+                inputmode="numeric"
+                aria-describedby="months-help"
+              />
+              <span class="input-suffix">meses</span>
+            </div>
+            <small id="months-help">
+              Quantidade de parcelas mensais.
+            </small>
+          </div>
+
+          <button id="calc-btn" class="btn btn-primary" type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="16" height="20" x="4" y="2" rx="2"/>
+              <line x1="8" x2="16" y1="6" y2="6"/>
+              <line x1="16" x2="16" y1="14" y2="18"/>
+              <path d="M16 10h.01"/>
+              <path d="M12 10h.01"/>
+              <path d="M8 10h.01"/>
+              <path d="M12 14h.01"/>
+              <path d="M8 14h.01"/>
+              <path d="M12 18h.01"/>
+              <path d="M8 18h.01"/>
+            </svg>
+            <span>Calcular empréstimo</span>
+          </button>
+
+          <p class="input-note">
+            Simulação realizada localmente no navegador. Não solicitamos seus dados
+            bancários ou informações pessoais.
+          </p>
+        </div>
+
+        <!-- RESULTADOS -->
+        <div class="card result-card" aria-live="polite" aria-atomic="true">
+          <div>
+            <span class="section-label">RESULTADO DA SIMULAÇÃO</span>
+            <h3>Resumo da operação</h3>
+
+            <div class="main-result">
+              <span>Valor estimado da parcela mensal</span>
+              <strong id="res-monthly">—</strong>
+              <small class="result-description">
+                Prestações mensais fixas
+              </small>
+            </div>
+
+            <div class="result-line">
+              <span>Total de juros</span>
+              <strong id="res-interest" class="interest-value">—</strong>
+            </div>
+
+            <div class="result-line">
+              <span>Valor total a pagar</span>
+              <strong id="res-total">—</strong>
+            </div>
+
+            <div class="result-line">
+              <span>Valor solicitado</span>
+              <strong id="res-principal">—</strong>
+            </div>
+
+            <p id="calc-error" class="calc-error" role="alert" hidden></p>
+          </div>
+
+          <div class="result-observation">
+            <strong>Importante:</strong>
+            <p>
+              O resultado é uma simulação matemática. O valor efetivo do
+              contrato pode incluir IOF, tarifas, seguros e outros encargos
+              que não estejam contemplados no cálculo.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTRODUÇÃO -->
+    <section class="content-section" aria-labelledby="what-title">
+      <div class="section-heading">
+        <span class="section-label">ENTENDA A SIMULAÇÃO</span>
+        <h2 id="what-title">O que é a Tabela Price?</h2>
+      </div>
+
+      <p>
+        A <strong>Tabela Price</strong>, também conhecida como sistema francês
+        de amortização, é um método utilizado em empréstimos e financiamentos
+        no qual as prestações são calculadas para permanecerem iguais ao longo
+        do prazo contratado, considerando as condições estabelecidas no
+        contrato.
+      </p>
+
+      <p>
+        Embora o valor da parcela seja constante em uma operação com taxa
+        fixa, a composição de cada prestação muda ao longo do tempo. No início,
+        uma parte maior da parcela corresponde aos juros. Conforme a dívida
+        diminui, a amortização do saldo devedor tende a aumentar.
+      </p>
+
+      <div class="explanation-grid">
+        <article class="explanation-card">
+          <div class="icon-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="5" x2="19" y1="9" y2="9"/>
+              <line x1="5" x2="19" y1="15" y2="15"/>
+            </svg>
+          </div>
+          <h3>Parcela fixa</h3>
+          <p>
+            O valor da prestação permanece constante durante o período
+            considerado, desde que as condições da operação não mudem.
+          </p>
+        </article>
+
+        <article class="explanation-card">
+          <div class="icon-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 17 13.5 8.5 8.5 13.5 2 7"/>
+              <polyline points="16 17 22 17 22 11"/>
+            </svg>
+          </div>
+          <h3>Juros decrescentes</h3>
+          <p>
+            A parcela de juros tende a diminuir à medida que o saldo devedor
+            é amortizado ao longo dos meses.
+          </p>
+        </article>
+
+        <article class="explanation-card">
+          <div class="icon-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+              <polyline points="16 7 22 7 22 13"/>
+            </svg>
+          </div>
+          <h3>Amortização crescente</h3>
+          <p>
+            Com o passar das parcelas, uma parte maior do pagamento é destinada
+            à redução do valor principal da dívida.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- COMO UTILIZAR -->
+    <section class="content-section" aria-labelledby="how-title">
+      <div class="section-heading">
+        <span class="section-label">PASSO A PASSO</span>
+        <h2 id="how-title">Como utilizar a calculadora de empréstimos?</h2>
+        <p>
+          A ferramenta foi desenvolvida para facilitar a comparação de
+          possibilidades de crédito. Para fazer uma simulação, siga estas etapas:
+        </p>
+      </div>
+
+      <div class="instruction-list">
+        <article class="instruction-card">
+          <span class="step-number">01</span>
+          <div>
+            <h3>Informe o valor do empréstimo</h3>
+            <p>
+              Digite o valor que deseja contratar. Por exemplo, R$ 20.000,00.
+            </p>
+          </div>
+        </article>
+
+        <article class="instruction-card">
+          <span class="step-number">02</span>
+          <div>
+            <h3>Informe a taxa de juros anual</h3>
+            <p>
+              Utilize a taxa de juros anual informada pela instituição
+              financeira. Confira se ela corresponde à taxa nominal ou efetiva
+              apresentada na proposta.
+            </p>
+          </div>
+        </article>
+
+        <article class="instruction-card">
+          <span class="step-number">03</span>
+          <div>
+            <h3>Escolha o prazo de pagamento</h3>
+            <p>
+              Informe durante quantos meses pretende pagar o empréstimo.
+              O prazo influencia diretamente o valor da prestação e o total
+              de juros.
+            </p>
+          </div>
+        </article>
+
+        <article class="instruction-card">
+          <span class="step-number">04</span>
+          <div>
+            <h3>Calcule e analise os resultados</h3>
+            <p>
+              Clique em calcular empréstimo. A ferramenta apresentará o valor
+              estimado da parcela, os juros acumulados e o custo total.
+            </p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- EXEMPLO -->
+    <section class="content-section" aria-labelledby="example-title">
+      <div class="section-heading">
+        <span class="section-label">EXEMPLO PRÁTICO</span>
+        <h2 id="example-title">Exemplo de simulação de empréstimo</h2>
+        <p>
+          Imagine uma pessoa que deseja contratar um empréstimo de R$ 20.000,00,
+          com uma taxa de juros anual de 24% e prazo de pagamento de 24 meses.
+        </p>
+      </div>
+
+      <div class="example-card">
+        <h3>Condições hipotéticas da operação</h3>
+
+        <div class="example-data">
+          <div>
+            <span>Valor solicitado</span>
+            <strong>R$ 20.000,00</strong>
+          </div>
+
+          <div>
+            <span>Taxa anual informada</span>
+            <strong>24% a.a.</strong>
+          </div>
+
+          <div>
+            <span>Prazo</span>
+            <strong>24 meses</strong>
+          </div>
+
+          <div>
+            <span>Sistema de amortização</span>
+            <strong>Tabela Price</strong>
+          </div>
+        </div>
+
+        <p>
+          Os resultados financeiros são calculados pelo simulador com base
+          nos parâmetros informados. Eles não representam uma proposta de
+          crédito de uma instituição financeira.
+        </p>
+      </div>
+    </section>
+
+    <!-- INTERPRETAÇÃO -->
+    <section class="content-section" aria-labelledby="results-title">
+      <div class="section-heading">
+        <span class="section-label">ENTENDA OS RESULTADOS</span>
+        <h2 id="results-title">Como interpretar os resultados?</h2>
+      </div>
+
+      <div class="explanation-grid">
+        <article class="explanation-card">
+          <div class="icon-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+              <line x1="16" x2="16" y1="2" y2="6"/>
+              <line x1="8" x2="8" y1="2" y2="6"/>
+              <line x1="3" x2="21" y1="10" y2="10"/>
+            </svg>
+          </div>
+          <h3>Parcela mensal</h3>
+          <p>
+            Representa o valor estimado de cada prestação mensal. É um dos
+            principais indicadores para avaliar se o empréstimo cabe no
+            orçamento.
+          </p>
+        </article>
+
+        <article class="explanation-card">
+          <div class="icon-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" x2="5" y1="5" y2="19"/>
+              <circle cx="6.5" cy="6.5" r="2.5"/>
+              <circle cx="17.5" cy="17.5" r="2.5"/>
+            </svg>
+          </div>
+          <h3>Total de juros</h3>
+          <p>
+            Corresponde ao custo estimado dos juros ao longo do prazo da
+            simulação. É importante observar esse valor para entender quanto
+            o crédito pode custar além do principal recebido.
+          </p>
+        </article>
+
+        <article class="explanation-card">
+          <div class="icon-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" x2="12" y1="2" y2="22"/>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </div>
+          <h3>Valor total a pagar</h3>
+          <p>
+            Representa a soma das prestações ao longo do prazo. É importante
+            observar esse valor, pois uma parcela aparentemente pequena pode
+            resultar em um custo total elevado quando o prazo é longo.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- PRAZO -->
+    <section class="content-section" aria-labelledby="term-title">
+      <div class="section-heading">
+        <span class="section-label">PLANEJAMENTO</span>
+        <h2 id="term-title">Como o prazo influencia o custo do empréstimo?</h2>
+      </div>
+
+      <p>
+        O prazo de pagamento é um dos fatores mais importantes na contratação
+        de crédito. Em geral, aumentar a quantidade de parcelas reduz o valor
+        mensal da prestação, mas pode elevar o total de juros pagos durante
+        a operação.
+      </p>
+
+      <p>
+        Por outro lado, escolher um prazo menor pode aumentar o valor da
+        prestação mensal, mas tende a reduzir o período de incidência dos
+        juros.
+      </p>
+
+      <div class="comparison-card">
+        <div>
+          <h3>Prazo menor</h3>
+          <ul>
+            <li>Parcelas geralmente maiores.</li>
+            <li>Menor período de pagamento.</li>
+            <li>Tendência de menor custo total de juros.</li>
+          </ul>
+        </div>
+
+        <div>
+          <h3>Prazo maior</h3>
+          <ul>
+            <li>Parcelas geralmente menores.</li>
+            <li>Maior período de endividamento.</li>
+            <li>Tendência de maior custo total de juros.</li>
+          </ul>
+        </div>
+      </div>
+
+      <p>
+        A melhor alternativa não é necessariamente aquela com a menor parcela.
+        Avalie o custo total da operação e a sua capacidade de pagamento.
+      </p>
+    </section>
+
+    <!-- CUIDADOS -->
+    <section class="attention-section" aria-labelledby="attention-title">
+      <div class="icon-badge icon-badge-amber attention-badge" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3"/>
+          <path d="M12 9v4"/>
+          <path d="M12 17h.01"/>
+        </svg>
+      </div>
+
+      <div>
+        <span class="section-label">ANTES DE CONTRATAR</span>
+        <h2 id="attention-title">O que observar antes de contratar um empréstimo?</h2>
+
+        <p>
+          Uma simulação é uma etapa importante do planejamento financeiro, mas
+          não substitui a análise das condições reais oferecidas pelo banco ou
+          financeira. Confira estes pontos antes de assinar o contrato:
+        </p>
+
+        <ul>
+          <li>
+            <strong>CET (Custo Efetivo Total):</strong>
+            representa o custo completo da operação, incluindo juros, tributos,
+            tarifas e demais despesas aplicáveis.
+          </li>
+          <li>
+            <strong>IOF:</strong>
+            verifique a incidência do Imposto sobre Operações Financeiras
+            na contratação.
+          </li>
+          <li>
+            <strong>Seguros e tarifas:</strong>
+            confira se existem cobranças adicionais incluídas na proposta.
+          </li>
+          <li>
+            <strong>Taxa de juros:</strong>
+            compare as condições de diferentes instituições financeiras.
+          </li>
+          <li>
+            <strong>Capacidade de pagamento:</strong>
+            avalie se a prestação cabe no orçamento sem comprometer despesas
+            essenciais.
+          </li>
+          <li>
+            <strong>Pagamento antecipado:</strong>
+            verifique as condições para amortização ou quitação antecipada
+            da dívida.
+          </li>
+        </ul>
+
+        <p>
+          Sempre que possível, compare o <strong>Custo Efetivo Total (CET)</strong>
+          das propostas. A taxa de juros isolada não representa necessariamente
+          o custo final do crédito.
+        </p>
+      </div>
+    </section>
+
+    <!-- METODOLOGIA -->
+    <section class="content-section methodology" aria-labelledby="methodology-title">
+      <div class="section-heading">
+        <span class="section-label">METODOLOGIA DE CÁLCULO</span>
+        <h2 id="methodology-title">Como funciona o cálculo da Tabela Price?</h2>
+      </div>
+
+      <p>
+        Na Tabela Price, o valor da prestação é determinado considerando o
+        principal financiado, a taxa periódica de juros e o número de parcelas.
+        A fórmula tradicional para calcular uma prestação fixa é:
+      </p>
+
+      <div class="formula-box">
+        <span>Fórmula da prestação fixa (Tabela Price)</span>
+
+        <div class="formula">
+          PMT = PV ×
+          <span class="fraction">
+            <span>i × (1 + i)<sup>n</sup></span>
+            <span>(1 + i)<sup>n</sup> − 1</span>
+          </span>
+        </div>
+
+        <ul class="formula-legend">
+          <li><strong>PMT:</strong> valor da prestação periódica.</li>
+          <li><strong>PV:</strong> valor principal do empréstimo.</li>
+          <li><strong>i:</strong> taxa de juros por período.</li>
+          <li><strong>n:</strong> quantidade de parcelas.</li>
+        </ul>
+      </div>
+
+      <p>
+        Para utilizar essa fórmula, a taxa de juros e o prazo precisam estar
+        expressos na mesma periodicidade. Por exemplo, uma taxa mensal deve
+        ser utilizada em conjunto com o número de parcelas mensais.
+      </p>
+
+      <p>
+        A conversão de uma taxa anual para mensal depende da natureza da taxa
+        informada. Uma taxa anual efetiva, por exemplo, não deve ser simplesmente
+        dividida por 12 para obter a taxa mensal equivalente. Confira a
+        metodologia adotada pelo simulador e as condições apresentadas pela
+        instituição financeira.
+      </p>
+    </section>
+
+    <!-- LIMITAÇÕES -->
+    <section class="content-section" aria-labelledby="transparency-title">
+      <div class="section-heading">
+        <span class="section-label">TRANSPARÊNCIA</span>
+        <h2 id="transparency-title">Limitações da simulação</h2>
+      </div>
+
+      <p>
+        Esta calculadora oferece uma estimativa matemática baseada na Tabela
+        Price. O resultado não deve ser interpretado como uma proposta de
+        crédito ou como garantia das condições que serão aprovadas por uma
+        instituição financeira.
+      </p>
+
+      <p>
+        O valor efetivo de uma contratação pode variar devido a impostos,
+        seguros, tarifas, datas de vencimento, regras contratuais, condições
+        de crédito e outros encargos. Para uma comparação mais precisa, utilize
+        os dados oficiais da proposta de empréstimo e confira o Custo Efetivo
+        Total (CET).
+      </p>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section" aria-labelledby="faq-title">
+      <div class="section-heading">
+        <span class="section-label">DÚVIDAS FREQUENTES</span>
+        <h2 id="faq-title">Perguntas frequentes sobre empréstimos</h2>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>O que é a Tabela Price?</summary>
+          <p>
+            É um sistema de amortização em que as prestações são calculadas
+            para apresentar valores iguais durante o período contratado,
+            considerando uma taxa de juros fixa e as demais condições da operação.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>As parcelas da Tabela Price são sempre iguais?</summary>
+          <p>
+            Na estrutura tradicional da Tabela Price, as prestações são fixas.
+            Entretanto, alterações contratuais, indexadores, seguros ou outros
+            encargos podem modificar os valores efetivamente cobrados.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Qual a diferença entre juros e amortização?</summary>
+          <p>
+            Juros representam o custo do dinheiro emprestado. Amortização é a
+            parte do pagamento utilizada para reduzir o saldo devedor.
+            Na Tabela Price, a composição da prestação muda ao longo do tempo.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Um empréstimo com prazo maior é sempre melhor?</summary>
+          <p>
+            Não. Um prazo maior pode reduzir o valor de cada prestação, mas
+            normalmente aumenta o total de juros pagos. É importante comparar
+            o custo total e avaliar sua capacidade financeira.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>A calculadora considera o IOF?</summary>
+          <p>
+            Não. A simulação apresentada não calcula automaticamente o IOF.
+            O resultado deve ser considerado uma estimativa matemática dos
+            valores calculados pelo sistema, sem presumir a inclusão de tributos
+            ou tarifas adicionais.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O resultado é igual ao oferecido pelo banco?</summary>
+          <p>
+            Não necessariamente. Cada instituição pode utilizar condições
+            específicas de contratação, encargos, datas de vencimento e critérios
+            de cálculo. Consulte sempre a proposta oficial.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Posso utilizar a calculadora para financiamentos?</summary>
+          <p>
+            Sim, como referência para simular operações com prestações calculadas
+            pela Tabela Price. Entretanto, financiamentos podem possuir seguros,
+            tarifas, impostos e outras condições que precisam ser considerados
+            separadamente.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>A calculadora é gratuita?</summary>
+          <p>
+            Sim. A ferramenta pode ser utilizada gratuitamente, sem necessidade
+            de cadastro ou fornecimento de informações bancárias.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <!-- AVISO -->
+    <aside class="final-notice">
+      <div class="notice-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 16v-4"/>
+          <path d="M12 8h.01"/>
+        </svg>
+        <strong>Aviso importante:</strong>
+      </div>
+      <p>
+        Esta ferramenta possui finalidade exclusivamente informativa e
+        educacional. Os resultados são estimativas e não constituem oferta,
+        recomendação de crédito, consultoria financeira ou garantia de aprovação.
+        Consulte as condições oficiais da instituição financeira antes de
+        contratar qualquer operação.
+      </p>
+    </aside>
+
+    <!-- CTA -->
+    <section class="final-cta">
+      <span class="section-label">CALCULADORA DE GANHOS</span>
+      <h2>Planeje suas decisões financeiras com mais clareza</h2>
+      <p>
+        Faça diferentes simulações, compare prazos e avalie o custo total
+        antes de assumir um compromisso financeiro.
+      </p>
+      <a href="/financas/" class="cta-link">
+        <span>Explorar outras calculadoras financeiras</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14"/>
+          <path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
+    </section>
+  </div>
+
+  <!-- SCRIPT DA CALCULADORA -->
+  <script>
+    import { calculateLoanPrice } from '../../engines/finance/loan';
+    import { formatBRL } from '../../engines/common/currency';
+
+    let pageController: AbortController | null = null;
+
+    function initPage() {
+      // Evita duplicação de eventos após navegação interna do Astro.
+      pageController?.abort();
+      pageController = new AbortController();
+
+      const { signal } = pageController;
+
+      const principalInput = document.getElementById('principal') as HTMLInputElement | null;
+      const rateInput = document.getElementById('rate') as HTMLInputElement | null;
+      const monthsInput = document.getElementById('months') as HTMLInputElement | null;
+
+      const calcButton = document.getElementById('calc-btn');
+      const errorElement = document.getElementById('calc-error');
+
+      const monthlyOutput = document.getElementById('res-monthly');
+      const interestOutput = document.getElementById('res-interest');
+      const totalOutput = document.getElementById('res-total');
+      const principalOutput = document.getElementById('res-principal');
+
+      if (
+        !principalInput ||
+        !rateInput ||
+        !monthsInput ||
+        !calcButton ||
+        !errorElement ||
+        !monthlyOutput ||
+        !interestOutput ||
+        !totalOutput ||
+        !principalOutput
+      ) {
+        return;
+      }
+
+      function resetResults() {
+        monthlyOutput.textContent = '—';
+        interestOutput.textContent = '—';
+        totalOutput.textContent = '—';
+        principalOutput.textContent = '—';
+      }
+
+      function showError(message: string) {
+        errorElement.textContent = message;
+        errorElement.hidden = false;
+        resetResults();
+      }
+
+      function clearError() {
+        errorElement.textContent = '';
+        errorElement.hidden = true;
+      }
+
+      function runCalc() {
+        clearError();
+
+        const rawPrincipal = principalInput.value.trim();
+        const rawRate = rateInput.value.trim();
+        const rawMonths = monthsInput.value.trim();
+
+        // Number('') retorna zero. Por isso, os campos vazios são
+        // verificados antes da conversão numérica.
+        if (!rawPrincipal || !rawRate || !rawMonths) {
+          showError('Preencha todos os campos para realizar a simulação.');
+          return;
+        }
+
+        const principal = Number(rawPrincipal);
+        const rate = Number(rawRate);
+        const months = Number(rawMonths);
+
+        if (!Number.isFinite(principal) || principal <= 0) {
+          showError('Informe um valor de empréstimo maior que zero.');
+          return;
+        }
+
+        if (!Number.isFinite(rate) || rate < 0) {
+          showError('Informe uma taxa de juros anual válida. Ela não pode ser negativa.');
+          return;
+        }
+
+        if (!Number.isInteger(months) || months <= 0) {
+          showError('Informe um prazo válido em meses, utilizando um número inteiro maior que zero.');
+          return;
+        }
+
+        try {
+          const result = calculateLoanPrice({
+            principal,
+            annualInterestRate: rate,
+            months,
+          });
+
+          const monthlyPayment = Number(result.monthlyPayment);
+          const totalInterest = Number(result.totalInterest);
+          const totalPayment = Number(result.totalPayment);
+
+          const values = [
+            monthlyPayment,
+            totalInterest,
+            totalPayment,
+          ];
+
+          if (!values.every(value => Number.isFinite(value) && value >= 0)) {
+            throw new Error('O motor retornou valores financeiros inválidos.');
+          }
+
+          if (monthlyPayment <= 0 || totalPayment <= 0) {
+            throw new Error('O motor retornou um resultado sem valor positivo.');
+          }
+
+          // Verificação de coerência: o total pago não deve ser inferior
+          // ao principal em uma simulação com juros não negativos.
+          if (totalPayment + 0.01 < principal) {
+            throw new Error('O total calculado ficou abaixo do valor solicitado.');
+          }
+
+          monthlyOutput.textContent = formatBRL(monthlyPayment);
+          interestOutput.textContent = formatBRL(totalInterest);
+          totalOutput.textContent = formatBRL(totalPayment);
+          principalOutput.textContent = formatBRL(principal);
+        } catch {
+          showError(
+            'Não foi possível realizar a simulação. Confira os valores informados e tente novamente.'
+          );
+        }
+      }
+
+      calcButton.addEventListener('click', runCalc, { signal });
+
+      [principalInput, rateInput, monthsInput].forEach(input => {
+        input.addEventListener('input', runCalc, { signal });
+        input.addEventListener('change', runCalc, { signal });
+      });
+
+      runCalc();
+    }
+
+    // Inicialização inicial.
+    initPage();
+
+    // Reaplica os eventos após navegações com View Transitions do Astro.
+    document.addEventListener('astro:page-load', initPage);
+  </script>
+
+  <style>
+    .loan-page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0.5rem 0 4rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1.75rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+
+    .hero {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .eyebrow,
+    .section-label {
+      display: inline-block;
+      margin-bottom: 0.75rem;
+      color: var(--color-primary);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .hero h1 {
+      margin: 0 0 0.9rem;
+      color: var(--text-primary);
+      font-size: clamp(2rem, 5vw, 2.7rem);
+      line-height: 1.2;
+    }
+
+    .hero > p {
+      max-width: 790px;
+      margin: 0 auto;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .hero-highlights {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.25rem 1.75rem;
+      margin-top: 1.75rem;
+    }
+
+    .highlight {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      font-weight: 600;
+    }
+
+    .highlight-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    :global([data-theme="dark"]) .highlight-icon {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    /* ÍCONES SVG PADRONIZADOS */
+
+    .icon-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    .icon-badge-amber {
+      background: rgba(217, 119, 6, 0.12);
+      color: #d97706;
+    }
+
+    :global([data-theme="dark"]) .icon-badge {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    :global([data-theme="dark"]) .icon-badge-amber {
+      background: rgba(251, 191, 36, 0.14);
+      color: #fbbf24;
+    }
+
+    .calculator-section {
+      margin-bottom: 3.5rem;
+      scroll-margin-top: 2rem;
+    }
+
+    .section-heading {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 0.6rem;
+      font-size: 1.65rem;
+      line-height: 1.3;
+    }
+
+    .section-heading > p {
+      max-width: 760px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .calc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+
+    .card {
+      padding: 1.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .card h3 {
+      margin: 0 0 1.4rem;
+      font-size: 1.2rem;
+    }
+
+    .input-card h3 {
+      color: var(--color-primary);
+    }
+
+    .field-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .field-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 650;
+      line-height: 1.5;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border-color);
+      border-radius: 9px;
+      background: var(--bg-primary);
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.12);
+    }
+
+    :global([data-theme="dark"]) .input-wrapper:focus-within {
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.16);
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      min-width: 0;
+      min-height: 46px;
+      padding: 0.75rem 0.9rem;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text-primary);
+      font: inherit;
+      box-sizing: border-box;
+    }
+
+    .input-prefix,
+    .input-suffix {
+      padding: 0 0.85rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .input-prefix {
+      border-right: 1px solid var(--border-color);
+    }
+
+    .input-suffix {
+      border-left: 1px solid var(--border-color);
+    }
+
+    .field-group small {
+      display: block;
+      margin-top: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      width: 100%;
+      min-height: 48px;
+      padding: 0.85rem 1.1rem;
+      border: 0;
+      border-radius: 9px;
+      background: var(--color-primary);
+      color: #ffffff;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .btn:hover {
+      opacity: 0.88;
+    }
+
+    .btn:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: 3px;
+    }
+
+    .input-note {
+      margin: 0.9rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    .result-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .result-card .section-label {
+      margin-bottom: 0.35rem;
+    }
+
+    .result-card h3 {
+      margin-bottom: 1.35rem;
+    }
+
+    .main-result {
+      padding: 1.35rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: rgba(6, 95, 70, 0.08);
+    }
+
+    :global([data-theme="dark"]) .main-result {
+      background: rgba(16, 185, 129, 0.12);
+    }
+
+    .main-result span {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .main-result strong {
+      display: block;
+      color: var(--color-primary);
+      font-size: clamp(1.8rem, 4vw, 2.3rem);
+      overflow-wrap: anywhere;
+    }
+
+    .result-description {
+      display: block;
+      margin-top: 0.4rem;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+    }
+
+    .result-line {
+      display: flex;
+      justify-content: space-between;
+      gap: 0.75rem;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.9rem;
+    }
+
+    .result-line span {
+      color: var(--text-secondary);
+    }
+
+    .result-line strong {
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .interest-value {
+      color: #dc2626;
+    }
+
+    :global([data-theme="dark"]) .interest-value {
+      color: #f87171;
+    }
+
+    .result-observation {
+      margin-top: 1.5rem;
+      padding-top: 1.1rem;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.8rem;
+    }
+
+    .result-observation p {
+      margin: 0.45rem 0 0;
+      color: var(--text-secondary);
+      line-height: 1.65;
+    }
+
+    .calc-error {
+      margin-top: 1rem;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid #dc2626;
+      border-radius: 8px;
+      color: #dc2626;
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    :global([data-theme="dark"]) .calc-error {
+      color: #fca5a5;
+      border-color: #f87171;
+    }
+
+    .content-section {
+      margin-bottom: 3.5rem;
+    }
+
+    .content-section > p {
+      margin: 1rem 0;
+      color: var(--text-secondary);
+      font-size: 0.97rem;
+      line-height: 1.85;
+    }
+
+    .explanation-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .explanation-card {
+      padding: 1.4rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .explanation-card .icon-badge {
+      margin-bottom: 0.95rem;
+    }
+
+    .instruction-list {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .instruction-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.35rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .step-number {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+      font-size: 0.85rem;
+      font-weight: 800;
+    }
+
+    :global([data-theme="dark"]) .step-number {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    .instruction-card h3,
+    .explanation-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    .instruction-card p,
+    .explanation-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .example-card {
+      padding: 1.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .example-card h3 {
+      margin: 0 0 1.35rem;
+    }
+
+    .example-data {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+    }
+
+    .example-data > div {
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-primary);
+    }
+
+    .example-data span {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+    }
+
+    .example-data strong {
+      font-size: 1.1rem;
+    }
+
+    .example-card > p {
+      margin: 1.25rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.75;
+    }
+
+    .comparison-card {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+
+    .comparison-card > div {
+      padding: 1.4rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .comparison-card h3 {
+      margin: 0 0 0.75rem;
+      color: var(--color-primary);
+    }
+
+    .comparison-card ul {
+      padding-left: 1.25rem;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.75;
+    }
+
+    .attention-section {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      padding: 1.65rem;
+      margin-bottom: 3.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      background: var(--bg-secondary);
+    }
+
+    .attention-badge {
+      width: 50px;
+      height: 50px;
+      border-radius: 14px;
+    }
+
+    .attention-section h2 {
+      margin: 0 0 0.85rem;
+      font-size: 1.45rem;
+    }
+
+    .attention-section p,
+    .attention-section li {
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.8;
+    }
+
+    .attention-section ul {
+      padding-left: 1.35rem;
+    }
+
+    .attention-section strong {
+      color: var(--text-primary);
+    }
+
+    .formula-box {
+      display: grid;
+      gap: 0.85rem;
+      padding: 1.5rem;
+      margin: 1.5rem 0;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .formula-box > span {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .formula {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1.1rem;
+      border-radius: 8px;
+      background: var(--bg-primary);
+      color: var(--color-primary);
+      font-size: clamp(1.05rem, 3vw, 1.35rem);
+      font-weight: 750;
+      text-align: center;
+      overflow-wrap: anywhere;
+    }
+
+    .fraction {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 0.9em;
+      line-height: 1.7;
+    }
+
+    .fraction span:first-child {
+      padding: 0 0.5rem 0.25rem;
+      border-bottom: 1px solid currentColor;
+    }
+
+    .fraction span:last-child {
+      padding: 0.25rem 0.5rem 0;
+    }
+
+    .formula-legend {
+      padding-left: 1.25rem;
+      margin: 0.35rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.75;
+    }
+
+    .formula-legend strong {
+      color: var(--text-primary);
+    }
+
+    .faq-section {
+      margin-bottom: 3.5rem;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .faq-item summary {
+      padding: 1.2rem 2rem 1.2rem 0;
+      position: relative;
+      cursor: pointer;
+      color: var(--text-primary);
+      font-weight: 650;
+      line-height: 1.5;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      content: '+';
+      position: absolute;
+      right: 0.3rem;
+      color: var(--color-primary);
+      font-size: 1.35rem;
+    }
+
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+
+    .faq-item p {
+      margin: 0;
+      padding: 0 1rem 1.2rem 0;
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+      line-height: 1.75;
+    }
+
+    .final-notice {
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 2.5rem;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--color-primary);
+      border-radius: 10px;
+      background: var(--bg-secondary);
+    }
+
+    .notice-title {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 0.5rem;
+      color: var(--color-primary);
+    }
+
+    .notice-title strong {
+      color: var(--text-primary);
+    }
+
+    .final-notice p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.75;
+    }
+
+    .final-cta {
+      padding: 2.25rem 1.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+      text-align: center;
+    }
+
+    .final-cta h2 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(1.45rem, 3vw, 1.85rem);
+    }
+
+    .final-cta p {
+      max-width: 650px;
+      margin: 0 auto 1.5rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .cta-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      padding: 0.8rem 1.4rem;
+      border-radius: 9px;
+      background: var(--color-primary);
+      color: #ffffff;
+      font-size: 0.92rem;
+      font-weight: 700;
+      text-decoration: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .cta-link:hover {
+      opacity: 0.88;
+    }
+
+    .cta-link:focus-visible,
+    .breadcrumb a:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 768px) {
+      .calc-grid,
+      .explanation-grid,
+      .comparison-card {
+        grid-template-columns: 1fr;
+      }
+
+      .attention-section {
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .example-data {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 1.25rem;
+      }
+
+      .hero-highlights {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.75rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</BaseLayout>

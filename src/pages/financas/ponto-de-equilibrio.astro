@@ -1,0 +1,1461 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de Ponto de Equilíbrio (Break-Even) — Calcule seu Faturamento Mínimo"
+  description="Calcule o ponto de equilíbrio da sua empresa. Descubra quantas unidades precisa vender e qual faturamento mínimo é necessário para cobrir seus custos."
+>
+  <main class="page-container">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <a href="/financas/">Finanças</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Ponto de Equilíbrio</span>
+    </nav>
+
+    <!-- CABEÇALHO -->
+    <header class="page-header">
+      <span class="eyebrow">GESTÃO FINANCEIRA EMPRESARIAL</span>
+      <h1>Calculadora de Ponto de Equilíbrio</h1>
+      <p>
+        Descubra quanto sua empresa precisa vender para cobrir todos os custos
+        e despesas operacionais. Calcule o faturamento mínimo e a quantidade
+        de unidades necessárias para alcançar o equilíbrio financeiro.
+      </p>
+    </header>
+
+    <!-- INTRODUÇÃO -->
+    <section class="intro-panel">
+      <div class="icon-badge" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/>
+        </svg>
+      </div>
+      <div>
+        <h2>Descubra quando seu negócio começa a dar lucro</h2>
+        <p>
+          O ponto de equilíbrio, também conhecido como Break-Even Point,
+          representa o momento em que a receita obtida com as vendas
+          é suficiente para cobrir os custos fixos e variáveis.
+          A partir desse nível de vendas, o negócio começa a gerar
+          resultado operacional positivo, considerando as premissas
+          utilizadas no cálculo.
+        </p>
+      </div>
+    </section>
+
+    <!-- CALCULADORA -->
+    <section class="calculator-section" aria-labelledby="calculator-title">
+      <div class="section-heading">
+        <span class="section-kicker">SIMULADOR GRATUITO</span>
+        <h2 id="calculator-title">Calcule o ponto de equilíbrio do seu negócio</h2>
+        <p>
+          Informe seus custos e o preço de venda para descobrir sua
+          meta mínima mensal.
+        </p>
+      </div>
+
+      <div class="calculator-grid">
+        <!-- ENTRADAS -->
+        <div class="card input-card">
+          <div class="card-heading">
+            <div class="icon-badge" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Custos e preços</h3>
+              <p>Preencha os dados financeiros da sua operação.</p>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="fixed-costs">Custos fixos mensais</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input
+                type="number"
+                id="fixed-costs"
+                value="8000"
+                min="0.01"
+                max="1000000000"
+                step="0.01"
+                inputmode="decimal"
+                aria-describedby="fixed-help"
+              />
+            </div>
+            <small id="fixed-help">
+              Aluguel, salários, contabilidade, internet e outras despesas
+              que não variam diretamente com o volume de vendas.
+            </small>
+          </div>
+
+          <div class="field-group">
+            <label for="unit-price">Preço de venda por unidade</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input
+                type="number"
+                id="unit-price"
+                value="100"
+                min="0.01"
+                max="100000000"
+                step="0.01"
+                inputmode="decimal"
+                aria-describedby="price-help"
+              />
+            </div>
+            <small id="price-help">
+              Valor cobrado do cliente por cada produto ou serviço vendido.
+            </small>
+          </div>
+
+          <div class="field-group">
+            <label for="var-cost">Custo variável por unidade</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input
+                type="number"
+                id="var-cost"
+                value="40"
+                min="0"
+                max="100000000"
+                step="0.01"
+                inputmode="decimal"
+                aria-describedby="variable-help"
+              />
+            </div>
+            <small id="variable-help">
+              Matéria-prima, embalagens, comissões, taxas e outros custos
+              relacionados diretamente a cada venda.
+            </small>
+          </div>
+
+          <div class="example-box">
+            <strong>Exemplo de utilização</strong>
+            <p>
+              Se sua empresa possui R$ 8.000 de custos fixos, vende cada
+              unidade por R$ 100 e gasta R$ 40 para produzi-la,
+              sua margem de contribuição unitária será de R$ 60.
+            </p>
+          </div>
+
+          <div id="calc-error" class="error-message" role="alert" hidden></div>
+
+          <button id="calc-btn" class="btn-calculate" type="button">
+            <span>Calcular ponto de equilíbrio</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </button>
+
+          <p class="auto-calc-note">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <span>Os resultados são recalculados automaticamente quando você modifica os valores.</span>
+          </p>
+        </div>
+
+        <!-- RESULTADOS -->
+        <div class="card result-card" aria-live="polite">
+          <div class="card-heading">
+            <div class="icon-badge result-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="m19 9-5 5-4-4-3 3"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Meta de equilíbrio</h3>
+              <p>Veja quanto sua empresa precisa vender.</p>
+            </div>
+          </div>
+
+          <div class="main-result">
+            <span class="result-label">Unidades necessárias por mês</span>
+            <strong id="res-units">134 unidades</strong>
+            <span class="result-description">
+              Quantidade mínima arredondada para cima.
+            </span>
+          </div>
+
+          <div class="result-breakdown">
+            <div class="result-row">
+              <div>
+                <span class="result-dot revenue-dot"></span>
+                <span>Faturamento mínimo</span>
+              </div>
+              <strong id="res-revenue">R$ 0,00</strong>
+            </div>
+
+            <div class="result-row">
+              <div>
+                <span class="result-dot contribution-dot"></span>
+                <span>Margem de contribuição unitária</span>
+              </div>
+              <strong id="res-contrib">R$ 0,00</strong>
+            </div>
+
+            <div class="result-row">
+              <div>
+                <span class="result-dot fixed-dot"></span>
+                <span>Custos fixos mensais</span>
+              </div>
+              <strong id="res-fixed">R$ 0,00</strong>
+            </div>
+
+            <div class="result-row">
+              <div>
+                <span class="result-dot margin-dot"></span>
+                <span>Margem de contribuição percentual</span>
+              </div>
+              <strong id="res-margin">0%</strong>
+            </div>
+          </div>
+
+          <div class="result-insight">
+            <span aria-hidden="true">💡</span>
+            <p>
+              O ponto de equilíbrio indica a quantidade de vendas necessária
+              para cobrir os custos considerados. Vendas adicionais podem
+              gerar resultado operacional positivo, desde que as demais
+              condições permaneçam constantes.
+            </p>
+          </div>
+
+          <p class="result-disclaimer">
+            Simulação baseada nos valores informados. Não considera
+            automaticamente despesas ou receitas que não tenham sido
+            incluídas nos parâmetros.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCAÇÃO FINANCEIRA -->
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="section-kicker">GESTÃO EMPRESARIAL</span>
+        <h2>O que é ponto de equilíbrio financeiro?</h2>
+      </div>
+
+      <p>
+        O ponto de equilíbrio é um indicador utilizado na gestão empresarial
+        para identificar o volume mínimo de vendas necessário para que
+        a receita cubra os custos e despesas considerados na operação.
+      </p>
+
+      <p>
+        Esse indicador ajuda empreendedores a estabelecer metas comerciais,
+        avaliar preços, analisar custos e compreender a quantidade de
+        produtos ou serviços que precisam comercializar para evitar
+        resultados operacionais negativos.
+      </p>
+
+      <p>
+        Também conhecido como Break-Even Point, o indicador é especialmente
+        útil para pequenos negócios, lojas, restaurantes, prestadores
+        de serviços e empresas que trabalham com produção e comercialização
+        de mercadorias.
+      </p>
+
+      <div class="formula-card">
+        <h3>Fórmula do ponto de equilíbrio</h3>
+
+        <div class="formula">
+          PE = <span>Custos Fixos</span> ÷
+          <span>(Preço de Venda − Custo Variável)</span>
+        </div>
+
+        <div class="formula-legend">
+          <span><strong>PE</strong> — Ponto de equilíbrio em unidades</span>
+          <span><strong>Custos fixos</strong> — Despesas fixas do período</span>
+          <span><strong>Preço de venda</strong> — Valor de cada unidade</span>
+          <span><strong>Custo variável</strong> — Custo associado a cada venda</span>
+        </div>
+
+        <p>
+          A diferença entre o preço de venda e o custo variável representa
+          a margem de contribuição unitária. É essa parcela que contribui
+          para pagar os custos fixos e, depois de cobertos, gerar resultado.
+        </p>
+      </div>
+    </section>
+
+    <!-- TIPOS DE CUSTOS -->
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="section-kicker">ENTENDA OS COMPONENTES</span>
+        <h2>Quais custos devem entrar no cálculo?</h2>
+      </div>
+
+      <div class="info-grid">
+        <article class="info-card">
+          <span class="info-number">01</span>
+          <h3>Custos fixos</h3>
+          <p>
+            Despesas que permanecem relativamente estáveis dentro de
+            determinado período e capacidade operacional.
+          </p>
+          <ul>
+            <li>Aluguel</li>
+            <li>Salários administrativos</li>
+            <li>Contabilidade</li>
+            <li>Internet e sistemas</li>
+          </ul>
+        </article>
+
+        <article class="info-card">
+          <span class="info-number">02</span>
+          <h3>Custos variáveis</h3>
+          <p>
+            Gastos que acompanham a produção ou comercialização
+            de produtos e serviços.
+          </p>
+          <ul>
+            <li>Matéria-prima</li>
+            <li>Embalagens</li>
+            <li>Comissões</li>
+            <li>Taxas sobre vendas</li>
+          </ul>
+        </article>
+
+        <article class="info-card">
+          <span class="info-number">03</span>
+          <h3>Preço de venda</h3>
+          <p>
+            Valor cobrado do consumidor pela comercialização
+            de cada produto ou serviço.
+          </p>
+          <ul>
+            <li>Preço comercializado</li>
+            <li>Valor por unidade</li>
+            <li>Preço do serviço</li>
+            <li>Valor efetivamente recebido</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- EXEMPLO -->
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="section-kicker">EXEMPLO PRÁTICO</span>
+        <h2>Como calcular o ponto de equilíbrio de uma empresa?</h2>
+      </div>
+
+      <p>
+        Imagine uma pequena empresa que possui R$ 8.000 em custos fixos
+        mensais. Cada produto é vendido por R$ 100 e apresenta um custo
+        variável de R$ 40 por unidade.
+      </p>
+
+      <div class="example-table-wrapper">
+        <table class="example-table">
+          <thead>
+            <tr>
+              <th>Indicador</th>
+              <th>Valor</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Custos fixos mensais</td>
+              <td>R$ 8.000,00</td>
+            </tr>
+            <tr>
+              <td>Preço de venda unitário</td>
+              <td>R$ 100,00</td>
+            </tr>
+            <tr>
+              <td>Custo variável unitário</td>
+              <td>R$ 40,00</td>
+            </tr>
+            <tr>
+              <td>Margem de contribuição unitária</td>
+              <td>R$ 60,00</td>
+            </tr>
+            <tr>
+              <td>Quantidade mínima de vendas</td>
+              <td>134 unidades</td>
+            </tr>
+            <tr class="table-total">
+              <td>Faturamento no equilíbrio</td>
+              <td>R$ 13.400,00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-panel">
+        <span aria-hidden="true">💡</span>
+        <p>
+          <strong>Entenda o resultado:</strong> matematicamente,
+          o equilíbrio ocorre em 133,33 unidades. Como não é possível
+          vender uma fração de unidade nesse exemplo, a meta operacional
+          deve ser arredondada para 134 unidades. Nesse volume, o
+          faturamento será R$ 13.400,00.
+        </p>
+      </div>
+    </section>
+
+    <!-- IMPORTÂNCIA -->
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="section-kicker">GESTÃO E PLANEJAMENTO</span>
+        <h2>Por que acompanhar o ponto de equilíbrio?</h2>
+      </div>
+
+      <div class="steps-grid">
+        <article class="step-card">
+          <span class="step-number">01</span>
+          <h3>Definir metas de vendas</h3>
+          <p>
+            Identifique a quantidade mínima de produtos ou serviços
+            que precisa comercializar para cobrir os custos.
+          </p>
+        </article>
+
+        <article class="step-card">
+          <span class="step-number">02</span>
+          <h3>Avaliar preços</h3>
+          <p>
+            Analise como alterações nos preços de venda e nos custos
+            variáveis podem modificar sua margem de contribuição.
+          </p>
+        </article>
+
+        <article class="step-card">
+          <span class="step-number">03</span>
+          <h3>Controlar despesas</h3>
+          <p>
+            Identifique custos fixos elevados e procure oportunidades
+            para melhorar a eficiência operacional.
+          </p>
+        </article>
+
+        <article class="step-card">
+          <span class="step-number">04</span>
+          <h3>Planejar o crescimento</h3>
+          <p>
+            Utilize o indicador para avaliar metas comerciais,
+            capacidade de produção e mudanças na estrutura do negócio.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="section-kicker">DÚVIDAS FREQUENTES</span>
+        <h2>Perguntas sobre ponto de equilíbrio</h2>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>O que significa atingir o ponto de equilíbrio?</summary>
+          <p>
+            Significa que a receita das vendas é suficiente para cobrir
+            os custos fixos e variáveis considerados no cálculo.
+            Nesse nível, o resultado operacional é igual a zero.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Qual é a diferença entre custos fixos e variáveis?</summary>
+          <p>
+            Custos fixos não variam diretamente com a quantidade vendida
+            dentro de determinada faixa operacional. Custos variáveis
+            acompanham o volume de produção ou comercialização.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O que é margem de contribuição?</summary>
+          <p>
+            É a diferença entre o preço de venda e os custos variáveis
+            de cada unidade. Essa margem ajuda a cobrir os custos fixos
+            e, depois de cobertos, contribui para o resultado positivo.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O que acontece quando o preço de venda é igual ao custo variável?</summary>
+          <p>
+            A margem de contribuição será zero. Nesse cenário, as vendas
+            não contribuem para pagar os custos fixos e não existe
+            um ponto de equilíbrio finito com essa estrutura de preços.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O que acontece quando o custo variável supera o preço de venda?</summary>
+          <p>
+            Cada unidade comercializada gera uma contribuição negativa.
+            Nesse caso, a empresa perde dinheiro a cada venda antes
+            mesmo de considerar os custos fixos.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O faturamento mínimo representa lucro?</summary>
+          <p>
+            Não. O faturamento correspondente ao ponto de equilíbrio
+            representa a receita necessária para cobrir os custos
+            considerados. O lucro operacional começa a aparecer
+            quando as vendas superam esse nível, mantidas as premissas.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Esta calculadora considera impostos?</summary>
+          <p>
+            Os impostos e taxas incidentes sobre as vendas devem ser
+            incluídos no custo variável unitário, quando aplicáveis.
+            A ferramenta não estima automaticamente a tributação
+            de cada empresa.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Posso utilizar a calculadora para serviços?</summary>
+          <p>
+            Sim. Basta considerar cada serviço como uma unidade de venda
+            e informar seu preço e os custos variáveis associados
+            à execução desse serviço.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <!-- AVISO -->
+    <aside class="disclaimer">
+      <div class="notice-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+        </svg>
+        <strong>Importante:</strong>
+      </div>
+      <p>
+        Esta ferramenta possui finalidade exclusivamente educativa
+        e informativa. Os resultados são estimativas matemáticas
+        baseadas nos dados fornecidos pelo usuário. O cálculo pressupõe
+        preço de venda, custos e composição operacional constantes.
+        Para decisões empresariais, considere também impostos,
+        despesas financeiras, capacidade produtiva, sazonalidade
+        e demais particularidades da sua atividade.
+      </p>
+    </aside>
+
+    <div class="back-link">
+      <a href="/financas/">← Voltar para as calculadoras financeiras</a>
+    </div>
+  </main>
+
+  <!-- LÓGICA DA CALCULADORA -->
+  <script>
+    import { calculateBreakEven } from '../../engines/business/pricing-engine';
+    import { formatBRL } from '../../engines/common/currency';
+
+    const fixedCostsInput = document.getElementById('fixed-costs') as HTMLInputElement;
+    const unitPriceInput = document.getElementById('unit-price') as HTMLInputElement;
+    const varCostInput = document.getElementById('var-cost') as HTMLInputElement;
+
+    const errorElement = document.getElementById('calc-error') as HTMLDivElement;
+
+    const unitsElement = document.getElementById('res-units')!;
+    const revenueElement = document.getElementById('res-revenue')!;
+    const contribElement = document.getElementById('res-contrib')!;
+    const fixedElement = document.getElementById('res-fixed')!;
+    const marginElement = document.getElementById('res-margin')!;
+
+    function showError(message: string) {
+      errorElement.textContent = message;
+      errorElement.hidden = false;
+
+      [
+        unitsElement,
+        revenueElement,
+        contribElement,
+        fixedElement,
+        marginElement
+      ].forEach((element) => {
+        element.textContent = '—';
+      });
+    }
+
+    function clearError() {
+      errorElement.textContent = '';
+      errorElement.hidden = true;
+    }
+
+    function runCalc() {
+      if (
+        fixedCostsInput.value.trim() === '' ||
+        unitPriceInput.value.trim() === '' ||
+        varCostInput.value.trim() === ''
+      ) {
+        showError('Preencha todos os campos para realizar o cálculo.');
+        return;
+      }
+
+      const fixedCosts = Number(fixedCostsInput.value);
+      const unitPrice = Number(unitPriceInput.value);
+      const varCost = Number(varCostInput.value);
+
+      if (
+        !Number.isFinite(fixedCosts) ||
+        !Number.isFinite(unitPrice) ||
+        !Number.isFinite(varCost)
+      ) {
+        showError('Informe valores numéricos válidos.');
+        return;
+      }
+
+      if (fixedCosts <= 0 || fixedCosts > 1000000000) {
+        showError('Os custos fixos devem ser maiores que zero e não ultrapassar R$ 1 bilhão.');
+        return;
+      }
+
+      if (unitPrice <= 0 || unitPrice > 100000000) {
+        showError('O preço de venda deve ser maior que zero e não ultrapassar R$ 100 milhões.');
+        return;
+      }
+
+      if (varCost < 0 || varCost > 100000000) {
+        showError('O custo variável deve ser igual ou maior que zero e não ultrapassar R$ 100 milhões.');
+        return;
+      }
+
+      const contribution = unitPrice - varCost;
+
+      if (contribution <= 0) {
+        showError(
+          contribution === 0
+            ? 'A margem de contribuição é zero. Aumente o preço de venda ou reduza o custo variável.'
+            : 'O custo variável supera o preço de venda. Não existe ponto de equilíbrio com esses valores.'
+        );
+        return;
+      }
+
+      try {
+        const result = calculateBreakEven({
+          fixedCosts,
+          unitSalePrice: unitPrice,
+          unitVariableCost: varCost
+        });
+
+        const values = [
+          result.breakEvenUnits,
+          result.breakEvenRevenue,
+          result.contributionMargin
+        ];
+
+        if (
+          !values.every(
+            (value) => Number.isFinite(value) && value >= 0
+          )
+        ) {
+          showError('Não foi possível gerar um resultado válido. Revise os valores informados.');
+          return;
+        }
+
+        const tolerance = Math.max(0.01, contribution * 0.000001);
+
+        if (Math.abs(result.contributionMargin - contribution) > tolerance) {
+          showError('O resultado da margem de contribuição não corresponde aos dados informados. Verifique o motor de cálculo.');
+          return;
+        }
+
+        const expectedUnits = Math.ceil(fixedCosts / contribution);
+
+        if (Math.abs(result.breakEvenUnits - expectedUnits) > 0.000001) {
+          showError('O resultado de unidades do motor não corresponde ao ponto de equilíbrio esperado. Verifique o motor de cálculo.');
+          return;
+        }
+
+        const expectedRevenue = expectedUnits * unitPrice;
+
+        if (
+          Math.abs(result.breakEvenRevenue - expectedRevenue) >
+          Math.max(0.01, expectedRevenue * 0.000001)
+        ) {
+          showError('O faturamento retornado pelo motor não corresponde às unidades necessárias. Verifique o motor de cálculo.');
+          return;
+        }
+
+        const contributionPercentage = (contribution / unitPrice) * 100;
+
+        clearError();
+
+        unitsElement.textContent =
+          `${expectedUnits.toLocaleString('pt-BR')} unidades`;
+
+        revenueElement.textContent = formatBRL(expectedRevenue);
+        contribElement.textContent = formatBRL(contribution);
+        fixedElement.textContent = formatBRL(fixedCosts);
+
+        marginElement.textContent =
+          `${contributionPercentage.toLocaleString('pt-BR', {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+          })}%`;
+
+      } catch (error) {
+        console.error('Erro ao calcular ponto de equilíbrio:', error);
+        showError('Ocorreu um erro durante o cálculo. Tente novamente.');
+      }
+    }
+
+    document.getElementById('calc-btn')?.addEventListener('click', runCalc);
+
+    [
+      fixedCostsInput,
+      unitPriceInput,
+      varCostInput
+    ].forEach((input) => {
+      input.addEventListener('input', runCalc);
+    });
+
+    runCalc();
+  </script>
+
+  <!-- ESTILIZAÇÃO -->
+  <style>
+    .page-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0.5rem 0 4rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1.75rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a,
+    .back-link a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover,
+    .back-link a:hover {
+      color: var(--color-primary);
+    }
+
+    .page-header {
+      max-width: 790px;
+      margin-bottom: 3rem;
+    }
+
+    .eyebrow,
+    .section-kicker,
+    .section-label {
+      display: inline-block;
+      margin-bottom: 0.75rem;
+      color: var(--color-primary);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .page-header h1 {
+      margin: 0 0 0.9rem;
+      color: var(--text-primary);
+      font-size: clamp(2rem, 5vw, 2.7rem);
+      line-height: 1.2;
+    }
+
+    .page-header > p {
+      max-width: 790px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .icon-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    :global([data-theme="dark"]) .icon-badge {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    .intro-panel {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.1rem;
+      margin-bottom: 3rem;
+      padding: 1.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .intro-panel h2 {
+      margin: 0 0 0.45rem;
+      color: var(--text-primary);
+      font-size: 1.15rem;
+    }
+
+    .intro-panel p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .calculator-section {
+      margin-bottom: 3.5rem;
+      scroll-margin-top: 2rem;
+    }
+
+    .section-heading {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 0.6rem;
+      font-size: 1.65rem;
+      line-height: 1.3;
+    }
+
+    .section-heading > p {
+      max-width: 760px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 1.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .card-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .card-heading h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .card-heading p {
+      margin: 0.2rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+    }
+
+    .input-card .card-heading h3 {
+      color: var(--color-primary);
+    }
+
+    .field-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .field-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 650;
+      line-height: 1.5;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border-color);
+      border-radius: 9px;
+      background: var(--bg-primary);
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.12);
+    }
+
+    :global([data-theme="dark"]) .input-wrapper:focus-within {
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.16);
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      min-width: 0;
+      min-height: 46px;
+      padding: 0.75rem 0.9rem;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text-primary);
+      font: inherit;
+      box-sizing: border-box;
+    }
+
+    .input-prefix {
+      padding: 0 0.85rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .field-group small {
+      display: block;
+      margin-top: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .example-box {
+      margin: 1.25rem 0;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-primary);
+    }
+
+    .example-box strong {
+      color: var(--text-primary);
+      font-size: 0.84rem;
+    }
+
+    .example-box p {
+      margin: 0.35rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      line-height: 1.65;
+    }
+
+    .btn-calculate {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      width: 100%;
+      min-height: 48px;
+      padding: 0.85rem 1.1rem;
+      border: 0;
+      border-radius: 9px;
+      background: var(--color-primary);
+      color: #ffffff;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .btn-calculate:hover {
+      opacity: 0.88;
+    }
+
+    .auto-calc-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      margin: 0.9rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    .auto-calc-note svg {
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+      color: var(--color-primary);
+    }
+
+    .error-message {
+      margin-top: 1rem;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid #dc2626;
+      border-radius: 8px;
+      color: #dc2626;
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .error-message[hidden] {
+      display: none;
+    }
+
+    .result-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .result-icon {
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+    }
+
+    :global([data-theme="dark"]) .result-icon {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    .main-result {
+      padding: 1.25rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid rgba(6, 95, 70, 0.2);
+      border-radius: 10px;
+      background: rgba(6, 95, 70, 0.05);
+    }
+
+    :global([data-theme="dark"]) .main-result {
+      border-color: rgba(16, 185, 129, 0.25);
+      background: rgba(16, 185, 129, 0.08);
+    }
+
+    .result-label {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 650;
+    }
+
+    .main-result strong {
+      display: block;
+      margin-bottom: 0.2rem;
+      color: var(--color-primary);
+      font-size: 1.8rem;
+      font-weight: 850;
+      letter-spacing: -0.03em;
+      overflow-wrap: anywhere;
+    }
+
+    .result-description {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+    }
+
+    .result-breakdown {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .result-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 0.85rem 0;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 0.86rem;
+    }
+
+    .result-row:last-child {
+      border-bottom: none;
+    }
+
+    .result-row > div {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+    }
+
+    .result-row strong {
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      overflow-wrap: anywhere;
+    }
+
+    .result-dot {
+      width: 9px;
+      height: 9px;
+      flex-shrink: 0;
+      border-radius: 50%;
+    }
+
+    .revenue-dot {
+      background: #2563eb;
+    }
+
+    .contribution-dot {
+      background: #16a34a;
+    }
+
+    .fixed-dot {
+      background: #d97706;
+    }
+
+    .margin-dot {
+      background: #7c3aed;
+    }
+
+    .result-insight {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      margin-top: 1.25rem;
+      padding: 1rem 1.1rem;
+      border-radius: 10px;
+      background: var(--bg-primary);
+    }
+
+    .result-insight > span {
+      flex-shrink: 0;
+    }
+
+    .result-insight p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      line-height: 1.65;
+    }
+
+    .result-disclaimer {
+      margin-top: 1.25rem;
+      padding-top: 1.1rem;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      line-height: 1.65;
+    }
+
+    .content-section {
+      margin-bottom: 3.5rem;
+    }
+
+    .content-section > p {
+      margin: 0 0 1rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .formula-card {
+      margin-top: 1.5rem;
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .formula-card h3 {
+      margin: 0 0 1rem;
+      color: var(--text-primary);
+      font-size: 1.05rem;
+    }
+
+    .formula {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 1.5rem 0;
+      color: var(--color-primary);
+      font-family: Georgia, serif;
+      font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .formula span {
+      padding: 0.2rem 0.4rem;
+      border-bottom: 2px solid var(--color-primary);
+    }
+
+    .formula-legend {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.75rem;
+      margin: 1.3rem 0;
+    }
+
+    .formula-legend span {
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    .formula-legend strong {
+      color: var(--text-primary);
+    }
+
+    .formula-card > p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.86rem;
+      line-height: 1.7;
+    }
+
+    .info-grid,
+    .rule-grid,
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .steps-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .info-card,
+    .rule-card,
+    .step-card {
+      padding: 1.4rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .info-number,
+    .step-number {
+      display: inline-block;
+      margin-bottom: 0.8rem;
+      color: var(--color-primary);
+      font-size: 0.85rem;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+    }
+
+    .info-card h3,
+    .step-card h3 {
+      margin: 0 0 0.5rem;
+      color: var(--text-primary);
+      font-size: 1.05rem;
+    }
+
+    .info-card p,
+    .info-card li,
+    .step-card p {
+      color: var(--text-secondary);
+      font-size: 0.86rem;
+      line-height: 1.7;
+    }
+
+    .info-card ul {
+      padding-left: 1.1rem;
+      margin: 0.5rem 0 0;
+    }
+
+    .info-card li {
+      margin-bottom: 0.3rem;
+    }
+
+    .example-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 1.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+    }
+
+    .example-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-secondary);
+      text-align: left;
+    }
+
+    .example-table th,
+    .example-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .example-table th {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-weight: 750;
+    }
+
+    .example-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .table-total td {
+      color: var(--text-primary);
+      font-weight: 800;
+    }
+
+    .tip-panel {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .tip-panel > span {
+      flex-shrink: 0;
+      font-size: 1.2rem;
+    }
+
+    .tip-panel p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+
+    .tip-panel strong {
+      color: var(--text-primary);
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .faq-item summary {
+      padding: 1.2rem 2rem 1.2rem 0;
+      position: relative;
+      cursor: pointer;
+      color: var(--text-primary);
+      font-weight: 650;
+      line-height: 1.5;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      content: '+';
+      position: absolute;
+      right: 0.3rem;
+      color: var(--color-primary);
+      font-size: 1.35rem;
+    }
+
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+
+    .faq-item p {
+      margin: 0;
+      padding: 0 1rem 1.2rem 0;
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+      line-height: 1.75;
+    }
+
+    .disclaimer {
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--color-primary);
+      border-radius: 10px;
+      background: var(--bg-secondary);
+    }
+
+    .notice-title {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 0.5rem;
+      color: var(--color-primary);
+    }
+
+    .notice-title strong {
+      color: var(--text-primary);
+    }
+
+    .disclaimer p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.75;
+    }
+
+    .back-link {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .btn-calculate:focus-visible,
+    .breadcrumb a:focus-visible,
+    .back-link a:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 768px) {
+      .calculator-grid,
+      .info-grid,
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card,
+      .intro-panel,
+      .info-card,
+      .step-card,
+      .tip-panel,
+      .formula-card {
+        padding: 1.25rem;
+      }
+
+      .formula-legend {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</BaseLayout>

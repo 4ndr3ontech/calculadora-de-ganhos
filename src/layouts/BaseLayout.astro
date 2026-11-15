@@ -1,0 +1,745 @@
+---
+interface Props {
+  title: string;
+  description: string;
+}
+
+const { title, description } = Astro.props;
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+
+const currentDate = new Date().toLocaleDateString('pt-BR', {
+  weekday: 'long',
+  day: 'numeric',
+  month: 'long',
+});
+---
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+
+    <!-- Restaura o tema salvo antes da renderização para evitar flash branco -->
+    <script is:inline>
+      (function () {
+        const saved = localStorage.getItem('theme');
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        const theme = saved || (prefersDark ? 'dark' : 'light');
+        document.documentElement.setAttribute('data-theme', theme);
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- Barra Superior (Top Bar) -->
+    <div class="top-bar">
+      <div class="container top-bar-container">
+        <span id="header-current-date" class="top-bar-date">{currentDate}</span>
+        <div class="top-bar-links">
+          <a href="/contato/">Contato</a>
+          <span class="top-bar-divider">•</span>
+          <a href="/privacidade/">Privacidade</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Cabeçalho Global com Identidade Esmeralda Profundo -->
+    <header class="site-header">
+      <div class="container header-container">
+        <div class="header-left">
+          <a href="/" class="logo-link" aria-label="Calculadora de Ganhos - Início">
+            <img src="/images/logo.svg" alt="Calculadora de Ganhos" class="site-logo-img" />
+          </a>
+        </div>
+
+        <!-- Ticker de Indicadores Econômicos e Trabalhistas -->
+        <div class="market-ticker" aria-label="Indicadores Econômicos e Trabalhistas">
+          <div class="ticker-item" title="Salário Mínimo Nacional Vigente">
+            <span class="ticker-label">Salário Mínimo</span>
+            <strong class="ticker-value">R$ 1.621,00</strong>
+          </div>
+          <span class="ticker-sep">|</span>
+          <div class="ticker-item" title="Taxa Básica de Juros (Selic Meta - Banco Central)">
+            <span class="ticker-label">Selic</span>
+            <strong id="ticker-selic" class="ticker-value">13,75% a.a.</strong>
+          </div>
+          <span class="ticker-sep">|</span>
+          <div class="ticker-item" title="Inflação Acumulada 12 meses (IPCA - IBGE)">
+            <span class="ticker-label">IPCA</span>
+            <strong id="ticker-ipca" class="ticker-value">4,63%</strong>
+          </div>
+          <span class="ticker-sep">|</span>
+          <div class="ticker-item" title="Cotação Dólar Comercial em Tempo Real">
+            <span class="ticker-label">Dólar</span>
+            <strong id="ticker-usd" class="ticker-value">R$ 5,67</strong>
+          </div>
+        </div>
+
+        <div class="header-right">
+          <button id="theme-toggle" type="button" class="theme-btn" aria-label="Alternar tema" title="Alternar tema">
+            <!-- Sol (visível no modo escuro) -->
+            <svg class="sun-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+            </svg>
+            <!-- Lua (visível no modo claro) -->
+            <svg class="moon-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Navegação Global -->
+    <Navigation />
+
+    <!-- Conteúdo Principal Global -->
+    <main class="main-content">
+      <div class="container">
+        <slot />
+      </div>
+    </main>
+
+    <!-- Rodapé Global -->
+    <Footer />
+
+    <!-- Botão Voltar ao Topo -->
+    <button
+      id="back-to-top"
+      type="button"
+      class="back-to-top"
+      aria-label="Voltar ao topo da página"
+      title="Voltar ao topo"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="20"
+        height="20"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2.4"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+      >
+        <path d="m18 15-6-6-6 6" />
+      </svg>
+    </button>
+
+    <script>
+      // Alternância de Modo Claro / Escuro
+      function setupThemeToggle() {
+        const toggleBtn = document.getElementById('theme-toggle');
+        if (!toggleBtn) return;
+
+        const updateAria = (theme: string) => {
+          const label = theme === 'dark' ? 'Ativar modo claro' : 'Ativar modo escuro';
+          toggleBtn.setAttribute('aria-label', label);
+          toggleBtn.setAttribute('title', label);
+        };
+
+        const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+        updateAria(currentTheme);
+
+        toggleBtn.onclick = () => {
+          const current = document.documentElement.getAttribute('data-theme');
+          const next = current === 'dark' ? 'light' : 'dark';
+
+          document.documentElement.setAttribute('data-theme', next);
+          localStorage.setItem('theme', next);
+          updateAria(next);
+        };
+      }
+
+      setupThemeToggle();
+      document.addEventListener('astro:after-swap', setupThemeToggle);
+
+      // Botão Voltar ao Topo
+      function setupBackToTop() {
+        const btn = document.getElementById('back-to-top');
+        if (!btn) return;
+
+        const toggleVisibility = () => {
+          if (window.scrollY > 320) {
+            btn.classList.add('visible');
+          } else {
+            btn.classList.remove('visible');
+          }
+        };
+
+        window.addEventListener('scroll', toggleVisibility, { passive: true });
+        toggleVisibility();
+
+        btn.onclick = () => {
+          const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          window.scrollTo({
+            top: 0,
+            behavior: prefersReduced ? 'auto' : 'smooth',
+          });
+        };
+      }
+
+      setupBackToTop();
+      document.addEventListener('astro:after-swap', setupBackToTop);
+
+      // Data atual no cabeçalho
+      const dateEl = document.getElementById('header-current-date');
+      if (dateEl) {
+        dateEl.textContent = new Date().toLocaleDateString('pt-BR', {
+          weekday: 'long',
+          day: 'numeric',
+          month: 'long',
+        });
+      }
+
+      // Atualização dos indicadores econômicos
+      async function updateMarketIndicators() {
+        try {
+          const usdRes = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL');
+          if (usdRes.ok) {
+            const usdData = await usdRes.json();
+            const bid = parseFloat(usdData?.USDBRL?.bid);
+            const usdEl = document.getElementById('ticker-usd');
+            if (usdEl && !isNaN(bid)) {
+              usdEl.textContent = bid.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              });
+            }
+          }
+        } catch {}
+
+        try {
+          const selicRes = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json');
+          if (selicRes.ok) {
+            const selicData = await selicRes.json();
+            const val = parseFloat(selicData?.[0]?.valor);
+            const selicEl = document.getElementById('ticker-selic');
+            if (selicEl && !isNaN(val)) {
+              selicEl.textContent = `${val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}% a.a.`;
+            }
+          }
+        } catch {}
+
+        try {
+          const ipcaRes = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.13522/dados/ultimos/1?formato=json');
+          if (ipcaRes.ok) {
+            const ipcaData = await ipcaRes.json();
+            const val = parseFloat(ipcaData?.[0]?.valor);
+            const ipcaEl = document.getElementById('ticker-ipca');
+            if (ipcaEl && !isNaN(val)) {
+              ipcaEl.textContent = `${val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
+            }
+          }
+        } catch {}
+      }
+
+      updateMarketIndicators();
+    </script>
+
+    <style is:global>
+      html {
+        overflow-y: scroll; /* Força a barra de rolagem visível para evitar o deslocamento do layout */
+      }
+
+      :root {
+        /* Miolo do Portal — Modo Claro (Off-white quente e Esmeralda) */
+        --bg-primary: #fafaf9;
+        --bg-secondary: #f5f5f4;
+        --text-primary: #1c1917;
+        --text-secondary: #57534e;
+        --text-muted: #a8a29e;
+        --border-color: #e7e5e4;
+        --color-primary: #065f46;
+        --color-secondary: #047857;
+
+        /* Identidade Visual Exclusiva — Header, Nav e Footer */
+        --chrome-bg: #064e3b;
+        --chrome-bg-alt: #043927;
+        --chrome-text: #ecfdf5;
+        --chrome-muted: #a7f3d0;
+        --chrome-border: rgba(167, 243, 208, 0.2);
+        --chrome-accent: #fbbf24;
+
+        --radius-sm: 8px;
+        --radius-md: 12px;
+        --radius-lg: 16px;
+        --shadow-sm: 0 1px 2px 0 rgba(28, 25, 23, 0.05);
+        --shadow-md: 0 4px 6px -1px rgba(28, 25, 23, 0.06), 0 2px 4px -1px rgba(28, 25, 23, 0.04);
+        --shadow-lg: 0 10px 15px -3px rgba(28, 25, 23, 0.07), 0 4px 6px -2px rgba(28, 25, 23, 0.03);
+      }
+
+      [data-theme="dark"] {
+        /* Miolo do Portal — Modo Escuro (Ardósia quente orgânico) */
+        --bg-primary: #111615;
+        --bg-secondary: #192220;
+        --text-primary: #f5f5f4;
+        --text-secondary: #a8a29e;
+        --text-muted: #78716c;
+        --border-color: #293532;
+        --color-primary: #10b981;
+        --color-secondary: #34d399;
+
+        /* Identidade Visual — Header, Nav e Footer no Modo Escuro */
+        --chrome-bg: #042f24;
+        --chrome-bg-alt: #022018;
+        --chrome-text: #ecfdf5;
+        --chrome-muted: #6ee7b7;
+        --chrome-border: rgba(110, 231, 183, 0.16);
+        --chrome-accent: #fbbf24;
+
+        --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.35);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.25);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.45), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+      }
+
+      body {
+        margin: 0;
+        font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+        background-color: var(--bg-primary);
+        color: var(--text-primary);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        -webkit-font-smoothing: antialiased;
+        transition: background-color 0.25s ease, color 0.25s ease;
+      }
+
+      .container {
+        width: 100%;
+        max-width: 1020px;
+        margin: 0 auto;
+        padding: 0 1.5rem;
+        box-sizing: border-box;
+      }
+
+      /* Barra Superior (Top Bar) */
+      .top-bar {
+        width: 100%;
+        background-color: var(--chrome-bg-alt);
+        border-bottom: 1px solid var(--chrome-border);
+        padding: 0.45rem 0;
+        font-size: 0.8rem;
+        color: var(--chrome-muted);
+      }
+      .top-bar-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .top-bar-date {
+        font-weight: 500;
+        color: var(--chrome-muted);
+        text-transform: lowercase;
+      }
+      .top-bar-date::first-letter {
+        text-transform: uppercase;
+      }
+      .top-bar-links {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+      }
+      .top-bar-links a {
+        color: var(--chrome-muted);
+        text-decoration: none;
+        font-weight: 500;
+        transition: color 0.2s;
+      }
+      .top-bar-links a:hover {
+        color: var(--chrome-accent);
+      }
+      .top-bar-divider {
+        color: var(--chrome-border);
+        font-size: 0.7rem;
+      }
+
+      /* Header Global Padronizado com Simetria Perfeita */
+      .site-header {
+        background-color: var(--chrome-bg);
+        border-bottom: 1px solid var(--chrome-border);
+        color: var(--chrome-text);
+        padding: 0.8rem 0;
+      }
+      .header-container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+      }
+      .header-left {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex: 1;
+      }
+      .header-right {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex: 1;
+      }
+      .logo-link {
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+      }
+      .site-logo-img {
+        height: 65px;
+        width: auto;
+        display: block;
+        transition: transform 0.2s ease;
+      }
+      .site-logo-img:hover {
+        transform: scale(1.02);
+      }
+
+      /* Ticker Central de Indicadores perfeitamente centralizado */
+      .market-ticker {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        background-color: var(--chrome-bg-alt);
+        border: 1px solid var(--chrome-border);
+        border-radius: 999px;
+        padding: 0.4rem 1rem;
+        font-size: 0.76rem;
+        box-shadow: var(--shadow-sm);
+        margin: 0 auto;
+      }
+      .ticker-item {
+        display: flex;
+        align-items: center;
+        gap: 0.3rem;
+        white-space: nowrap;
+      }
+      .ticker-label {
+        color: var(--chrome-muted);
+        font-weight: 500;
+      }
+      .ticker-value {
+        color: var(--chrome-accent);
+        font-weight: 700;
+      }
+      .ticker-sep {
+        color: var(--chrome-border);
+        font-weight: 300;
+      }
+
+      @media (max-width: 960px) {
+        .header-container {
+          display: flex;
+          justify-content: space-between;
+        }
+        .market-ticker {
+          display: none;
+        }
+      }
+
+      /* Harmonização da Navegação Global com a identidade do Header */
+      body > nav,
+      .site-nav,
+      .main-nav {
+        background-color: var(--chrome-bg-alt) !important;
+        border-bottom: 1px solid var(--chrome-border) !important;
+        color: var(--chrome-text) !important;
+      }
+      body > nav a,
+      .site-nav a,
+      .main-nav a,
+      header nav a,
+      .site-header nav a {
+        color: var(--chrome-text) !important;
+        text-decoration: none !important;
+      }
+      body > nav a:hover,
+      .site-nav a:hover,
+      .main-nav a:hover {
+        color: var(--chrome-accent) !important;
+      }
+
+      /* Harmonização do Rodapé Global (Footer.astro) */
+      footer,
+      .site-footer {
+        background-color: var(--chrome-bg) !important;
+        border-top: 3px solid var(--chrome-accent) !important;
+        color: var(--chrome-text) !important;
+      }
+      footer h2,
+      footer h3,
+      footer h4,
+      footer strong,
+      .site-footer h2,
+      .site-footer h3,
+      .site-footer h4,
+      .site-footer strong {
+        color: var(--chrome-text) !important;
+      }
+      footer p,
+      footer span,
+      footer li,
+      .site-footer p,
+      .site-footer span,
+      .site-footer li {
+        color: var(--chrome-muted) !important;
+      }
+      footer a,
+      .site-footer a {
+        color: var(--chrome-text) !important;
+        transition: color 0.2s ease;
+      }
+      footer a:hover,
+      .site-footer a:hover {
+        color: var(--chrome-accent) !important;
+      }
+
+      /* Botão de Tema no Header */
+      .theme-btn {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid var(--chrome-border);
+        color: var(--chrome-text);
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        transition: background 0.2s, border-color 0.2s;
+      }
+      .theme-btn:hover {
+        background: rgba(255, 255, 255, 0.16);
+        border-color: var(--chrome-accent);
+      }
+      .theme-btn:focus-visible {
+        outline: 3px solid var(--chrome-accent);
+        outline-offset: 3px;
+      }
+
+      .sun-icon { display: none; }
+      .moon-icon { display: block; }
+      [data-theme="dark"] .sun-icon { display: block; }
+      [data-theme="dark"] .moon-icon { display: none; }
+
+      /* Botão Voltar ao Topo */
+      .back-to-top {
+        position: fixed;
+        right: 1.5rem;
+        bottom: 1.5rem;
+        z-index: 90;
+        width: 44px;
+        height: 44px;
+        border-radius: 50%;
+        background-color: var(--chrome-bg, #064e3b);
+        color: var(--chrome-accent, #fbbf24);
+        border: 1px solid var(--chrome-border, rgba(167, 243, 208, 0.25));
+        box-shadow: var(--shadow-lg);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        opacity: 0;
+        visibility: hidden;
+        transform: translateY(12px);
+        transition: opacity 0.25s ease, transform 0.25s ease, visibility 0.25s ease, background-color 0.2s ease, border-color 0.2s ease;
+      }
+
+      .back-to-top.visible {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0);
+      }
+
+      .back-to-top:hover {
+        background-color: var(--chrome-bg-alt, #043927);
+        border-color: var(--chrome-accent, #fbbf24);
+        transform: translateY(-2px);
+      }
+
+      .back-to-top:focus-visible {
+        outline: 3px solid var(--chrome-accent, #fbbf24);
+        outline-offset: 3px;
+      }
+
+      @media (max-width: 600px) {
+        .back-to-top {
+          right: 1rem;
+          bottom: 1rem;
+          width: 40px;
+          height: 40px;
+        }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .back-to-top {
+          transition: none;
+        }
+      }
+
+      /* Main Content Global */
+      .main-content {
+        flex: 1;
+        padding: 3rem 0;
+      }
+
+      /* CENTRALIZAÇÃO GLOBAL DE TODOS OS TÍTULOS DO SITE */
+      h1, h2, h3, h4, h5, h6 {
+        text-align: center;
+        width: 100%;
+      }
+
+      /* Cabeçalhos e seções informativas com alinhamento centralizado padronizado */
+      .section-heading,
+      .page-header,
+      .trust-intro {
+        text-align: center;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .section-heading > div {
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .section-heading p,
+      .page-header p,
+      .trust-intro > p,
+      .main-content h1 + p {
+        text-align: center;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .eyebrow {
+        display: inline-block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      /* Breadcrumb centralizado mantendo os espaços naturais */
+      .main-content nav,
+      .breadcrumb {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+        text-align: center;
+      }
+      .main-content nav a,
+      .breadcrumb a {
+        margin: 0 0.25rem;
+      }
+      .main-content nav span,
+      .breadcrumb span {
+        margin-left: 0.25rem;
+      }
+
+      /* Cartão Padrão Unificado */
+      .card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 2rem;
+        box-shadow: var(--shadow-sm);
+        transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+        text-align: center;
+      }
+      .card:hover {
+        border-color: var(--color-primary);
+        box-shadow: var(--shadow-md);
+      }
+
+      /* Cartões de Vitrine / Listagem de Ferramentas */
+      a.card,
+      .tools-grid .card,
+      .category-grid .card,
+      .info-card {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-between;
+        text-align: center;
+        height: 100%;
+        box-sizing: border-box;
+      }
+
+      a.card h3,
+      a.card h2,
+      .tools-grid .card h3,
+      .category-grid .card h3,
+      .info-card h3 {
+        text-align: center;
+        width: 100%;
+        margin-top: 0;
+        margin-bottom: 0.75rem;
+      }
+
+      a.card p,
+      .tools-grid .card p,
+      .category-grid .card p,
+      .info-card p {
+        text-align: center;
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+        flex-grow: 1;
+      }
+
+      /* Botões Globais Unificados */
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0.8rem 1.5rem;
+        font-weight: 700;
+        font-size: 0.95rem;
+        border-radius: var(--radius-sm);
+        border: none;
+        cursor: pointer;
+        transition: opacity 0.2s, transform 0.1s;
+        text-decoration: none;
+      }
+      .btn-primary {
+        background-color: var(--color-primary);
+        color: #ffffff;
+      }
+      .btn-primary:hover {
+        opacity: 0.9;
+      }
+
+      /* Campos de Formulário Globais */
+      input[type="number"],
+      input[type="text"],
+      input[type="date"],
+      select {
+        width: 100%;
+        padding: 0.75rem 0.9rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        background: var(--bg-primary);
+        color: var(--text-primary);
+        font-size: 0.95rem;
+        box-sizing: border-box;
+        transition: border-color 0.2s;
+      }
+      input:focus, select:focus {
+        outline: none;
+        border-color: var(--color-primary);
+        box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.15);
+      }
+
+      label {
+        color: var(--text-primary);
+      }
+    </style>
+  </body>
+</html>

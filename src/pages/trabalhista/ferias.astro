@@ -1,0 +1,1394 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de Férias CLT 2026 — Salário e Terço Constitucional"
+  description="Calcule suas férias remuneradas, adicional constitucional de 1/3 e abono pecuniário. Simule quanto receberá ao vender até 10 dias de férias."
+>
+  <main class="page-container">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <a href="/trabalhista/">Trabalhista</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Férias</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="eyebrow">DIREITOS TRABALHISTAS</span>
+      <h1>Calculadora de Férias CLT</h1>
+      <p>
+        Descubra quanto você pode receber durante suas férias.
+        Simule o salário dos dias de descanso, o adicional de 1/3
+        constitucional e o valor adicional pela venda de dias.
+      </p>
+    </header>
+
+    <section class="intro-card">
+      <div class="intro-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+          <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+        </svg>
+      </div>
+      <div>
+        <h2>Planeje seu período de descanso</h2>
+        <p>
+          Informe seu salário bruto, o período de férias disponível e
+          quantos dias deseja converter em abono pecuniário. Veja a
+          composição detalhada do valor bruto estimado.
+        </p>
+      </div>
+    </section>
+
+    <section class="calculator-layout" aria-label="Simulador de férias">
+      <div class="card form-card">
+        <div class="section-heading">
+          <div>
+            <span class="section-label">SIMULAÇÃO</span>
+            <h2>Dados das férias</h2>
+          </div>
+          <div class="heading-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="salary">Salário bruto mensal</label>
+          <div class="input-wrapper">
+            <span class="input-prefix">R$</span>
+            <input
+              type="number"
+              id="salary"
+              value="3500"
+              min="0.01"
+              max="100000000"
+              step="0.01"
+              inputmode="decimal"
+            />
+          </div>
+          <small>
+            Informe seu salário bruto mensal, antes dos descontos.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="days">Dias de férias adquiridos</label>
+          <select id="days">
+            <option value="30" selected>30 dias</option>
+            <option value="24">24 dias</option>
+            <option value="18">18 dias</option>
+            <option value="12">12 dias</option>
+          </select>
+          <small>
+            Selecione o período de férias disponível conforme seu
+            direito adquirido e eventuais reduções legais.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="sell-days">Dias convertidos em abono pecuniário</label>
+          <select id="sell-days">
+            <option value="0" selected>Não vender dias</option>
+            <option value="1">Vender 1 dia</option>
+            <option value="2">Vender 2 dias</option>
+            <option value="3">Vender 3 dias</option>
+            <option value="4">Vender 4 dias</option>
+            <option value="5">Vender 5 dias</option>
+            <option value="6">Vender 6 dias</option>
+            <option value="7">Vender 7 dias</option>
+            <option value="8">Vender 8 dias</option>
+            <option value="9">Vender 9 dias</option>
+            <option value="10">Vender 10 dias</option>
+          </select>
+          <small id="sell-hint">
+            É possível converter até 1/3 do período de férias em abono,
+            respeitadas as condições legais.
+          </small>
+        </div>
+
+        <div class="field-summary" id="days-summary">
+          Você descansará 30 dias e não converterá nenhum dia em abono.
+        </div>
+
+        <div id="form-error" class="form-error" role="alert" hidden></div>
+
+        <button type="button" id="calc-btn" class="calculate-button">
+          <span>Calcular minhas férias</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </button>
+
+        <p class="privacy-note">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Os dados são processados diretamente nesta página.
+        </p>
+      </div>
+
+      <div class="card results-card" aria-live="polite">
+        <div class="section-heading">
+          <div>
+            <span class="section-label">RESULTADO</span>
+            <h2>Estimativa de pagamento</h2>
+          </div>
+          <div class="heading-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </div>
+        </div>
+
+        <div id="results-placeholder" class="results-placeholder">
+          <div class="placeholder-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <h3>Sua simulação aparecerá aqui</h3>
+          <p>
+            Informe os dados das férias para visualizar os valores
+            e a composição da remuneração.
+          </p>
+        </div>
+
+        <div id="results-content" hidden>
+          <div class="gross-result">
+            <span>Valor bruto total das férias</span>
+            <strong id="res-total">R$ 0,00</strong>
+            <small>Antes dos descontos legais aplicáveis.</small>
+          </div>
+
+          <div class="result-highlight">
+            <div>
+              <span>Dias efetivamente descansados</span>
+              <strong id="res-rest-days">30 dias</strong>
+            </div>
+            <div>
+              <span>Dias vendidos</span>
+              <strong id="res-sold-days">0 dias</strong>
+            </div>
+          </div>
+
+          <div class="breakdown">
+            <h3>Composição dos valores</h3>
+
+            <div class="detail-row">
+              <span>Remuneração dos dias de descanso</span>
+              <strong id="res-vacation">R$ 0,00</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Abono pecuniário</span>
+              <strong id="res-abono">R$ 0,00</strong>
+            </div>
+
+            <div class="detail-row">
+              <span>Terço constitucional total</span>
+              <strong id="res-third">R$ 0,00</strong>
+            </div>
+
+            <div class="detail-row total-row">
+              <span>Total bruto</span>
+              <strong id="res-total-detail">R$ 0,00</strong>
+            </div>
+          </div>
+
+          <div class="comparison-box" id="comparison-box">
+            <h3>Impacto da venda de dias</h3>
+            <p id="comparison-text"></p>
+          </div>
+
+          <p class="result-explanation" id="result-explanation"></p>
+        </div>
+
+        <p class="result-disclaimer">
+          Simulação bruta. Não representa necessariamente o valor
+          líquido depositado após os descontos aplicáveis.
+        </p>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2>Como funciona o cálculo das férias?</h2>
+      <p>
+        Todo trabalhador com vínculo empregatício regido pela CLT
+        adquire, em regra, direito a férias remuneradas após cada
+        período aquisitivo, observadas as condições previstas na legislação.
+      </p>
+
+      <div class="formula-card">
+        <span class="formula-label">FÓRMULA BÁSICA</span>
+        <div class="formula">
+          <strong>Remuneração das férias + 1/3 constitucional</strong>
+        </div>
+        <p>
+          O valor considera a remuneração correspondente ao período
+          de férias adquirido, incluindo o adicional constitucional.
+        </p>
+      </div>
+
+      <div class="info-grid">
+        <article class="info-card">
+          <div class="info-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+              <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+            </svg>
+          </div>
+          <h3>Férias remuneradas</h3>
+          <p>
+            Durante o período de descanso, o trabalhador recebe a
+            remuneração correspondente aos dias de férias, conforme
+            sua remuneração habitual e as regras aplicáveis.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <div class="info-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+          </div>
+          <h3>Terço constitucional</h3>
+          <p>
+            A Constituição Federal garante um adicional de pelo menos
+            um terço sobre a remuneração das férias.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2>O que é o abono pecuniário?</h2>
+      <p>
+        Conhecido popularmente como venda de férias, o abono pecuniário
+        permite converter até um terço do período de férias a que o
+        trabalhador tem direito em pagamento em dinheiro.
+      </p>
+
+      <div class="abono-example">
+        <div class="abono-example-header">
+          <span>EXEMPLO DE FÉRIAS DE 30 DIAS</span>
+          <strong>20 + 10 dias</strong>
+        </div>
+
+        <div class="days-bar">
+          <div class="rest-bar">
+            <strong>20 dias</strong>
+            <span>Descanso</span>
+          </div>
+          <div class="sold-bar">
+            <strong>10 dias</strong>
+            <span>Abono</span>
+          </div>
+        </div>
+
+        <p>
+          Nesse exemplo, o trabalhador descansa 20 dias e recebe
+          o valor correspondente aos 10 dias convertidos em abono.
+          O terço constitucional considera o período integral de 30 dias.
+        </p>
+      </div>
+
+      <div class="checklist">
+        <div class="check-item">
+          <span aria-hidden="true">✓</span>
+          <div>
+            <strong>Limite de conversão</strong>
+            <p>
+              A CLT permite converter até 1/3 do período de férias
+              a que o trabalhador tem direito em abono pecuniário.
+            </p>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <span aria-hidden="true">✓</span>
+          <div>
+            <strong>Prazo para solicitar</strong>
+            <p>
+              O pedido de conversão deve ser realizado até 15 dias
+              antes do término do período aquisitivo, conforme o
+              artigo 143, § 1º, da CLT.
+            </p>
+          </div>
+        </div>
+
+        <div class="check-item">
+          <span aria-hidden="true">✓</span>
+          <div>
+            <strong>Prazo de pagamento</strong>
+            <p>
+              A remuneração das férias e o abono, quando aplicável,
+              devem ser pagos até dois dias antes do início do período
+              de descanso.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <h2>Quantos dias de férias o trabalhador pode ter?</h2>
+      <p>
+        A duração das férias pode variar conforme a quantidade de
+        faltas injustificadas durante o período aquisitivo, conforme
+        o artigo 130 da CLT.
+      </p>
+
+      <div class="example-table">
+        <div class="example-row">
+          <span>Até 5 faltas injustificadas</span>
+          <strong>30 dias</strong>
+        </div>
+        <div class="example-row">
+          <span>De 6 a 14 faltas</span>
+          <strong>24 dias</strong>
+        </div>
+        <div class="example-row">
+          <span>De 15 a 23 faltas</span>
+          <strong>18 dias</strong>
+        </div>
+        <div class="example-row">
+          <span>De 24 a 32 faltas</span>
+          <strong>12 dias</strong>
+        </div>
+      </div>
+
+      <p class="example-note">
+        A tabela apresenta a regra geral do artigo 130 da CLT.
+        Existem outras situações legais que podem afetar a aquisição
+        e a duração das férias.
+      </p>
+    </section>
+
+    <section class="content-section">
+      <h2>Perguntas frequentes sobre férias</h2>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>Como calcular o valor das férias?</summary>
+          <p>
+            Considere a remuneração correspondente aos dias de férias
+            adquiridos e acrescente o adicional constitucional de pelo
+            menos 1/3. Se houver venda de dias, inclua o valor do abono
+            pecuniário na composição.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Posso vender 10 dias de férias?</summary>
+          <p>
+            Sim. Para quem possui direito a 30 dias de férias, é possível
+            converter até 10 dias em abono pecuniário, respeitadas as
+            condições e os prazos legais.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Sou obrigado a vender parte das férias?</summary>
+          <p>
+            Não. A conversão em abono pecuniário é uma faculdade do
+            trabalhador, não uma obrigação imposta pelo empregador
+            nas condições previstas no artigo 143 da CLT.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O terço constitucional também considera os dias vendidos?</summary>
+          <p>
+            Sim. O adicional constitucional deve corresponder ao período
+            integral de férias. Quando existe conversão em abono, o cálculo
+            pode ser apresentado em rubricas separadas, sem duplicar
+            o adicional.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>As férias têm desconto de INSS e Imposto de Renda?</summary>
+          <p>
+            A tributação depende da natureza de cada verba e da situação
+            do pagamento. A remuneração das férias gozadas e seu adicional
+            constitucional possuem tratamento tributário próprio.
+            O abono pecuniário possui regras específicas. Esta calculadora
+            apresenta valores brutos e não estima os descontos individuais.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Quando devo receber o pagamento das férias?</summary>
+          <p>
+            Conforme o artigo 145 da CLT, o pagamento da remuneração
+            das férias e do abono, quando aplicável, deve ser realizado
+            até dois dias antes do início do período.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Posso dividir minhas férias?</summary>
+          <p>
+            Com a concordância do empregado, as férias podem ser divididas
+            em até três períodos, sendo que um deles não pode ser inferior
+            a 14 dias corridos e os demais não podem ser inferiores
+            a 5 dias corridos cada.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <section class="final-note">
+      <strong>Importante:</strong>
+      Esta calculadora possui finalidade informativa e educacional.
+      Os resultados são estimativas brutas e não substituem o demonstrativo
+      oficial de pagamento da empresa ou a orientação de um profissional
+      especializado em legislação trabalhista e tributária.
+    </section>
+  </main>
+
+  <script>
+    import { formatBRL } from '../../engines/common/currency';
+
+    const getInput = (id: string): HTMLInputElement =>
+      document.getElementById(id) as HTMLInputElement;
+
+    const getSelect = (id: string): HTMLSelectElement =>
+      document.getElementById(id) as HTMLSelectElement;
+
+    const getElement = (id: string): HTMLElement =>
+      document.getElementById(id)!;
+
+    function setText(id: string, value: string): void {
+      getElement(id).textContent = value;
+    }
+
+    function money(value: number): number {
+      return Math.round((value + Number.EPSILON) * 100) / 100;
+    }
+
+    function updateSellOptions(): void {
+      const days = Number(getSelect('days').value);
+      const select = getSelect('sell-days');
+      const currentValue = Number(select.value);
+
+      const maxSellDays = Math.floor(days / 3);
+
+      select.innerHTML = '';
+
+      const noSale = document.createElement('option');
+      noSale.value = '0';
+      noSale.textContent = 'Não vender dias';
+      select.appendChild(noSale);
+
+      for (let i = 1; i <= maxSellDays; i++) {
+        const option = document.createElement('option');
+        option.value = String(i);
+        option.textContent = `Vender ${i} ${i === 1 ? 'dia' : 'dias'}`;
+        select.appendChild(option);
+      }
+
+      select.value = String(
+        Math.min(currentValue, maxSellDays)
+      );
+
+      getElement('sell-hint').textContent =
+        `Você pode converter até ${maxSellDays} ${
+          maxSellDays === 1 ? 'dia' : 'dias'
+        } deste período em abono pecuniário, respeitadas as condições legais.`;
+
+      updateDaysSummary();
+    }
+
+    function updateDaysSummary(): void {
+      const days = Number(getSelect('days').value);
+      const sellDays = Number(getSelect('sell-days').value);
+      const restDays = days - sellDays;
+
+      const message = sellDays > 0
+        ? `Você descansará ${restDays} ${
+            restDays === 1 ? 'dia' : 'dias'
+          } e converterá ${sellDays} ${
+            sellDays === 1 ? 'dia' : 'dias'
+          } em abono.`
+        : `Você descansará os ${days} ${
+            days === 1 ? 'dia' : 'dias'
+          } de férias, sem conversão em abono.`;
+
+      setText('days-summary', message);
+    }
+
+    function showError(message: string): void {
+      const error = getElement('form-error');
+
+      error.textContent = message;
+      error.hidden = false;
+
+      getElement('results-content').hidden = true;
+      getElement('results-placeholder').hidden = false;
+    }
+
+    function clearError(): void {
+      const error = getElement('form-error');
+
+      error.textContent = '';
+      error.hidden = true;
+    }
+
+    function runCalc(): void {
+      clearError();
+
+      const salary = Number(getInput('salary').value);
+      const days = Number(getSelect('days').value);
+      const sellDays = Number(getSelect('sell-days').value);
+
+      if (!Number.isFinite(salary) || !Number.isFinite(days) ||
+          !Number.isFinite(sellDays)) {
+        showError('Preencha todos os campos com valores válidos.');
+        return;
+      }
+
+      if (salary <= 0 || salary > 100000000) {
+        showError('Informe um salário bruto maior que zero e válido.');
+        getInput('salary').focus();
+        return;
+      }
+
+      if (![30, 24, 18, 12].includes(days)) {
+        showError('Selecione um período de férias válido.');
+        return;
+      }
+
+      const maxSellDays = Math.floor(days / 3);
+
+      if (
+        !Number.isInteger(sellDays) ||
+        sellDays < 0 ||
+        sellDays > maxSellDays
+      ) {
+        showError('A quantidade de dias vendidos ultrapassa o limite permitido.');
+        return;
+      }
+
+      const button = getElement('calc-btn') as HTMLButtonElement;
+
+      button.disabled = true;
+
+      try {
+        const dailyRate = salary / 30;
+
+        const restDays = days - sellDays;
+
+        // Remuneração correspondente aos dias efetivamente descansados.
+        const vacationPay = money(dailyRate * restDays);
+
+        // Abono pecuniário correspondente aos dias convertidos.
+        const abonoPay = money(dailyRate * sellDays);
+
+        // Terço constitucional calculado uma única vez sobre
+        // a remuneração correspondente ao período integral adquirido.
+        const constitutionalThird = money(
+          (dailyRate * days) / 3
+        );
+
+        // Soma das parcelas, sem duplicar o terço constitucional.
+        const totalGross = money(
+          vacationPay + abonoPay + constitutionalThird
+        );
+
+        const comparisonWithoutSale = money(
+          dailyRate * days + constitutionalThird
+        );
+
+        setText('res-total', formatBRL(totalGross));
+        setText('res-total-detail', formatBRL(totalGross));
+
+        setText('res-vacation', formatBRL(vacationPay));
+        setText('res-abono', formatBRL(abonoPay));
+        setText('res-third', formatBRL(constitutionalThird));
+
+        setText('res-rest-days', `${restDays} dias`);
+        setText('res-sold-days', `${sellDays} dias`);
+
+        const comparisonBox = getElement('comparison-box');
+
+        if (sellDays > 0) {
+          comparisonBox.hidden = false;
+
+          setText(
+            'comparison-text',
+            `A conversão de ${sellDays} ${
+              sellDays === 1 ? 'dia' : 'dias'
+            } acrescenta ${formatBRL(abonoPay)} ao pagamento bruto das férias, enquanto reduz o período de descanso em ${
+              sellDays
+            } ${
+              sellDays === 1 ? 'dia' : 'dias'
+            }. O adicional constitucional já está incluído no cálculo integral.`
+          );
+        } else {
+          comparisonBox.hidden = false;
+
+          setText(
+            'comparison-text',
+            `Sem converter dias em abono, o valor bruto estimado é de ${formatBRL(comparisonWithoutSale)}. Você mantém todo o período de descanso adquirido.`
+          );
+        }
+
+        setText(
+          'result-explanation',
+          `Cálculo realizado com salário mensal de ${formatBRL(salary)}, considerando ${days} dias de férias adquiridos, ${restDays} dias de descanso e ${sellDays} dias convertidos em abono.`
+        );
+
+        getElement('results-placeholder').hidden = true;
+        getElement('results-content').hidden = false;
+
+      } catch (error) {
+        console.error('Erro ao calcular férias:', error);
+
+        showError(
+          'Não foi possível realizar o cálculo. Verifique os valores e tente novamente.'
+        );
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    getSelect('days').addEventListener('change', () => {
+      updateSellOptions();
+      runCalc();
+    });
+
+    getSelect('sell-days').addEventListener('change', () => {
+      updateDaysSummary();
+      runCalc();
+    });
+
+    getInput('salary').addEventListener('input', runCalc);
+
+    getInput('salary').addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') runCalc();
+    });
+
+    getElement('calc-btn').addEventListener('click', runCalc);
+
+    updateSellOptions();
+    runCalc();
+  </script>
+
+  <style>
+    .page-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 0 3rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 2rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+
+    .page-header {
+      margin-bottom: 1.75rem;
+    }
+
+    .eyebrow,
+    .section-label {
+      display: inline-block;
+      margin-bottom: 0.55rem;
+      color: var(--color-primary);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+    }
+
+    .page-header h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2rem, 5vw, 2.7rem);
+      line-height: 1.15;
+      letter-spacing: -0.045em;
+    }
+
+    .page-header > p {
+      max-width: 750px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.75;
+    }
+
+    .intro-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.25rem;
+      margin-bottom: 1.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+
+    .intro-icon,
+    .placeholder-icon,
+    .info-icon {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 45px;
+      height: 45px;
+      border-radius: 12px;
+      background: var(--bg-primary);
+      color: var(--color-primary);
+      font-size: 1.4rem;
+    }
+
+    .intro-card h2 {
+      margin: 0 0 0.35rem;
+      font-size: 1.05rem;
+    }
+
+    .intro-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.65;
+    }
+
+    .calculator-layout {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      align-items: start;
+      gap: 1.5rem;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+      box-shadow: 0 5px 20px rgba(0, 0, 0, 0.035);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: 1.25rem;
+      letter-spacing: -0.02em;
+    }
+
+    .heading-icon {
+      color: var(--color-primary);
+      font-size: 1.5rem;
+      display: grid;
+      place-items: center;
+    }
+
+    .field {
+      margin-bottom: 1.2rem;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 0.45rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .field small {
+      display: block;
+      margin-top: 0.4rem;
+      color: var(--text-secondary);
+      font-size: 0.77rem;
+      line-height: 1.5;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+    }
+
+    .input-prefix {
+      padding-left: 0.85rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 650;
+    }
+
+    .input-wrapper input,
+    .field select {
+      width: 100%;
+      min-width: 0;
+      padding: 0.85rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      outline: none;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font: inherit;
+      font-size: 0.95rem;
+    }
+
+    .input-wrapper input {
+      border: none;
+      background: transparent;
+    }
+
+    .input-wrapper:focus-within,
+    .field select:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .field-summary {
+      padding: 0.85rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      line-height: 1.55;
+    }
+
+    .calculate-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      width: 100%;
+      padding: 0.95rem 1.2rem;
+      border: none;
+      border-radius: var(--radius-sm);
+      background: var(--color-primary);
+      color: white;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 750;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.2s;
+    }
+
+    .calculate-button:hover {
+      opacity: 0.9;
+      transform: translateY(-1px);
+    }
+
+    .calculate-button:disabled {
+      opacity: 0.6;
+      cursor: wait;
+    }
+
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 0.85rem 0 0;
+      color: var(--text-secondary);
+      text-align: center;
+      font-size: 0.75rem;
+    }
+
+    .privacy-note svg {
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    .form-error {
+      padding: 0.85rem;
+      margin-bottom: 1rem;
+      border: 1px solid #dc2626;
+      border-radius: var(--radius-sm);
+      background: rgba(220, 38, 38, 0.08);
+      color: #dc2626;
+      font-size: 0.85rem;
+      line-height: 1.5;
+    }
+
+    .results-card {
+      display: flex;
+      flex-direction: column;
+      min-height: 440px;
+    }
+
+    .results-placeholder {
+      display: flex;
+      flex: 1;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 260px;
+      text-align: center;
+    }
+
+    .placeholder-icon {
+      width: 65px;
+      height: 65px;
+      margin-bottom: 1rem;
+      border-radius: 18px;
+      font-size: 2rem;
+      color: var(--color-primary);
+      display: grid;
+      place-items: center;
+      background: var(--bg-primary);
+    }
+
+    .results-placeholder h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    .results-placeholder p {
+      max-width: 290px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
+
+    .gross-result {
+      padding: 1.2rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+    }
+
+    .gross-result span,
+    .gross-result small {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+    }
+
+    .gross-result strong {
+      display: block;
+      margin: 0.45rem 0;
+      font-size: clamp(1.7rem, 4vw, 2rem);
+      letter-spacing: -0.04em;
+      overflow-wrap: anywhere;
+    }
+
+    .result-highlight {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .result-highlight > div {
+      padding: 0.9rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+    }
+
+    .result-highlight span {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+    }
+
+    .result-highlight strong {
+      display: block;
+      margin-top: 0.35rem;
+      font-size: 1.1rem;
+    }
+
+    .breakdown {
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .breakdown h3,
+    .comparison-box h3 {
+      margin: 0 0 0.8rem;
+      font-size: 0.95rem;
+    }
+
+    .detail-row,
+    .example-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: 0.65rem 0;
+      border-bottom: 1px solid var(--border-color);
+      font-size: 0.82rem;
+    }
+
+    .detail-row span,
+    .example-row span {
+      color: var(--text-secondary);
+    }
+
+    .detail-row strong,
+    .example-row strong {
+      text-align: right;
+      overflow-wrap: anywhere;
+    }
+
+    .total-row {
+      font-weight: 750;
+    }
+
+    .comparison-box {
+      padding: 1rem;
+      margin-top: 1.1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+    }
+
+    .comparison-box p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      line-height: 1.65;
+    }
+
+    .result-explanation,
+    .result-disclaimer {
+      color: var(--text-secondary);
+      font-size: 0.77rem;
+      line-height: 1.6;
+    }
+
+    .result-explanation {
+      margin: 1rem 0 0;
+    }
+
+    .result-disclaimer {
+      margin: auto 0 0;
+      padding-top: 1.2rem;
+    }
+
+    .content-section {
+      margin-top: 3rem;
+    }
+
+    .content-section > h2 {
+      margin: 0 0 0.8rem;
+      font-size: 1.55rem;
+      letter-spacing: -0.035em;
+    }
+
+    .content-section > p {
+      max-width: 850px;
+      margin: 0 0 1.3rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .formula-card {
+      padding: 1.4rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+
+    .formula-label,
+    .abono-example-header > span {
+      color: var(--color-primary);
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .formula {
+      margin: 0.9rem 0;
+      font-size: clamp(1rem, 3vw, 1.4rem);
+      line-height: 1.5;
+    }
+
+    .formula-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .info-card {
+      padding: 1.4rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+
+    .info-icon {
+      margin-bottom: 0.9rem;
+    }
+
+    .info-card h3 {
+      margin: 0 0 0.5rem;
+      font-size: 1.05rem;
+    }
+
+    .info-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.87rem;
+      line-height: 1.7;
+    }
+
+    .abono-example {
+      padding: 1.3rem;
+      margin-bottom: 1.2rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+
+    .abono-example-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .abono-example-header strong {
+      font-size: 0.9rem;
+    }
+
+    .days-bar {
+      display: flex;
+      overflow: hidden;
+      min-height: 85px;
+      border-radius: var(--radius-sm);
+    }
+
+    .rest-bar,
+    .sold-bar {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 0.3rem;
+      color: white;
+      text-align: center;
+    }
+
+    .rest-bar {
+      flex: 2;
+      background: #2563eb;
+    }
+
+    .sold-bar {
+      flex: 1;
+      background: #0f766e;
+    }
+
+    .days-bar strong {
+      font-size: 1.1rem;
+    }
+
+    .days-bar span {
+      font-size: 0.75rem;
+    }
+
+    .abono-example > p {
+      margin: 1rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.65;
+    }
+
+    .checklist {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.85rem;
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-secondary);
+    }
+
+    .check-item > span {
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+      width: 25px;
+      height: 25px;
+      border-radius: 50%;
+      background: var(--bg-primary);
+      color: var(--color-primary);
+      font-weight: 800;
+    }
+
+    .check-item strong {
+      display: block;
+      margin-bottom: 0.25rem;
+      font-size: 0.9rem;
+    }
+
+    .check-item p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.65;
+    }
+
+    .example-table {
+      padding: 0.5rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+
+    .example-note {
+      margin-top: 0.75rem !important;
+      font-size: 0.78rem !important;
+    }
+
+    .faq-list {
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    .faq-item {
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-secondary);
+    }
+
+    .faq-item summary {
+      position: relative;
+      padding-right: 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      position: absolute;
+      right: 0;
+      content: '+';
+      color: var(--color-primary);
+      font-size: 1.2rem;
+    }
+
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+
+    .faq-item p {
+      margin: 0.85rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.87rem;
+      line-height: 1.7;
+    }
+
+    .final-note {
+      padding: 1rem 1.2rem;
+      margin-top: 2rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .final-note strong {
+      color: var(--text-primary);
+    }
+
+    @media (max-width: 800px) {
+      .calculator-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .results-card {
+        min-height: auto;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .page-container {
+        padding-bottom: 2rem;
+      }
+
+      .card {
+        padding: 1.1rem;
+      }
+
+      .intro-card {
+        padding: 1rem;
+      }
+
+      .info-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .content-section {
+        margin-top: 2.3rem;
+      }
+
+      .content-section > h2 {
+        font-size: 1.3rem;
+      }
+
+      .abono-example-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</BaseLayout>

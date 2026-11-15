@@ -1,0 +1,1236 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getToolsByCategory } from '../../data/tools';
+
+const tools = getToolsByCategory('Matemática');
+---
+
+<BaseLayout
+  title="Calculadoras Matemáticas Online e Gratuitas — Calculadora de Ganhos"
+  description="Acesse calculadoras matemáticas gratuitas para porcentagem, regra de três, média, descontos e outros cálculos do dia a dia. Resultados rápidos e fáceis de entender."
+>
+  <div class="math-page">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Matemática</span>
+    </nav>
+
+    <!-- HERO COM MOCKUP FLUTUANTE -->
+    <header class="hero">
+      <div class="hero-glow" aria-hidden="true"></div>
+
+      <div class="hero-grid">
+        <div class="hero-text">
+          <span class="eyebrow">CENTRAL DE FERRAMENTAS</span>
+
+          <h1>
+            Calculadoras
+            <span>Matemáticas</span>
+          </h1>
+
+          <p class="hero-description">
+            Resolva cálculos do cotidiano sem complicação. Encontre ferramentas
+            práticas para porcentagens, proporções, médias, descontos e muito mais.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#ferramentas" class="hero-cta">
+              Explorar calculadoras <span aria-hidden="true">↓</span>
+            </a>
+
+            <span class="hero-note">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Gratuitas e fáceis de usar
+            </span>
+          </div>
+        </div>
+
+        <!-- CARTÃO VISUAL ILUSTRATIVO (MOCKUP DE CALCULADORA) -->
+        <div class="hero-visual" aria-hidden="true">
+          <span class="floating-symbol symbol-percent">%</span>
+          <span class="floating-symbol symbol-pi">π</span>
+          <span class="floating-symbol symbol-sum">∑</span>
+
+          <div class="mockup-card calc-mockup">
+            <div class="mockup-top">
+              <div class="window-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <span class="mockup-badge">Cálculo online</span>
+            </div>
+
+            <!-- VISOR DA CALCULADORA -->
+            <div class="calc-screen">
+              <div class="calc-expression">25% de 1.480,00 =</div>
+              <div class="calc-result">370,00</div>
+            </div>
+
+            <!-- TECLADO -->
+            <div class="calc-keypad">
+              <span class="calc-key is-muted">C</span>
+              <span class="calc-key is-muted">%</span>
+              <span class="calc-key is-muted">÷</span>
+              <span class="calc-key is-op">×</span>
+
+              <span class="calc-key">7</span>
+              <span class="calc-key">8</span>
+              <span class="calc-key">9</span>
+              <span class="calc-key is-op">−</span>
+
+              <span class="calc-key">4</span>
+              <span class="calc-key">5</span>
+              <span class="calc-key">6</span>
+              <span class="calc-key is-op">+</span>
+
+              <span class="calc-key">1</span>
+              <span class="calc-key">2</span>
+              <span class="calc-key">3</span>
+              <span class="calc-key is-equal">=</span>
+            </div>
+
+            <div class="mockup-row-footer">
+              <span>Calculadora de Ganhos</span>
+              <span class="mockup-dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- BARRA DE INDICADORES -->
+    <section class="highlights" aria-label="Características das ferramentas">
+      <div class="highlight-item">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="4" y1="9" x2="20" y2="9"></line>
+            <line x1="4" y1="15" x2="20" y2="15"></line>
+            <line x1="10" y1="3" x2="8" y2="21"></line>
+            <line x1="16" y1="3" x2="14" y2="21"></line>
+          </svg>
+        </div>
+        <div>
+          <strong>Operações rápidas</strong>
+          <small>Resultados precisos em segundos</small>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="14" height="20" x="5" y="2" rx="2" ry="2"/><path d="M12 18h.01"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Responsivo</strong>
+          <small>Funciona em celular e computador</small>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Fórmulas explicadas</strong>
+          <small>Entenda cada etapa do cálculo</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- GRADE DE FERRAMENTAS -->
+    <section class="tools-section" id="ferramentas" aria-labelledby="tools-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">EXPLORE AS FERRAMENTAS</span>
+          <h2 id="tools-title">O que você precisa calcular?</h2>
+          <p>Escolha uma ferramenta ou pesquise pelo tipo de cálculo.</p>
+        </div>
+
+        <span class="tools-count">
+          {tools.length} {tools.length === 1 ? 'ferramenta disponível' : 'ferramentas disponíveis'}
+        </span>
+      </div>
+
+      <div class="search-wrapper">
+        <label class="search-container">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="search-icon" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/>
+          </svg>
+          <input
+            type="search"
+            id="tool-search"
+            placeholder="Pesquisar calculadora..."
+            aria-label="Pesquisar ferramentas matemáticas"
+          />
+          <span class="search-shortcut">BUSCAR</span>
+        </label>
+      </div>
+
+      {tools.length > 0 ? (
+        <>
+          <div class="tools-grid" id="tools-grid">
+            {tools.map((tool) => (
+              <a
+                href={tool.route}
+                class="tool-card"
+                data-search={`${tool.name} ${tool.description}`.toLowerCase()}
+              >
+                <div class="tool-card-top">
+                  <div class="tool-icon" aria-hidden="true">
+                    <span>ƒx</span>
+                  </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="tool-arrow" aria-hidden="true">
+                    <line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/>
+                  </svg>
+                </div>
+
+                <div class="tool-card-content">
+                  <h3>{tool.name}</h3>
+                  <p>{tool.description}</p>
+                </div>
+
+                <div class="tool-card-footer">
+                  <span>Acessar ferramenta</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                  </svg>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <div class="no-results" id="no-results" hidden>
+            <div class="empty-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/>
+              </svg>
+            </div>
+            <h3>Nenhuma ferramenta encontrada</h3>
+            <p>Tente pesquisar por outro termo ou nome de calculadora.</p>
+          </div>
+        </>
+      ) : (
+        <div class="empty-state">
+          <div class="empty-icon" aria-hidden="true">∑</div>
+          <h3>Novas ferramentas em breve</h3>
+          <p>
+            Estamos preparando novas calculadoras matemáticas para facilitar
+            seus cálculos do dia a dia.
+          </p>
+          <a href="/" class="empty-link">Explorar outras ferramentas →</a>
+        </div>
+      )}
+    </section>
+
+    <!-- MATEMÁTICA NO DIA A DIA -->
+    <section class="content-section" aria-labelledby="info-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">MATEMÁTICA NO DIA A DIA</span>
+          <h2 id="info-title">Facilite seus cálculos com ferramentas online</h2>
+          <p>
+            A matemática está presente em diversas situações: nas compras,
+            no planejamento financeiro, nos estudos e nas atividades profissionais.
+            Com as ferramentas certas, você consegue resolver operações de forma
+            mais prática e compreender melhor os resultados.
+          </p>
+        </div>
+      </div>
+
+      <div class="information-grid">
+        <article class="information-card">
+          <div class="information-icon" aria-hidden="true">%</div>
+          <h3>Porcentagens e descontos</h3>
+          <p>
+            Calcule percentuais, descubra o valor de descontos e compare preços
+            para tomar decisões de compra mais conscientes.
+          </p>
+        </article>
+
+        <article class="information-card">
+          <div class="information-icon" aria-hidden="true">÷</div>
+          <h3>Proporções e regra de três</h3>
+          <p>
+            Resolva problemas envolvendo grandezas proporcionais e encontre
+            valores desconhecidos a partir de relações conhecidas.
+          </p>
+        </article>
+
+        <article class="information-card">
+          <div class="information-icon" aria-hidden="true">∑</div>
+          <h3>Médias e operações</h3>
+          <p>
+            Faça cálculos de médias e outras operações matemáticas úteis
+            para estudos, trabalho e organização pessoal.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section" aria-labelledby="faq-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">DÚVIDAS FREQUENTES</span>
+          <h2 id="faq-title">Perguntas sobre as calculadoras matemáticas</h2>
+        </div>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>As calculadoras matemáticas são gratuitas?</summary>
+          <p>
+            Sim. As ferramentas disponíveis nesta categoria podem ser utilizadas
+            gratuitamente, sem necessidade de assinatura.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Quais tipos de cálculos posso realizar?</summary>
+          <p>
+            Você pode encontrar ferramentas para porcentagens, descontos,
+            regra de três, médias e outras operações matemáticas, conforme
+            a disponibilidade no portal.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Preciso instalar algum programa?</summary>
+          <p>
+            Não. As calculadoras são acessadas diretamente pelo navegador,
+            sem necessidade de instalar aplicativos.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Posso utilizar as ferramentas pelo celular?</summary>
+          <p>
+            Sim. A página foi desenvolvida para se adaptar a computadores,
+            tablets e smartphones.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Os resultados substituem uma conferência profissional?</summary>
+          <p>
+            As ferramentas auxiliam na realização de cálculos, mas os resultados
+            devem ser conferidos quando utilizados em decisões financeiras,
+            comerciais ou profissionais importantes.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="final-cta">
+      <span class="eyebrow">CALCULADORA DE GANHOS</span>
+      <h2>Encontre a ferramenta ideal para o seu próximo cálculo.</h2>
+      <p>Explore outras categorias e descubra mais recursos gratuitos.</p>
+      <a href="/" class="cta-link">
+        <span>Ver todas as ferramentas</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  const searchInput = document.querySelector<HTMLInputElement>('#tool-search');
+  const toolCards = Array.from(
+    document.querySelectorAll<HTMLAnchorElement>('.tool-card')
+  );
+  const noResults = document.querySelector<HTMLElement>('#no-results');
+
+  searchInput?.addEventListener('input', () => {
+    const query = searchInput.value
+      .trim()
+      .toLocaleLowerCase('pt-BR')
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '');
+
+    let visibleCount = 0;
+
+    toolCards.forEach((card) => {
+      const content = (card.dataset.search || '')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+
+      const matches = content.includes(query);
+
+      card.hidden = !matches;
+
+      if (matches) visibleCount++;
+    });
+
+    if (noResults) {
+      noResults.hidden = visibleCount > 0;
+    }
+  });
+</script>
+
+<style>
+  .math-page {
+    width: 100%;
+    padding: 0.5rem 0 2.5rem;
+    color: var(--text-primary);
+  }
+
+  .breadcrumb {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-bottom: 1.75rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  /* HERO (PADRÃO CENTRAL DE FERRAMENTAS) */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 2.75rem 3rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--color-primary) 16%, transparent) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .hero-text {
+    text-align: center;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    color: var(--color-primary);
+    font-size: 0.73rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.85rem;
+  }
+
+  .hero h1 {
+    margin: 0 0 1.15rem;
+    font-size: clamp(2.15rem, 4.5vw, 3.25rem);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    font-weight: 850;
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .hero h1 span {
+    display: block;
+    color: var(--color-primary);
+  }
+
+  .hero-description {
+    max-width: 520px;
+    margin: 0 auto 1.75rem;
+    color: var(--text-secondary);
+    font-size: 0.98rem;
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem 1.35rem;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.85rem 1.45rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 750;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .hero-cta:hover {
+    opacity: 0.92;
+    transform: translateY(-2px);
+  }
+
+  .hero-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary);
+    font-size: 0.84rem;
+    font-weight: 600;
+  }
+
+  .hero-note svg {
+    color: var(--color-primary);
+  }
+
+  /* CARTÃO MOCKUP DE CALCULADORA */
+  .hero-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .floating-symbol {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    width: 38px;
+    height: 38px;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--bg-primary);
+    color: var(--color-primary);
+    font-size: 1rem;
+    font-weight: 850;
+    box-shadow: var(--shadow-md);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .symbol-percent {
+    top: -10px;
+    left: 12px;
+    transform: rotate(-10deg);
+  }
+
+  .symbol-pi {
+    top: 32px;
+    right: 6px;
+    transform: rotate(12deg);
+  }
+
+  .symbol-sum {
+    bottom: 14px;
+    left: 6px;
+    transform: rotate(8deg);
+  }
+
+  .calc-mockup {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 320px;
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-primary);
+    box-shadow: var(--shadow-lg);
+    transform: rotate(-2.5deg);
+    transition: transform 0.3s ease;
+    text-align: left;
+  }
+
+  .calc-mockup:hover {
+    transform: rotate(0deg) translateY(-3px);
+  }
+
+  .mockup-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .window-dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  .window-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-color);
+  }
+
+  .mockup-badge {
+    padding: 0.28rem 0.7rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+    font-size: 0.7rem;
+    font-weight: 750;
+  }
+
+  /* VISOR */
+  .calc-screen {
+    padding: 0.9rem 1rem;
+    margin-bottom: 0.9rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: right;
+  }
+
+  .calc-expression {
+    color: var(--text-secondary);
+    font-size: 0.76rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+  }
+
+  .calc-result {
+    color: var(--text-primary);
+    font-size: 1.55rem;
+    font-weight: 850;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* TECLADO */
+  .calc-keypad {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.45rem;
+  }
+
+  .calc-key {
+    display: grid;
+    place-items: center;
+    height: 36px;
+    border: 1px solid var(--border-color);
+    border-radius: 9px;
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 0.85rem;
+    font-weight: 750;
+    user-select: none;
+  }
+
+  .calc-key.is-muted {
+    color: var(--text-secondary);
+    background: color-mix(in srgb, var(--bg-secondary) 65%, var(--bg-primary));
+  }
+
+  .calc-key.is-op {
+    border-color: color-mix(in srgb, var(--color-primary) 25%, var(--border-color));
+    background: color-mix(in srgb, var(--color-primary) 11%, var(--bg-primary));
+    color: var(--color-primary);
+  }
+
+  .calc-key.is-equal {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: #ffffff;
+    font-weight: 850;
+  }
+
+  .mockup-row-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.95rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 0.72rem;
+  }
+
+  .mockup-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+
+  /* BARRA DE INDICADORES */
+  .highlights {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 4.5rem;
+    padding: 1.25rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .highlight-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+    padding: 0.45rem 1rem;
+    text-align: left;
+  }
+
+  .highlight-item + .highlight-item {
+    border-left: 1px solid var(--border-color);
+  }
+
+  .highlight-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+  }
+
+  .highlight-item strong,
+  .highlight-item small {
+    display: block;
+  }
+
+  .highlight-item strong {
+    font-size: 0.88rem;
+    color: var(--text-primary);
+  }
+
+  .highlight-item small {
+    margin-top: 0.15rem;
+    color: var(--text-secondary);
+    font-size: 0.74rem;
+  }
+
+  /* CABEÇALHOS DE SEÇÃO */
+  .tools-section,
+  .content-section,
+  .faq-section {
+    margin-bottom: 4.5rem;
+  }
+
+  .tools-section {
+    scroll-margin-top: 2rem;
+  }
+
+  .section-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.85rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-heading > div {
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .section-heading h2 {
+    margin: 0 0 0.65rem;
+    font-size: clamp(1.55rem, 3.2vw, 2.05rem);
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .section-heading p {
+    margin: 0 auto;
+    color: var(--text-secondary);
+    font-size: 0.96rem;
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .tools-count {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  /* CAMPO DE BUSCA */
+  .search-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+  }
+
+  .search-container {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 560px;
+    height: 52px;
+    padding: 0 1.1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+
+  .search-container:focus-within {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
+  }
+
+  .search-icon {
+    color: var(--color-primary);
+    flex-shrink: 0;
+  }
+
+  .search-container input {
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 0.92rem;
+  }
+
+  .search-container input::placeholder {
+    color: var(--text-secondary);
+  }
+
+  .search-shortcut {
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    flex-shrink: 0;
+  }
+
+  /* GRADE DE FERRAMENTAS */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .tool-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 235px;
+    padding: 1.55rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    color: inherit;
+    text-decoration: none;
+    text-align: center;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .tool-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+  }
+
+  .tool-card:focus-visible,
+  .cta-link:focus-visible,
+  .hero-cta:focus-visible,
+  .breadcrumb a:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  .tool-card[hidden] {
+    display: none;
+  }
+
+  .tool-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.15rem;
+  }
+
+  .tool-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--color-primary) 12%, var(--bg-primary));
+    color: var(--color-primary);
+    font-size: 1.05rem;
+    font-weight: 900;
+  }
+
+  .tool-arrow {
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .tool-card:hover .tool-arrow {
+    color: var(--color-primary);
+    transform: translate(3px, -3px);
+  }
+
+  .tool-card-content {
+    flex: 1;
+  }
+
+  .tool-card-content h3 {
+    margin: 0 0 0.55rem;
+    color: var(--text-primary);
+    font-size: 1.12rem;
+    font-weight: 750;
+    line-height: 1.4;
+    text-align: center;
+  }
+
+  .tool-card-content p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.86rem;
+    line-height: 1.65;
+    text-align: center;
+  }
+
+  .tool-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.35rem;
+    padding-top: 0.95rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--color-primary);
+    font-size: 0.83rem;
+    font-weight: 750;
+  }
+
+  /* ESTADOS VAZIOS */
+  .no-results,
+  .empty-state {
+    padding: 3rem 1.5rem;
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
+  .no-results[hidden] {
+    display: none;
+  }
+
+  .empty-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 1rem;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+    font-size: 1.75rem;
+    font-weight: 800;
+  }
+
+  .no-results h3,
+  .empty-state h3 {
+    margin: 0 0 0.5rem;
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .no-results p,
+  .empty-state p {
+    max-width: 500px;
+    margin: 0 auto;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    text-align: center;
+  }
+
+  .empty-link {
+    display: inline-block;
+    margin-top: 1rem;
+    color: var(--color-primary);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .empty-link:hover {
+    text-decoration: underline;
+  }
+
+  /* MATEMÁTICA NO DIA A DIA */
+  .information-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
+
+  .information-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.65rem 1.4rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
+  .information-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+    font-size: 1.3rem;
+    font-weight: 850;
+  }
+
+  .information-card h3 {
+    margin: 0 0 0.55rem;
+    color: var(--text-primary);
+    font-size: 1.05rem;
+    font-weight: 750;
+    text-align: center;
+  }
+
+  .information-card p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.87rem;
+    line-height: 1.7;
+    text-align: center;
+  }
+
+  /* FAQ */
+  .faq-list {
+    max-width: 850px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    margin-bottom: 0.75rem;
+    padding: 1.15rem 1.3rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: left;
+  }
+
+  .faq-item summary {
+    position: relative;
+    padding-right: 2rem;
+    cursor: pointer;
+    color: var(--text-primary);
+    font-size: 0.94rem;
+    font-weight: 700;
+    line-height: 1.5;
+    list-style: none;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::after {
+    content: '+';
+    position: absolute;
+    top: -0.1rem;
+    right: 0;
+    color: var(--color-primary);
+    font-size: 1.3rem;
+  }
+
+  .faq-item[open] summary::after {
+    content: '−';
+  }
+
+  .faq-item p {
+    margin: 0.9rem 0 0;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.75;
+  }
+
+  /* CTA FINAL */
+  .final-cta {
+    padding: 2.75rem 1.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
+  .final-cta h2 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-align: center;
+  }
+
+  .final-cta p {
+    max-width: 600px;
+    margin: 0 auto 1.6rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #ffffff;
+    font-size: 0.92rem;
+    font-weight: 750;
+    text-decoration: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .cta-link:hover {
+    opacity: 0.92;
+    transform: translateY(-2px);
+  }
+
+  /* RESPONSIVIDADE */
+  @media (max-width: 900px) {
+    .tools-grid,
+    .information-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 860px) {
+    .hero {
+      padding: 2.25rem 1.75rem;
+    }
+
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
+    }
+
+    .calc-mockup {
+      transform: rotate(0deg);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .highlights {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 3.25rem;
+    }
+
+    .highlight-item {
+      justify-content: flex-start;
+      padding: 0.65rem 0.5rem;
+    }
+
+    .highlight-item + .highlight-item {
+      border-left: none;
+      border-top: 1px solid var(--border-color);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .math-page {
+      padding-bottom: 2rem;
+    }
+
+    .hero {
+      padding: 1.75rem 1.25rem;
+    }
+
+    .tools-section,
+    .content-section,
+    .faq-section {
+      margin-bottom: 3.25rem;
+    }
+
+    .tools-grid,
+    .information-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .tool-card {
+      min-height: 200px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tool-card,
+    .tool-arrow,
+    .hero-cta,
+    .cta-link,
+    .calc-mockup {
+      transition: none;
+    }
+
+    .tool-card:hover,
+    .hero-cta:hover,
+    .cta-link:hover,
+    .calc-mockup:hover {
+      transform: none;
+    }
+  }
+</style>

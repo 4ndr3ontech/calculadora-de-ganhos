@@ -1,0 +1,324 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-container">
+    <div class="footer-grid">
+      <!-- Coluna 1: Identidade e Propósito -->
+      <div class="footer-brand">
+        <a href="/" class="footer-logo-link" aria-label="Calculadora de Ganhos - Início">
+          <img src="/images/logo.svg" alt="Calculadora de Ganhos" class="footer-logo-img" width="220" height="64" loading="lazy" />
+        </a>
+        <p class="footer-desc">
+          Portal brasileiro gratuito de calculadoras inteligentes, simuladores financeiros,
+          trabalhistas e utilidades práticas para apoiar suas decisões cotidianas com clareza.
+        </p>
+        <p class="footer-contact-info">
+          Contato editorial: <a href="/contato/">Fale conosco</a>
+        </p>
+      </div>
+
+      <!-- Coluna 2: Todas as Categorias do Portal -->
+      <nav class="footer-col" aria-label="Calculadoras">
+        <h4>Calculadoras</h4>
+        <ul>
+          <li><a href="/financas/">Finanças e Investimentos</a></li>
+          <li><a href="/trabalhista/">Calculadoras Trabalhistas</a></li>
+          <li><a href="/matematica/">Matemática e Cálculos</a></li>
+          <li><a href="/conversores/">Conversores e Utilitários</a></li>
+          <li><a href="/saude/biometria/">Saúde e Biometria</a></li>
+          <li><a href="/ferramentas/">Ferramentas Digitais</a></li>
+        </ul>
+      </nav>
+
+      <!-- Coluna 3: Institucional e Editorial -->
+      <nav class="footer-col" aria-label="Institucional">
+        <h4>Institucional</h4>
+        <ul>
+          <li><a href="/sobre/">Sobre Nós</a></li>
+          <li><a href="/politica-editorial/">Política Editorial</a></li>
+          <li><a href="/guias/">Guias e Artigos</a></li>
+          <li><a href="/contato/">Contato</a></li>
+        </ul>
+      </nav>
+
+      <!-- Coluna 4: Legal, Privacidade e LGPD -->
+      <nav class="footer-col" aria-label="Legal e Privacidade">
+        <h4>Legal e Privacidade</h4>
+        <ul>
+          <li><a href="/privacidade/">Política de Privacidade</a></li>
+          <li><a href="/termos/">Termos de Uso</a></li>
+          <li><a href="/cookies/">Política de Cookies</a></li>
+          <li><a href="/acessibilidade/">Acessibilidade</a></li>
+        </ul>
+      </nav>
+    </div>
+
+    <!-- Aviso de Isenção de Responsabilidade -->
+    <div class="footer-disclaimer" role="note">
+      <div class="disclaimer-badge" aria-hidden="true">ⓘ</div>
+      <p>
+        <strong>Aviso Legal e Isenção de Responsabilidade:</strong> As calculadoras, simuladores e conteúdos
+        publicados no <strong>Calculadora de Ganhos</strong> têm caráter estritamente informativo e educacional.
+        Os resultados apresentados são estimativas baseadas nos dados inseridos pelo usuário e nas regras vigentes,
+        não substituindo a orientação individualizada de contadores, advogados, médicos ou consultores financeiros.
+      </p>
+    </div>
+
+    <!-- Barra Inferior de Direitos Autorais -->
+    <div class="footer-bottom">
+      <p>© {currentYear} Calculadora de Ganhos (calculadoradeganhos.com.br). Todos os direitos reservados.</p>
+      <p class="footer-lgpd">Este site utiliza cookies para melhorar a experiência de navegação e exibir anúncios relevantes conforme a LGPD.</p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background-color: var(--chrome-bg, #064e3b);
+    border-top: 3px solid var(--chrome-accent, #fbbf24);
+    padding: 3.5rem 0 2.25rem;
+    margin-top: auto;
+    color: var(--chrome-muted, #a7f3d0);
+  }
+
+  .footer-grid {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr 1fr 1fr;
+    gap: 2.5rem;
+    margin-bottom: 2.5rem;
+    text-align: left;
+  }
+
+  .footer-brand {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .footer-logo-link {
+    display: inline-block;
+    border-radius: 6px;
+    text-decoration: none;
+    margin-bottom: 1rem;
+  }
+
+  .footer-logo-img {
+    height: 60px;
+    width: auto;
+    display: block;
+    transition: transform 0.2s ease;
+  }
+
+  .footer-logo-link:hover .footer-logo-img {
+    transform: scale(1.02);
+  }
+
+  .footer-desc {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--chrome-muted, #a7f3d0);
+    margin: 0 0 1rem;
+    text-align: left;
+  }
+
+  .footer-contact-info {
+    font-size: 0.85rem;
+    color: var(--chrome-muted, #a7f3d0);
+    margin: 0;
+    text-align: left;
+  }
+
+  .footer-contact-info a {
+    color: var(--chrome-accent, #fbbf24);
+    font-weight: 700;
+    text-decoration: none;
+    border-radius: 4px;
+  }
+
+  .footer-contact-info a:hover {
+    text-decoration: underline;
+  }
+
+  .footer-col {
+    text-align: left;
+  }
+
+  .footer-col h4 {
+    color: var(--chrome-text, #ecfdf5);
+    font-size: 0.84rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 0 0 1.05rem;
+    text-align: left;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.65rem;
+  }
+
+  .footer-col li {
+    margin: 0;
+    padding: 0;
+    text-align: left;
+  }
+
+  .footer-col a {
+    color: var(--chrome-muted, #a7f3d0);
+    text-decoration: none;
+    font-size: 0.87rem;
+    line-height: 1.45;
+    border-radius: 4px;
+    transition: color 0.2s ease, transform 0.2s ease;
+    display: inline-block;
+    text-align: left;
+  }
+
+  .footer-col a:hover {
+    color: var(--chrome-accent, #fbbf24);
+    transform: translateX(2px);
+  }
+
+  .footer-logo-link:focus-visible,
+  .footer-contact-info a:focus-visible,
+  .footer-col a:focus-visible {
+    outline: 2px solid var(--chrome-accent, #fbbf24);
+    outline-offset: 3px;
+  }
+
+  .footer-disclaimer {
+    display: flex;
+    align-items: center;
+    gap: 0.95rem;
+    background-color: var(--chrome-bg-alt, #043927);
+    border: 1px solid var(--chrome-border, rgba(167, 243, 208, 0.2));
+    border-left: 4px solid var(--chrome-accent, #fbbf24);
+    border-radius: var(--radius-md, 10px);
+    padding: 1.15rem 1.35rem;
+    margin-bottom: 1.75rem;
+  }
+
+  .disclaimer-badge {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    background: rgba(251, 191, 36, 0.14);
+    color: var(--chrome-accent, #fbbf24);
+    font-size: 1rem;
+    font-weight: 800;
+  }
+
+  .footer-disclaimer p {
+    margin: 0;
+    font-size: 0.81rem;
+    line-height: 1.68;
+    color: var(--chrome-muted, #a7f3d0);
+    text-align: left;
+  }
+
+  .footer-disclaimer strong {
+    color: var(--chrome-text, #ecfdf5);
+  }
+
+  .footer-disclaimer strong:first-child {
+    color: var(--chrome-accent, #fbbf24);
+  }
+
+  .footer-bottom {
+    border-top: 1px solid var(--chrome-border, rgba(167, 243, 208, 0.2));
+    padding-top: 1.5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .footer-bottom p {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--chrome-muted, #a7f3d0);
+    text-align: center;
+  }
+
+  .footer-lgpd {
+    font-size: 0.76rem !important;
+    opacity: 0.85;
+  }
+
+  @media (max-width: 900px) {
+    .footer-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .site-footer {
+      padding: 2.75rem 0 2rem;
+    }
+
+    .footer-grid {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+
+    .footer-brand {
+      align-items: center;
+      text-align: center;
+    }
+
+    .footer-desc,
+    .footer-contact-info {
+      text-align: center;
+    }
+
+    .footer-col,
+    .footer-col h4,
+    .footer-col li,
+    .footer-col a {
+      text-align: center;
+    }
+
+    .footer-col ul {
+      align-items: center;
+    }
+
+    .footer-col a:hover {
+      transform: none;
+    }
+
+    .footer-disclaimer {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .footer-disclaimer p {
+      text-align: center;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .footer-logo-img,
+    .footer-col a {
+      transition: none;
+    }
+
+    .footer-logo-link:hover .footer-logo-img,
+    .footer-col a:hover {
+      transform: none;
+    }
+  }
+</style>

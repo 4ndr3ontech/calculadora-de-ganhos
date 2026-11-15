@@ -1,0 +1,1244 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de Porcentagem Online — Descontos, Aumentos e Variações | Calculadora de Ganhos"
+  description="Calcule porcentagens, descontos, aumentos e variações percentuais gratuitamente. Veja resultados imediatos, fórmulas e exemplos práticos."
+>
+  <main class="percentage-page">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <a href="/matematica/">Matemática</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Porcentagem</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="eyebrow">FERRAMENTAS MATEMÁTICAS</span>
+      <h1>Calculadora de Porcentagem</h1>
+      <p>
+        Calcule porcentagens, descontos, aumentos e variações percentuais.
+        Obtenha resultados instantâneos com explicações passo a passo.
+      </p>
+    </header>
+
+    <section class="calculator card" aria-labelledby="calculator-title">
+      <div class="calculator-heading">
+        <div>
+          <span class="section-label">CALCULADORA ONLINE</span>
+          <h2 id="calculator-title">O que você deseja calcular?</h2>
+        </div>
+        <div class="calculator-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="19" y1="5" x2="5" y2="19"></line>
+            <circle cx="6.5" cy="6.5" r="2.5"></circle>
+            <circle cx="17.5" cy="17.5" r="2.5"></circle>
+          </svg>
+        </div>
+      </div>
+
+      <div class="tabs" role="group" aria-label="Tipo de cálculo">
+        <button type="button" class="tab active" data-mode="percentage" aria-pressed="true">
+          Porcentagem
+        </button>
+        <button type="button" class="tab" data-mode="discount" aria-pressed="false">
+          Desconto
+        </button>
+        <button type="button" class="tab" data-mode="increase" aria-pressed="false">
+          Aumento
+        </button>
+        <button type="button" class="tab" data-mode="variation" aria-pressed="false">
+          Variação
+        </button>
+      </div>
+
+      <div class="calculator-content">
+        <div class="input-panel">
+          <div class="mode-description" id="mode-description">
+            Descubra quanto representa uma porcentagem de determinado valor.
+          </div>
+
+          <div class="field">
+            <label for="percentage" id="percentage-label">Porcentagem (%)</label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="percentage"
+                value="15"
+                min="0"
+                step="any"
+                inputmode="decimal"
+                placeholder="Ex.: 15"
+              />
+              <span class="input-suffix" aria-hidden="true">%</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="value" id="value-label">Valor total (R$)</label>
+            <div class="input-wrapper">
+              <span class="input-prefix" aria-hidden="true">R$</span>
+              <input
+                type="number"
+                id="value"
+                value="500"
+                min="0"
+                step="any"
+                inputmode="decimal"
+                placeholder="Ex.: 500"
+              />
+            </div>
+          </div>
+
+          <div class="field hidden" id="variation-field">
+            <label for="new-value">Novo valor (R$)</label>
+            <div class="input-wrapper">
+              <span class="input-prefix" aria-hidden="true">R$</span>
+              <input
+                type="number"
+                id="new-value"
+                value="600"
+                min="0"
+                step="any"
+                inputmode="decimal"
+                placeholder="Ex.: 600"
+              />
+            </div>
+          </div>
+
+          <div class="examples">
+            <span>Exemplos rápidos:</span>
+            <button type="button" data-example="10">10%</button>
+            <button type="button" data-example="15">15%</button>
+            <button type="button" data-example="20">20%</button>
+            <button type="button" data-example="50">50%</button>
+          </div>
+
+          <button type="button" id="calc-btn" class="calculate-button">
+            <span>Calcular agora</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </button>
+
+          <p class="privacy-note">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+            </svg>
+            Cálculos realizados diretamente no seu navegador.
+          </p>
+        </div>
+
+        <div class="result-panel" aria-live="polite" aria-atomic="true">
+          <div class="result-top">
+            <span class="result-label" id="result-label">VALOR DA PORCENTAGEM</span>
+            <span class="result-symbol" aria-hidden="true">=</span>
+          </div>
+
+          <div class="result-value" id="res-value">R$ 75,00</div>
+          <p class="result-description" id="result-description">
+            15% de R$ 500,00 corresponde a R$ 75,00.
+          </p>
+
+          <div class="result-divider" aria-hidden="true"></div>
+
+          <div class="formula-heading">
+            <span>Memória de cálculo</span>
+            <span class="formula-tag">FÓRMULA</span>
+          </div>
+
+          <div class="formula-box" id="res-formula">
+            (15 ÷ 100) × 500 = 75
+          </div>
+
+          <div class="secondary-results" id="secondary-results">
+            <div class="secondary-item">
+              <span>Valor original</span>
+              <strong id="secondary-original">R$ 500,00</strong>
+            </div>
+            <div class="secondary-item">
+              <span>Valor final</span>
+              <strong id="secondary-final">R$ 575,00</strong>
+            </div>
+          </div>
+
+          <p class="result-footnote" id="result-footnote">
+            O resultado representa a parte correspondente à porcentagem informada.
+          </p>
+        </div>
+      </div>
+
+      <p class="error-message" id="error-message" role="alert" hidden></p>
+    </section>
+
+    <section class="info-section">
+      <div class="section-heading">
+        <span class="section-label">ENTENDA O CÁLCULO</span>
+        <h2>Como calcular porcentagem?</h2>
+        <p>
+          A porcentagem representa uma proporção de um total dividida em 100 partes.
+          O símbolo % significa literalmente "por cento".
+        </p>
+      </div>
+
+      <div class="formula-highlight">
+        <span>Fórmula básica da porcentagem</span>
+        <strong>Resultado = (Porcentagem ÷ 100) × Valor</strong>
+        <p>Multiplique o valor pela porcentagem convertida em número decimal.</p>
+      </div>
+
+      <div class="examples-grid">
+        <article class="example-card">
+          <span class="example-number">01</span>
+          <h3>Porcentagem de um valor</h3>
+          <p>Quanto é 15% de R$ 500,00?</p>
+          <div class="example-calculation">(15 ÷ 100) × 500</div>
+          <strong>R$ 75,00</strong>
+        </article>
+
+        <article class="example-card">
+          <span class="example-number">02</span>
+          <h3>Desconto percentual</h3>
+          <p>Um produto custa R$ 200,00 e tem 20% de desconto.</p>
+          <div class="example-calculation">200 − (20% × 200)</div>
+          <strong>R$ 160,00</strong>
+        </article>
+
+        <article class="example-card">
+          <span class="example-number">03</span>
+          <h3>Aumento percentual</h3>
+          <p>Um salário de R$ 2.000,00 recebe aumento de 10%.</p>
+          <div class="example-calculation">2.000 + (10% × 2.000)</div>
+          <strong>R$ 2.200,00</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="section-heading">
+        <span class="section-label">APLICAÇÕES PRÁTICAS</span>
+        <h2>Quando utilizar a calculadora de porcentagem?</h2>
+        <p>
+          A porcentagem está presente em diversas situações do cotidiano,
+          desde compras até planejamento financeiro.
+        </p>
+      </div>
+
+      <div class="uses-grid">
+        <article class="use-card">
+          <div class="use-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
+          </div>
+          <div>
+            <h3>Compras e descontos</h3>
+            <p>Descubra o preço final de produtos em promoção e compare ofertas.</p>
+          </div>
+        </article>
+
+        <article class="use-card">
+          <div class="use-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <div>
+            <h3>Finanças pessoais</h3>
+            <p>Calcule reajustes, variações de valores e proporções do orçamento.</p>
+          </div>
+        </article>
+
+        <article class="use-card">
+          <div class="use-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </div>
+          <div>
+            <h3>Estudos e estatísticas</h3>
+            <p>Calcule participações, resultados, proporções e indicadores.</p>
+          </div>
+        </article>
+
+        <article class="use-card">
+          <div class="use-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
+              <polyline points="17 6 23 6 23 12"></polyline>
+            </svg>
+          </div>
+          <div>
+            <h3>Empresas e negócios</h3>
+            <p>Analise margens, aumentos de preços e variações de faturamento.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="faq-section">
+      <span class="section-label">DÚVIDAS FREQUENTES</span>
+      <h2>Perguntas sobre porcentagem</h2>
+
+      <details>
+        <summary>Como calcular 10% de um valor?</summary>
+        <p>
+          Divida o valor por 10. Por exemplo, 10% de R$ 300,00 é R$ 30,00.
+          O mesmo resultado é obtido multiplicando 300 por 0,10.
+        </p>
+      </details>
+
+      <details>
+        <summary>Como calcular um desconto de 20%?</summary>
+        <p>
+          Multiplique o preço original por 0,20 para descobrir o desconto.
+          Depois, subtraia esse resultado do preço original. Em um produto
+          de R$ 100,00, o desconto será R$ 20,00 e o preço final será R$ 80,00.
+        </p>
+      </details>
+
+      <details>
+        <summary>Como calcular um aumento percentual?</summary>
+        <p>
+          Multiplique o valor original pela porcentagem dividida por 100 e
+          some o resultado ao valor original. Um aumento de 10% sobre
+          R$ 500,00 resulta em R$ 550,00.
+        </p>
+      </details>
+
+      <details>
+        <summary>Como descobrir a variação percentual entre dois valores?</summary>
+        <p>
+          Subtraia o valor inicial do valor final, divida a diferença pelo
+          valor inicial e multiplique por 100. Um resultado positivo indica
+          aumento; um resultado negativo indica redução.
+        </p>
+      </details>
+
+      <details>
+        <summary>Qual é a diferença entre porcentagem e pontos percentuais?</summary>
+        <p>
+          Porcentagem representa uma proporção relativa. Pontos percentuais
+          representam a diferença direta entre duas taxas. Por exemplo,
+          passar de 10% para 15% corresponde a um aumento de 5 pontos
+          percentuais, ou 50% em termos relativos.
+        </p>
+      </details>
+    </section>
+
+    <section class="bottom-cta">
+      <h2>Explore outras ferramentas matemáticas</h2>
+      <p>
+        Acesse outras calculadoras gratuitas para facilitar seus estudos,
+        atividades e decisões do dia a dia.
+      </p>
+      <a href="/matematica/" class="back-link">
+        <span>Ver todas as ferramentas matemáticas</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
+    </section>
+  </main>
+
+  <script>
+    import { calculatePercentageOfValue } from '../../engines/math/percentage';
+
+    type CalculationMode = 'percentage' | 'discount' | 'increase' | 'variation';
+
+    const percentageInput = document.getElementById('percentage') as HTMLInputElement;
+    const valueInput = document.getElementById('value') as HTMLInputElement;
+    const newValueInput = document.getElementById('new-value') as HTMLInputElement;
+
+    const resultValue = document.getElementById('res-value')!;
+    const resultFormula = document.getElementById('res-formula')!;
+    const resultLabel = document.getElementById('result-label')!;
+    const resultDescription = document.getElementById('result-description')!;
+    const resultFootnote = document.getElementById('result-footnote')!;
+    const secondaryResults = document.getElementById('secondary-results')!;
+    const errorMessage = document.getElementById('error-message')!;
+
+    const modeDescription = document.getElementById('mode-description')!;
+    const percentageLabel = document.getElementById('percentage-label')!;
+    const valueLabel = document.getElementById('value-label');
+    const variationField = document.getElementById('variation-field')!;
+
+    const originalOutput = document.getElementById('secondary-original')!;
+    const finalOutput = document.getElementById('secondary-final')!;
+
+    let currentMode: CalculationMode = 'percentage';
+
+    const currency = (value: number) =>
+      value.toLocaleString('pt-BR', {
+        style: 'currency',
+        currency: 'BRL',
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+
+    const numberFormat = (value: number) =>
+      value.toLocaleString('pt-BR', {
+        maximumFractionDigits: 6
+      });
+
+    function showError(message: string) {
+      errorMessage.textContent = message;
+      errorMessage.hidden = false;
+    }
+
+    function clearError() {
+      errorMessage.textContent = '';
+      errorMessage.hidden = true;
+    }
+
+    function setMode(mode: CalculationMode) {
+      currentMode = mode;
+      clearError();
+
+      document.querySelectorAll<HTMLButtonElement>('.tab').forEach((button) => {
+        const active = button.dataset.mode === mode;
+        button.classList.toggle('active', active);
+        button.setAttribute('aria-pressed', String(active));
+      });
+
+      const descriptions: Record<CalculationMode, string> = {
+        percentage: 'Descubra quanto representa uma porcentagem de determinado valor.',
+        discount: 'Calcule quanto você economiza e qual será o preço após o desconto.',
+        increase: 'Descubra o valor final após aplicar um aumento percentual.',
+        variation: 'Compare dois valores e descubra a variação percentual entre eles.'
+      };
+
+      modeDescription.textContent = descriptions[mode];
+
+      variationField.classList.toggle('hidden', mode !== 'variation');
+      percentageInput.parentElement!.parentElement!.classList.toggle('hidden', mode === 'variation');
+
+      const labels: Record<CalculationMode, string> = {
+        percentage: 'Porcentagem (%)',
+        discount: 'Desconto (%)',
+        increase: 'Aumento (%)',
+        variation: 'Valor inicial (R$)'
+      };
+
+      percentageLabel.textContent = labels[mode];
+
+      if (valueLabel) {
+        valueLabel.textContent = mode === 'variation' ? 'Valor inicial (R$)' : 'Valor base (R$)';
+      }
+
+      if (mode === 'variation') {
+        valueInput.value = '500';
+        newValueInput.value = '600';
+      }
+
+      runCalculation();
+    }
+
+    function runCalculation() {
+      clearError();
+
+      const percentage = Number(percentageInput.value);
+      const value = Number(valueInput.value);
+      const newValue = Number(newValueInput.value);
+
+      const validNumber = (number: number) => Number.isFinite(number);
+
+      if (currentMode === 'variation') {
+        if (valueInput.value.trim() === '' || newValueInput.value.trim() === '') {
+          showError('Informe o valor inicial e o novo valor para calcular a variação.');
+          return;
+        }
+
+        if (!validNumber(value) || !validNumber(newValue) || value <= 0 || newValue < 0) {
+          showError('Informe valores válidos. O valor inicial deve ser maior que zero e o novo valor não pode ser negativo.');
+          return;
+        }
+
+        const difference = newValue - value;
+        const variation = (difference / value) * 100;
+
+        if (!validNumber(variation)) {
+          showError('Não foi possível calcular a variação com esses valores.');
+          return;
+        }
+
+        resultLabel.textContent = 'VARIAÇÃO PERCENTUAL';
+        resultValue.textContent = `${variation > 0 ? '+' : ''}${numberFormat(variation)}%`;
+
+        resultDescription.textContent = variation > 0
+          ? `O valor aumentou ${numberFormat(variation)}% em relação ao valor inicial.`
+          : variation < 0
+            ? `O valor diminuiu ${numberFormat(Math.abs(variation))}% em relação ao valor inicial.`
+            : 'Os dois valores são iguais. Não houve variação percentual.';
+
+        resultFormula.textContent =
+          `((${numberFormat(newValue)} − ${numberFormat(value)}) ÷ ${numberFormat(value)}) × 100 = ${numberFormat(variation)}%`;
+
+        originalOutput.textContent = currency(value);
+        finalOutput.textContent = currency(newValue);
+        secondaryResults.classList.remove('hidden');
+
+        resultFootnote.textContent = 'A variação é calculada em relação ao valor inicial.';
+        return;
+      }
+
+      if (percentageInput.value.trim() === '' || valueInput.value.trim() === '') {
+        showError('Preencha a porcentagem e o valor para realizar o cálculo.');
+        return;
+      }
+
+      if (!validNumber(percentage) || !validNumber(value) || percentage < 0 || value < 0) {
+        showError('Informe números válidos e não negativos.');
+        return;
+      }
+
+      if (percentage > 1000000 || value > Number.MAX_SAFE_INTEGER) {
+        showError('Os valores informados são muito elevados. Utilize números menores.');
+        return;
+      }
+
+      let result: number;
+
+      try {
+        result = calculatePercentageOfValue(value, percentage);
+      } catch {
+        showError('Não foi possível realizar o cálculo. Verifique os valores informados.');
+        return;
+      }
+
+      if (!validNumber(result)) {
+        showError('O resultado ultrapassou o limite numérico permitido.');
+        return;
+      }
+
+      const percentageValue = (percentage / 100) * value;
+
+      if (currentMode === 'percentage') {
+        resultLabel.textContent = 'VALOR DA PORCENTAGEM';
+        resultValue.textContent = currency(result);
+        resultDescription.textContent =
+          `${numberFormat(percentage)}% de ${currency(value)} corresponde a ${currency(result)}.`;
+
+        resultFormula.textContent =
+          `(${numberFormat(percentage)} ÷ 100) × ${numberFormat(value)} = ${numberFormat(result)}`;
+
+        originalOutput.textContent = currency(value);
+        finalOutput.textContent = currency(result);
+        resultFootnote.textContent = 'O resultado representa a parte correspondente à porcentagem informada.';
+      }
+
+      if (currentMode === 'discount') {
+        const finalValue = value - result;
+
+        resultLabel.textContent = 'PREÇO COM DESCONTO';
+        resultValue.textContent = currency(finalValue);
+        resultDescription.textContent =
+          `Você economiza ${currency(result)} ao aplicar ${numberFormat(percentage)}% de desconto.`;
+
+        resultFormula.textContent =
+          `${numberFormat(value)} − ((${numberFormat(percentage)} ÷ 100) × ${numberFormat(value)}) = ${numberFormat(finalValue)}`;
+
+        originalOutput.textContent = currency(value);
+        finalOutput.textContent = currency(finalValue);
+        resultFootnote.textContent = `Economia de ${currency(result)} sobre o valor original.`;
+      }
+
+      if (currentMode === 'increase') {
+        const finalValue = value + result;
+
+        resultLabel.textContent = 'VALOR COM AUMENTO';
+        resultValue.textContent = currency(finalValue);
+        resultDescription.textContent =
+          `O aumento de ${numberFormat(percentage)}% representa ${currency(result)}.`;
+
+        resultFormula.textContent =
+          `${numberFormat(value)} + ((${numberFormat(percentage)} ÷ 100) × ${numberFormat(value)}) = ${numberFormat(finalValue)}`;
+
+        originalOutput.textContent = currency(value);
+        finalOutput.textContent = currency(finalValue);
+        resultFootnote.textContent = `O acréscimo aplicado foi de ${currency(result)}.`;
+      }
+
+      secondaryResults.classList.remove('hidden');
+    }
+
+    document.querySelectorAll<HTMLButtonElement>('.tab').forEach((button) => {
+      button.addEventListener('click', () => {
+        const mode = button.dataset.mode as CalculationMode;
+        if (mode) setMode(mode);
+      });
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('[data-example]').forEach((button) => {
+      button.addEventListener('click', () => {
+        percentageInput.value = button.dataset.example || '10';
+        runCalculation();
+      });
+    });
+
+    document.getElementById('calc-btn')?.addEventListener('click', runCalculation);
+
+    [percentageInput, valueInput, newValueInput].forEach((input) => {
+      input.addEventListener('input', runCalculation);
+    });
+
+    runCalculation();
+  </script>
+
+  <style>
+    .percentage-page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding-bottom: 3rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 2rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+    }
+
+    .eyebrow,
+    .section-label {
+      display: inline-block;
+      margin-bottom: 0.65rem;
+      color: var(--color-primary);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .page-header h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      line-height: 1.15;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .page-header p,
+    .section-heading p {
+      max-width: 720px;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .card {
+      padding: 1.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      background: var(--card-bg, var(--bg-secondary));
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.05);
+    }
+
+    .calculator {
+      margin-bottom: 4rem;
+    }
+
+    .calculator-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .calculator-heading h2 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+
+    .calculator-icon {
+      display: grid;
+      width: 52px;
+      height: 52px;
+      place-items: center;
+      border-radius: 15px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--color-primary);
+    }
+
+    .calculator-icon svg {
+      width: 26px;
+      height: 26px;
+    }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.5rem;
+      padding: 0.4rem;
+      margin-bottom: 1.75rem;
+      border-radius: 12px;
+      background: var(--bg-primary);
+      border: 1px solid var(--border-color);
+    }
+
+    .tab {
+      min-height: 42px;
+      padding: 0.6rem 0.4rem;
+      border: 0;
+      border-radius: 8px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      font-weight: 650;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .tab:hover {
+      color: var(--color-primary);
+    }
+
+    .tab.active {
+      background: var(--color-primary);
+      color: white;
+      box-shadow: 0 3px 10px rgba(37, 99, 235, 0.2);
+    }
+
+    .calculator-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      align-items: stretch;
+    }
+
+    .mode-description {
+      min-height: 48px;
+      margin-bottom: 1.2rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .field {
+      margin-bottom: 1.2rem;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      min-height: 50px;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-primary);
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      min-width: 0;
+      padding: 0.85rem;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: var(--text-primary);
+      font: inherit;
+      font-size: 1rem;
+    }
+
+    .input-prefix,
+    .input-suffix {
+      padding: 0 0.9rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .input-prefix {
+      padding-right: 0;
+    }
+
+    .input-suffix {
+      padding-left: 0;
+    }
+
+    .examples {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.5rem;
+      margin: 1.4rem 0;
+    }
+
+    .examples span {
+      width: 100%;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+    }
+
+    .examples button {
+      padding: 0.4rem 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 20px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 0.82rem;
+      cursor: pointer;
+    }
+
+    .examples button:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .calculate-button {
+      display: flex;
+      width: 100%;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      padding: 0.95rem 1.2rem;
+      border: 0;
+      border-radius: 10px;
+      background: var(--color-primary);
+      color: white;
+      font-size: 1rem;
+      font-weight: 750;
+      cursor: pointer;
+      transition: filter 0.2s, transform 0.2s;
+    }
+
+    .calculate-button:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    .calculate-button svg {
+      flex-shrink: 0;
+    }
+
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 1rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      text-align: center;
+    }
+
+    .privacy-note svg {
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    .result-panel {
+      display: flex;
+      flex-direction: column;
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      background: var(--bg-primary);
+    }
+
+    .result-top,
+    .formula-heading,
+    .secondary-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+    }
+
+    .result-label {
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .result-symbol {
+      color: var(--color-primary);
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .result-value {
+      margin: 1rem 0 0.5rem;
+      color: var(--color-primary);
+      font-size: clamp(1.9rem, 4vw, 2.5rem);
+      font-weight: 850;
+      line-height: 1.2;
+      overflow-wrap: anywhere;
+    }
+
+    .result-description {
+      min-height: 42px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .result-divider {
+      height: 1px;
+      margin: 1.4rem 0;
+      background: var(--border-color);
+    }
+
+    .formula-heading {
+      margin-bottom: 0.7rem;
+      font-size: 0.85rem;
+      font-weight: 750;
+    }
+
+    .formula-tag {
+      padding: 0.25rem 0.5rem;
+      border-radius: 5px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--color-primary);
+      font-size: 0.65rem;
+      letter-spacing: 0.05em;
+    }
+
+    .formula-box {
+      padding: 0.9rem;
+      border: 1px dashed var(--border-color);
+      border-radius: 8px;
+      color: var(--text-primary);
+      font-family: monospace;
+      font-size: 0.85rem;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
+    }
+
+    .secondary-results {
+      display: grid;
+      gap: 0.8rem;
+      margin-top: 1.2rem;
+    }
+
+    .secondary-item {
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+    }
+
+    .secondary-item strong {
+      color: var(--text-primary);
+      text-align: right;
+    }
+
+    .result-footnote {
+      margin: auto 0 0;
+      padding-top: 1.2rem;
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+      line-height: 1.5;
+    }
+
+    .error-message {
+      margin: 1.2rem 0 0;
+      padding: 0.9rem 1rem;
+      border: 1px solid #ef4444;
+      border-radius: 8px;
+      background: rgba(239, 68, 68, 0.08);
+      color: #dc2626;
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .info-section {
+      margin: 4rem 0;
+    }
+
+    .section-heading {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading h2,
+    .faq-section h2,
+    .bottom-cta h2 {
+      margin: 0 0 0.7rem;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+    }
+
+    .section-heading p {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .formula-highlight {
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--color-primary);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .formula-highlight span {
+      display: block;
+      margin-bottom: 0.7rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .formula-highlight strong {
+      display: block;
+      color: var(--color-primary);
+      font-size: clamp(1.05rem, 3vw, 1.35rem);
+      overflow-wrap: anywhere;
+    }
+
+    .formula-highlight p {
+      margin: 0.6rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .example-card {
+      padding: 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--card-bg, var(--bg-secondary));
+    }
+
+    .example-number {
+      color: var(--color-primary);
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .example-card h3 {
+      margin: 0.65rem 0;
+      font-size: 1rem;
+    }
+
+    .example-card p,
+    .example-calculation {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .example-calculation {
+      margin: 1rem 0 0.5rem;
+      font-family: monospace;
+      overflow-wrap: anywhere;
+    }
+
+    .example-card > strong {
+      color: var(--color-primary);
+      font-size: 1.25rem;
+    }
+
+    .uses-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .use-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.2rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--card-bg, var(--bg-secondary));
+    }
+
+    .use-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--color-primary);
+    }
+
+    .use-card h3 {
+      margin: 0 0 0.4rem;
+      font-size: 0.98rem;
+    }
+
+    .use-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.55;
+    }
+
+    .faq-section {
+      margin: 4rem 0;
+    }
+
+    .faq-section h2 {
+      margin-bottom: 1.5rem;
+    }
+
+    .faq-section details {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .faq-section summary {
+      position: relative;
+      padding-right: 2rem;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq-section summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-section summary::after {
+      position: absolute;
+      right: 0;
+      content: '+';
+      color: var(--color-primary);
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .faq-section details[open] summary::after {
+      content: '−';
+    }
+
+    .faq-section details p {
+      max-width: 800px;
+      margin: 0.8rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .bottom-cta {
+      padding: 2rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+      text-align: center;
+    }
+
+    .bottom-cta p {
+      max-width: 600px;
+      margin: 0 auto 1.3rem;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 0.8rem 1.2rem;
+      border-radius: 9px;
+      background: var(--color-primary);
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      filter: brightness(1.1);
+    }
+
+    .back-link svg {
+      flex-shrink: 0;
+    }
+
+    @media (max-width: 760px) {
+      .calculator-content {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .examples-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .uses-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 1rem;
+      }
+
+      .calculator-heading h2 {
+        font-size: 1.15rem;
+      }
+
+      .tab {
+        font-size: 0.82rem;
+      }
+
+      .result-panel {
+        padding: 1.1rem;
+      }
+
+      .bottom-cta {
+        padding: 1.4rem 1rem;
+      }
+    }
+  </style>
+</BaseLayout>

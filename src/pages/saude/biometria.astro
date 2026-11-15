@@ -1,0 +1,1149 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de IMC, Calorias e Água — Calculadora de Ganhos"
+  description="Calcule seu IMC, metabolismo basal (TMB), gasto calórico diário (TDEE) e estimativa de consumo de água. Ferramenta gratuita com resultados explicados."
+>
+  <main class="health-page">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Saúde e Biometria</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="eyebrow">SAÚDE E BEM-ESTAR</span>
+      <h1>Calculadora de Saúde e Biometria</h1>
+      <p>
+        Informe seus dados físicos para estimar o Índice de Massa Corporal,
+        o metabolismo, o gasto energético diário e a necessidade de hidratação.
+      </p>
+    </header>
+
+    <section class="calculator-grid" aria-label="Calculadora de saúde">
+      <div class="card input-card">
+        <div class="section-heading">
+          <div class="heading-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 3v18"></path>
+              <path d="M5 8h14"></path>
+              <path d="M7 16h10"></path>
+              <path d="M3 12h18"></path>
+            </svg>
+          </div>
+          <div>
+            <h2>Seus dados físicos</h2>
+            <p>Preencha os campos para realizar a estimativa.</p>
+          </div>
+        </div>
+
+        <div class="form-grid">
+          <div class="field">
+            <label for="h-weight">Peso corporal</label>
+            <div class="input-wrap">
+              <input id="h-weight" type="number" min="1" max="500" step="0.1" value="75" inputmode="decimal" />
+              <span>kg</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="h-height">Altura</label>
+            <div class="input-wrap">
+              <input id="h-height" type="number" min="50" max="250" step="0.1" value="175" inputmode="decimal" />
+              <span>cm</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="h-age">Idade</label>
+            <div class="input-wrap">
+              <input id="h-age" type="number" min="18" max="120" step="1" value="30" inputmode="numeric" />
+              <span>anos</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="h-gender">Sexo biológico</label>
+            <select id="h-gender">
+              <option value="male">Masculino</option>
+              <option value="female">Feminino</option>
+            </select>
+          </div>
+
+          <div class="field full-width">
+            <label for="h-activity">Nível de atividade física</label>
+            <select id="h-activity">
+              <option value="1.2">Sedentário — pouco ou nenhum exercício</option>
+              <option value="1.375">Levemente ativo — exercícios 1 a 3 dias/semana</option>
+              <option value="1.55" selected>Moderadamente ativo — exercícios 3 a 5 dias/semana</option>
+              <option value="1.725">Muito ativo — exercícios intensos 6 a 7 dias/semana</option>
+            </select>
+            <small>Escolha a opção que melhor representa sua rotina habitual.</small>
+          </div>
+        </div>
+
+        <div id="form-error" class="form-error" role="alert" aria-live="polite" hidden></div>
+
+        <button type="button" id="calc-btn" class="calculate-btn">
+          <span>Calcular meus resultados</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </button>
+
+        <p class="privacy-note">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Os cálculos são realizados diretamente no navegador.
+        </p>
+      </div>
+
+      <div class="card results-card" aria-live="polite">
+        <div class="section-heading">
+          <div class="heading-icon result-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </div>
+          <div>
+            <h2>Seus resultados</h2>
+            <p>Estimativas calculadas com seus dados.</p>
+          </div>
+        </div>
+
+        <div class="result-list">
+          <article class="result-item imc-result">
+            <div class="result-top">
+              <div>
+                <span class="result-label">Índice de Massa Corporal</span>
+                <span class="result-description">IMC</span>
+              </div>
+              <div class="result-symbol" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="m16 16 3-8 3 8c-.87.65-1.93 1-3 1s-2.13-.35-3-1Z"></path>
+                  <path d="m2 16 3-8 3 8c-.87.65-1.93 1-3 1s-2.13-.35-3-1Z"></path>
+                  <path d="M7 21h10"></path>
+                  <path d="M12 3v18"></path>
+                  <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="result-value-row">
+              <strong id="res-imc">--</strong>
+              <span id="res-imc-class" class="result-tag">Aguardando</span>
+            </div>
+            <div class="imc-track" aria-hidden="true">
+              <span class="imc-segment under"></span>
+              <span class="imc-segment normal"></span>
+              <span class="imc-segment over"></span>
+              <span class="imc-segment obese"></span>
+            </div>
+            <p id="res-imc-description" class="result-footnote">
+              O resultado aparecerá após o cálculo.
+            </p>
+          </article>
+
+          <article class="result-item calories-result">
+            <div class="result-top">
+              <div>
+                <span class="result-label">Gasto energético diário</span>
+                <span class="result-description">TDEE estimado</span>
+              </div>
+              <div class="result-symbol" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.5 4 6.5 2 2 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.229 1-3 1 1 1.5 1.5 1.5 2.5Z"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="result-value-row">
+              <strong id="res-tdee">--</strong>
+              <span class="unit">kcal/dia</span>
+            </div>
+            <p id="res-tmb" class="result-footnote">
+              Metabolismo basal (TMB): -- kcal/dia
+            </p>
+          </article>
+
+          <article class="result-item water-result">
+            <div class="result-top">
+              <div>
+                <span class="result-label">Estimativa de hidratação</span>
+                <span class="result-description">Consumo diário de água</span>
+              </div>
+              <div class="result-symbol" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+                </svg>
+              </div>
+            </div>
+            <div class="result-value-row">
+              <strong id="res-water">--</strong>
+              <span class="unit">litros/dia</span>
+            </div>
+            <p id="res-water-ml" class="result-footnote">
+              Equivalente em mililitros: --
+            </p>
+          </article>
+        </div>
+
+        <div class="results-disclaimer">
+          <span aria-hidden="true">ⓘ</span>
+          <p>Os resultados são estimativas matemáticas e não representam diagnóstico ou prescrição médica.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="card explanation-section">
+      <div class="content-heading">
+        <span class="eyebrow">ENTENDA OS INDICADORES</span>
+        <h2>O que significam os resultados?</h2>
+        <p>Conheça os indicadores utilizados pela calculadora e como interpretar cada estimativa.</p>
+      </div>
+
+      <div class="explanation-grid">
+        <article class="explanation-card">
+          <div class="explanation-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m16 16 3-8 3 8c-.87.65-1.93 1-3 1s-2.13-.35-3-1Z"></path>
+              <path d="m2 16 3-8 3 8c-.87.65-1.93 1-3 1s-2.13-.35-3-1Z"></path>
+              <path d="M7 21h10"></path>
+              <path d="M12 3v18"></path>
+            </svg>
+          </div>
+          <h3>Índice de Massa Corporal (IMC)</h3>
+          <p>
+            O IMC relaciona o peso com a altura e é utilizado como indicador
+            inicial para avaliação do estado nutricional em adultos.
+          </p>
+          <div class="formula">
+            IMC = Peso ÷ Altura²
+          </div>
+          <p class="small-note">
+            O IMC não diferencia massa muscular, gordura corporal e distribuição de gordura.
+          </p>
+        </article>
+
+        <article class="explanation-card">
+          <div class="explanation-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.5 4 6.5 2 2 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.229 1-3 1 1 1.5 1.5 1.5 2.5Z"></path>
+            </svg>
+          </div>
+          <h3>Taxa Metabólica Basal (TMB)</h3>
+          <p>
+            Representa uma estimativa da energia que o organismo utiliza
+            em repouso para manter suas funções vitais.
+          </p>
+          <div class="formula">
+            Equação de Mifflin-St Jeor
+          </div>
+          <p class="small-note">
+            A estimativa considera peso, altura, idade e sexo biológico.
+          </p>
+        </article>
+
+        <article class="explanation-card">
+          <div class="explanation-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 11V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v0"></path>
+              <path d="M14 10V4a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v2"></path>
+              <path d="M10 10.5V6a2 2 0 0 0-2-2v0a2 2 0 0 0-2 2v8"></path>
+              <path d="M18 8a2 2 0 1 1 4 0v6a8 8 0 0 1-8 8h-2c-2.8 0-4.5-.86-5.99-2.34l-3.6-3.6a2 2 0 0 1 2.83-2.82L7 15"></path>
+            </svg>
+          </div>
+          <h3>Gasto Energético Diário (TDEE)</h3>
+          <p>
+            É uma estimativa do gasto energético total, considerando o
+            metabolismo basal e o nível de atividade física informado.
+          </p>
+          <div class="formula">
+            TDEE = TMB × Fator de atividade
+          </div>
+          <p class="small-note">
+            O resultado pode variar conforme a rotina, composição corporal e metabolismo individual.
+          </p>
+        </article>
+
+        <article class="explanation-card">
+          <div class="explanation-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"></path>
+            </svg>
+          </div>
+          <h3>Consumo de água</h3>
+          <p>
+            A ferramenta apresenta uma referência simplificada de hidratação
+            proporcional ao peso corporal.
+          </p>
+          <div class="formula">
+            Estimativa = Peso × 35 ml
+          </div>
+          <p class="small-note">
+            A necessidade real varia com clima, alimentação, exercícios, condições de saúde e outros fatores.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="card imc-reference">
+      <div class="content-heading">
+        <span class="eyebrow">TABELA DE REFERÊNCIA</span>
+        <h2>Classificação do IMC em adultos</h2>
+        <p>Faixas de referência geralmente utilizadas para adultos com 20 anos ou mais.</p>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Classificação</th>
+              <th>Faixa de IMC</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Abaixo do peso</td>
+              <td>Menor que 18,5</td>
+            </tr>
+            <tr>
+              <td>Peso adequado</td>
+              <td>18,5 a 24,9</td>
+            </tr>
+            <tr>
+              <td>Sobrepeso</td>
+              <td>25,0 a 29,9</td>
+            </tr>
+            <tr>
+              <td>Obesidade grau I</td>
+              <td>30,0 a 34,9</td>
+            </tr>
+            <tr>
+              <td>Obesidade grau II</td>
+              <td>35,0 a 39,9</td>
+            </tr>
+            <tr>
+              <td>Obesidade grau III</td>
+              <td>40,0 ou mais</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">
+        Esta tabela é uma referência geral para adultos. Não deve ser aplicada isoladamente a crianças,
+        adolescentes, gestantes ou pessoas com condições específicas.
+      </p>
+    </section>
+
+    <section class="card faq-section">
+      <div class="content-heading">
+        <span class="eyebrow">DÚVIDAS FREQUENTES</span>
+        <h2>Perguntas sobre saúde e biometria</h2>
+      </div>
+
+      <div class="faq-list">
+        <details>
+          <summary>O IMC é suficiente para avaliar minha saúde?</summary>
+          <p>
+            Não. O IMC é um indicador inicial e não avalia diretamente a composição corporal,
+            a distribuição de gordura ou outros fatores importantes. Uma avaliação completa
+            deve considerar o histórico e as características individuais.
+          </p>
+        </details>
+
+        <details>
+          <summary>Qual é a diferença entre TMB e TDEE?</summary>
+          <p>
+            A TMB estima a energia utilizada pelo organismo em repouso. O TDEE considera
+            também o nível de atividade física e representa uma estimativa do gasto energético total diário.
+          </p>
+        </details>
+
+        <details>
+          <summary>O TDEE indica exatamente quantas calorias devo consumir?</summary>
+          <p>
+            Não. Ele fornece uma estimativa do gasto energético diário. A necessidade calórica
+            individual depende de objetivos, composição corporal, rotina e condições de saúde.
+            Procure orientação de um nutricionista para definir uma estratégia alimentar.
+          </p>
+        </details>
+
+        <details>
+          <summary>Devo beber exatamente a quantidade de água calculada?</summary>
+          <p>
+            Não necessariamente. O valor é apenas uma referência matemática. A necessidade de
+            líquidos pode mudar conforme temperatura, exercício, alimentação, medicamentos e
+            condições clínicas. Siga orientações profissionais quando houver restrição hídrica.
+          </p>
+        </details>
+
+        <details>
+          <summary>Posso utilizar a calculadora para crianças ou adolescentes?</summary>
+          <p>
+            Esta ferramenta utiliza referências gerais destinadas a adultos. Crianças e adolescentes
+            precisam de métodos de avaliação específicos que consideram idade e desenvolvimento.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <aside class="health-warning">
+      <strong>Importante:</strong>
+      Esta ferramenta tem finalidade exclusivamente informativa e educacional.
+      Os resultados não substituem consultas, exames, diagnóstico ou orientação de
+      médicos e nutricionistas. Não utilize estimativas isoladas para iniciar dietas,
+      alterar a ingestão de líquidos ou modificar tratamentos.
+    </aside>
+  </main>
+
+  <script>
+    import {
+      calculateIMC,
+      calculateTMB,
+      calculateWaterIntake
+    } from '../../engines/health/health-engine';
+
+    const weightInput = document.getElementById('h-weight') as HTMLInputElement;
+    const heightInput = document.getElementById('h-height') as HTMLInputElement;
+    const ageInput = document.getElementById('h-age') as HTMLInputElement;
+    const genderInput = document.getElementById('h-gender') as HTMLSelectElement;
+    const activityInput = document.getElementById('h-activity') as HTMLSelectElement;
+    const calculateButton = document.getElementById('calc-btn') as HTMLButtonElement;
+    const errorElement = document.getElementById('form-error') as HTMLDivElement;
+
+    const imcOutput = document.getElementById('res-imc')!;
+    const imcClassOutput = document.getElementById('res-imc-class')!;
+    const imcDescriptionOutput = document.getElementById('res-imc-description')!;
+    const tdeeOutput = document.getElementById('res-tdee')!;
+    const tmbOutput = document.getElementById('res-tmb')!;
+    const waterOutput = document.getElementById('res-water')!;
+    const waterMlOutput = document.getElementById('res-water-ml')!;
+
+    const numberFormat = new Intl.NumberFormat('pt-BR', {
+      maximumFractionDigits: 1
+    });
+
+    const integerFormat = new Intl.NumberFormat('pt-BR', {
+      maximumFractionDigits: 0
+    });
+
+    function getIMCClassification(imc: number) {
+      if (imc < 18.5) {
+        return {
+          label: 'Abaixo do peso',
+          description: 'O resultado está abaixo da faixa de referência para adultos.',
+          className: 'tag-warning'
+        };
+      }
+
+      if (imc < 25) {
+        return {
+          label: 'Peso adequado',
+          description: 'O resultado está dentro da faixa de referência para adultos.',
+          className: 'tag-success'
+        };
+      }
+
+      if (imc < 30) {
+        return {
+          label: 'Sobrepeso',
+          description: 'O resultado está acima da faixa de referência para adultos.',
+          className: 'tag-warning'
+        };
+      }
+
+      if (imc < 35) {
+        return {
+          label: 'Obesidade I',
+          description: 'O resultado corresponde à faixa de obesidade grau I.',
+          className: 'tag-danger'
+        };
+      }
+
+      if (imc < 40) {
+        return {
+          label: 'Obesidade II',
+          description: 'O resultado corresponde à faixa de obesidade grau II.',
+          className: 'tag-danger'
+        };
+      }
+
+      return {
+        label: 'Obesidade III',
+        description: 'O resultado corresponde à faixa de obesidade grau III.',
+        className: 'tag-danger'
+      };
+    }
+
+    function showError(message: string) {
+      errorElement.textContent = message;
+      errorElement.hidden = false;
+    }
+
+    function clearError() {
+      errorElement.textContent = '';
+      errorElement.hidden = true;
+    }
+
+    function validateInputs(weight: number, height: number, age: number) {
+      if (!Number.isFinite(weight) || weight <= 0 || weight > 500) {
+        return 'Informe um peso válido, maior que zero e até 500 kg.';
+      }
+
+      if (!Number.isFinite(height) || height < 50 || height > 250) {
+        return 'Informe uma altura válida entre 50 e 250 centímetros.';
+      }
+
+      if (!Number.isInteger(age) || age < 18 || age > 120) {
+        return 'Esta calculadora utiliza referências para adultos. Informe uma idade entre 18 e 120 anos.';
+      }
+
+      return '';
+    }
+
+    function runCalc() {
+      const weight = Number(weightInput.value);
+      const heightCm = Number(heightInput.value);
+      const age = Number(ageInput.value);
+      const gender = genderInput.value as 'male' | 'female';
+      const activity = Number(activityInput.value);
+
+      const validationError = validateInputs(weight, heightCm, age);
+
+      if (validationError) {
+        showError(validationError);
+        return;
+      }
+
+      if (!['male', 'female'].includes(gender) || ![1.2, 1.375, 1.55, 1.725].includes(activity)) {
+        showError('Verifique as opções selecionadas e tente novamente.');
+        return;
+      }
+
+      try {
+        clearError();
+
+        const heightM = heightCm / 100;
+
+        const imcResult = calculateIMC(weight, heightM);
+        const tmbResult = calculateTMB(weight, heightCm, age, gender, activity);
+        const waterResult = calculateWaterIntake(weight);
+
+        const imc = Number(imcResult.imc);
+        const tmb = Number(tmbResult.tmb);
+        const tdee = Number(tmbResult.tdee);
+        const water = Number(waterResult);
+
+        if (
+          !Number.isFinite(imc) ||
+          !Number.isFinite(tmb) ||
+          !Number.isFinite(tdee) ||
+          !Number.isFinite(water) ||
+          imc <= 0 ||
+          tmb <= 0 ||
+          tdee <= 0 ||
+          water <= 0
+        ) {
+          throw new Error('Não foi possível gerar uma estimativa válida com os dados informados.');
+        }
+
+        const classification = getIMCClassification(imc);
+
+        imcOutput.textContent = numberFormat.format(imc);
+        imcClassOutput.textContent = classification.label;
+        imcClassOutput.className = `result-tag ${classification.className}`;
+        imcDescriptionOutput.textContent = classification.description;
+
+        tdeeOutput.textContent = integerFormat.format(tdee);
+        tmbOutput.textContent = `Metabolismo basal (TMB): ${integerFormat.format(tmb)} kcal/dia`;
+
+        waterOutput.textContent = numberFormat.format(water);
+        waterMlOutput.textContent = `Equivalente aproximado: ${integerFormat.format(water * 1000)} ml/dia`;
+      } catch (error) {
+        showError(
+          error instanceof Error
+            ? error.message
+            : 'Ocorreu um erro ao calcular os resultados. Verifique os dados e tente novamente.'
+        );
+      }
+    }
+
+    calculateButton.addEventListener('click', runCalc);
+
+    [weightInput, heightInput, ageInput, genderInput, activityInput].forEach((input) => {
+      input.addEventListener('change', runCalc);
+    });
+
+    runCalc();
+  </script>
+
+  <style>
+    .health-page {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 0 3rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      gap: 0.6rem;
+      align-items: center;
+      margin-bottom: 1.8rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a {
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .page-header {
+      max-width: 760px;
+      margin-bottom: 2rem;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      color: var(--color-primary);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      margin-bottom: 0.65rem;
+    }
+
+    .page-header h1 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+      margin: 0 0 0.8rem;
+      color: var(--text-primary);
+    }
+
+    .page-header > p,
+    .content-heading > p {
+      color: var(--text-secondary);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.4rem;
+      align-items: stretch;
+    }
+
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: clamp(1.1rem, 3vw, 1.6rem);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.035);
+    }
+
+    .input-card,
+    .results-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .heading-icon {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--color-primary);
+    }
+
+    .result-icon {
+      background: rgba(22, 163, 74, 0.1);
+      color: #16a34a;
+    }
+
+    .section-heading h2 {
+      font-size: 1.15rem;
+      margin: 0 0 0.25rem;
+      color: var(--text-primary);
+    }
+
+    .section-heading p {
+      margin: 0;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .field {
+      min-width: 0;
+    }
+
+    .full-width {
+      grid-column: 1 / -1;
+    }
+
+    .field label {
+      display: block;
+      font-size: 0.86rem;
+      font-weight: 650;
+      margin-bottom: 0.45rem;
+      color: var(--text-primary);
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input,
+    .field select {
+      width: 100%;
+      min-height: 46px;
+      border: 1px solid var(--border-color);
+      border-radius: 9px;
+      padding: 0.7rem 0.8rem;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font: inherit;
+      font-size: 0.92rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrap input {
+      padding-right: 3rem;
+    }
+
+    .input-wrap > span {
+      position: absolute;
+      top: 50%;
+      right: 0.85rem;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      pointer-events: none;
+    }
+
+    .input-wrap input:focus,
+    .field select:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .field small {
+      display: block;
+      margin-top: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .calculate-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      min-height: 48px;
+      padding: 0.8rem 1rem;
+      margin-top: 1.5rem;
+      border: 0;
+      border-radius: 10px;
+      background: var(--color-primary);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: filter 0.2s, transform 0.2s;
+    }
+
+    .calculate-btn:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+
+    .calculate-btn:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: 3px;
+    }
+
+    .calculate-btn svg {
+      flex-shrink: 0;
+    }
+
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 0.85rem 0 0;
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+    }
+
+    .privacy-note svg {
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    .form-error {
+      margin-top: 1rem;
+      padding: 0.8rem 0.9rem;
+      border: 1px solid rgba(220, 38, 38, 0.25);
+      border-radius: 9px;
+      background: rgba(220, 38, 38, 0.08);
+      color: #dc2626;
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    .result-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.85rem;
+    }
+
+    .result-item {
+      padding: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-primary);
+    }
+
+    .result-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .result-label {
+      display: block;
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .result-description {
+      display: block;
+      margin-top: 0.2rem;
+      font-size: 0.75rem;
+      color: var(--text-secondary);
+    }
+
+    .result-symbol {
+      color: var(--color-primary);
+    }
+
+    .result-value-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      gap: 0.65rem;
+      margin-top: 0.8rem;
+    }
+
+    .result-value-row strong {
+      font-size: clamp(1.45rem, 3vw, 1.8rem);
+      line-height: 1.2;
+      letter-spacing: -0.04em;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .result-tag {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 30px;
+      padding: 0.3rem 0.6rem;
+      background: rgba(100, 116, 139, 0.12);
+      color: var(--text-secondary);
+      font-size: 0.72rem;
+      font-weight: 700;
+    }
+
+    .tag-success {
+      background: rgba(22, 163, 74, 0.12);
+      color: #16a34a;
+    }
+
+    .tag-warning {
+      background: rgba(217, 119, 6, 0.12);
+      color: #d97706;
+    }
+
+    .tag-danger {
+      background: rgba(220, 38, 38, 0.12);
+      color: #dc2626;
+    }
+
+    .unit {
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .result-footnote {
+      margin: 0.65rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.77rem;
+      line-height: 1.5;
+    }
+
+    .imc-track {
+      display: flex;
+      height: 7px;
+      gap: 3px;
+      margin-top: 0.9rem;
+      overflow: hidden;
+      border-radius: 20px;
+    }
+
+    .imc-segment {
+      flex: 1;
+      border-radius: 20px;
+    }
+
+    .imc-segment.under { background: #eab308; }
+    .imc-segment.normal { background: #16a34a; }
+    .imc-segment.over { background: #f59e0b; }
+    .imc-segment.obese { background: #dc2626; }
+
+    .results-disclaimer {
+      display: flex;
+      gap: 0.65rem;
+      align-items: flex-start;
+      margin-top: auto;
+      padding: 1rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+      line-height: 1.5;
+    }
+
+    .results-disclaimer p {
+      margin: 0;
+    }
+
+    .explanation-section,
+    .imc-reference,
+    .faq-section {
+      margin-top: 1.5rem;
+    }
+
+    .content-heading {
+      margin-bottom: 1.3rem;
+    }
+
+    .content-heading h2 {
+      margin: 0 0 0.55rem;
+      font-size: 1.35rem;
+      letter-spacing: -0.025em;
+      color: var(--text-primary);
+    }
+
+    .content-heading > p {
+      font-size: 0.9rem;
+    }
+
+    .explanation-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .explanation-card {
+      padding: 1.1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-primary);
+    }
+
+    .explanation-icon {
+      color: var(--color-primary);
+      margin-bottom: 0.65rem;
+    }
+
+    .explanation-card h3 {
+      margin: 0 0 0.55rem;
+      font-size: 1rem;
+      color: var(--text-primary);
+    }
+
+    .explanation-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      line-height: 1.7;
+    }
+
+    .formula {
+      margin: 0.85rem 0;
+      padding: 0.7rem;
+      border-radius: 8px;
+      background: rgba(37, 99, 235, 0.07);
+      color: var(--color-primary);
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .explanation-card .small-note {
+      font-size: 0.76rem;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    .imc-reference table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    .imc-reference th,
+    .imc-reference td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+    }
+
+    .imc-reference th {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .imc-reference td {
+      color: var(--text-secondary);
+    }
+
+    .imc-reference tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .table-note {
+      margin: 1rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    .faq-list details {
+      border-top: 1px solid var(--border-color);
+    }
+
+    .faq-list details:last-child {
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .faq-list summary {
+      position: relative;
+      padding: 1rem 2rem 1rem 0;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 650;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq-list summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-list summary::after {
+      content: '+';
+      position: absolute;
+      right: 0.2rem;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--color-primary);
+      font-size: 1.3rem;
+      font-weight: 400;
+    }
+
+    .faq-list details[open] summary::after {
+      content: '−';
+    }
+
+    .faq-list details p {
+      margin: 0;
+      padding: 0 0 1rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .health-warning {
+      margin-top: 1.5rem;
+      padding: 1rem 1.1rem;
+      border-left: 4px solid #d97706;
+      border-radius: 8px;
+      background: rgba(217, 119, 6, 0.07);
+      color: var(--text-secondary);
+      font-size: 0.83rem;
+      line-height: 1.7;
+    }
+
+    .health-warning strong {
+      color: var(--text-primary);
+    }
+
+    @media (max-width: 760px) {
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .explanation-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .page-header {
+        margin-bottom: 1.5rem;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .full-width {
+        grid-column: auto;
+      }
+
+      .result-value-row {
+        gap: 0.45rem;
+      }
+
+      .card {
+        border-radius: 12px;
+      }
+    }
+  </style>
+</BaseLayout>

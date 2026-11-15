@@ -1,0 +1,1384 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de Salário Líquido CLT 2026 — Calculadora de Ganhos"
+  description="Calcule seu salário líquido em 2026 com INSS progressivo, IRRF atualizado, dependentes e outros descontos. Simulação gratuita para trabalhadores CLT."
+>
+  <main class="salary-page">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">/</span>
+      <a href="/trabalhista/">Trabalhista</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">Salário Líquido</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="eyebrow">DIREITOS TRABALHISTAS</span>
+      <h1>Calculadora de Salário Líquido CLT</h1>
+      <p>
+        Descubra quanto pode receber após os descontos de INSS, Imposto de Renda
+        e outras deduções. Cálculo atualizado com as tabelas de referência de 2026.
+      </p>
+    </header>
+
+    <section class="calculator-grid" aria-label="Calculadora de salário líquido">
+      <div class="card input-card">
+        <div class="section-heading">
+          <div class="heading-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            </svg>
+          </div>
+          <div>
+            <h2>Dados do salário</h2>
+            <p>Informe sua remuneração e os descontos aplicáveis.</p>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="gross-salary">Salário bruto mensal</label>
+          <div class="input-wrap">
+            <span class="prefix">R$</span>
+            <input
+              type="number"
+              id="gross-salary"
+              value="4500"
+              min="0.01"
+              max="100000000"
+              step="0.01"
+              inputmode="decimal"
+            />
+          </div>
+          <small>Valor bruto antes dos descontos da folha de pagamento.</small>
+        </div>
+
+        <div class="field">
+          <label for="dependents">Número de dependentes para IRRF</label>
+          <input
+            type="number"
+            id="dependents"
+            value="0"
+            min="0"
+            max="50"
+            step="1"
+            inputmode="numeric"
+          />
+          <small>
+            Dedução mensal de R$ 189,59 por dependente, quando legalmente aplicável.
+          </small>
+        </div>
+
+        <div class="field">
+          <label for="other-discounts">Outros descontos mensais</label>
+          <div class="input-wrap">
+            <span class="prefix">R$</span>
+            <input
+              type="number"
+              id="other-discounts"
+              value="0"
+              min="0"
+              max="100000000"
+              step="0.01"
+              inputmode="decimal"
+            />
+          </div>
+          <small>
+            Exemplo: vale-transporte, plano de saúde, coparticipação e outros descontos informados.
+          </small>
+        </div>
+
+        <div class="legal-info">
+          <span aria-hidden="true">ⓘ</span>
+          <p>
+            O cálculo utiliza as tabelas gerais de INSS e IRRF de 2026 para
+            trabalhadores empregados. Situações específicas podem alterar o resultado.
+          </p>
+        </div>
+
+        <div id="form-error" class="form-error" role="alert" aria-live="polite" hidden></div>
+
+        <button type="button" id="calc-btn" class="calculate-btn">
+          <span>Calcular salário líquido</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </button>
+
+        <p class="privacy-note">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Cálculos realizados diretamente no navegador.
+        </p>
+      </div>
+
+      <div class="card results-card" aria-live="polite">
+        <div class="section-heading">
+          <div class="heading-icon result-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="20" x2="18" y2="10"></line>
+              <line x1="12" y1="20" x2="12" y2="4"></line>
+              <line x1="6" y1="20" x2="6" y2="14"></line>
+            </svg>
+          </div>
+          <div>
+            <h2>Demonstrativo salarial</h2>
+            <p>Estimativa dos valores da sua remuneração.</p>
+          </div>
+        </div>
+
+        <div class="net-result">
+          <span>Salário líquido estimado</span>
+          <strong id="res-net">R$ 0,00</strong>
+          <small>Valor após os descontos considerados.</small>
+        </div>
+
+        <div class="salary-breakdown">
+          <div class="breakdown-heading">Composição da remuneração</div>
+
+          <div class="result-line">
+            <span>Salário bruto</span>
+            <strong id="res-gross">R$ 0,00</strong>
+          </div>
+
+          <div class="result-line deduction">
+            <span>INSS</span>
+            <strong id="res-inss">- R$ 0,00</strong>
+          </div>
+
+          <div class="result-line deduction">
+            <span>IRRF</span>
+            <strong id="res-irrf">- R$ 0,00</strong>
+          </div>
+
+          <div class="result-line deduction">
+            <span>Outros descontos</span>
+            <strong id="res-others">- R$ 0,00</strong>
+          </div>
+
+          <div class="result-line total-line">
+            <span>Total de descontos</span>
+            <strong id="res-deductions">R$ 0,00</strong>
+          </div>
+        </div>
+
+        <div class="tax-details">
+          <div class="breakdown-heading">Detalhamento do Imposto de Renda</div>
+
+          <div class="detail-line">
+            <span>Base de cálculo do IRRF</span>
+            <strong id="res-irrf-base">R$ 0,00</strong>
+          </div>
+
+          <div class="detail-line">
+            <span>Dedução utilizada</span>
+            <strong id="res-irrf-deduction">R$ 0,00</strong>
+          </div>
+
+          <div class="detail-line">
+            <span>Redução do IRRF 2026</span>
+            <strong id="res-irrf-reduction">R$ 0,00</strong>
+          </div>
+        </div>
+
+        <div class="net-percentage">
+          <div class="percentage-header">
+            <span>Percentual líquido do salário</span>
+            <strong id="res-percentage">0%</strong>
+          </div>
+          <div class="percentage-track" aria-hidden="true">
+            <span id="percentage-bar"></span>
+          </div>
+        </div>
+
+        <p class="result-disclaimer">
+          Estimativa mensal. Não contempla automaticamente todas as particularidades
+          da folha de pagamento.
+        </p>
+      </div>
+    </section>
+
+    <section class="card explanation-section">
+      <div class="content-heading">
+        <span class="eyebrow">ENTENDA SEUS DESCONTOS</span>
+        <h2>Como funciona o cálculo do salário líquido?</h2>
+        <p>
+          O salário líquido corresponde à remuneração após a aplicação dos descontos
+          obrigatórios e das demais deduções consideradas na folha.
+        </p>
+      </div>
+
+      <div class="explanation-grid">
+        <article class="explanation-card">
+          <div class="explanation-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 21h18"></path>
+              <path d="M5 21V7l8-4v18"></path>
+              <path d="M19 21V11l-6-4"></path>
+              <path d="M9 9v.01"></path>
+              <path d="M9 13v.01"></path>
+              <path d="M9 17v.01"></path>
+            </svg>
+          </div>
+          <h3>INSS</h3>
+          <p>
+            A contribuição previdenciária do empregado é calculada de maneira
+            progressiva. Cada alíquota incide somente sobre a parcela do salário
+            que pertence à respectiva faixa.
+          </p>
+          <div class="formula">Alíquotas de 7,5% a 14%</div>
+        </article>
+
+        <article class="explanation-card">
+          <div class="explanation-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <h3>Imposto de Renda (IRRF)</h3>
+          <p>
+            O imposto é calculado sobre uma base tributável, considerando as
+            deduções legais ou o desconto simplificado mensal, conforme a
+            alternativa mais vantajosa.
+          </p>
+          <div class="formula">Tabela progressiva + redução de 2026</div>
+        </article>
+
+        <article class="explanation-card">
+          <div class="explanation-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
+              <circle cx="9" cy="7" r="4"></circle>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+            </svg>
+          </div>
+          <h3>Dependentes</h3>
+          <p>
+            A legislação permite uma dedução mensal por dependente que atenda
+            aos critérios legais. O valor considerado nesta simulação é de
+            R$ 189,59 por dependente.
+          </p>
+          <div class="formula">R$ 189,59 por dependente</div>
+        </article>
+
+        <article class="explanation-card">
+          <div class="explanation-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="1" y="4" width="22" height="16" rx="2" ry="2"></rect>
+              <line x1="1" y1="10" x2="23" y2="10"></line>
+            </svg>
+          </div>
+          <h3>Outros descontos</h3>
+          <p>
+            Podem incluir vale-transporte, plano de saúde, coparticipações e
+            outros descontos autorizados ou previstos na legislação e no contrato.
+          </p>
+          <div class="formula">Variam conforme cada contrato</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="card table-section">
+      <div class="content-heading">
+        <span class="eyebrow">TABELA DE CONTRIBUIÇÃO</span>
+        <h2>INSS 2026 — Empregados CLT</h2>
+        <p>Faixas de contribuição progressiva válidas a partir de janeiro de 2026.</p>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Faixa salarial</th>
+              <th>Alíquota</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Até R$ 1.621,00</td>
+              <td>7,5%</td>
+            </tr>
+            <tr>
+              <td>De R$ 1.621,01 até R$ 2.902,84</td>
+              <td>9%</td>
+            </tr>
+            <tr>
+              <td>De R$ 2.902,85 até R$ 4.354,27</td>
+              <td>12%</td>
+            </tr>
+            <tr>
+              <td>De R$ 4.354,28 até R$ 8.475,55</td>
+              <td>14%</td>
+            </tr>
+            <tr>
+              <td>Acima de R$ 8.475,55</td>
+              <td>Teto de contribuição</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p class="table-note">
+        As alíquotas são progressivas: não se aplica uma única alíquota sobre todo o salário.
+      </p>
+    </section>
+
+    <section class="card table-section">
+      <div class="content-heading">
+        <span class="eyebrow">TABELA DO IMPOSTO DE RENDA</span>
+        <h2>IRRF 2026 — Incidência mensal</h2>
+        <p>Faixas da tabela progressiva mensal, antes da aplicação da redução adicional.</p>
+      </div>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Base de cálculo mensal</th>
+              <th>Alíquota</th>
+              <th>Parcela a deduzir</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Até R$ 2.428,80</td>
+              <td>Isento</td>
+              <td>R$ 0,00</td>
+            </tr>
+            <tr>
+              <td>R$ 2.428,81 a R$ 2.826,65</td>
+              <td>7,5%</td>
+              <td>R$ 182,16</td>
+            </tr>
+            <tr>
+              <td>R$ 2.826,66 a R$ 3.751,05</td>
+              <td>15%</td>
+              <td>R$ 394,16</td>
+            </tr>
+            <tr>
+              <td>R$ 3.751,06 a R$ 4.664,68</td>
+              <td>22,5%</td>
+              <td>R$ 675,49</td>
+            </tr>
+            <tr>
+              <td>Acima de R$ 4.664,68</td>
+              <td>27,5%</td>
+              <td>R$ 908,73</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tax-reduction-info">
+        <h3>Redução adicional do IRRF em 2026</h3>
+        <p>
+          Para rendimentos tributáveis mensais de até R$ 5.000,00, a redução
+          pode zerar o imposto devido. Entre R$ 5.000,01 e R$ 7.350,00,
+          a redução diminui progressivamente até deixar de ser aplicada.
+        </p>
+        <div class="reduction-grid">
+          <div>
+            <strong>Até R$ 5.000</strong>
+            <span>Imposto pode ser zerado</span>
+          </div>
+          <div>
+            <strong>R$ 5.000,01 a R$ 7.350</strong>
+            <span>Redução gradual</span>
+          </div>
+          <div>
+            <strong>Acima de R$ 7.350</strong>
+            <span>Sem redução adicional</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card calculation-section">
+      <div class="content-heading">
+        <span class="eyebrow">EXEMPLO DE CÁLCULO</span>
+        <h2>Como chegar ao salário líquido?</h2>
+        <p>Considere um salário bruto hipotético de R$ 4.500,00.</p>
+      </div>
+
+      <div class="example-steps">
+        <div class="example-step">
+          <span class="step-number">01</span>
+          <div>
+            <strong>Calcular o INSS</strong>
+            <p>Aplicar as alíquotas progressivas sobre as faixas do salário.</p>
+          </div>
+        </div>
+        <div class="example-step">
+          <span class="step-number">02</span>
+          <div>
+            <strong>Definir a base do IRRF</strong>
+            <p>Subtrair as deduções legais ou o desconto simplificado, escolhendo o mais vantajoso.</p>
+          </div>
+        </div>
+        <div class="example-step">
+          <span class="step-number">03</span>
+          <div>
+            <strong>Calcular o Imposto de Renda</strong>
+            <p>Aplicar a tabela progressiva e a redução mensal de 2026, quando aplicável.</p>
+          </div>
+        </div>
+        <div class="example-step">
+          <span class="step-number">04</span>
+          <div>
+            <strong>Encontrar o salário líquido</strong>
+            <p>Subtrair INSS, IRRF e outros descontos do salário bruto.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card faq-section">
+      <div class="content-heading">
+        <span class="eyebrow">DÚVIDAS FREQUENTES</span>
+        <h2>Perguntas sobre salário líquido</h2>
+      </div>
+
+      <div class="faq-list">
+        <details>
+          <summary>Qual é a diferença entre salário bruto e salário líquido?</summary>
+          <p>
+            O salário bruto é o valor contratado antes dos descontos. O salário
+            líquido é o valor estimado que sobra depois da aplicação dos descontos
+            previdenciários, tributários e demais deduções.
+          </p>
+        </details>
+
+        <details>
+          <summary>Como funciona o desconto progressivo do INSS?</summary>
+          <p>
+            Cada faixa salarial possui uma alíquota própria. O percentual de cada
+            faixa incide somente sobre a parcela correspondente, e não sobre
+            todo o salário.
+          </p>
+        </details>
+
+        <details>
+          <summary>Quem recebe até R$ 5.000,00 não paga Imposto de Renda em 2026?</summary>
+          <p>
+            A regra de redução mensal de 2026 pode zerar o IRRF para rendimentos
+            tributáveis de até R$ 5.000,00. A aplicação depende do cálculo do
+            imposto e da redução prevista na legislação. Outras fontes de renda
+            podem gerar diferenças na apuração anual.
+          </p>
+        </details>
+
+        <details>
+          <summary>O desconto simplificado é obrigatório?</summary>
+          <p>
+            Não. No cálculo mensal do IRRF, o desconto simplificado pode substituir
+            as deduções legais quando for mais vantajoso. Esta calculadora compara
+            o desconto simplificado mensal com as deduções legais informadas.
+          </p>
+        </details>
+
+        <details>
+          <summary>Vale-transporte e plano de saúde reduzem o IRRF?</summary>
+          <p>
+            Não são automaticamente tratados como deduções da base mensal do IRRF
+            nesta simulação. Eles são considerados apenas como outros descontos
+            no cálculo do valor líquido.
+          </p>
+        </details>
+
+        <details>
+          <summary>O resultado é igual ao contracheque?</summary>
+          <p>
+            Não necessariamente. O contracheque pode incluir horas extras,
+            adicionais, faltas, benefícios, pensão alimentícia, múltiplos vínculos,
+            outras deduções e regras específicas do contrato ou de convenção coletiva.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <aside class="legal-warning">
+      <strong>Importante:</strong>
+      Esta calculadora apresenta uma estimativa informativa com base nas tabelas
+      gerais de 2026. O cálculo oficial da folha pode envolver outras verbas
+      salariais, deduções, múltiplos vínculos, pensão alimentícia e particularidades
+      contratuais. O resultado não substitui o demonstrativo oficial de pagamento
+      nem uma avaliação profissional.
+    </aside>
+  </main>
+
+  <script>
+    import { formatBRL } from '../../engines/common/currency';
+
+    // Tabela progressiva do INSS para empregados CLT - 2026.
+    const INSS_BRACKETS = [
+      { limit: 1621.00, rate: 0.075 },
+      { limit: 2902.84, rate: 0.09 },
+      { limit: 4354.27, rate: 0.12 },
+      { limit: 8475.55, rate: 0.14 }
+    ];
+
+    const INSS_CEILING = 8475.55;
+
+    // Tabela progressiva mensal do IRRF - 2026.
+    const IRRF_BRACKETS = [
+      { limit: 2428.80, rate: 0, deduction: 0 },
+      { limit: 2826.65, rate: 0.075, deduction: 182.16 },
+      { limit: 3751.05, rate: 0.15, deduction: 394.16 },
+      { limit: 4664.68, rate: 0.225, deduction: 675.49 },
+      { limit: Infinity, rate: 0.275, deduction: 908.73 }
+    ];
+
+    const DEPENDENT_DEDUCTION = 189.59;
+    const SIMPLIFIED_DEDUCTION = 607.20;
+
+    const salaryInput = document.getElementById('gross-salary') as HTMLInputElement;
+    const dependentsInput = document.getElementById('dependents') as HTMLInputElement;
+    const otherDiscountsInput = document.getElementById('other-discounts') as HTMLInputElement;
+    const calculateButton = document.getElementById('calc-btn') as HTMLButtonElement;
+    const errorElement = document.getElementById('form-error') as HTMLDivElement;
+
+    const outputs = {
+      net: document.getElementById('res-net')!,
+      gross: document.getElementById('res-gross')!,
+      inss: document.getElementById('res-inss')!,
+      irrf: document.getElementById('res-irrf')!,
+      others: document.getElementById('res-others')!,
+      deductions: document.getElementById('res-deductions')!,
+      irrfBase: document.getElementById('res-irrf-base')!,
+      irrfDeduction: document.getElementById('res-irrf-deduction')!,
+      irrfReduction: document.getElementById('res-irrf-reduction')!,
+      percentage: document.getElementById('res-percentage')!,
+      percentageBar: document.getElementById('percentage-bar') as HTMLSpanElement
+    };
+
+    function calculateINSS(gross: number): number {
+      const contributionBase = Math.min(gross, INSS_CEILING);
+      let previousLimit = 0;
+      let contribution = 0;
+
+      for (const bracket of INSS_BRACKETS) {
+        const taxableInBracket = Math.max(
+          0,
+          Math.min(contributionBase, bracket.limit) - previousLimit
+        );
+
+        contribution += taxableInBracket * bracket.rate;
+        previousLimit = bracket.limit;
+
+        if (contributionBase <= bracket.limit) {
+          break;
+        }
+      }
+
+      return Math.round((contribution + Number.EPSILON) * 100) / 100;
+    }
+
+    function calculateProgressiveIRRF(base: number): number {
+      if (base <= 0) return 0;
+
+      const bracket = IRRF_BRACKETS.find(item => base <= item.limit)!;
+      const tax = base * bracket.rate - bracket.deduction;
+
+      return Math.max(0, Math.round((tax + Number.EPSILON) * 100) / 100);
+    }
+
+    function calculateIRRFReduction(gross: number, tax: number): number {
+      let reduction = 0;
+
+      if (gross <= 5000) {
+        reduction = 312.89;
+      } else if (gross <= 7350) {
+        reduction = 978.62 - (0.133145 * gross);
+      }
+
+      reduction = Math.max(0, reduction);
+
+      // A redução não pode superar o imposto calculado.
+      return Math.min(tax, reduction);
+    }
+
+    function calculateSalary(gross: number, dependents: number, others: number) {
+      const inss = calculateINSS(gross);
+
+      const legalDeductions =
+        inss + (dependents * DEPENDENT_DEDUCTION);
+
+      // O desconto simplificado substitui as deduções legais.
+      // É utilizada a alternativa mais vantajosa para o trabalhador.
+      const irrfDeduction = Math.max(
+        legalDeductions,
+        SIMPLIFIED_DEDUCTION
+      );
+
+      const irrfBase = Math.max(0, gross - irrfDeduction);
+
+      const progressiveTax = calculateProgressiveIRRF(irrfBase);
+
+      // A redução de 2026 considera os rendimentos tributáveis mensais,
+      // e não a base de cálculo após as deduções.
+      const irrfReduction = calculateIRRFReduction(
+        gross,
+        progressiveTax
+      );
+
+      const irrf = Math.max(
+        0,
+        Math.round((progressiveTax - irrfReduction + Number.EPSILON) * 100) / 100
+      );
+
+      const totalDeductions = inss + irrf + others;
+      const net = gross - totalDeductions;
+
+      return {
+        inss,
+        irrf,
+        irrfBase,
+        irrfDeduction,
+        irrfReduction,
+        totalDeductions,
+        net
+      };
+    }
+
+    function showError(message: string) {
+      errorElement.textContent = message;
+      errorElement.hidden = false;
+    }
+
+    function clearError() {
+      errorElement.textContent = '';
+      errorElement.hidden = true;
+    }
+
+    function runCalc() {
+      const gross = Number(salaryInput.value);
+      const dependents = Number(dependentsInput.value);
+      const others = Number(otherDiscountsInput.value);
+
+      if (!Number.isFinite(gross) || gross <= 0 || gross > 100000000) {
+        showError('Informe um salário bruto válido e maior que zero.');
+        return;
+      }
+
+      if (!Number.isInteger(dependents) || dependents < 0 || dependents > 50) {
+        showError('Informe um número válido de dependentes, entre 0 e 50.');
+        return;
+      }
+
+      if (!Number.isFinite(others) || others < 0 || others > gross) {
+        showError('Informe um valor válido para os outros descontos, sem superar o salário bruto.');
+        return;
+      }
+
+      try {
+        clearError();
+
+        const result = calculateSalary(gross, dependents, others);
+
+        outputs.net.textContent = formatBRL(result.net);
+        outputs.gross.textContent = formatBRL(gross);
+        outputs.inss.textContent = `- ${formatBRL(result.inss)}`;
+        outputs.irrf.textContent = `- ${formatBRL(result.irrf)}`;
+        outputs.others.textContent = `- ${formatBRL(others)}`;
+        outputs.deductions.textContent = formatBRL(result.totalDeductions);
+
+        outputs.irrfBase.textContent = formatBRL(result.irrfBase);
+        outputs.irrfDeduction.textContent = formatBRL(result.irrfDeduction);
+        outputs.irrfReduction.textContent = formatBRL(result.irrfReduction);
+
+        const percentage = Math.max(
+          0,
+          Math.min(100, (result.net / gross) * 100)
+        );
+
+        outputs.percentage.textContent = `${percentage.toFixed(1).replace('.', ',')}%`;
+        outputs.percentageBar.style.width = `${percentage}%`;
+      } catch (error) {
+        showError(
+          error instanceof Error
+            ? error.message
+            : 'Não foi possível realizar o cálculo. Verifique os dados informados.'
+        );
+      }
+    }
+
+    calculateButton.addEventListener('click', runCalc);
+
+    [salaryInput, dependentsInput, otherDiscountsInput].forEach(input => {
+      input.addEventListener('input', runCalc);
+    });
+
+    runCalc();
+  </script>
+
+  <style>
+    .salary-page {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding-bottom: 3rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1.8rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a {
+      color: var(--color-primary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      text-decoration: underline;
+    }
+
+    .page-header {
+      max-width: 760px;
+      margin-bottom: 2rem;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 0.65rem;
+      color: var(--color-primary);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+    }
+
+    .page-header h1 {
+      margin: 0 0 0.8rem;
+      color: var(--text-primary);
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+    }
+
+    .page-header p,
+    .content-heading > p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: stretch;
+      gap: 1.4rem;
+    }
+
+    .card {
+      padding: clamp(1.1rem, 3vw, 1.6rem);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.035);
+    }
+
+    .input-card,
+    .results-card {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .heading-icon {
+      display: grid;
+      flex: 0 0 44px;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--color-primary);
+      font-size: 1.25rem;
+    }
+
+    .result-icon {
+      background: rgba(22, 163, 74, 0.1);
+      color: #16a34a;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 0.25rem;
+      color: var(--text-primary);
+      font-size: 1.15rem;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .field {
+      margin-bottom: 1.2rem;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--text-primary);
+      font-size: 0.87rem;
+      font-weight: 650;
+    }
+
+    .field input {
+      width: 100%;
+      min-height: 46px;
+      padding: 0.7rem 0.85Reference;
+      padding: 0.7rem 0.85rem;
+      border: 1px solid var(--border-color);
+      border-radius: 9px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font: inherit;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-wrap input {
+      padding-left: 2.8rem;
+    }
+
+    .input-wrap .prefix {
+      position: absolute;
+      top: 50%;
+      left: 0.85rem;
+      z-index: 1;
+      transform: translateY(-50%);
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      pointer-events: none;
+    }
+
+    .field input:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    .field small {
+      display: block;
+      margin-top: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+      line-height: 1.5;
+    }
+
+    .legal-info {
+      display: flex;
+      gap: 0.65rem;
+      align-items: flex-start;
+      margin-top: 0.2rem;
+      padding: 0.85rem;
+      border-radius: 9px;
+      background: rgba(37, 99, 235, 0.07);
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      line-height: 1.55;
+    }
+
+    .legal-info p {
+      margin: 0;
+    }
+
+    .form-error {
+      margin-top: 1rem;
+      padding: 0.8rem 0.9rem;
+      border: 1px solid rgba(220, 38, 38, 0.25);
+      border-radius: 9px;
+      background: rgba(220, 38, 38, 0.08);
+      color: #dc2626;
+      font-size: 0.84rem;
+      line-height: 1.5;
+    }
+
+    .calculate-btn {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      width: 100%;
+      min-height: 48px;
+      padding: 0.8rem 1rem;
+      margin-top: 1.4rem;
+      border: 0;
+      border-radius: 10px;
+      background: var(--color-primary);
+      color: #fff;
+      font-size: 0.95rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: filter 0.2s, transform 0.2s;
+    }
+
+    .calculate-btn:hover {
+      filter: brightness(1.08);
+      transform: translateY(-1px);
+    }
+
+    .calculate-btn:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: 3px;
+    }
+
+    .calculate-btn svg {
+      flex-shrink: 0;
+    }
+
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 0.85rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      text-align: center;
+    }
+
+    .privacy-note svg {
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    .net-result {
+      padding: 1.3rem;
+      border: 1px solid rgba(37, 99, 235, 0.12);
+      border-radius: 12px;
+      background: rgba(37, 99, 235, 0.07);
+    }
+
+    .net-result > span,
+    .net-result > small {
+      display: block;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+    }
+
+    .net-result strong {
+      display: block;
+      margin: 0.6rem 0;
+      color: var(--color-primary);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      line-height: 1.2;
+      letter-spacing: -0.045em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .net-result small {
+      font-size: 0.74rem;
+    }
+
+    .salary-breakdown,
+    .tax-details {
+      margin-top: 1.3rem;
+    }
+
+    .breakdown-heading {
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+      font-size: 0.88rem;
+      font-weight: 750;
+    }
+
+    .result-line,
+    .detail-line {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .result-line span,
+    .detail-line span {
+      color: var(--text-secondary);
+      font-size: 0.83rem;
+      line-height: 1.5;
+    }
+
+    .result-line strong,
+    .detail-line strong {
+      color: var(--text-primary);
+      font-size: 0.86rem;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .result-line.deduction strong {
+      color: #dc2626;
+    }
+
+    .result-line.total-line {
+      border-bottom: 0;
+      font-weight: 750;
+    }
+
+    .total-line strong {
+      color: var(--text-primary);
+    }
+
+    .detail-line {
+      padding: 0.65rem 0;
+    }
+
+    .detail-line span,
+    .detail-line strong {
+      font-size: 0.77rem;
+    }
+
+    .net-percentage {
+      margin-top: 1.3rem;
+      padding: 1rem;
+      border-radius: 10px;
+      background: var(--bg-primary);
+    }
+
+    .percentage-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 0.7rem;
+      font-size: 0.8rem;
+    }
+
+    .percentage-header span {
+      color: var(--text-secondary);
+    }
+
+    .percentage-header strong {
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .percentage-track {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 20px;
+      background: var(--border-color);
+    }
+
+    .percentage-track span {
+      display: block;
+      width: 0;
+      height: 100%;
+      border-radius: inherit;
+      background: #16a34a;
+      transition: width 0.3s ease;
+    }
+
+    .result-disclaimer {
+      margin: auto 0 0;
+      padding-top: 1rem;
+      color: var(--text-secondary);
+      font-size: 0.73rem;
+      line-height: 1.55;
+      text-align: center;
+    }
+
+    .explanation-section,
+    .table-section,
+    .calculation-section,
+    .faq-section {
+      margin-top: 1.5rem;
+    }
+
+    .content-heading {
+      margin-bottom: 1.3rem;
+    }
+
+    .content-heading h2 {
+      margin: 0 0 0.55rem;
+      color: var(--text-primary);
+      font-size: 1.35rem;
+      letter-spacing: -0.025em;
+    }
+
+    .content-heading > p {
+      font-size: 0.88rem;
+    }
+
+    .explanation-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .explanation-card {
+      padding: 1.1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-primary);
+    }
+
+    .explanation-icon {
+      color: var(--color-primary);
+      margin-bottom: 0.65rem;
+    }
+
+    .explanation-card h3 {
+      margin: 0 0 0.55rem;
+      color: var(--text-primary);
+      font-size: 0.98rem;
+    }
+
+    .explanation-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.83rem;
+      line-height: 1.7;
+    }
+
+    .formula {
+      margin-top: 0.85rem;
+      padding: 0.75rem;
+      border-radius: 8px;
+      background: rgba(37, 99, 235, 0.07);
+      color: var(--color-primary);
+      font-size: 0.82rem;
+      font-weight: 700;
+      line-height: 1.5;
+      text-align: center;
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    .table-section table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+
+    .table-section th,
+    .table-section td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+      white-space: nowrap;
+    }
+
+    .table-section th {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-weight: 700;
+    }
+
+    .table-section td {
+      color: var(--text-secondary);
+    }
+
+    .table-section tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .table-note {
+      margin: 1rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.77rem;
+      line-height: 1.6;
+    }
+
+    .tax-reduction-info {
+      margin-top: 1.3rem;
+      padding: 1.1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-primary);
+    }
+
+    .tax-reduction-info h3 {
+      margin: 0 0 0.55rem;
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .tax-reduction-info > p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      line-height: 1.65;
+    }
+
+    .reduction-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .reduction-grid > div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      padding: 0.8rem;
+      border-radius: 8px;
+      background: rgba(37, 99, 235, 0.07);
+    }
+
+    .reduction-grid strong {
+      color: var(--color-primary);
+      font-size: 0.84rem;
+    }
+
+    .reduction-grid span {
+      color: var(--text-secondary);
+      font-size: 0.73rem;
+      line-height: 1.45;
+    }
+
+    .example-steps {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .example-step {
+      display: flex;
+      gap: 1rem;
+      padding: 1rem 0;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .step-number {
+      display: grid;
+      flex: 0 0 38px;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border-radius: 10px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--color-primary);
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .example-step strong {
+      display: block;
+      margin-bottom: 0.3rem;
+      color: var(--text-primary);
+      font-size: 0.92rem;
+    }
+
+    .example-step p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.83rem;
+      line-height: 1.6;
+    }
+
+    .faq-list details {
+      border-top: 1px solid var(--border-color);
+    }
+
+    .faq-list details:last-child {
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .faq-list summary {
+      position: relative;
+      padding: 1rem 2rem 1rem 0;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 650;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq-list summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-list summary::after {
+      position: absolute;
+      top: 50%;
+      right: 0.2rem;
+      transform: translateY(-50%);
+      color: var(--color-primary);
+      content: '+';
+      font-size: 1.3rem;
+      font-weight: 400;
+    }
+
+    .faq-list details[open] summary::after {
+      content: '−';
+    }
+
+    .faq-list details p {
+      margin: 0;
+      padding: 0 0 1rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.7;
+    }
+
+    .legal-warning {
+      margin-top: 1.5rem;
+      padding: 1rem 1.1rem;
+      border-left: 4px solid #d97706;
+      border-radius: 8px;
+      background: rgba(217, 119, 6, 0.07);
+      color: var(--text-secondary);
+      font-size: 0.83rem;
+      line-height: 1.7;
+    }
+
+    .legal-warning strong {
+      color: var(--text-primary);
+    }
+
+    @media (max-width: 760px) {
+      .calculator-grid,
+      .explanation-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .reduction-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 420px) {
+      .result-line,
+      .detail-line {
+        align-items: flex-start;
+      }
+
+      .card {
+        border-radius: 12px;
+      }
+    }
+  </style>
+</BaseLayout>

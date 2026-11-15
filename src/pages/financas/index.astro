@@ -1,0 +1,1285 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getToolsByCategory } from '../../data/tools';
+
+const financasTools = getToolsByCategory('Finanças');
+
+const descriptions: Record<string, string> = {
+  'Juros Compostos': 'Projete o crescimento do seu dinheiro ao longo do tempo, considerando juros sobre juros e aportes periódicos.',
+  'Calculadora de Juros Compostos': 'Simule a evolução de investimentos com capital inicial, aportes mensais e rentabilidade.',
+  'Simulador de Financiamento SAC': 'Calcule parcelas, amortização, juros e custo total de um financiamento imobiliário.',
+  'Simulador de Financiamento': 'Compare condições de financiamento e entenda o impacto das taxas e dos prazos.',
+  'Independência Financeira': 'Estime o patrimônio necessário para alcançar sua meta de renda passiva.',
+  'Comprar ou Alugar Imóvel': 'Compare os custos de comprar um imóvel financiado com a alternativa de alugar e investir.',
+  'Custo Real do Carro': 'Estime os gastos com combustível, seguro, manutenção, impostos e depreciação do veículo.',
+};
+
+const featuredTools = financasTools.map((tool, index) => ({
+  ...tool,
+  description: descriptions[tool.name] || tool.description,
+  number: String(index + 1).padStart(2, '0'),
+}));
+---
+
+<BaseLayout
+  title="Calculadoras Financeiras: Investimentos, Juros e Financiamentos — Calculadora de Ganhos"
+  description="Explore calculadoras financeiras gratuitas para simular investimentos, juros compostos, financiamentos, aposentadoria e planejamento financeiro. Faça suas simulações online."
+>
+  <div class="finance-page">
+    <!-- NAVEGAÇÃO -->
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Finanças</span>
+    </nav>
+
+    <!-- HERO COM MOCKUP FLUTUANTE DE DASHBOARD -->
+    <header class="hero">
+      <div class="hero-glow" aria-hidden="true"></div>
+
+      <div class="hero-grid">
+        <div class="hero-text">
+          <span class="eyebrow">PLANEJAMENTO FINANCEIRO</span>
+
+          <h1>
+            Calculadoras
+            <span>Financeiras</span>
+          </h1>
+
+          <p class="hero-description">
+            Tome decisões financeiras com mais clareza. Utilize nossas ferramentas
+            gratuitas para simular investimentos, entender financiamentos,
+            planejar objetivos e organizar seu dinheiro.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#ferramentas" class="hero-cta">
+              Explorar calculadoras <span aria-hidden="true">↓</span>
+            </a>
+
+            <span class="hero-note">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Simulações gratuitas e online
+            </span>
+          </div>
+        </div>
+
+        <!-- CARTÃO VISUAL ILUSTRATIVO (MOCKUP DASHBOARD FINANCEIRA) -->
+        <div class="hero-visual" aria-hidden="true">
+          <span class="floating-symbol symbol-one">R$</span>
+          <span class="floating-symbol symbol-two">+12,4%</span>
+          <span class="floating-symbol symbol-three">↗</span>
+
+          <div class="mockup-card dash-mockup">
+            <div class="mockup-top">
+              <div class="window-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <span class="mockup-badge">Projeção patrimonial</span>
+            </div>
+
+            <!-- RESUMO DO PATRIMÔNIO -->
+            <div class="dash-balance-box">
+              <div class="dash-balance-header">
+                <span class="dash-balance-label">Patrimônio acumulado</span>
+                <span class="dash-trend-pill">+18,6% a.a.</span>
+              </div>
+              <div class="dash-balance-value">R$ 148.920,00</div>
+            </div>
+
+            <!-- GRÁFICO DE CRESCIMENTO -->
+            <div class="dash-chart">
+              <div class="dash-grid-lines">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <div class="dash-bars">
+                <div class="dash-bar-col">
+                  <div class="dash-bar-track"><span style="height: 28%"></span></div>
+                  <small>Ano 1</small>
+                </div>
+                <div class="dash-bar-col">
+                  <div class="dash-bar-track"><span style="height: 42%"></span></div>
+                  <small>Ano 2</small>
+                </div>
+                <div class="dash-bar-col">
+                  <div class="dash-bar-track"><span style="height: 56%"></span></div>
+                  <small>Ano 3</small>
+                </div>
+                <div class="dash-bar-col">
+                  <div class="dash-bar-track"><span style="height: 74%"></span></div>
+                  <small>Ano 4</small>
+                </div>
+                <div class="dash-bar-col is-active">
+                  <div class="dash-bar-track"><span style="height: 96%"></span></div>
+                  <small>Ano 5</small>
+                </div>
+              </div>
+            </div>
+
+            <!-- MINI INDICADORES -->
+            <div class="dash-kpis">
+              <div class="dash-kpi">
+                <span>Total investido</span>
+                <strong>R$ 96.000</strong>
+              </div>
+              <div class="dash-kpi">
+                <span>Juros obtidos</span>
+                <strong class="is-positive">+R$ 52.920</strong>
+              </div>
+            </div>
+
+            <div class="mockup-row-footer">
+              <span>Calculadora de Ganhos</span>
+              <span class="mockup-dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- BARRA DE INDICADORES -->
+    <section class="highlights" aria-label="Características das ferramentas">
+      <div class="highlight-item">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Simulações práticas</strong>
+          <small>Resultados organizados para sua análise</small>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="m19 9-5 5-4-4-3 3"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Planejamento consciente</strong>
+          <small>Entenda cenários antes de decidir</small>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Acesso online</strong>
+          <small>Funciona em celular e computador</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- FERRAMENTAS -->
+    <section class="tools-section" id="ferramentas" aria-labelledby="tools-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">NOSSA COLEÇÃO</span>
+          <h2 id="tools-title">Explore nossas calculadoras</h2>
+          <p>
+            Escolha a ferramenta que corresponde ao seu objetivo financeiro.
+          </p>
+        </div>
+
+        <span class="tools-count">
+          {featuredTools.length} {featuredTools.length === 1 ? 'ferramenta disponível' : 'ferramentas disponíveis'}
+        </span>
+      </div>
+
+      {featuredTools.length > 0 ? (
+        <div class="tools-grid">
+          {featuredTools.map((tool) => (
+            <a href={tool.route} class="tool-card">
+              <div class="tool-card-top">
+                <span class="tool-number">{tool.number}</span>
+                <span class="tool-arrow" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M7 17 17 7"/><path d="M7 7h10v10"/>
+                  </svg>
+                </span>
+              </div>
+
+              <div class="tool-card-content">
+                <h3>{tool.name}</h3>
+                <p>{tool.description}</p>
+              </div>
+
+              <div class="tool-card-footer">
+                <span>Acessar calculadora</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                </svg>
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <div class="empty-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/>
+            </svg>
+          </div>
+          <h3>Novas calculadoras em preparação</h3>
+          <p>
+            Estamos preparando novas ferramentas financeiras.
+            Volte em breve para conferir as novidades.
+          </p>
+        </div>
+      )}
+    </section>
+
+    <!-- GUIA DE EDUCAÇÃO FINANCEIRA -->
+    <section class="content-section" aria-labelledby="guide-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">EDUCAÇÃO FINANCEIRA</span>
+          <h2 id="guide-title">Planejar é o primeiro passo para cuidar melhor do dinheiro</h2>
+        </div>
+      </div>
+
+      <div class="guide-grid">
+        <article class="guide-card">
+          <div class="guide-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <h3>Entenda seus números</h3>
+          <p>
+            Antes de investir, financiar ou assumir uma nova despesa,
+            é importante compreender como os valores envolvidos afetam
+            seu orçamento. Uma simulação permite visualizar cenários,
+            comparar alternativas e identificar custos que poderiam
+            passar despercebidos.
+          </p>
+        </article>
+
+        <article class="guide-card">
+          <div class="guide-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="m19 9-5 5-4-4-3 3"/>
+            </svg>
+          </div>
+          <h3>Compare diferentes cenários</h3>
+          <p>
+            Taxas de juros, prazos, aportes e valores iniciais podem
+            alterar significativamente um resultado financeiro.
+            Testar diferentes combinações ajuda a entender essas
+            diferenças e a tomar decisões mais fundamentadas.
+          </p>
+        </article>
+
+        <article class="guide-card">
+          <div class="guide-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+          <h3>Use os resultados com consciência</h3>
+          <p>
+            Toda simulação depende das informações fornecidas e das
+            premissas utilizadas. Os resultados são estimativas para
+            fins educativos e não substituem uma análise individual
+            das condições de cada operação financeira.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section" aria-labelledby="faq-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">DÚVIDAS FREQUENTES</span>
+          <h2 id="faq-title">Perguntas sobre calculadoras financeiras</h2>
+        </div>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>As calculadoras financeiras são gratuitas?</summary>
+          <p>
+            Sim. As ferramentas disponibilizadas nesta categoria podem
+            ser utilizadas gratuitamente, diretamente pelo navegador.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Posso utilizar as calculadoras pelo celular?</summary>
+          <p>
+            Sim. As páginas são desenvolvidas para funcionar em computadores,
+            tablets e smartphones, com adaptação para diferentes tamanhos
+            de tela.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Os resultados das simulações são garantidos?</summary>
+          <p>
+            Não. Os resultados são estimativas matemáticas baseadas nos dados
+            informados e nas premissas de cada ferramenta. Condições reais,
+            taxas, impostos e outros fatores podem modificar os resultados.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>As calculadoras substituem um profissional financeiro?</summary>
+          <p>
+            Não. Elas são recursos de apoio ao planejamento e à educação
+            financeira. Para decisões importantes, considere consultar
+            um profissional habilitado.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <!-- AVISO LEGAL -->
+    <aside class="notice">
+      <div class="notice-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+        </svg>
+        <strong>Transparência:</strong>
+      </div>
+      <p>
+        As ferramentas desta página têm finalidade educativa e informativa.
+        Os resultados não representam garantia de rentabilidade, aprovação
+        de crédito ou recomendação de investimento.
+      </p>
+    </aside>
+
+    <!-- CTA FINAL -->
+    <section class="final-cta">
+      <span class="eyebrow">CALCULADORA DE GANHOS</span>
+      <h2>Planeje seus objetivos com mais clareza</h2>
+      <p>
+        Explore também nossas calculadoras trabalhistas, matemáticas e
+        conversores gratuitos em um só lugar.
+      </p>
+      <a href="/" class="cta-link">
+        <span>Explorar outras ferramentas</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .finance-page {
+    width: 100%;
+    padding: 0.5rem 0 2.5rem;
+    color: var(--text-primary);
+  }
+
+  .breadcrumb {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-bottom: 1.75rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  /* HERO (PADRÃO CENTRAL DE FERRAMENTAS) */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 2.75rem 3rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--color-primary) 16%, transparent) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .hero-text {
+    text-align: center;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    color: var(--color-primary);
+    font-size: 0.73rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.85rem;
+  }
+
+  .hero h1 {
+    margin: 0 0 1.15rem;
+    font-size: clamp(2.15rem, 4.5vw, 3.25rem);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    font-weight: 850;
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .hero h1 span {
+    display: block;
+    color: var(--color-primary);
+  }
+
+  .hero-description {
+    max-width: 520px;
+    margin: 0 auto 1.75rem;
+    color: var(--text-secondary);
+    font-size: 0.98rem;
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem 1.35rem;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.85rem 1.45rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 750;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .hero-cta:hover {
+    opacity: 0.92;
+    transform: translateY(-2px);
+  }
+
+  .hero-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary);
+    font-size: 0.84rem;
+    font-weight: 600;
+  }
+
+  .hero-note svg {
+    color: var(--color-primary);
+  }
+
+  /* CARTÃO MOCKUP DASHBOARD FINANCEIRA */
+  .hero-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .floating-symbol {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 0.55rem;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--bg-primary);
+    color: var(--color-primary);
+    font-size: 0.78rem;
+    font-weight: 850;
+    box-shadow: var(--shadow-md);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .symbol-one {
+    top: -10px;
+    left: 10px;
+    transform: rotate(-10deg);
+  }
+
+  .symbol-two {
+    top: 30px;
+    right: 2px;
+    transform: rotate(10deg);
+  }
+
+  .symbol-three {
+    bottom: 14px;
+    left: 4px;
+    transform: rotate(8deg);
+  }
+
+  .dash-mockup {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 335px;
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-primary);
+    box-shadow: var(--shadow-lg);
+    transform: rotate(-2.5deg);
+    transition: transform 0.3s ease;
+    text-align: left;
+  }
+
+  .dash-mockup:hover {
+    transform: rotate(0deg) translateY(-3px);
+  }
+
+  .mockup-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.95rem;
+  }
+
+  .window-dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  .window-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-color);
+  }
+
+  .mockup-badge {
+    padding: 0.28rem 0.7rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+    font-size: 0.7rem;
+    font-weight: 750;
+  }
+
+  /* RESUMO DO PATRIMÔNIO */
+  .dash-balance-box {
+    padding: 0.85rem 0.95rem;
+    margin-bottom: 0.85rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .dash-balance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.3rem;
+  }
+
+  .dash-balance-label {
+    color: var(--text-secondary);
+    font-size: 0.72rem;
+    font-weight: 600;
+  }
+
+  .dash-trend-pill {
+    padding: 0.16rem 0.48rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+    color: var(--color-primary);
+    font-size: 0.66rem;
+    font-weight: 800;
+  }
+
+  .dash-balance-value {
+    color: var(--text-primary);
+    font-size: 1.42rem;
+    font-weight: 850;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* GRÁFICO DE BARRAS */
+  .dash-chart {
+    position: relative;
+    padding: 0.75rem 0.65rem 0.55rem;
+    margin-bottom: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .dash-grid-lines {
+    position: absolute;
+    inset: 0.75rem 0.65rem 1.65rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    pointer-events: none;
+  }
+
+  .dash-grid-lines span {
+    border-top: 1px dashed var(--border-color);
+  }
+
+  .dash-bars {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 0.5rem;
+    align-items: end;
+  }
+
+  .dash-bar-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  .dash-bar-track {
+    display: flex;
+    align-items: flex-end;
+    width: 100%;
+    height: 78px;
+    padding: 0 3px;
+  }
+
+  .dash-bar-track span {
+    width: 100%;
+    border-radius: 6px 6px 3px 3px;
+    background: color-mix(in srgb, var(--color-primary) 42%, var(--bg-primary));
+    border: 1px solid color-mix(in srgb, var(--color-primary) 35%, transparent);
+  }
+
+  .dash-bar-col.is-active .dash-bar-track span {
+    background: var(--color-primary);
+    border-color: var(--color-primary);
+    box-shadow: 0 6px 16px color-mix(in srgb, var(--color-primary) 32%, transparent);
+  }
+
+  .dash-bar-col small {
+    color: var(--text-muted);
+    font-size: 0.64rem;
+    font-weight: 650;
+  }
+
+  .dash-bar-col.is-active small {
+    color: var(--color-primary);
+    font-weight: 800;
+  }
+
+  /* MINI KPIS */
+  .dash-kpis {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.55rem;
+  }
+
+  .dash-kpi {
+    padding: 0.55rem 0.7rem;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--bg-secondary);
+  }
+
+  .dash-kpi span {
+    display: block;
+    color: var(--text-secondary);
+    font-size: 0.66rem;
+    margin-bottom: 0.15rem;
+  }
+
+  .dash-kpi strong {
+    display: block;
+    color: var(--text-primary);
+    font-size: 0.82rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .dash-kpi strong.is-positive {
+    color: var(--color-primary);
+  }
+
+  .mockup-row-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.85rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 0.72rem;
+  }
+
+  .mockup-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+
+  /* BARRA DE INDICADORES */
+  .highlights {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 4.5rem;
+    padding: 1.25rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .highlight-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+    padding: 0.45rem 1rem;
+    text-align: left;
+  }
+
+  .highlight-item + .highlight-item {
+    border-left: 1px solid var(--border-color);
+  }
+
+  .highlight-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+  }
+
+  .highlight-item strong,
+  .highlight-item small {
+    display: block;
+  }
+
+  .highlight-item strong {
+    font-size: 0.88rem;
+    color: var(--text-primary);
+  }
+
+  .highlight-item small {
+    margin-top: 0.15rem;
+    color: var(--text-secondary);
+    font-size: 0.74rem;
+  }
+
+  /* CABEÇALHOS DE SEÇÃO */
+  .tools-section,
+  .content-section,
+  .faq-section {
+    margin-bottom: 4.5rem;
+  }
+
+  .tools-section {
+    scroll-margin-top: 2rem;
+  }
+
+  .section-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.85rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-heading > div {
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .section-heading h2 {
+    margin: 0 0 0.65rem;
+    font-size: clamp(1.55rem, 3.2vw, 2.05rem);
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .section-heading p {
+    margin: 0 auto;
+    color: var(--text-secondary);
+    font-size: 0.96rem;
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .tools-count {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.9rem;
+    border-radius: 999px;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  /* GRADE DE FERRAMENTAS */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .tool-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 240px;
+    padding: 1.55rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    color: inherit;
+    text-decoration: none;
+    text-align: center;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .tool-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+  }
+
+  .tool-card:focus-visible,
+  .hero-cta:focus-visible,
+  .cta-link:focus-visible,
+  .breadcrumb a:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  .tool-card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.15rem;
+  }
+
+  .tool-number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--color-primary) 12%, var(--bg-primary));
+    color: var(--color-primary);
+    font-size: 0.8rem;
+    font-weight: 850;
+    letter-spacing: 0.04em;
+  }
+
+  .tool-arrow {
+    display: inline-flex;
+    width: 34px;
+    height: 34px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-color);
+    border-radius: 9px;
+    background: var(--bg-primary);
+    color: var(--color-primary);
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .tool-card:hover .tool-arrow {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: #ffffff;
+  }
+
+  .tool-card-content {
+    flex: 1;
+  }
+
+  .tool-card h3 {
+    margin: 0 0 0.55rem;
+    color: var(--text-primary);
+    font-size: 1.12rem;
+    font-weight: 750;
+    line-height: 1.38;
+    text-align: center;
+  }
+
+  .tool-card p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.86rem;
+    line-height: 1.65;
+    text-align: center;
+  }
+
+  .tool-card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.35rem;
+    padding-top: 0.95rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--color-primary);
+    font-size: 0.83rem;
+    font-weight: 750;
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 3rem 1.5rem;
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
+  .empty-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin-bottom: 1rem;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+  }
+
+  .empty-state h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .empty-state p {
+    max-width: 480px;
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.65;
+    text-align: center;
+  }
+
+  /* EDUCAÇÃO FINANCEIRA */
+  .guide-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
+
+  .guide-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.6rem 1.4rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
+  .guide-icon {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin-bottom: 1rem;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+  }
+
+  .guide-card h3 {
+    margin: 0 0 0.55rem;
+    color: var(--text-primary);
+    font-size: 1.04rem;
+    font-weight: 750;
+    text-align: center;
+  }
+
+  .guide-card p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.87rem;
+    line-height: 1.7;
+    text-align: center;
+  }
+
+  /* FAQ */
+  .faq-list {
+    max-width: 850px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    margin-bottom: 0.75rem;
+    padding: 1.15rem 1.3rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: left;
+  }
+
+  .faq-item summary {
+    position: relative;
+    padding-right: 2rem;
+    cursor: pointer;
+    color: var(--text-primary);
+    font-size: 0.94rem;
+    font-weight: 700;
+    line-height: 1.5;
+    list-style: none;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::after {
+    content: '+';
+    position: absolute;
+    top: -0.1rem;
+    right: 0;
+    color: var(--color-primary);
+    font-size: 1.3rem;
+  }
+
+  .faq-item[open] summary::after {
+    content: '−';
+  }
+
+  .faq-item p {
+    margin: 0.9rem 0 0;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.75;
+  }
+
+  /* AVISO */
+  .notice {
+    margin-bottom: 4.5rem;
+    padding: 1.5rem;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--color-primary);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: left;
+  }
+
+  .notice-title {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    margin-bottom: 0.5rem;
+    color: var(--color-primary);
+  }
+
+  .notice-title strong {
+    color: var(--text-primary);
+  }
+
+  .notice p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.75;
+  }
+
+  /* CTA FINAL */
+  .final-cta {
+    padding: 2.75rem 1.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
+  .final-cta h2 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-align: center;
+  }
+
+  .final-cta p {
+    max-width: 600px;
+    margin: 0 auto 1.6rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #ffffff;
+    font-size: 0.92rem;
+    font-weight: 750;
+    text-decoration: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .cta-link:hover {
+    opacity: 0.92;
+    transform: translateY(-2px);
+  }
+
+  /* RESPONSIVIDADE */
+  @media (max-width: 900px) {
+    .tools-grid,
+    .guide-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 860px) {
+    .hero {
+      padding: 2.25rem 1.75rem;
+    }
+
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
+    }
+
+    .dash-mockup {
+      transform: rotate(0deg);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .highlights {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 3.25rem;
+    }
+
+    .highlight-item {
+      justify-content: flex-start;
+      padding: 0.65rem 0.5rem;
+    }
+
+    .highlight-item + .highlight-item {
+      border-left: none;
+      border-top: 1px solid var(--border-color);
+    }
+  }
+
+  @media (max-width: 600px) {
+    .finance-page {
+      padding-bottom: 2rem;
+    }
+
+    .hero {
+      padding: 1.75rem 1.25rem;
+    }
+
+    .tools-section,
+    .content-section,
+    .faq-section,
+    .notice {
+      margin-bottom: 3.25rem;
+    }
+
+    .tools-grid,
+    .guide-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .tool-card {
+      min-height: 205px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tool-card,
+    .tool-arrow,
+    .hero-cta,
+    .cta-link,
+    .dash-mockup {
+      transition: none;
+    }
+
+    .tool-card:hover,
+    .hero-cta:hover,
+    .cta-link:hover,
+    .dash-mockup:hover {
+      transform: none;
+    }
+  }
+</style>

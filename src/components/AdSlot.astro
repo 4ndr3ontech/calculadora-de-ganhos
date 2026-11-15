@@ -1,0 +1,122 @@
+---
+import { ADS_CONFIG } from '../config/ads';
+
+interface Props {
+  format?: 'horizontal' | 'rectangle' | 'responsive';
+  slotId?: string;
+  label?: string;
+}
+
+const {
+  format = 'responsive',
+  slotId = 'default-slot',
+  label = 'Publicidade',
+} = Astro.props;
+
+const adFormatMap = {
+  horizontal: 'horizontal',
+  rectangle: 'rectangle',
+  responsive: 'auto',
+} as const;
+
+const isDev = import.meta.env.DEV;
+const shouldRender = ADS_CONFIG.enabled || isDev;
+---
+
+{shouldRender && (
+  <aside
+    class={`ad-container ad-${format}`}
+    aria-label={label}
+  >
+    <span class="ad-label">{label}</span>
+
+    {ADS_CONFIG.enabled ? (
+      <div class="ad-slot-wrapper">
+        <ins
+          class="adsbygoogle"
+          style="display:block"
+          data-ad-client={`ca-${ADS_CONFIG.publisherId}`}
+          data-ad-slot={slotId}
+          data-ad-format={adFormatMap[format]}
+          data-full-width-responsive={format === 'rectangle' ? 'false' : 'true'}
+        ></ins>
+        <script is:inline>
+          (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      </div>
+    ) : (
+      <div class="ad-placeholder">
+        <span>Espaço Publicitário • Formato: {format}</span>
+      </div>
+    )}
+  </aside>
+)}
+
+<style>
+  .ad-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin: 2.25rem auto;
+    text-align: center;
+  }
+
+  .ad-label {
+    display: inline-block;
+    margin-bottom: 0.45rem;
+    color: var(--text-muted);
+    font-size: 0.65rem;
+    font-weight: 750;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .ad-slot-wrapper,
+  .ad-placeholder {
+    width: 100%;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+  }
+
+  /* Reserva de altura mínima por formato para evitar Cumulative Layout Shift (CLS) */
+  .ad-horizontal .ad-slot-wrapper,
+  .ad-horizontal .ad-placeholder {
+    max-width: 728px;
+    min-height: 90px;
+  }
+
+  .ad-rectangle .ad-slot-wrapper,
+  .ad-rectangle .ad-placeholder {
+    max-width: 336px;
+    min-height: 280px;
+  }
+
+  .ad-responsive .ad-slot-wrapper,
+  .ad-responsive .ad-placeholder {
+    min-height: 100px;
+  }
+
+  .ad-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.25rem;
+    border: 1px dashed var(--border-color);
+    background: var(--bg-secondary);
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  @media (max-width: 600px) {
+    .ad-container {
+      margin: 1.75rem auto;
+    }
+
+    .ad-horizontal .ad-slot-wrapper,
+    .ad-horizontal .ad-placeholder {
+      min-height: 60px;
+    }
+  }
+</style>

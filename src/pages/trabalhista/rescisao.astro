@@ -1,0 +1,1393 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de Rescisão Trabalhista CLT Online — Calculadora de Ganhos"
+  description="Simule sua rescisão trabalhista CLT. Calcule saldo de salário, aviso prévio proporcional, férias, décimo terceiro e multa do FGTS."
+>
+  <main class="page-container">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <a href="/trabalhista/">Trabalhista</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Rescisão</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="eyebrow">CALCULADORA TRABALHISTA</span>
+      <h1>Calculadora de Rescisão Trabalhista</h1>
+      <p>
+        Simule os valores da sua rescisão contratual. Informe os dados do vínculo
+        empregatício e confira uma estimativa das principais verbas rescisórias.
+      </p>
+    </header>
+
+    <section class="notice-banner">
+      <span class="notice-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="10"></circle>
+          <line x1="12" y1="16" x2="12" y2="12"></line>
+          <line x1="12" y1="8" x2="12.01" y2="8"></line>
+        </svg>
+      </span>
+      <p>
+        <strong>Importante:</strong> o resultado é uma simulação. O valor efetivo
+        pode variar conforme o histórico do contrato, depósitos do FGTS, férias
+        adquiridas, descontos e regras coletivas aplicáveis.
+      </p>
+    </section>
+
+    <section class="calculator-grid" aria-label="Calculadora de rescisão">
+      <div class="card form-card">
+        <div class="section-heading">
+          <div class="heading-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+              <polyline points="10 9 9 9 8 9"></polyline>
+            </svg>
+          </div>
+          <div>
+            <h2>Dados do contrato</h2>
+            <p>Preencha as informações do seu vínculo empregatício.</p>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="res-salary">Último salário bruto mensal</label>
+          <div class="input-wrapper">
+            <span class="input-prefix">R$</span>
+            <input
+              type="number"
+              id="res-salary"
+              value="3500"
+              min="0.01"
+              step="0.01"
+              inputmode="decimal"
+              placeholder="Ex.: 3500,00"
+            />
+          </div>
+          <small>Informe sua remuneração mensal bruta.</small>
+        </div>
+
+        <div class="form-group">
+          <label for="res-type">Motivo do desligamento</label>
+          <select id="res-type">
+            <option value="sem-justa-causa">Dispensa sem justa causa</option>
+            <option value="pedido-demissao">Pedido de demissão</option>
+            <option value="acordo-mutuo">Acordo entre empregado e empregador</option>
+            <option value="com-justa-causa">Dispensa por justa causa</option>
+          </select>
+          <small>O tipo de desligamento altera as verbas rescisórias.</small>
+        </div>
+
+        <div class="form-group" id="aviso-group">
+          <label for="res-aviso-type">Modalidade do aviso prévio</label>
+          <select id="res-aviso-type">
+            <option value="indenizado">Indenizado</option>
+            <option value="trabalhado">Trabalhado</option>
+          </select>
+          <small id="aviso-help">
+            Selecione como o aviso prévio foi ou será cumprido.
+          </small>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <div class="section-heading compact-heading">
+          <div class="heading-icon secondary-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <div>
+            <h2>Datas do contrato</h2>
+            <p>Informe o início e o término do vínculo.</p>
+          </div>
+        </div>
+
+        <div class="date-grid">
+          <div class="form-group">
+            <label for="res-start-date">Data de admissão</label>
+            <input type="date" id="res-start-date" value="2020-01-15" />
+          </div>
+
+          <div class="form-group">
+            <label for="res-end-date">Data de afastamento</label>
+            <input type="date" id="res-end-date" />
+          </div>
+        </div>
+
+        <div class="form-divider"></div>
+
+        <div class="vacation-option">
+          <input type="checkbox" id="res-vencida" />
+          <label for="res-vencida">
+            <strong>Possuo férias vencidas não gozadas</strong>
+            <small>
+              Marque se existe período de férias adquirido e ainda não quitado.
+            </small>
+          </label>
+        </div>
+
+        <div id="calc-error" class="form-error" role="alert" hidden></div>
+
+        <button type="button" id="calc-btn" class="calculate-button">
+          <span>Calcular minha rescisão</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </button>
+
+        <p class="privacy-note">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="display:inline; vertical-align:-1px; margin-right:4px;">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+          </svg>
+          Seus dados são utilizados apenas para realizar esta simulação.
+        </p>
+      </div>
+
+      <div class="card result-card">
+        <div class="section-heading">
+          <div class="heading-icon result-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <div>
+            <h2>Resultado da simulação</h2>
+            <p>Confira a memória de cálculo estimada.</p>
+          </div>
+        </div>
+
+        <div class="total-panel" aria-live="polite">
+          <span class="total-label">Total estimado da rescisão</span>
+          <strong id="res-total">R$ 0,00</strong>
+          <span class="total-caption">
+            Conforme as verbas e os descontos calculados pela ferramenta
+          </span>
+        </div>
+
+        <div class="result-group">
+          <span class="result-group-title">VERBAS RESCISÓRIAS</span>
+
+          <div class="result-row">
+            <div>
+              <span class="result-label">Saldo de salário</span>
+              <small>Dias trabalhados no mês do desligamento</small>
+            </div>
+            <strong id="res-saldo">R$ 0,00</strong>
+          </div>
+
+          <div class="result-row">
+            <div>
+              <span class="result-label">Aviso prévio</span>
+              <small><span id="res-aviso-dias">30</span> dias considerados</small>
+            </div>
+            <strong id="res-aviso">R$ 0,00</strong>
+          </div>
+
+          <div class="result-row">
+            <div>
+              <span class="result-label">Décimo terceiro proporcional</span>
+              <small>Inclui eventual parcela indenizada calculada</small>
+            </div>
+            <strong id="res-13">R$ 0,00</strong>
+          </div>
+
+          <div class="result-row">
+            <div>
+              <span class="result-label">Férias proporcionais</span>
+              <small>Inclui eventual parcela indenizada calculada</small>
+            </div>
+            <strong id="res-ferias">R$ 0,00</strong>
+          </div>
+
+          <div class="result-row">
+            <div>
+              <span class="result-label">Férias vencidas</span>
+              <small>Valor apresentado pelo motor de cálculo</small>
+            </div>
+            <strong id="res-ferias-venc" class="positive-value">R$ 0,00</strong>
+          </div>
+        </div>
+
+        <div class="result-group">
+          <span class="result-group-title">FGTS E DESCONTOS</span>
+
+          <div class="result-row">
+            <div>
+              <span class="result-label">Multa rescisória do FGTS</span>
+              <small>Estimativa conforme o cálculo realizado</small>
+            </div>
+            <strong id="res-multa">R$ 0,00</strong>
+          </div>
+
+          <div class="result-row discount-row">
+            <div>
+              <span class="result-label">Descontos estimados</span>
+              <small>INSS e IRRF considerados pelo motor</small>
+            </div>
+            <strong id="res-descontos">R$ 0,00</strong>
+          </div>
+        </div>
+
+        <div class="result-observation">
+          <span aria-hidden="true">ⓘ</span>
+          <p>
+            O saldo disponível na conta do FGTS, os saques e outros descontos
+            não são necessariamente representados integralmente neste resultado.
+            Confira seu extrato e o demonstrativo oficial da rescisão.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section class="content-section">
+      <div class="content-heading">
+        <span class="eyebrow">ENTENDA SEUS DIREITOS</span>
+        <h2>O que entra no cálculo da rescisão?</h2>
+        <p>
+          As verbas rescisórias dependem principalmente do motivo do desligamento,
+          do tempo de serviço e das condições do contrato.
+        </p>
+      </div>
+
+      <div class="info-grid">
+        <article class="info-card">
+          <div class="info-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"></line>
+              <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+          </div>
+          <h3>Saldo de salário</h3>
+          <p>
+            Corresponde aos dias trabalhados no mês em que ocorre o encerramento
+            do contrato, ainda não pagos pelo empregador.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <div class="info-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+          </div>
+          <h3>Aviso prévio</h3>
+          <p>
+            Pode ser trabalhado ou indenizado. Na dispensa sem justa causa,
+            o período pode ser proporcional ao tempo de serviço.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <div class="info-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <line x1="16" y1="2" x2="16" y2="6"></line>
+              <line x1="8" y1="2" x2="8" y2="6"></line>
+              <line x1="3" y1="10" x2="21" y2="10"></line>
+            </svg>
+          </div>
+          <h3>Décimo terceiro</h3>
+          <p>
+            O valor proporcional considera os meses trabalhados no ano,
+            observadas as regras de contagem e a projeção do aviso prévio
+            quando aplicável.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <div class="info-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
+              <path d="M22 12A10 10 0 0 0 12 2v10z"></path>
+            </svg>
+          </div>
+          <h3>Férias e adicional de 1/3</h3>
+          <p>
+            Podem existir valores de férias proporcionais, adquiridas e não
+            gozadas, acrescidos do adicional constitucional, conforme o caso.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <div class="info-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+              <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+            </svg>
+          </div>
+          <h3>FGTS e multa rescisória</h3>
+          <p>
+            Na dispensa sem justa causa, em regra, existe multa de 40% sobre
+            a base legal dos depósitos do FGTS. No acordo, a multa é de 20%.
+          </p>
+        </article>
+
+        <article class="info-card">
+          <div class="info-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="m16 16 3-8 3 8c-.87.65-1.93 1-3 1s-2.13-.35-3-1Z"></path>
+              <path d="m2 16 3-8 3 8c-.87.65-1.93 1-3 1s-2.13-.35-3-1Z"></path>
+              <path d="M7 21h10"></path>
+              <path d="M12 3v18"></path>
+              <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2"></path>
+            </svg>
+          </div>
+          <h3>Descontos legais</h3>
+          <p>
+            INSS, imposto de renda e outros descontos permitidos podem alterar
+            o valor final recebido pelo trabalhador.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="types-section">
+      <div class="content-heading">
+        <span class="eyebrow">MODALIDADES DE DESLIGAMENTO</span>
+        <h2>O motivo da rescisão faz diferença</h2>
+        <p>
+          Cada modalidade possui regras próprias para o pagamento das verbas
+          trabalhistas.
+        </p>
+      </div>
+
+      <div class="types-grid">
+        <article class="type-card">
+          <span class="type-indicator indicator-green"></span>
+          <h3>Sem justa causa</h3>
+          <p>
+            Em regra, inclui saldo de salário, aviso prévio, férias e décimo
+            terceiro proporcionais, além da multa rescisória do FGTS.
+          </p>
+        </article>
+
+        <article class="type-card">
+          <span class="type-indicator indicator-blue"></span>
+          <h3>Pedido de demissão</h3>
+          <p>
+            Em regra, são devidos saldo de salário, férias adquiridas e
+            proporcionais com adicional de 1/3 e décimo terceiro proporcional.
+            Pode haver desconto de aviso prévio não cumprido.
+          </p>
+        </article>
+
+        <article class="type-card">
+          <span class="type-indicator indicator-purple"></span>
+          <h3>Acordo entre as partes</h3>
+          <p>
+            O artigo 484-A da CLT prevê regras específicas, incluindo metade
+            do aviso prévio indenizado e metade da indenização sobre o FGTS,
+            além das demais verbas devidas integralmente.
+          </p>
+        </article>
+
+        <article class="type-card">
+          <span class="type-indicator indicator-orange"></span>
+          <h3>Com justa causa</h3>
+          <p>
+            As verbas são mais restritas. Em regra, são devidos saldo de salário
+            e férias já adquiridas com adicional de 1/3, conforme a situação.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <section class="legal-section">
+      <div class="legal-icon" aria-hidden="true">§</div>
+      <div>
+        <h2>Legislação trabalhista</h2>
+        <p>
+          A rescisão do contrato de trabalho envolve diferentes dispositivos
+          legais. Entre as referências importantes estão a CLT, a Lei
+          12.506/2011, que trata do aviso prévio proporcional, e o artigo
+          484-A da CLT, que regulamenta a extinção do contrato por acordo.
+        </p>
+        <div class="legal-links">
+          <a
+            href="https://www.planalto.gov.br/ccivil_03/decreto-lei/del5452compilado.htm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Consultar a CLT</a>
+          <a
+            href="https://www.planalto.gov.br/ccivil_03/_ato2011-2014/2011/lei/l12506.htm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Lei 12.506/2011 — Aviso prévio proporcional</a>
+          <a
+            href="https://www.planalto.gov.br/ccivil_03/leis/l8036consol.htm"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Lei 8.036/1990 — FGTS</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="faq-section">
+      <div class="content-heading">
+        <span class="eyebrow">DÚVIDAS FREQUENTES</span>
+        <h2>Perguntas sobre rescisão trabalhista</h2>
+      </div>
+
+      <details class="faq-item">
+        <summary>Como funciona o aviso prévio proporcional?</summary>
+        <p>
+          A Lei 12.506/2011 estabelece 30 dias de aviso prévio, acrescidos de
+          3 dias por ano de serviço prestado na mesma empresa, até o limite
+          legal de 90 dias no total.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Quem pede demissão recebe multa do FGTS?</summary>
+        <p>
+          Em regra, não. No pedido de demissão, o trabalhador não recebe a
+          multa rescisória de 40% e não tem liberação do FGTS pela modalidade
+          de desligamento, ressalvadas outras hipóteses legais de saque.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Como funciona a rescisão por acordo?</summary>
+        <p>
+          No acordo previsto no artigo 484-A da CLT, o aviso prévio, se
+          indenizado, e a indenização sobre o saldo do FGTS são pagos pela
+          metade. As demais verbas trabalhistas são devidas integralmente.
+          O saque do FGTS fica limitado à regra legal dessa modalidade.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>O que são férias vencidas?</summary>
+        <p>
+          São férias relativas a um período aquisitivo já completado e ainda
+          não usufruídas. Dependendo do prazo de concessão e das circunstâncias,
+          pode existir pagamento em dobro. A simulação simplificada não substitui
+          a análise dos períodos e das datas de cada férias.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>O valor calculado é exatamente o que vou receber?</summary>
+        <p>
+          Não necessariamente. O cálculo depende dos dados informados e das
+          regras implementadas na ferramenta. O demonstrativo oficial pode
+          incluir outras verbas, descontos, médias remuneratórias e informações
+          do FGTS que não foram consideradas na simulação.
+        </p>
+      </details>
+
+      <details class="faq-item">
+        <summary>Qual é o prazo para pagamento da rescisão?</summary>
+        <p>
+          Em regra, o artigo 477, § 6º, da CLT estabelece prazo de até 10 dias
+          contados do término do contrato para pagamento das verbas rescisórias
+          e entrega dos documentos previstos na legislação.
+        </p>
+      </details>
+    </section>
+
+    <p class="disclaimer">
+      <strong>Aviso:</strong> esta ferramenta tem finalidade exclusivamente
+      informativa. Ela não substitui o Termo de Rescisão do Contrato de Trabalho
+      (TRCT), a conferência do extrato do FGTS ou a orientação de um profissional
+      especializado.
+    </p>
+  </main>
+
+  <script>
+    import { calculateRescisao } from '../../engines/business/rescisao-engine';
+    import { formatBRL } from '../../engines/common/currency';
+
+    const getInput = (id: string): HTMLInputElement =>
+      document.getElementById(id) as HTMLInputElement;
+
+    const getSelect = (id: string): HTMLSelectElement =>
+      document.getElementById(id) as HTMLSelectElement;
+
+    const setText = (id: string, value: string) => {
+      const element = document.getElementById(id);
+      if (element) element.textContent = value;
+    };
+
+    const errorElement = document.getElementById('calc-error');
+
+    function showError(message: string) {
+      if (errorElement) {
+        errorElement.textContent = message;
+        errorElement.removeAttribute('hidden');
+      }
+    }
+
+    function clearError() {
+      if (errorElement) {
+        errorElement.textContent = '';
+        errorElement.setAttribute('hidden', '');
+      }
+    }
+
+    function updateNoticeHelp() {
+      const type = getSelect('res-type').value;
+      const avisoGroup = document.getElementById('aviso-group');
+      const avisoHelp = document.getElementById('aviso-help');
+
+      if (avisoHelp) {
+        const messages: Record<string, string> = {
+          'sem-justa-causa':
+            'Na dispensa sem justa causa, o aviso pode ser trabalhado ou indenizado.',
+          'pedido-demissao':
+            'No pedido de demissão, o aviso pode ser cumprido ou, conforme o caso, descontado.',
+          'acordo-mutuo':
+            'No acordo, se o aviso prévio for indenizado, aplica-se a regra específica do artigo 484-A da CLT.',
+          'com-justa-causa':
+            'Em regra, não há aviso prévio devido na dispensa por justa causa.'
+        };
+
+        avisoHelp.textContent =
+          messages[type] || 'Selecione a modalidade do aviso prévio.';
+      }
+
+      if (avisoGroup) {
+        avisoGroup.classList.toggle('notice-disabled', type === 'com-justa-causa');
+      }
+    }
+
+    function runCalc() {
+      clearError();
+
+      const salary = Number(getInput('res-salary').value);
+      const type = getSelect('res-type').value;
+      const avisoType = getSelect('res-aviso-type').value;
+      const startDate = getInput('res-start-date').value;
+      const endDate = getInput('res-end-date').value;
+      const hasVencida = getInput('res-vencida').checked;
+
+      if (!Number.isFinite(salary) || salary <= 0) {
+        showError('Informe um salário bruto maior que zero.');
+        return;
+      }
+
+      if (!startDate || !endDate) {
+        showError('Preencha as datas de admissão e afastamento.');
+        return;
+      }
+
+      const start = new Date(`${startDate}T12:00:00`);
+      const end = new Date(`${endDate}T12:00:00`);
+
+      if (
+        Number.isNaN(start.getTime()) ||
+        Number.isNaN(end.getTime())
+      ) {
+        showError('Informe datas válidas para o contrato.');
+        return;
+      }
+
+      if (start > end) {
+        showError('A data de admissão não pode ser posterior à data de afastamento.');
+        return;
+      }
+
+      try {
+        const res = calculateRescisao({
+          monthlySalary: salary,
+          resignationType: type as any,
+          avisoType: avisoType as any,
+          startDate,
+          endDate,
+          hasVencidaVacation: hasVencida
+        });
+
+        const values = [
+          res.totalLiquido,
+          res.saldoSalario,
+          res.avisoPrevio,
+          res.decimoTerceiroProporcional,
+          res.decimoTerceiroIndenizado,
+          res.feriasProporcionais,
+          res.feriasIndenizadas,
+          res.feriasVencidas,
+          res.multaFgts,
+          res.inssDescontoTotal,
+          res.irrfDescontoTotal,
+          res.avisoDays
+        ];
+
+        if (!values.every((value) => Number.isFinite(Number(value)))) {
+          throw new Error('O motor retornou valores inválidos.');
+        }
+
+        setText('res-total', formatBRL(res.totalLiquido));
+        setText('res-saldo', formatBRL(res.saldoSalario));
+        setText('res-aviso', formatBRL(res.avisoPrevio));
+        setText('res-aviso-dias', String(res.avisoDays));
+
+        setText(
+          'res-13',
+          formatBRL(
+            res.decimoTerceiroProporcional +
+            res.decimoTerceiroIndenizado
+          )
+        );
+
+        setText(
+          'res-ferias',
+          formatBRL(
+            res.feriasProporcionais +
+            res.feriasIndenizadas
+          )
+        );
+
+        setText('res-ferias-venc', formatBRL(res.feriasVencidas));
+        setText('res-multa', formatBRL(res.multaFgts));
+
+        setText(
+          'res-descontos',
+          formatBRL(
+            res.inssDescontoTotal +
+            res.irrfDescontoTotal
+          )
+        );
+      } catch (error) {
+        console.error('Erro ao calcular rescisão:', error);
+        showError(
+          'Não foi possível concluir o cálculo. Confira os dados e tente novamente.'
+        );
+      }
+    }
+
+    document.getElementById('calc-btn')?.addEventListener('click', runCalc);
+
+    getSelect('res-type').addEventListener('change', () => {
+      updateNoticeHelp();
+      runCalc();
+    });
+
+    getSelect('res-aviso-type').addEventListener('change', runCalc);
+
+    [
+      'res-salary',
+      'res-start-date',
+      'res-end-date'
+    ].forEach((id) => {
+      getInput(id).addEventListener('change', runCalc);
+    });
+
+    getInput('res-vencida').addEventListener('change', runCalc);
+
+    updateNoticeHelp();
+
+    // Define a data atual como padrão para o afastamento.
+    const endDateInput = getInput('res-end-date');
+    if (!endDateInput.value) {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, '0');
+      const day = String(today.getDate()).padStart(2, '0');
+
+      endDateInput.value = `${year}-${month}-${day}`;
+    }
+
+    runCalc();
+  </script>
+
+  <style>
+    .page-container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding-bottom: 3rem;
+    }
+
+    .breadcrumb {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      margin-bottom: 1.8rem;
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+
+    .page-header {
+      max-width: 780px;
+      margin-bottom: 1.5rem;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 0.65rem;
+      color: var(--color-primary);
+      font-size: 0.74rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .page-header h1 {
+      margin: 0 0 0.8rem;
+      color: var(--text-primary);
+      font-size: clamp(2rem, 5vw, 2.7rem);
+      line-height: 1.15;
+      letter-spacing: -0.04em;
+    }
+
+    .page-header p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.75;
+    }
+
+    .notice-banner {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem 1.1rem;
+      border: 1px solid rgba(37, 99, 235, 0.2);
+      border-radius: var(--radius-md);
+      background: rgba(37, 99, 235, 0.06);
+    }
+
+    .notice-icon {
+      flex-shrink: 0;
+      color: var(--color-primary);
+      display: grid;
+      place-items: center;
+    }
+
+    .notice-banner p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      line-height: 1.65;
+    }
+
+    .notice-banner strong {
+      color: var(--text-primary);
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+      gap: 1.4rem;
+      align-items: start;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.035);
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 0.25rem;
+      color: var(--text-primary);
+      font-size: 1.12rem;
+      font-weight: 750;
+    }
+
+    .section-heading p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      line-height: 1.5;
+    }
+
+    .heading-icon {
+      display: grid;
+      flex-shrink: 0;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--color-primary);
+    }
+
+    .secondary-icon {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+    }
+
+    .result-icon {
+      background: rgba(16, 185, 129, 0.1);
+      color: #10b981;
+    }
+
+    .form-group {
+      margin-bottom: 1.15rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.45rem;
+      color: var(--text-primary);
+      font-size: 0.88rem;
+      font-weight: 650;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      min-width: 0;
+      min-height: 46px;
+      padding: 0.7rem 0.8rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      outline: none;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font: inherit;
+      font-size: 0.9rem;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+    }
+
+    .input-wrapper input {
+      border: 0;
+      border-radius: 0;
+      box-shadow: none !important;
+    }
+
+    .input-prefix {
+      padding: 0 0.85rem;
+      border-right: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+    }
+
+    .form-group small {
+      display: block;
+      margin-top: 0.4rem;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      line-height: 1.5;
+    }
+
+    .notice-disabled {
+      opacity: 0.65;
+    }
+
+    .form-divider {
+      height: 1px;
+      margin: 1.4rem 0;
+      background: var(--border-color);
+    }
+
+    .compact-heading {
+      margin-bottom: 1.2rem;
+    }
+
+    .date-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+    }
+
+    .vacation-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.7rem;
+      margin-bottom: 1.4rem;
+      padding: 0.9rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+    }
+
+    .vacation-option input {
+      width: 18px;
+      height: 18px;
+      flex-shrink: 0;
+      margin: 0.15rem 0 0;
+      accent-color: var(--color-primary);
+      cursor: pointer;
+    }
+
+    .vacation-option label {
+      cursor: pointer;
+    }
+
+    .vacation-option strong {
+      display: block;
+      color: var(--text-primary);
+      font-size: 0.83rem;
+    }
+
+    .vacation-option small {
+      display: block;
+      margin-top: 0.25rem;
+      color: var(--text-secondary);
+      font-size: 0.73rem;
+      line-height: 1.5;
+    }
+
+    .calculate-button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.7rem;
+      width: 100%;
+      min-height: 50px;
+      padding: 0.85rem 1.2rem;
+      border: 0;
+      border-radius: var(--radius-sm);
+      background: var(--color-primary);
+      color: #fff;
+      font: inherit;
+      font-size: 0.92rem;
+      font-weight: 750;
+      cursor: pointer;
+      transition: filter 0.2s ease, transform 0.2s ease;
+    }
+
+    .calculate-button:hover {
+      filter: brightness(1.1);
+      transform: translateY(-1px);
+    }
+
+    .calculate-button:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: 3px;
+    }
+
+    .privacy-note {
+      margin: 0.85rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.73rem;
+      text-align: center;
+    }
+
+    .form-error {
+      margin-bottom: 1rem;
+      padding: 0.8rem 0.9rem;
+      border: 1px solid rgba(220, 38, 38, 0.25);
+      border-radius: var(--radius-sm);
+      background: rgba(220, 38, 38, 0.07);
+      color: #dc2626;
+      font-size: 0.83rem;
+      line-height: 1.5;
+    }
+
+    [hidden] {
+      display: none !important;
+    }
+
+    .result-card {
+      position: sticky;
+      top: 1rem;
+    }
+
+    .total-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      margin-bottom: 1.5rem;
+      padding: 1.3rem;
+      border: 1px solid rgba(16, 185, 129, 0.2);
+      border-radius: var(--radius-sm);
+      background: rgba(16, 185, 129, 0.07);
+    }
+
+    .total-label {
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+    }
+
+    .total-panel strong {
+      color: #059669;
+      font-size: clamp(1.9rem, 4vw, 2.4rem);
+      line-height: 1.2;
+      letter-spacing: -0.04em;
+      overflow-wrap: anywhere;
+    }
+
+    .total-caption {
+      color: var(--text-secondary);
+      font-size: 0.72rem;
+      line-height: 1.5;
+    }
+
+    .result-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .result-group-title {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+      font-size: 0.68rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+    }
+
+    .result-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.7rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .result-label {
+      display: block;
+      color: var(--text-primary);
+      font-size: 0.82rem;
+      font-weight: 650;
+    }
+
+    .result-row small {
+      display: block;
+      margin-top: 0.2rem;
+      color: var(--text-secondary);
+      font-size: 0.7rem;
+      line-height: 1.4;
+    }
+
+    .result-row strong {
+      flex-shrink: 0;
+      color: var(--text-primary);
+      font-size: 0.85rem;
+      text-align: right;
+    }
+
+    .result-row .positive-value {
+      color: #059669;
+    }
+
+    .discount-row strong {
+      color: #dc2626;
+    }
+
+    .result-observation {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.65rem;
+      margin-top: 0.5rem;
+      padding: 0.9rem;
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+      line-height: 1.6;
+    }
+
+    .result-observation span {
+      flex-shrink: 0;
+      color: var(--color-primary);
+    }
+
+    .result-observation p {
+      margin: 0;
+    }
+
+    .content-section,
+    .types-section,
+    .legal-section,
+    .faq-section {
+      margin-top: 4rem;
+    }
+
+    .content-heading {
+      max-width: 730px;
+      margin-bottom: 1.5rem;
+    }
+
+    .content-heading h2 {
+      margin: 0 0 0.65rem;
+      color: var(--text-primary);
+      font-size: clamp(1.5rem, 3vw, 1.9rem);
+      letter-spacing: -0.035em;
+    }
+
+    .content-heading p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.91rem;
+      line-height: 1.75;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .info-card {
+      padding: 1.3rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+
+    .info-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      margin-bottom: 0.9rem;
+      place-items: center;
+      border-radius: 11px;
+      background: var(--bg-primary);
+      color: var(--color-primary);
+    }
+
+    .info-card h3,
+    .type-card h3 {
+      margin: 0 0 0.5rem;
+      color: var(--text-primary);
+      font-size: 0.96rem;
+    }
+
+    .info-card p,
+    .type-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      line-height: 1.7;
+    }
+
+    .types-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .type-card {
+      padding: 1.3rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+
+    .type-indicator {
+      display: block;
+      width: 30px;
+      height: 4px;
+      margin-bottom: 0.9rem;
+      border-radius: 5px;
+    }
+
+    .indicator-green {
+      background: #10b981;
+    }
+
+    .indicator-blue {
+      background: #3b82f6;
+    }
+
+    .indicator-purple {
+      background: #8b5cf6;
+    }
+
+    .indicator-orange {
+      background: #f97316;
+    }
+
+    .legal-section {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.1rem;
+      padding: 1.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      background: var(--bg-secondary);
+    }
+
+    .legal-icon {
+      display: grid;
+      flex-shrink: 0;
+      width: 44px;
+      height: 44px;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(37, 99, 235, 0.1);
+      color: var(--color-primary);
+      font-size: 1.4rem;
+      font-weight: 800;
+    }
+
+    .legal-section h2 {
+      margin: 0 0 0.6rem;
+      color: var(--text-primary);
+      font-size: 1.25rem;
+    }
+
+    .legal-section p {
+      margin: 0 0 1rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.75;
+    }
+
+    .legal-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.65rem 1rem;
+    }
+
+    .legal-links a {
+      color: var(--color-primary);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+
+    .faq-section {
+      max-width: 850px;
+    }
+
+    .faq-item {
+      margin-bottom: 0.7rem;
+      padding: 1rem 1.15rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-secondary);
+    }
+
+    .faq-item summary {
+      position: relative;
+      padding-right: 1.5rem;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      position: absolute;
+      top: 0;
+      right: 0;
+      color: var(--color-primary);
+      content: "+";
+      font-size: 1.2rem;
+      line-height: 1;
+    }
+
+    .faq-item[open] summary::after {
+      content: "−";
+    }
+
+    .faq-item p {
+      margin: 0.85rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      line-height: 1.7;
+    }
+
+    .disclaimer {
+      margin: 2rem 0 0;
+      padding: 1rem 1.1rem;
+      border-left: 3px solid var(--color-primary);
+      background: var(--bg-secondary);
+      color: var(--text-secondary);
+      font-size: 0.81rem;
+      line-height: 1.7;
+    }
+
+    .disclaimer strong {
+      color: var(--text-primary);
+    }
+
+    @media (max-width: 850px) {
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .result-card {
+        position: static;
+      }
+
+      .info-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 580px) {
+      .card {
+        padding: 1.1rem;
+      }
+
+      .date-grid,
+      .info-grid,
+      .types-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .result-row {
+        gap: 0.45rem;
+      }
+
+      .result-row strong {
+        font-size: 0.8rem;
+      }
+
+      .legal-section {
+        gap: 0.8rem;
+        padding: 1.1rem;
+      }
+
+      .legal-icon {
+        width: 36px;
+        height: 36px;
+      }
+    }
+  </style>
+</BaseLayout>

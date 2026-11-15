@@ -1,0 +1,1323 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getToolsByCategory } from '../../data/tools';
+
+const tools = getToolsByCategory('Ferramentas');
+---
+
+<BaseLayout
+  title="Ferramentas e Utilitários Online Grátis | Calculadora de Ganhos"
+  description="Encontre ferramentas e utilitários online gratuitos para produtividade, textos e segurança digital. Acesse recursos práticos diretamente pelo navegador, sem instalar programas."
+>
+  <div class="tools-page">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Ferramentas</span>
+    </nav>
+
+    <!-- HERO -->
+    <header class="hero">
+      <div class="hero-glow" aria-hidden="true"></div>
+
+      <div class="hero-grid">
+        <div class="hero-text">
+          <span class="eyebrow">PRATICIDADE NO DIA A DIA</span>
+
+          <h1>
+            Ferramentas e
+            <span>Utilitários Online</span>
+          </h1>
+
+          <p class="hero-description">
+            Encontre recursos gratuitos para facilitar tarefas, aumentar sua
+            produtividade e resolver necessidades do cotidiano. Utilize
+            ferramentas práticas diretamente pelo navegador, sem precisar
+            instalar programas.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#catalogo" class="hero-cta">
+              Explorar ferramentas <span aria-hidden="true">↓</span>
+            </a>
+
+            <span class="hero-note">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Gratuitas e fáceis de usar
+            </span>
+          </div>
+        </div>
+
+        <!-- MOCKUP ILUSTRATIVO -->
+        <div class="hero-visual" aria-hidden="true">
+          <span class="floating-symbol symbol-one">⚡</span>
+          <span class="floating-symbol symbol-two">Aa</span>
+          <span class="floating-symbol symbol-three">✓</span>
+
+          <div class="mockup-card util-mockup">
+            <div class="mockup-top">
+              <div class="window-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <span class="mockup-badge">Uso no navegador</span>
+            </div>
+
+            <div class="util-screen">
+              <div class="util-screen-header">
+                <span class="util-tag">Ferramenta digital</span>
+                <span class="util-status">● Disponível</span>
+              </div>
+              <div class="util-output">Prático • Rápido • Gratuito</div>
+            </div>
+
+            <div class="util-actions-grid">
+              <span class="util-chip is-active">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+                </svg>
+                Textos
+              </span>
+
+              <span class="util-chip">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+                Segurança
+              </span>
+
+              <span class="util-chip">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Validar
+              </span>
+
+              <span class="util-chip is-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+                  <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                </svg>
+                Copiar
+              </span>
+            </div>
+
+            <div class="util-bar">
+              <div class="util-bar-info">
+                <span>Acesso simplificado</span>
+                <strong>Online</strong>
+              </div>
+              <div class="util-progress">
+                <span></span>
+              </div>
+            </div>
+
+            <div class="mockup-row-footer">
+              <span>Calculadora de Ganhos</span>
+              <span class="mockup-dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- INDICADORES -->
+    <section class="highlights" aria-label="Características das ferramentas">
+      <div class="highlight-item">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Fáceis de usar</strong>
+          <small>Soluções práticas sem complicação</small>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Privacidade em foco</strong>
+          <small>Informações sobre o tratamento de dados</small>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="14" height="20" x="5" y="2" rx="2"/><path d="M12 18h.01"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Acesso gratuito</strong>
+          <small>Compatível com diferentes dispositivos</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- CATÁLOGO -->
+    <section class="catalog-section" id="catalogo" aria-labelledby="catalog-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">NOSSO CATÁLOGO</span>
+          <h2 id="catalog-title">Explore nossas ferramentas</h2>
+          <p>
+            Escolha o utilitário desejado para acessar sua página, conhecer
+            suas funcionalidades e utilizar os recursos disponíveis.
+          </p>
+        </div>
+
+        <span class="tool-count">
+          <span class="count-dot" aria-hidden="true"></span>
+          {tools.length} {tools.length === 1 ? 'ferramenta disponível' : 'ferramentas disponíveis'}
+        </span>
+      </div>
+
+      {tools.length > 0 ? (
+        <div class="tools-grid">
+          {tools.map((tool) => (
+            <a href={tool.route} class="tool-card" key={tool.route}>
+              <div class="tool-card-content">
+                <div class="tool-icon" aria-hidden="true">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                  </svg>
+                </div>
+
+                <h3>{tool.name}</h3>
+
+                <p>{tool.description}</p>
+              </div>
+
+              <span class="tool-link">
+                <span>Acessar ferramenta</span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                </svg>
+              </span>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="empty-state">
+          <div class="empty-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M16 20V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/><rect width="20" height="14" x="2" y="6" rx="2"/>
+            </svg>
+          </div>
+          <h3>Novas ferramentas estão chegando</h3>
+          <p>
+            Estamos preparando novos utilitários para facilitar suas tarefas.
+            Volte em breve para conferir as novidades.
+          </p>
+          <a href="/" class="empty-link">Voltar para a página inicial →</a>
+        </div>
+      )}
+    </section>
+
+    <!-- SOBRE OS UTILITÁRIOS -->
+    <section class="content-section" aria-labelledby="about-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">SOBRE OS UTILITÁRIOS</span>
+          <h2 id="about-title">O que você encontra nesta categoria?</h2>
+        </div>
+      </div>
+
+      <div class="prose-block">
+        <p>
+          A categoria de ferramentas reúne utilitários digitais desenvolvidos
+          para ajudar em atividades comuns. São recursos que permitem realizar
+          tarefas específicas de maneira simples, sem a necessidade de instalar
+          programas adicionais.
+        </p>
+
+        <p>
+          Conforme a ferramenta escolhida, você poderá trabalhar com textos,
+          gerar informações, verificar dados, converter conteúdos ou executar
+          outras operações diretamente na página correspondente.
+        </p>
+
+        <p>
+          Cada utilitário possui funcionalidades próprias e instruções de uso.
+          Nosso objetivo é apresentar recursos acessíveis, com informações
+          claras sobre sua finalidade, funcionamento e limitações.
+        </p>
+      </div>
+    </section>
+
+    <!-- PRIVACIDADE -->
+    <section class="privacy-section" aria-labelledby="privacy-title">
+      <div class="privacy-icon" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>
+        </svg>
+      </div>
+
+      <div class="privacy-body">
+        <span class="eyebrow">PRIVACIDADE E SEGURANÇA</span>
+        <h2 id="privacy-title">Seus dados merecem atenção</h2>
+
+        <p>
+          Algumas ferramentas realizam o processamento diretamente no navegador,
+          sem transmitir os dados digitados para um servidor. Quando esse for
+          o funcionamento do utilitário, essa característica será informada
+          na respectiva página.
+        </p>
+
+        <p>
+          Outras funcionalidades podem depender de serviços externos ou
+          comunicação com servidores. Por isso, recomendamos consultar as
+          orientações específicas de cada ferramenta antes de inserir
+          informações pessoais, senhas ou outros dados confidenciais.
+        </p>
+      </div>
+    </section>
+
+    <!-- COMO UTILIZAR -->
+    <section class="how-section" aria-labelledby="how-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">COMO UTILIZAR</span>
+          <h2 id="how-title">Comece em poucos passos</h2>
+          <p>
+            A navegação foi pensada para tornar o acesso aos utilitários
+            simples e direto.
+          </p>
+        </div>
+      </div>
+
+      <div class="steps-grid">
+        <article class="step-card">
+          <span class="step-number">01</span>
+          <h3>Escolha uma ferramenta</h3>
+          <p>
+            Explore os utilitários disponíveis e selecione aquele que atende
+            à sua necessidade.
+          </p>
+        </article>
+
+        <article class="step-card">
+          <span class="step-number">02</span>
+          <h3>Informe os dados</h3>
+          <p>
+            Preencha os campos solicitados, seguindo as instruções exibidas
+            na página da ferramenta.
+          </p>
+        </article>
+
+        <article class="step-card">
+          <span class="step-number">03</span>
+          <h3>Utilize o resultado</h3>
+          <p>
+            Confira as informações apresentadas e utilize os recursos
+            disponíveis para copiar ou aproveitar o resultado, quando
+            essa opção existir.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="faq-section" aria-labelledby="faq-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">DÚVIDAS FREQUENTES</span>
+          <h2 id="faq-title">Perguntas sobre nossas ferramentas</h2>
+        </div>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>As ferramentas são gratuitas?</summary>
+          <p>
+            Sim. Os utilitários disponibilizados nesta categoria podem ser
+            utilizados gratuitamente, respeitando as condições de uso
+            e eventuais limitações informadas em cada página.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Preciso instalar algum programa?</summary>
+          <p>
+            Não é necessário instalar um programa para acessar as ferramentas
+            disponíveis no site. Basta utilizar um navegador atualizado e
+            acessar a página do utilitário desejado.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>As ferramentas funcionam no celular?</summary>
+          <p>
+            As páginas são desenvolvidas para se adaptar a diferentes
+            tamanhos de tela. Entretanto, a experiência pode variar conforme
+            o dispositivo, o navegador e os recursos de cada ferramenta.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Os dados informados são armazenados?</summary>
+          <p>
+            Isso depende do funcionamento de cada utilitário. Algumas
+            ferramentas processam informações localmente no navegador,
+            enquanto outras funcionalidades podem depender de serviços
+            externos. Consulte a explicação específica da ferramenta
+            e nossa Política de Privacidade.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Posso utilizar os resultados profissionalmente?</summary>
+          <p>
+            Depende da finalidade e da natureza do resultado. Ferramentas
+            informativas podem auxiliar em tarefas cotidianas, mas não
+            substituem análises profissionais, verificações técnicas ou
+            orientações especializadas quando necessárias.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Novas ferramentas serão adicionadas?</summary>
+          <p>
+            Sim. A categoria poderá receber novos utilitários e melhorias
+            conforme o desenvolvimento do projeto. Consulte esta página
+            periodicamente para conhecer os recursos disponíveis.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <!-- CTA FINAL -->
+    <section class="final-cta">
+      <span class="eyebrow">CALCULADORA DE GANHOS</span>
+      <h2>Mais praticidade para suas tarefas</h2>
+      <p>
+        Explore também nossas calculadoras e outros recursos para encontrar
+        soluções úteis em um só lugar.
+      </p>
+      <a href="/" class="cta-link">
+        <span>Conhecer o site</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .tools-page {
+    width: 100%;
+    padding: 0.5rem 0 2.5rem;
+    color: var(--text-primary);
+  }
+
+  .breadcrumb {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-bottom: 1.75rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  /* HERO */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 2.75rem 3rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--color-primary) 16%, transparent) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .hero-text {
+    text-align: center;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    color: var(--color-primary);
+    font-size: 0.73rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.85rem;
+  }
+
+  .hero h1 {
+    margin: 0 0 1.15rem;
+    font-size: clamp(2.15rem, 4.5vw, 3.25rem);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    font-weight: 850;
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .hero h1 span {
+    display: block;
+    color: var(--color-primary);
+  }
+
+  .hero-description {
+    max-width: 520px;
+    margin: 0 auto 1.75rem;
+    color: var(--text-secondary);
+    font-size: 0.98rem;
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem 1.35rem;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.85rem 1.45rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 750;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .hero-cta:hover {
+    opacity: 0.92;
+    transform: translateY(-2px);
+  }
+
+  .hero-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary);
+    font-size: 0.84rem;
+    font-weight: 600;
+  }
+
+  .hero-note svg {
+    color: var(--color-primary);
+  }
+
+  /* MOCKUP */
+  .hero-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .floating-symbol {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--bg-primary);
+    color: var(--color-primary);
+    font-size: 0.88rem;
+    font-weight: 850;
+    box-shadow: var(--shadow-md);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .symbol-one {
+    top: -10px;
+    left: 12px;
+    transform: rotate(-10deg);
+  }
+
+  .symbol-two {
+    top: 32px;
+    right: 6px;
+    transform: rotate(12deg);
+  }
+
+  .symbol-three {
+    bottom: 14px;
+    left: 6px;
+    transform: rotate(8deg);
+  }
+
+  .util-mockup {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 325px;
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-primary);
+    box-shadow: var(--shadow-lg);
+    transform: rotate(-2.5deg);
+    transition: transform 0.3s ease;
+    text-align: left;
+  }
+
+  .util-mockup:hover {
+    transform: rotate(0deg) translateY(-3px);
+  }
+
+  .mockup-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.95rem;
+  }
+
+  .window-dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  .window-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-color);
+  }
+
+  .mockup-badge {
+    padding: 0.28rem 0.7rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+    font-size: 0.7rem;
+    font-weight: 750;
+  }
+
+  /* VISOR */
+  .util-screen {
+    padding: 0.85rem 0.95rem;
+    margin-bottom: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .util-screen-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.35rem;
+  }
+
+  .util-tag {
+    color: var(--text-secondary);
+    font-size: 0.7rem;
+    font-weight: 600;
+  }
+
+  .util-status {
+    color: #22c55e;
+    font-size: 0.68rem;
+    font-weight: 750;
+  }
+
+  .util-output {
+    color: var(--text-primary);
+    font-size: 0.96rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* AÇÕES */
+  .util-actions-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.45rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .util-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    height: 35px;
+    padding: 0 0.65rem;
+    border: 1px solid var(--border-color);
+    border-radius: 9px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 0.76rem;
+    font-weight: 700;
+    user-select: none;
+  }
+
+  .util-chip.is-active {
+    border-color: color-mix(in srgb, var(--color-primary) 28%, var(--border-color));
+    background: color-mix(in srgb, var(--color-primary) 11%, var(--bg-primary));
+    color: var(--color-primary);
+  }
+
+  .util-chip.is-primary {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: #ffffff;
+    font-weight: 750;
+  }
+
+  /* BARRA DE STATUS */
+  .util-bar {
+    padding: 0.65rem 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--bg-secondary);
+  }
+
+  .util-bar-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+    font-size: 0.7rem;
+  }
+
+  .util-bar-info span {
+    color: var(--text-secondary);
+  }
+
+  .util-bar-info strong {
+    color: var(--color-primary);
+    font-weight: 800;
+  }
+
+  .util-progress {
+    height: 6px;
+    border-radius: 999px;
+    background: var(--border-color);
+    overflow: hidden;
+  }
+
+  .util-progress span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--color-primary);
+  }
+
+  .mockup-row-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.85rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 0.72rem;
+  }
+
+  .mockup-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+
+  /* INDICADORES */
+  .highlights {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 4.5rem;
+    padding: 1.25rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .highlight-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+    padding: 0.45rem 1rem;
+    text-align: left;
+  }
+
+  .highlight-item + .highlight-item {
+    border-left: 1px solid var(--border-color);
+  }
+
+  .highlight-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+  }
+
+  .highlight-item strong,
+  .highlight-item small {
+    display: block;
+  }
+
+  .highlight-item strong {
+    font-size: 0.88rem;
+    color: var(--text-primary);
+  }
+
+  .highlight-item small {
+    margin-top: 0.15rem;
+    color: var(--text-secondary);
+    font-size: 0.74rem;
+  }
+
+  /* SEÇÕES */
+  .catalog-section,
+  .content-section,
+  .how-section,
+  .faq-section {
+    margin-bottom: 4.5rem;
+  }
+
+  .catalog-section {
+    scroll-margin-top: 2rem;
+  }
+
+  .section-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.85rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-heading > div {
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .section-heading h2 {
+    margin: 0 0 0.65rem;
+    font-size: clamp(1.55rem, 3.2vw, 2.05rem);
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .section-heading p {
+    margin: 0 auto;
+    color: var(--text-secondary);
+    font-size: 0.96rem;
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .tool-count {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.45rem 0.9rem;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 700;
+  }
+
+  .count-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #22c55e;
+  }
+
+  /* GRADE */
+  .tools-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.25rem;
+  }
+
+  .tool-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 235px;
+    padding: 1.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-decoration: none;
+    color: inherit;
+    text-align: center;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .tool-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+  }
+
+  .tool-card:focus-visible,
+  .hero-cta:focus-visible,
+  .cta-link:focus-visible,
+  .breadcrumb a:focus-visible,
+  .empty-link:focus-visible,
+  .faq-item summary:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  .tool-card-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .tool-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 1.1rem;
+    border-radius: 12px;
+    background: color-mix(in srgb, var(--color-primary) 12%, var(--bg-primary));
+    color: var(--color-primary);
+  }
+
+  .tool-card h3 {
+    margin: 0 0 0.65rem;
+    color: var(--text-primary);
+    font-size: 1.2rem;
+    font-weight: 750;
+    text-align: center;
+  }
+
+  .tool-card p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.65;
+    text-align: center;
+  }
+
+  .tool-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--color-primary);
+    font-size: 0.86rem;
+    font-weight: 750;
+  }
+
+  .empty-state {
+    padding: 3rem 1.5rem;
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
+  .empty-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 1rem;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+  }
+
+  .empty-state h3 {
+    margin: 0 0 0.5rem;
+    text-align: center;
+  }
+
+  .empty-state p {
+    max-width: 500px;
+    margin: 0 auto 1.15rem;
+    color: var(--text-secondary);
+    line-height: 1.7;
+    text-align: center;
+  }
+
+  .empty-link {
+    color: var(--color-primary);
+    font-weight: 700;
+    text-decoration: none;
+  }
+
+  .empty-link:hover {
+    text-decoration: underline;
+  }
+
+  /* CONTEÚDO */
+  .prose-block {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .prose-block p {
+    color: var(--text-secondary);
+    font-size: 0.96rem;
+    line-height: 1.85;
+    margin: 0 0 1rem;
+    text-align: left;
+  }
+
+  .prose-block p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* PRIVACIDADE */
+  .privacy-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.25rem;
+    margin-bottom: 4.5rem;
+    padding: 2rem;
+    border: 1px solid var(--border-color);
+    border-left: 4px solid var(--color-primary);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: left;
+  }
+
+  .privacy-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+  }
+
+  .privacy-body {
+    flex: 1;
+    text-align: left;
+  }
+
+  .privacy-section h2 {
+    margin: 0 0 0.75rem;
+    font-size: 1.45rem;
+    font-weight: 800;
+    text-align: left;
+  }
+
+  .privacy-section p {
+    margin: 0 0 0.85rem;
+    color: var(--text-secondary);
+    font-size: 0.93rem;
+    line-height: 1.75;
+    text-align: left;
+  }
+
+  .privacy-section p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* PASSO A PASSO */
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.1rem;
+  }
+
+  .step-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1.65rem 1.4rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
+  .step-number {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+    font-size: 0.88rem;
+    font-weight: 850;
+  }
+
+  .step-card h3 {
+    margin: 0 0 0.5rem;
+    font-size: 1.05rem;
+    text-align: center;
+  }
+
+  .step-card p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.65;
+    text-align: center;
+  }
+
+  /* FAQ */
+  .faq-list {
+    max-width: 850px;
+    margin: 0 auto;
+  }
+
+  .faq-item {
+    margin-bottom: 0.75rem;
+    padding: 1.15rem 1.3rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: left;
+  }
+
+  .faq-item summary {
+    position: relative;
+    padding-right: 2rem;
+    cursor: pointer;
+    color: var(--text-primary);
+    font-size: 0.94rem;
+    font-weight: 700;
+    line-height: 1.5;
+    list-style: none;
+  }
+
+  .faq-item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq-item summary::after {
+    content: '+';
+    position: absolute;
+    top: -0.1rem;
+    right: 0;
+    color: var(--color-primary);
+    font-size: 1.3rem;
+  }
+
+  .faq-item[open] summary::after {
+    content: '−';
+  }
+
+  .faq-item p {
+    margin: 0.9rem 0 0;
+    padding-top: 0.85rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.88rem;
+    line-height: 1.75;
+  }
+
+  /* CTA FINAL */
+  .final-cta {
+    padding: 2.75rem 1.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
+  .final-cta h2 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-align: center;
+  }
+
+  .final-cta p {
+    max-width: 600px;
+    margin: 0 auto 1.6rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #ffffff;
+    font-size: 0.92rem;
+    font-weight: 750;
+    text-decoration: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .cta-link:hover {
+    opacity: 0.92;
+    transform: translateY(-2px);
+  }
+
+  /* RESPONSIVIDADE */
+  @media (max-width: 860px) {
+    .hero {
+      padding: 2.25rem 1.75rem;
+    }
+
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
+    }
+
+    .util-mockup {
+      transform: rotate(0deg);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .highlights {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 3.25rem;
+    }
+
+    .highlight-item {
+      justify-content: flex-start;
+      padding: 0.65rem 0.5rem;
+    }
+
+    .highlight-item + .highlight-item {
+      border-left: none;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .privacy-section {
+      flex-direction: column;
+      padding: 1.4rem;
+      margin-bottom: 3.25rem;
+    }
+
+    .steps-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .tools-page {
+      padding-bottom: 2rem;
+    }
+
+    .hero {
+      padding: 1.75rem 1.25rem;
+    }
+
+    .catalog-section,
+    .content-section,
+    .how-section,
+    .faq-section {
+      margin-bottom: 3.25rem;
+    }
+
+    .tools-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .tool-card {
+      min-height: 190px;
+    }
+
+    .prose-block {
+      padding: 1.35rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .tool-card,
+    .hero-cta,
+    .cta-link,
+    .util-mockup {
+      transition: none;
+    }
+
+    .tool-card:hover,
+    .hero-cta:hover,
+    .cta-link:hover,
+    .util-mockup:hover {
+      transform: none;
+    }
+  }
+</style>

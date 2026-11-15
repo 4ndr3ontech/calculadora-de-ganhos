@@ -1,0 +1,1314 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora de Orçamento 50-30-20 — Organize seu Salário"
+  description="Organize seu salário com a regra 50-30-20. Descubra quanto destinar às necessidades, desejos pessoais e investimentos ou quitação de dívidas."
+>
+  <main class="page-container">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <a href="/financas/">Finanças</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Orçamento 50-30-20</span>
+    </nav>
+
+    <!-- CABEÇALHO -->
+    <header class="page-header">
+      <span class="eyebrow">PLANEJAMENTO FINANCEIRO</span>
+      <h1>Calculadora de Orçamento 50-30-20</h1>
+      <p>
+        Descubra como distribuir seu salário de maneira equilibrada,
+        controlar seus gastos e construir uma vida financeira mais organizada.
+        Faça uma simulação gratuita utilizando a regra 50-30-20.
+      </p>
+    </header>
+
+    <!-- INTRODUÇÃO -->
+    <section class="intro-panel">
+      <div class="icon-badge" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/>
+        </svg>
+      </div>
+      <div>
+        <h2>Organize seu dinheiro com uma estratégia simples</h2>
+        <p>
+          A regra 50-30-20 divide sua renda líquida em três categorias:
+          necessidades essenciais, desejos pessoais e investimentos ou
+          pagamento de dívidas. O objetivo é encontrar equilíbrio entre
+          suas despesas atuais e seus objetivos financeiros.
+        </p>
+      </div>
+    </section>
+
+    <!-- CALCULADORA -->
+    <section class="calculator-section" aria-labelledby="calculator-title">
+      <div class="section-heading">
+        <span class="section-kicker">SIMULADOR GRATUITO</span>
+        <h2 id="calculator-title">Faça a distribuição do seu salário</h2>
+        <p>
+          Informe sua renda líquida mensal para descobrir quanto destinar
+          a cada categoria do orçamento.
+        </p>
+      </div>
+
+      <div class="calculator-grid">
+        <!-- ENTRADA -->
+        <div class="card input-card">
+          <div class="card-heading">
+            <div class="icon-badge" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" x2="12" y1="2" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Sua renda mensal</h3>
+              <p>Informe quanto você recebe após os descontos.</p>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="net-income">Salário líquido mensal</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input
+                type="number"
+                id="net-income"
+                value="5000"
+                min="0.01"
+                max="1000000000"
+                step="0.01"
+                inputmode="decimal"
+                aria-describedby="income-help"
+              />
+            </div>
+            <small id="income-help">
+              Utilize o valor que realmente entra na sua conta todos os meses.
+            </small>
+          </div>
+
+          <div class="example-box">
+            <strong>Exemplo de utilização</strong>
+            <p>
+              Se você recebe R$ 5.000 líquidos por mês, a regra sugere
+              separar R$ 2.500 para necessidades, R$ 1.500 para desejos
+              e R$ 1.000 para investimentos ou dívidas.
+            </p>
+          </div>
+
+          <div id="calc-error" class="error-message" role="alert" hidden></div>
+
+          <button id="calc-btn" class="btn-calculate" type="button">
+            <span>Distribuir meu orçamento</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+            </svg>
+          </button>
+
+          <p class="auto-calc-note">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <span>Os resultados são atualizados automaticamente quando você modifica sua renda.</span>
+          </p>
+        </div>
+
+        <!-- RESULTADOS -->
+        <div class="card result-card" aria-live="polite">
+          <div class="card-heading">
+            <div class="icon-badge result-icon" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3 3v16a2 2 0 0 0 2 2h16"/><path d="m19 9-5 5-4-4-3 3"/>
+              </svg>
+            </div>
+            <div>
+              <h3>Distribuição recomendada</h3>
+              <p>Veja como organizar sua renda mensal.</p>
+            </div>
+          </div>
+
+          <div class="total-income">
+            <span>Renda líquida considerada</span>
+            <strong id="res-income">R$ 5.000,00</strong>
+          </div>
+
+          <!-- NECESSIDADES -->
+          <div class="budget-item">
+            <div class="budget-item-header">
+              <div class="budget-title">
+                <span class="budget-dot needs-dot"></span>
+                <strong>Necessidades</strong>
+              </div>
+              <span class="budget-percent">50%</span>
+            </div>
+
+            <strong id="res-needs" class="budget-value">R$ 0,00</strong>
+
+            <div class="progress-track" role="img" aria-label="50% da renda para necessidades">
+              <div class="progress-fill needs-fill"></div>
+            </div>
+
+            <p>Moradia, alimentação, transporte, saúde e contas essenciais.</p>
+          </div>
+
+          <!-- DESEJOS -->
+          <div class="budget-item">
+            <div class="budget-item-header">
+              <div class="budget-title">
+                <span class="budget-dot wants-dot"></span>
+                <strong>Desejos pessoais</strong>
+              </div>
+              <span class="budget-percent">30%</span>
+            </div>
+
+            <strong id="res-wants" class="budget-value">R$ 0,00</strong>
+
+            <div class="progress-track" role="img" aria-label="30% da renda para desejos">
+              <div class="progress-fill wants-fill"></div>
+            </div>
+
+            <p>Lazer, restaurantes, viagens, assinaturas e compras pessoais.</p>
+          </div>
+
+          <!-- INVESTIMENTOS -->
+          <div class="budget-item">
+            <div class="budget-item-header">
+              <div class="budget-title">
+                <span class="budget-dot savings-dot"></span>
+                <strong>Investimentos e dívidas</strong>
+              </div>
+              <span class="budget-percent">20%</span>
+            </div>
+
+            <strong id="res-savings" class="budget-value">R$ 0,00</strong>
+
+            <div class="progress-track" role="img" aria-label="20% da renda para investimentos e dívidas">
+              <div class="progress-fill savings-fill"></div>
+            </div>
+
+            <p>Reserva de emergência, investimentos e quitação de dívidas.</p>
+          </div>
+
+          <div class="result-total">
+            <span>Total distribuído</span>
+            <strong id="res-total">R$ 5.000,00</strong>
+          </div>
+
+          <p class="result-disclaimer">
+            A divisão apresentada é uma referência de planejamento.
+            Adapte os percentuais à sua realidade financeira.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCAÇÃO FINANCEIRA -->
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="section-kicker">EDUCAÇÃO FINANCEIRA</span>
+        <h2>O que é a regra 50-30-20?</h2>
+      </div>
+
+      <p>
+        A regra 50-30-20 é um método de organização financeira que
+        recomenda dividir a renda líquida mensal em três grandes grupos.
+        A proposta é estabelecer limites de gastos, manter qualidade
+        de vida e reservar uma parte do dinheiro para o futuro.
+      </p>
+
+      <p>
+        O método ficou conhecido por meio do livro
+        <strong>All Your Worth: The Ultimate Lifetime Money Plan</strong>,
+        de Elizabeth Warren e Amelia Warren Tyagi. Sua principal vantagem
+        é transformar o planejamento financeiro em algo simples de
+        compreender e colocar em prática.
+      </p>
+
+      <div class="rule-grid">
+        <article class="rule-card needs-card">
+          <span class="rule-percent">50%</span>
+          <h3>Necessidades essenciais</h3>
+          <p>
+            Despesas indispensáveis para manter sua rotina e qualidade
+            de vida.
+          </p>
+          <ul>
+            <li>Aluguel ou financiamento</li>
+            <li>Água, energia e internet essencial</li>
+            <li>Alimentação e supermercado</li>
+            <li>Transporte e combustível</li>
+            <li>Saúde e medicamentos</li>
+          </ul>
+        </article>
+
+        <article class="rule-card wants-card">
+          <span class="rule-percent">30%</span>
+          <h3>Desejos pessoais</h3>
+          <p>
+            Gastos que proporcionam conforto, entretenimento e experiências
+            pessoais.
+          </p>
+          <ul>
+            <li>Restaurantes e passeios</li>
+            <li>Viagens e férias</li>
+            <li>Streaming e entretenimento</li>
+            <li>Compras pessoais</li>
+            <li>Hobbies e lazer</li>
+          </ul>
+        </article>
+
+        <article class="rule-card savings-card">
+          <span class="rule-percent">20%</span>
+          <h3>Futuro financeiro</h3>
+          <p>
+            Recursos destinados à construção de patrimônio e à melhoria
+            da saúde financeira.
+          </p>
+          <ul>
+            <li>Reserva de emergência</li>
+            <li>Investimentos de longo prazo</li>
+            <li>Aposentadoria complementar</li>
+            <li>Quitação de dívidas</li>
+            <li>Objetivos financeiros futuros</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <!-- EXEMPLO -->
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="section-kicker">EXEMPLO PRÁTICO</span>
+        <h2>Como funciona a regra com R$ 5.000 de salário?</h2>
+      </div>
+
+      <p>
+        Imagine uma pessoa que recebe R$ 5.000 líquidos por mês.
+        Aplicando a distribuição tradicional, o planejamento ficaria
+        da seguinte maneira:
+      </p>
+
+      <div class="example-table-wrapper">
+        <table class="example-table">
+          <thead>
+            <tr>
+              <th>Categoria</th>
+              <th>Percentual</th>
+              <th>Valor mensal</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Necessidades</td>
+              <td>50%</td>
+              <td>R$ 2.500,00</td>
+            </tr>
+            <tr>
+              <td>Desejos pessoais</td>
+              <td>30%</td>
+              <td>R$ 1.500,00</td>
+            </tr>
+            <tr>
+              <td>Investimentos e dívidas</td>
+              <td>20%</td>
+              <td>R$ 1.000,00</td>
+            </tr>
+            <tr class="table-total">
+              <td>Total</td>
+              <td>100%</td>
+              <td>R$ 5.000,00</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tip-panel">
+        <span aria-hidden="true">💡</span>
+        <p>
+          <strong>Dica:</strong> se suas despesas essenciais ultrapassarem
+          50% da renda, não significa que você está fazendo tudo errado.
+          Utilize a regra como referência, identifique oportunidades
+          de economia e ajuste os percentuais gradualmente.
+        </p>
+      </div>
+    </section>
+
+    <!-- COMO APLICAR -->
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="section-kicker">ORGANIZAÇÃO FINANCEIRA</span>
+        <h2>Como colocar a regra 50-30-20 em prática?</h2>
+      </div>
+
+      <div class="steps-grid">
+        <article class="step-card">
+          <span class="step-number">01</span>
+          <h3>Conheça sua renda líquida</h3>
+          <p>
+            Identifique quanto realmente recebe após os descontos
+            de impostos, contribuições e outros abatimentos.
+          </p>
+        </article>
+
+        <article class="step-card">
+          <span class="step-number">02</span>
+          <h3>Identifique seus gastos</h3>
+          <p>
+            Registre suas despesas mensais e classifique cada uma
+            entre necessidades, desejos e objetivos financeiros.
+          </p>
+        </article>
+
+        <article class="step-card">
+          <span class="step-number">03</span>
+          <h3>Defina suas prioridades</h3>
+          <p>
+            Estabeleça limites para cada categoria e priorize
+            a redução de despesas desnecessárias.
+          </p>
+        </article>
+
+        <article class="step-card">
+          <span class="step-number">04</span>
+          <h3>Acompanhe mensalmente</h3>
+          <p>
+            Revise seu orçamento, acompanhe sua evolução e faça
+            ajustes sempre que sua renda ou suas despesas mudarem.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="content-section">
+      <div class="section-heading">
+        <span class="section-kicker">DÚVIDAS FREQUENTES</span>
+        <h2>Perguntas sobre a regra 50-30-20</h2>
+      </div>
+
+      <div class="faq-list">
+        <details class="faq-item">
+          <summary>O cálculo considera o salário bruto ou líquido?</summary>
+          <p>
+            A regra 50-30-20 utiliza como referência a renda líquida,
+            ou seja, o valor que você efetivamente recebe após os
+            descontos obrigatórios e outros abatimentos.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Preciso seguir exatamente os percentuais 50, 30 e 20?</summary>
+          <p>
+            Não. Os percentuais são uma referência de organização.
+            Dependendo do custo de vida, da renda e das responsabilidades
+            financeiras, pode ser necessário adaptar a distribuição.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>O que acontece se minhas necessidades ultrapassarem 50%?</summary>
+          <p>
+            Você pode ajustar temporariamente as outras categorias.
+            Analise despesas fixas, procure alternativas mais econômicas
+            e avalie mudanças que possam melhorar seu orçamento.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Posso utilizar os 20% para pagar dívidas?</summary>
+          <p>
+            Sim. O pagamento de dívidas pode fazer parte dessa categoria.
+            Se você possui débitos com juros elevados, organizar sua
+            quitação pode ser uma prioridade antes de ampliar os investimentos.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Devo investir os 20% todos os meses?</summary>
+          <p>
+            Se não houver dívidas prioritárias, uma possibilidade é
+            direcionar essa parcela para construir uma reserva de
+            emergência e, posteriormente, investir conforme seus
+            objetivos e tolerância a riscos.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>A regra funciona para quem tem renda variável?</summary>
+          <p>
+            Sim, mas exige planejamento adicional. Uma alternativa é
+            utilizar uma estimativa conservadora de renda mensal,
+            priorizar despesas essenciais e reservar parte dos meses
+            de maior faturamento para períodos de menor receita.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>A calculadora realiza investimentos automaticamente?</summary>
+          <p>
+            Não. A ferramenta apenas calcula uma sugestão de distribuição
+            da renda. Ela não realiza transações financeiras, não acessa
+            contas bancárias e não recomenda produtos de investimento.
+          </p>
+        </details>
+      </div>
+    </section>
+
+    <!-- AVISO -->
+    <aside class="disclaimer">
+      <div class="notice-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>
+        </svg>
+        <strong>Importante:</strong>
+      </div>
+      <p>
+        Esta calculadora possui finalidade exclusivamente educativa
+        e informativa. A regra 50-30-20 é um método de organização
+        financeira, não uma obrigação. Os percentuais devem ser adaptados
+        à realidade econômica, às responsabilidades e aos objetivos
+        de cada pessoa. A ferramenta não constitui recomendação
+        de investimento ou aconselhamento financeiro.
+      </p>
+    </aside>
+
+    <div class="back-link">
+      <a href="/financas/">← Voltar para as calculadoras financeiras</a>
+    </div>
+  </main>
+
+  <!-- LÓGICA DA CALCULADORA -->
+  <script>
+    import { calculateBudget503020 } from '../../engines/finance/personal-finance-engine';
+    import { formatBRL } from '../../engines/common/currency';
+
+    const incomeInput = document.getElementById('net-income') as HTMLInputElement;
+    const errorElement = document.getElementById('calc-error') as HTMLDivElement;
+
+    const incomeElement = document.getElementById('res-income')!;
+    const needsElement = document.getElementById('res-needs')!;
+    const wantsElement = document.getElementById('res-wants')!;
+    const savingsElement = document.getElementById('res-savings')!;
+    const totalElement = document.getElementById('res-total')!;
+
+    function showError(message: string) {
+      errorElement.textContent = message;
+      errorElement.hidden = false;
+
+      [
+        incomeElement,
+        needsElement,
+        wantsElement,
+        savingsElement,
+        totalElement
+      ].forEach((element) => {
+        element.textContent = '—';
+      });
+    }
+
+    function clearError() {
+      errorElement.textContent = '';
+      errorElement.hidden = true;
+    }
+
+    function runCalc() {
+      if (incomeInput.value.trim() === '') {
+        showError('Informe sua renda líquida mensal para continuar.');
+        return;
+      }
+
+      const income = Number(incomeInput.value);
+
+      if (!Number.isFinite(income)) {
+        showError('Informe um valor numérico válido.');
+        return;
+      }
+
+      if (income <= 0) {
+        showError('Sua renda mensal deve ser maior que zero.');
+        return;
+      }
+
+      if (income > 1000000000) {
+        showError('Informe uma renda de até R$ 1 bilhão.');
+        return;
+      }
+
+      try {
+        const result = calculateBudget503020({
+          netMonthlyIncome: income
+        });
+
+        const values = [
+          result.needs,
+          result.wants,
+          result.savingsOrDebt
+        ];
+
+        if (
+          !values.every(
+            (value) => Number.isFinite(value) && value >= 0
+          )
+        ) {
+          showError('Não foi possível gerar uma distribuição válida. Revise o valor informado.');
+          return;
+        }
+
+        const total =
+          result.needs +
+          result.wants +
+          result.savingsOrDebt;
+
+        if (!Number.isFinite(total)) {
+          showError('O resultado ultrapassou os limites de cálculo.');
+          return;
+        }
+
+        clearError();
+
+        incomeElement.textContent = formatBRL(income);
+        needsElement.textContent = formatBRL(result.needs);
+        wantsElement.textContent = formatBRL(result.wants);
+        savingsElement.textContent = formatBRL(result.savingsOrDebt);
+        totalElement.textContent = formatBRL(total);
+
+      } catch (error) {
+        console.error('Erro ao calcular orçamento:', error);
+        showError('Ocorreu um erro durante o cálculo. Tente novamente.');
+      }
+    }
+
+    document.getElementById('calc-btn')?.addEventListener('click', runCalc);
+    incomeInput.addEventListener('input', runCalc);
+    runCalc();
+  </script>
+
+  <!-- ESTILIZAÇÃO -->
+  <style>
+    .page-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0.5rem 0 4rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem;
+      margin-bottom: 1.75rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a,
+    .back-link a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover,
+    .back-link a:hover {
+      color: var(--color-primary);
+    }
+
+    .page-header {
+      max-width: 790px;
+      margin-bottom: 3rem;
+    }
+
+    .eyebrow,
+    .section-kicker,
+    .section-label {
+      display: inline-block;
+      margin-bottom: 0.75rem;
+      color: var(--color-primary);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .page-header h1 {
+      margin: 0 0 0.9rem;
+      color: var(--text-primary);
+      font-size: clamp(2rem, 5vw, 2.7rem);
+      line-height: 1.2;
+    }
+
+    .page-header > p {
+      max-width: 790px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.8;
+    }
+
+    .icon-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    :global([data-theme="dark"]) .icon-badge {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    .intro-panel {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.1rem;
+      margin-bottom: 3rem;
+      padding: 1.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .intro-panel h2 {
+      margin: 0 0 0.45rem;
+      color: var(--text-primary);
+      font-size: 1.15rem;
+    }
+
+    .intro-panel p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.7;
+    }
+
+    .calculator-section {
+      margin-bottom: 3.5rem;
+      scroll-margin-top: 2rem;
+    }
+
+    .section-heading {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading h2 {
+      margin: 0 0 0.6rem;
+      font-size: 1.65rem;
+      line-height: 1.3;
+    }
+
+    .section-heading > p {
+      max-width: 760px;
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      align-items: stretch;
+    }
+
+    .card {
+      min-width: 0;
+      padding: 1.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+    }
+
+    .card-heading {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      margin-bottom: 1.4rem;
+    }
+
+    .card-heading h3 {
+      margin: 0;
+      font-size: 1.2rem;
+    }
+
+    .card-heading p {
+      margin: 0.2rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+    }
+
+    .input-card .card-heading h3 {
+      color: var(--color-primary);
+    }
+
+    .field-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .field-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-size: 0.9rem;
+      font-weight: 650;
+      line-height: 1.5;
+    }
+
+    .input-wrapper {
+      display: flex;
+      align-items: center;
+      border: 1px solid var(--border-color);
+      border-radius: 9px;
+      background: var(--bg-primary);
+      overflow: hidden;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+
+    .input-wrapper:focus-within {
+      border-color: var(--color-primary);
+      box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.12);
+    }
+
+    :global([data-theme="dark"]) .input-wrapper:focus-within {
+      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.16);
+    }
+
+    .input-wrapper input {
+      width: 100%;
+      min-width: 0;
+      min-height: 46px;
+      padding: 0.75rem 0.9rem;
+      border: none;
+      outline: none;
+      background: transparent;
+      color: var(--text-primary);
+      font: inherit;
+      box-sizing: border-box;
+    }
+
+    .input-prefix {
+      padding: 0 0.85rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      font-weight: 600;
+      white-space: nowrap;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .field-group small {
+      display: block;
+      margin-top: 0.45rem;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .example-box {
+      margin: 1.25rem 0;
+      padding: 1rem 1.1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-primary);
+    }
+
+    .example-box strong {
+      color: var(--text-primary);
+      font-size: 0.84rem;
+    }
+
+    .example-box p {
+      margin: 0.35rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      line-height: 1.65;
+    }
+
+    .btn-calculate {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.55rem;
+      width: 100%;
+      min-height: 48px;
+      padding: 0.85rem 1.1rem;
+      border: 0;
+      border-radius: 9px;
+      background: var(--color-primary);
+      color: #ffffff;
+      font: inherit;
+      font-size: 0.95rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: opacity 0.2s ease;
+    }
+
+    .btn-calculate:hover {
+      opacity: 0.88;
+    }
+
+    .auto-calc-note {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.45rem;
+      margin: 0.9rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      line-height: 1.6;
+    }
+
+    .auto-calc-note svg {
+      flex-shrink: 0;
+      margin-top: 0.15rem;
+      color: var(--color-primary);
+    }
+
+    .error-message {
+      margin-top: 1rem;
+      padding: 0.75rem 0.9rem;
+      border: 1px solid #dc2626;
+      border-radius: 8px;
+      color: #dc2626;
+      font-size: 0.85rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
+
+    .error-message[hidden] {
+      display: none;
+    }
+
+    .result-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .result-icon {
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+    }
+
+    :global([data-theme="dark"]) .result-icon {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    .total-income {
+      padding: 1.1rem;
+      margin-bottom: 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-primary);
+    }
+
+    .total-income span {
+      display: block;
+      margin-bottom: 0.35rem;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+    }
+
+    .total-income strong {
+      display: block;
+      color: var(--text-primary);
+      font-size: 1.25rem;
+      overflow-wrap: anywhere;
+    }
+
+    .budget-item {
+      margin-bottom: 1.1rem;
+      padding-bottom: 1.1rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .budget-item-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      margin-bottom: 0.45rem;
+    }
+
+    .budget-title {
+      display: flex;
+      align-items: center;
+      gap: 0.55rem;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+
+    .budget-dot {
+      width: 9px;
+      height: 9px;
+      flex-shrink: 0;
+      border-radius: 50%;
+    }
+
+    .needs-dot,
+    .needs-fill {
+      background: #2563eb;
+    }
+
+    .wants-dot,
+    .wants-fill {
+      background: #d97706;
+    }
+
+    .savings-dot,
+    .savings-fill {
+      background: var(--color-primary);
+    }
+
+    .budget-percent {
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-weight: 750;
+    }
+
+    .budget-value {
+      display: block;
+      margin-bottom: 0.55rem;
+      color: var(--text-primary);
+      font-size: 1.25rem;
+      font-weight: 800;
+      overflow-wrap: anywhere;
+    }
+
+    .progress-track {
+      width: 100%;
+      height: 8px;
+      overflow: hidden;
+      margin-bottom: 0.5rem;
+      border-radius: 20px;
+      background: var(--bg-primary);
+    }
+
+    .progress-fill {
+      height: 100%;
+      border-radius: 20px;
+    }
+
+    .needs-fill {
+      width: 50%;
+    }
+
+    .wants-fill {
+      width: 30%;
+    }
+
+    .savings-fill {
+      width: 20%;
+    }
+
+    .budget-item > p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      line-height: 1.5;
+    }
+
+    .result-total {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding-top: 0.2rem;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .result-total strong {
+      color: var(--color-primary);
+      font-size: 1.1rem;
+      overflow-wrap: anywhere;
+    }
+
+    .result-disclaimer {
+      margin-top: 1.5rem;
+      padding-top: 1.1rem;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      line-height: 1.65;
+    }
+
+    .content-section {
+      margin-bottom: 3.5rem;
+    }
+
+    .content-section > p {
+      margin: 0 0 1rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.75;
+    }
+
+    .rule-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .rule-card {
+      padding: 1.4rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .rule-percent {
+      display: inline-block;
+      margin-bottom: 0.8rem;
+      font-size: 2rem;
+      font-weight: 850;
+      letter-spacing: -0.04em;
+    }
+
+    .needs-card .rule-percent {
+      color: #2563eb;
+    }
+
+    .wants-card .rule-percent {
+      color: #d97706;
+    }
+
+    .savings-card .rule-percent {
+      color: var(--color-primary);
+    }
+
+    .rule-card h3 {
+      margin: 0 0 0.5rem;
+      color: var(--text-primary);
+      font-size: 1.05rem;
+    }
+
+    .rule-card p,
+    .rule-card li {
+      color: var(--text-secondary);
+      font-size: 0.86rem;
+      line-height: 1.7;
+    }
+
+    .rule-card ul {
+      padding-left: 1.1rem;
+      margin: 0.5rem 0 0;
+    }
+
+    .rule-card li {
+      margin-bottom: 0.3rem;
+    }
+
+    .example-table-wrapper {
+      width: 100%;
+      overflow-x: auto;
+      margin-top: 1.5rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+    }
+
+    .example-table {
+      width: 100%;
+      border-collapse: collapse;
+      background: var(--bg-secondary);
+      text-align: left;
+    }
+
+    .example-table th,
+    .example-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+    }
+
+    .example-table th {
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-weight: 750;
+    }
+
+    .example-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .table-total td {
+      color: var(--text-primary);
+      font-weight: 800;
+    }
+
+    .tip-panel {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.8rem;
+      margin-top: 1.5rem;
+      padding: 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .tip-panel > span {
+      flex-shrink: 0;
+      font-size: 1.2rem;
+    }
+
+    .tip-panel p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.7;
+    }
+
+    .tip-panel strong {
+      color: var(--text-primary);
+    }
+
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+      margin-top: 1.5rem;
+    }
+
+    .step-card {
+      padding: 1.4rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .step-number {
+      display: inline-block;
+      margin-bottom: 0.8rem;
+      color: var(--color-primary);
+      font-size: 0.85rem;
+      font-weight: 850;
+      letter-spacing: 0.08em;
+    }
+
+    .step-card h3 {
+      margin: 0 0 0.5rem;
+      color: var(--text-primary);
+      font-size: 1.05rem;
+    }
+
+    .step-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .faq-item {
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .faq-item summary {
+      padding: 1.2rem 2rem 1.2rem 0;
+      position: relative;
+      cursor: pointer;
+      color: var(--text-primary);
+      font-weight: 650;
+      line-height: 1.5;
+      list-style: none;
+    }
+
+    .faq-item summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-item summary::after {
+      content: '+';
+      position: absolute;
+      right: 0.3rem;
+      color: var(--color-primary);
+      font-size: 1.35rem;
+    }
+
+    .faq-item[open] summary::after {
+      content: '−';
+    }
+
+    .faq-item p {
+      margin: 0;
+      padding: 0 1rem 1.2rem 0;
+      color: var(--text-secondary);
+      font-size: 0.94rem;
+      line-height: 1.75;
+    }
+
+    .disclaimer {
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--color-primary);
+      border-radius: 10px;
+      background: var(--bg-secondary);
+    }
+
+    .notice-title {
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      margin-bottom: 0.5rem;
+      color: var(--color-primary);
+    }
+
+    .notice-title strong {
+      color: var(--text-primary);
+    }
+
+    .disclaimer p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.75;
+    }
+
+    .back-link {
+      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 650;
+    }
+
+    .btn-calculate:focus-visible,
+    .breadcrumb a:focus-visible,
+    .back-link a:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: 3px;
+    }
+
+    @media (max-width: 768px) {
+      .calculator-grid,
+      .rule-grid,
+      .steps-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card,
+      .intro-panel,
+      .rule-card,
+      .step-card,
+      .tip-panel {
+        padding: 1.25rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</BaseLayout>

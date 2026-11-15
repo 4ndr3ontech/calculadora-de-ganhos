@@ -1,0 +1,180 @@
+---
+const pathname = Astro.url.pathname;
+
+const navItems = [
+  { href: '/', label: 'Início' },
+  { href: '/financas/', label: 'Finanças' },
+  { href: '/matematica/', label: 'Matemática' },
+  { href: '/trabalhista/', label: 'Trabalhista' },
+  { href: '/conversores/', label: 'Conversores' },
+  { href: '/saude/biometria/', label: 'Saúde' },
+  { href: '/ferramentas/', label: 'Ferramentas' },
+  { href: '/guias/', label: 'Guias' },
+];
+
+const isActive = (href: string) => {
+  if (href === '/') return pathname === '/';
+  return pathname === href || pathname.startsWith(href);
+};
+---
+
+<nav class="site-nav" id="main-navigation" aria-label="Navegação principal">
+  <div class="container nav-container">
+    {navItems.map((item) => {
+      const active = isActive(item.href);
+      return (
+        <a
+          href={item.href}
+          class:list={['nav-link', { active }]}
+          aria-current={active ? 'page' : undefined}
+        >
+          {item.label}
+        </a>
+      );
+    })}
+  </div>
+</nav>
+
+<script>
+  function setupMobileNav() {
+    const btn = document.getElementById('mobile-menu-btn');
+    const nav = document.getElementById('main-navigation');
+
+    if (!btn || !nav) return;
+
+    const setMenuState = (open: boolean) => {
+      nav.classList.toggle('is-open', open);
+      btn.setAttribute('aria-expanded', String(open));
+      btn.setAttribute('aria-label', open ? 'Fechar menu principal' : 'Abrir menu principal');
+    };
+
+    // Garante menu fechado ao navegar entre páginas
+    setMenuState(false);
+
+    btn.onclick = (e) => {
+      e.stopPropagation();
+      const isOpen = nav.classList.contains('is-open');
+      setMenuState(!isOpen);
+    };
+
+    // Fecha ao clicar em qualquer link no mobile
+    nav.querySelectorAll('a').forEach((link) => {
+      link.addEventListener('click', () => setMenuState(false));
+    });
+
+    // Fecha ao clicar fora ou pressionar ESC
+    document.addEventListener('click', (e) => {
+      if (
+        nav.classList.contains('is-open') &&
+        !nav.contains(e.target as Node) &&
+        !btn.contains(e.target as Node)
+      ) {
+        setMenuState(false);
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+        setMenuState(false);
+        btn.focus();
+      }
+    });
+  }
+
+  setupMobileNav();
+  document.addEventListener('astro:after-swap', setupMobileNav);
+</script>
+
+<style>
+  .site-nav {
+    width: 100%;
+    border-top: 1px solid var(--border-color);
+    background-color: transparent;
+  }
+
+  .nav-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.4rem;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.55rem 1rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    box-sizing: border-box;
+  }
+
+  .nav-container::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nav-link {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.45rem 0.85rem;
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .nav-link:hover {
+    color: var(--color-primary);
+    background-color: color-mix(in srgb, var(--color-primary) 9%, transparent);
+  }
+
+  .nav-link.active {
+    color: var(--color-primary);
+    background-color: color-mix(in srgb, var(--color-primary) 13%, transparent);
+    font-weight: 750;
+  }
+
+  .nav-link:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 2px;
+  }
+
+  @media (max-width: 768px) {
+    .site-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      z-index: 99;
+      width: 100%;
+      border-top: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
+      background-color: var(--bg-secondary);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .site-nav.is-open {
+      display: block;
+    }
+
+    .nav-container {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.35rem;
+      padding: 1rem 1.25rem 1.25rem;
+    }
+
+    .nav-link {
+      justify-content: center;
+      padding: 0.7rem 1rem;
+      font-size: 0.95rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .nav-link {
+      transition: none;
+    }
+  }
+</style>

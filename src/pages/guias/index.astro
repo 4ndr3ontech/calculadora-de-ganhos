@@ -1,0 +1,1217 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const guides = await getCollection('guides');
+
+const sortedGuides = [...guides].sort((a, b) => {
+  return new Date(b.data.publishDate).getTime() -
+    new Date(a.data.publishDate).getTime();
+});
+
+const categories = [
+  ...new Set(sortedGuides.map((guide) => guide.data.category))
+].sort((a, b) => a.localeCompare(b, 'pt-BR'));
+
+const formatDate = (date: string | Date) => {
+  const parsed = new Date(date);
+
+  if (Number.isNaN(parsed.getTime())) {
+    return String(date);
+  }
+
+  return parsed.toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+    timeZone: 'UTC',
+  });
+};
+---
+
+<BaseLayout
+  title="Guias e Artigos Educativos — Calculadora de Ganhos"
+  description="Aprenda sobre finanças pessoais, matemática, investimentos, direitos trabalhistas e organização financeira com guias educativos e conteúdos explicativos."
+>
+  <div class="guides-page">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Guias e Artigos</span>
+    </nav>
+
+    <!-- HERO COM MOCKUP FLUTUANTE -->
+    <header class="hero">
+      <div class="hero-glow" aria-hidden="true"></div>
+
+      <div class="hero-grid">
+        <div class="hero-text">
+          <span class="eyebrow">CENTRAL DE CONHECIMENTO</span>
+
+          <h1>
+            Conhecimento para
+            <span>decisões melhores.</span>
+          </h1>
+
+          <p class="hero-description">
+            Explore conteúdos educativos sobre finanças, matemática,
+            investimentos, direitos trabalhistas e organização pessoal.
+            Informação clara para transformar conhecimento em decisões conscientes.
+          </p>
+
+          <div class="hero-actions">
+            <a href="#biblioteca" class="hero-cta">
+              Explorar guias <span aria-hidden="true">↓</span>
+            </a>
+
+            <span class="hero-note">
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              Leitura gratuita e prática
+            </span>
+          </div>
+        </div>
+
+        <!-- CARTÃO VISUAL ILUSTRATIVO (MOCKUP DE ARTIGO/GUIA) -->
+        <div class="hero-visual" aria-hidden="true">
+          <span class="floating-symbol symbol-one">📖</span>
+          <span class="floating-symbol symbol-two">§</span>
+          <span class="floating-symbol symbol-three">✓</span>
+
+          <div class="mockup-card guide-mockup">
+            <div class="mockup-top">
+              <div class="window-dots">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+              <span class="mockup-badge">Guia prático</span>
+            </div>
+
+            <!-- CABEÇALHO DO ARTIGO -->
+            <div class="article-preview">
+              <div class="article-meta">
+                <span class="article-tag">Finanças & CLT</span>
+                <span class="article-time">5 min leitura</span>
+              </div>
+              <div class="article-title">Como planejar seus ganhos e direitos passo a passo</div>
+            </div>
+
+            <!-- TÓPICOS DO GUIA -->
+            <div class="article-topics">
+              <div class="article-topic is-active">
+                <span class="topic-num">01</span>
+                <span>Conceitos explicados sem jargões</span>
+              </div>
+              <div class="article-topic">
+                <span class="topic-num">02</span>
+                <span>Exemplos práticos do dia a dia</span>
+              </div>
+              <div class="article-topic">
+                <span class="topic-num">03</span>
+                <span>Simulações integradas</span>
+              </div>
+            </div>
+
+            <div class="mockup-row-footer">
+              <span>Calculadora de Ganhos</span>
+              <span class="mockup-dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- BARRA DE INDICADORES -->
+    <section class="highlights" aria-label="Resumo da biblioteca de guias">
+      <div class="highlight-item">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+          </svg>
+        </div>
+        <div>
+          <strong>{sortedGuides.length} {sortedGuides.length === 1 ? 'Guia publicado' : 'Guias publicados'}</strong>
+          <small>Conteúdos completos e atualizados</small>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="7" height="7" x="3" y="3" rx="1"/><rect width="7" height="7" x="14" y="3" rx="1"/><rect width="7" height="7" x="14" y="14" rx="1"/><rect width="7" height="7" x="3" y="14" rx="1"/>
+          </svg>
+        </div>
+        <div>
+          <strong>{categories.length} {categories.length === 1 ? 'Categoria' : 'Categorias'}</strong>
+          <small>Assuntos organizados por tema</small>
+        </div>
+      </div>
+
+      <div class="highlight-item">
+        <div class="highlight-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+        </div>
+        <div>
+          <strong>Linguagem acessível</strong>
+          <small>Exemplos claros para o dia a dia</small>
+        </div>
+      </div>
+    </section>
+
+    <!-- BIBLIOTECA DE GUIAS -->
+    <section class="library" id="biblioteca" aria-labelledby="library-title">
+      <div class="section-heading">
+        <div>
+          <span class="eyebrow">BIBLIOTECA</span>
+          <h2 id="library-title">Explore nossos conteúdos</h2>
+          <p>Pesquise um assunto ou navegue pelas categorias.</p>
+        </div>
+      </div>
+
+      <div class="search-panel">
+        <label class="search-box">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/>
+          </svg>
+          <input
+            type="search"
+            id="guide-search"
+            placeholder="Pesquisar guias, assuntos ou palavras-chave..."
+            aria-label="Pesquisar guias"
+          />
+        </label>
+
+        <div class="filters">
+          <span class="filter-caption">Filtrar por:</span>
+
+          <div class="filter-list" id="category-filters">
+            <button
+              type="button"
+              class="filter-button active"
+              data-category="all"
+              aria-pressed="true"
+            >
+              Todos
+            </button>
+
+            {categories.map((category) => (
+              <button
+                type="button"
+                class="filter-button"
+                data-category={category}
+                aria-pressed="false"
+              >
+                {category}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div class="results-header">
+        <div>
+          <h3>Todos os guias</h3>
+          <p id="results-count" aria-live="polite">
+            {sortedGuides.length} {sortedGuides.length === 1 ? 'conteúdo disponível' : 'conteúdos disponíveis'}
+          </p>
+        </div>
+
+        <span class="sort-label">Mais recentes primeiro</span>
+      </div>
+
+      {sortedGuides.length > 0 ? (
+        <>
+          <div class="guides-grid" id="guides-grid">
+            {sortedGuides.map((guide) => (
+              <a
+                href={`/guias/${guide.id}/`}
+                class="guide-card"
+                data-title={guide.data.title}
+                data-description={guide.data.description}
+                data-category={guide.data.category}
+              >
+                <div class="card-header">
+                  <span class="card-category">{guide.data.category}</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="card-arrow" aria-hidden="true">
+                    <line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/>
+                  </svg>
+                </div>
+
+                <h4>{guide.data.title}</h4>
+
+                <p class="card-description">{guide.data.description}</p>
+
+                <div class="card-footer">
+                  <time datetime={String(guide.data.publishDate)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    {formatDate(guide.data.publishDate)}
+                  </time>
+
+                  <span class="read-more">
+                    Ler artigo
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+                    </svg>
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+
+          <div class="no-results" id="no-results" hidden>
+            <div class="no-results-badge" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="11" cy="11" r="8"/><line x1="21" x2="16.65" y1="21" y2="16.65"/>
+              </svg>
+            </div>
+            <h3>Nenhum guia encontrado</h3>
+            <p>
+              Tente pesquisar com outras palavras ou selecione uma categoria diferente.
+            </p>
+            <button type="button" id="clear-filters">Limpar filtros</button>
+          </div>
+        </>
+      ) : (
+        <div class="no-results">
+          <div class="no-results-badge" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 19.5v-15A2.5 2.5 0 0 1 6.5 2H20v20H6.5a2.5 2.5 0 0 1 0-5H20"/>
+            </svg>
+          </div>
+          <h3>Novos conteúdos em preparação</h3>
+          <p>
+            Estamos preparando materiais educativos para ampliar
+            nossa biblioteca de conhecimento.
+          </p>
+        </div>
+      )}
+    </section>
+
+    <!-- CHAMADA FINAL -->
+    <section class="final-cta">
+      <span class="eyebrow">CONHECIMENTO NA PRÁTICA</span>
+      <h2>Aprenda, simule e planeje melhor.</h2>
+      <p>
+        Utilize nossas ferramentas gratuitas para colocar
+        seus conhecimentos em prática.
+      </p>
+      <a href="/" class="cta-link">
+        <span>Explorar ferramentas</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+        </svg>
+      </a>
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  const searchInput = document.querySelector<HTMLInputElement>('#guide-search');
+
+  const cards = Array.from(
+    document.querySelectorAll<HTMLElement>('.guide-card')
+  );
+
+  const filterButtons = Array.from(
+    document.querySelectorAll<HTMLButtonElement>('.filter-button')
+  );
+
+  const resultsCount = document.querySelector<HTMLElement>('#results-count');
+  const noResults = document.querySelector<HTMLElement>('#no-results');
+  const clearButton = document.querySelector<HTMLButtonElement>('#clear-filters');
+
+  let selectedCategory = 'all';
+
+  function normalize(value: string) {
+    return value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .toLowerCase()
+      .trim();
+  }
+
+  function updateResults() {
+    const term = normalize(searchInput?.value || '');
+    let visibleCount = 0;
+
+    cards.forEach((card) => {
+      const title = normalize(card.dataset.title || '');
+      const description = normalize(card.dataset.description || '');
+      const category = normalize(card.dataset.category || '');
+
+      const matchesSearch =
+        !term ||
+        title.includes(term) ||
+        description.includes(term) ||
+        category.includes(term);
+
+      const matchesCategory =
+        selectedCategory === 'all' ||
+        category === normalize(selectedCategory);
+
+      const visible = matchesSearch && matchesCategory;
+
+      card.hidden = !visible;
+
+      if (visible) visibleCount++;
+    });
+
+    if (resultsCount) {
+      resultsCount.textContent =
+        `${visibleCount} ${visibleCount === 1 ? 'conteúdo encontrado' : 'conteúdos encontrados'}`;
+    }
+
+    if (noResults) {
+      noResults.hidden = visibleCount !== 0;
+    }
+  }
+
+  searchInput?.addEventListener('input', updateResults);
+
+  filterButtons.forEach((button) => {
+    button.addEventListener('click', () => {
+      selectedCategory = button.dataset.category || 'all';
+
+      filterButtons.forEach((item) => {
+        const active = item === button;
+
+        item.classList.toggle('active', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
+
+      updateResults();
+    });
+  });
+
+  clearButton?.addEventListener('click', () => {
+    if (searchInput) searchInput.value = '';
+
+    selectedCategory = 'all';
+
+    filterButtons.forEach((button) => {
+      const active = button.dataset.category === 'all';
+
+      button.classList.toggle('active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+
+    updateResults();
+  });
+</script>
+
+<style>
+  .guides-page {
+    width: 100%;
+    padding: 0.5rem 0 2.5rem;
+    color: var(--text-primary);
+  }
+
+  .breadcrumb {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+    margin-bottom: 1.75rem;
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+  }
+
+  .breadcrumb a {
+    color: var(--text-secondary);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .breadcrumb a:hover {
+    color: var(--color-primary);
+  }
+
+  /* HERO (PADRÃO CENTRAL DE CONHECIMENTO) */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 2.75rem 3rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+  }
+
+  .hero-glow {
+    position: absolute;
+    top: -120px;
+    right: -80px;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--color-primary) 16%, transparent) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .hero-grid {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    gap: 2.5rem;
+    align-items: center;
+  }
+
+  .hero-text {
+    text-align: center;
+  }
+
+  .eyebrow {
+    display: inline-block;
+    color: var(--color-primary);
+    font-size: 0.73rem;
+    font-weight: 800;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.85rem;
+  }
+
+  .hero h1 {
+    margin: 0 0 1.15rem;
+    font-size: clamp(2.15rem, 4.5vw, 3.25rem);
+    line-height: 1.08;
+    letter-spacing: -0.045em;
+    font-weight: 850;
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .hero h1 span {
+    display: block;
+    color: var(--color-primary);
+  }
+
+  .hero-description {
+    max-width: 520px;
+    margin: 0 auto 1.75rem;
+    color: var(--text-secondary);
+    font-size: 0.98rem;
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem 1.35rem;
+  }
+
+  .hero-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.85rem 1.45rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 750;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+  }
+
+  .hero-cta:hover {
+    opacity: 0.92;
+    transform: translateY(-2px);
+  }
+
+  .hero-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--text-secondary);
+    font-size: 0.84rem;
+    font-weight: 600;
+  }
+
+  .hero-note svg {
+    color: var(--color-primary);
+  }
+
+  /* CARTÃO MOCKUP DE ARTIGO/GUIA */
+  .hero-visual {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .floating-symbol {
+    position: absolute;
+    display: grid;
+    place-items: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 0.5rem;
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    background: var(--bg-primary);
+    color: var(--color-primary);
+    font-size: 0.88rem;
+    font-weight: 850;
+    box-shadow: var(--shadow-md);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  .symbol-one {
+    top: -10px;
+    left: 12px;
+    transform: rotate(-10deg);
+  }
+
+  .symbol-two {
+    top: 32px;
+    right: 6px;
+    transform: rotate(12deg);
+  }
+
+  .symbol-three {
+    bottom: 14px;
+    left: 6px;
+    transform: rotate(8deg);
+  }
+
+  .guide-mockup {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 330px;
+    padding: 1.25rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-primary);
+    box-shadow: var(--shadow-lg);
+    transform: rotate(-2.5deg);
+    transition: transform 0.3s ease;
+    text-align: left;
+  }
+
+  .guide-mockup:hover {
+    transform: rotate(0deg) translateY(-3px);
+  }
+
+  .mockup-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.95rem;
+  }
+
+  .window-dots {
+    display: flex;
+    gap: 5px;
+  }
+
+  .window-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--border-color);
+  }
+
+  .mockup-badge {
+    padding: 0.28rem 0.7rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+    font-size: 0.7rem;
+    font-weight: 750;
+  }
+
+  /* CABEÇALHO DO ARTIGO */
+  .article-preview {
+    padding: 0.85rem 0.95rem;
+    margin-bottom: 0.8rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .article-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.4rem;
+  }
+
+  .article-tag {
+    color: var(--color-primary);
+    font-size: 0.68rem;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+  }
+
+  .article-time {
+    color: var(--text-muted);
+    font-size: 0.68rem;
+    font-weight: 600;
+  }
+
+  .article-title {
+    color: var(--text-primary);
+    font-size: 0.92rem;
+    font-weight: 800;
+    line-height: 1.35;
+    letter-spacing: -0.015em;
+  }
+
+  /* TÓPICOS DO GUIA */
+  .article-topics {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .article-topic {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 0.76rem;
+    font-weight: 600;
+  }
+
+  .article-topic.is-active {
+    border-color: color-mix(in srgb, var(--color-primary) 30%, var(--border-color));
+    background: color-mix(in srgb, var(--color-primary) 9%, var(--bg-primary));
+    color: var(--text-primary);
+  }
+
+  .topic-num {
+    display: inline-grid;
+    place-items: center;
+    width: 22px;
+    height: 22px;
+    flex-shrink: 0;
+    border-radius: 6px;
+    background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+    color: var(--color-primary);
+    font-size: 0.66rem;
+    font-weight: 850;
+  }
+
+  .mockup-row-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.85rem;
+    padding-top: 0.7rem;
+    border-top: 1px solid var(--border-color);
+    color: var(--text-muted);
+    font-size: 0.72rem;
+  }
+
+  .mockup-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--color-primary);
+  }
+
+  /* BARRA DE INDICADORES */
+  .highlights {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    margin-bottom: 4.5rem;
+    padding: 1.25rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .highlight-item {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.85rem;
+    padding: 0.45rem 1rem;
+    text-align: left;
+  }
+
+  .highlight-item + .highlight-item {
+    border-left: 1px solid var(--border-color);
+  }
+
+  .highlight-icon {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+  }
+
+  .highlight-item strong,
+  .highlight-item small {
+    display: block;
+  }
+
+  .highlight-item strong {
+    font-size: 0.88rem;
+    color: var(--text-primary);
+  }
+
+  .highlight-item small {
+    margin-top: 0.15rem;
+    color: var(--text-secondary);
+    font-size: 0.74rem;
+  }
+
+  /* BIBLIOTECA */
+  .library {
+    margin-bottom: 4.5rem;
+    scroll-margin-top: 2rem;
+  }
+
+  .section-heading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.85rem;
+    margin-bottom: 2rem;
+  }
+
+  .section-heading > div {
+    max-width: 750px;
+    margin: 0 auto;
+  }
+
+  .section-heading h2 {
+    margin: 0 0 0.65rem;
+    font-size: clamp(1.55rem, 3.2vw, 2.05rem);
+    font-weight: 800;
+    line-height: 1.25;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    text-align: center;
+  }
+
+  .section-heading p {
+    margin: 0 auto;
+    color: var(--text-secondary);
+    font-size: 0.96rem;
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .search-panel {
+    padding: 1.35rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.9rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-primary);
+  }
+
+  .search-box > svg {
+    color: var(--text-muted);
+    flex-shrink: 0;
+  }
+
+  .search-box input {
+    width: 100%;
+    min-width: 0;
+    border: 0;
+    outline: none;
+    background: transparent;
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 0.92rem;
+  }
+
+  .search-box input::placeholder {
+    color: var(--text-muted);
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1.15rem;
+  }
+
+  .filter-caption {
+    color: var(--text-muted);
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+
+  .filter-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .filter-button {
+    padding: 0.45rem 0.85rem;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: var(--bg-primary);
+    color: var(--text-secondary);
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.78rem;
+    font-weight: 600;
+    transition: all 0.2s;
+  }
+
+  .filter-button:hover,
+  .filter-button.active {
+    border-color: var(--color-primary);
+    background: var(--color-primary);
+    color: #ffffff;
+  }
+
+  .filter-button:focus-visible,
+  .search-box:focus-within,
+  .hero-cta:focus-visible,
+  .cta-link:focus-visible,
+  .breadcrumb a:focus-visible {
+    outline: 3px solid var(--color-primary);
+    outline-offset: 3px;
+  }
+
+  /* CABEÇALHO DE RESULTADOS */
+  .results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 1rem;
+    margin: 2.25rem 0 1.25rem;
+    text-align: left;
+  }
+
+  .results-header h3 {
+    margin: 0;
+    color: var(--text-primary);
+    font-size: 1.25rem;
+    font-weight: 800;
+  }
+
+  .results-header p {
+    margin: 0.3rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.82rem;
+  }
+
+  .sort-label {
+    color: var(--text-muted);
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+
+  /* GRADE DE ARTIGOS */
+  .guides-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+
+  .guide-card {
+    display: flex;
+    flex-direction: column;
+    min-height: 230px;
+    padding: 1.65rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-decoration: none;
+    text-align: left;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .guide-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-md);
+  }
+
+  .guide-card[hidden] {
+    display: none;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+
+  .card-category {
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    background: color-mix(in srgb, var(--color-primary) 12%, var(--bg-primary));
+    color: var(--color-primary);
+    font-size: 0.72rem;
+    font-weight: 750;
+  }
+
+  .card-arrow {
+    color: var(--text-muted);
+    flex-shrink: 0;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .guide-card:hover .card-arrow {
+    color: var(--color-primary);
+    transform: translate(2px, -2px);
+  }
+
+  .guide-card h4 {
+    margin: 0 0 0.65rem;
+    color: var(--text-primary);
+    font-size: 1.15rem;
+    font-weight: 750;
+    line-height: 1.4;
+  }
+
+  .card-description {
+    display: -webkit-box;
+    margin: 0 0 1.5rem;
+    overflow: hidden;
+    color: var(--text-secondary);
+    font-size: 0.89rem;
+    line-height: 1.7;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .card-footer time {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    color: var(--text-muted);
+    font-size: 0.76rem;
+  }
+
+  .read-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    color: var(--color-primary);
+    font-size: 0.82rem;
+    font-weight: 750;
+  }
+
+  /* ESTADOS VAZIOS */
+  .no-results {
+    padding: 3rem 1.5rem;
+    border: 1px dashed var(--border-color);
+    border-radius: var(--radius-md);
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
+  .no-results[hidden] {
+    display: none;
+  }
+
+  .no-results-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px;
+    height: 56px;
+    margin: 0 auto 1rem;
+    border-radius: 14px;
+    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+    color: var(--color-primary);
+  }
+
+  .no-results h3 {
+    margin: 0 0 0.55rem;
+    color: var(--text-primary);
+    font-size: 1.15rem;
+    text-align: center;
+  }
+
+  .no-results p {
+    max-width: 480px;
+    margin: 0 auto 1.25rem;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    text-align: center;
+  }
+
+  .no-results button {
+    padding: 0.72rem 1.15rem;
+    border: 0;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #ffffff;
+    cursor: pointer;
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 750;
+  }
+
+  /* CTA FINAL */
+  .final-cta {
+    padding: 2.75rem 1.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    background: var(--bg-secondary);
+    text-align: center;
+  }
+
+  .final-cta h2 {
+    margin: 0 0 0.75rem;
+    font-size: clamp(1.5rem, 3vw, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    text-align: center;
+  }
+
+  .final-cta p {
+    max-width: 600px;
+    margin: 0 auto 1.6rem;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    line-height: 1.75;
+    text-align: center;
+  }
+
+  .cta-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1.5rem;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #ffffff;
+    font-size: 0.92rem;
+    font-weight: 750;
+    text-decoration: none;
+    transition: opacity 0.2s ease, transform 0.2s ease;
+  }
+
+  .cta-link:hover {
+    opacity: 0.92;
+    transform: translateY(-2px);
+  }
+
+  /* RESPONSIVIDADE */
+  @media (max-width: 860px) {
+    .hero {
+      padding: 2.25rem 1.75rem;
+    }
+
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 2.25rem;
+    }
+
+    .guide-mockup {
+      transform: rotate(0deg);
+    }
+  }
+
+  @media (max-width: 720px) {
+    .highlights {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+      padding: 1rem;
+      margin-bottom: 3.25rem;
+    }
+
+    .highlight-item {
+      justify-content: flex-start;
+      padding: 0.65rem 0.5rem;
+    }
+
+    .highlight-item + .highlight-item {
+      border-left: none;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .results-header {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .guides-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .guides-page {
+      padding-bottom: 2rem;
+    }
+
+    .hero {
+      padding: 1.75rem 1.25rem;
+    }
+
+    .library {
+      margin-bottom: 3.25rem;
+    }
+
+    .search-panel {
+      padding: 1rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .guide-card,
+    .hero-cta,
+    .cta-link,
+    .filter-button,
+    .guide-mockup {
+      transition: none;
+    }
+
+    .guide-card:hover,
+    .hero-cta:hover,
+    .cta-link:hover,
+    .guide-mockup:hover {
+      transform: none;
+    }
+  }
+</style>
