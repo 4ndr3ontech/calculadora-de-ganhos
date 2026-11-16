@@ -1,180 +1,220 @@
 ---
-const pathname = Astro.url.pathname;
+const pathname = new URL(Astro.request.url).pathname;
 
 const navItems = [
-  { href: '/', label: 'Início' },
-  { href: '/financas/', label: 'Finanças' },
-  { href: '/matematica/', label: 'Matemática' },
-  { href: '/trabalhista/', label: 'Trabalhista' },
-  { href: '/conversores/', label: 'Conversores' },
-  { href: '/saude/biometria/', label: 'Saúde' },
-  { href: '/ferramentas/', label: 'Ferramentas' },
-  { href: '/guias/', label: 'Guias' },
+  { label: 'Início', href: '/' },
+  { label: 'Trabalhista', href: '/trabalhista/' },
+  { label: 'Finanças', href: '/financas/' },
+  { label: 'Ferramentas', href: '/ferramentas/' },
+  { label: 'Matemática', href: '/matematica/' },
 ];
-
-const isActive = (href: string) => {
-  if (href === '/') return pathname === '/';
-  return pathname === href || pathname.startsWith(href);
-};
 ---
 
-<nav class="site-nav" id="main-navigation" aria-label="Navegação principal">
+<nav class="site-nav" aria-label="Navegação Principal">
   <div class="container nav-container">
-    {navItems.map((item) => {
-      const active = isActive(item.href);
-      return (
-        <a
-          href={item.href}
-          class:list={['nav-link', { active }]}
-          aria-current={active ? 'page' : undefined}
-        >
-          {item.label}
-        </a>
-      );
-    })}
+    <!-- Cabeçalho Mobile com Botão Hambúrguer à Esquerda e Título Centralizado -->
+    <div class="mobile-nav-header">
+      <button
+        id="mobile-menu-btn"
+        type="button"
+        class="hamburger-btn"
+        aria-expanded="false"
+        aria-controls="main-nav-list"
+        aria-label="Abrir menu de navegação"
+      >
+        <svg class="icon-menu" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>
+        </svg>
+        <svg class="icon-close" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+        </svg>
+      </button>
+      <span class="mobile-nav-title">Categorias e Calculadoras</span>
+    </div>
+
+    <!-- Lista de Abas (Horizontal no Desktop / Gaveta Vertical Centralizada no Mobile) -->
+    <ul id="main-nav-list" class="nav-list">
+      {navItems.map((item) => {
+        const isActive =
+          item.href === '/'
+            ? pathname === '/'
+            : pathname.startsWith(item.href);
+
+        return (
+          <li class="nav-item">
+            <a
+              href={item.href}
+              class={`nav-link ${isActive ? 'active' : ''}`}
+              aria-current={isActive ? 'page' : undefined}
+            >
+              {item.label}
+            </a>
+          </li>
+        );
+      })}
+    </ul>
   </div>
 </nav>
 
 <script>
-  function setupMobileNav() {
+  function setupMobileMenu() {
     const btn = document.getElementById('mobile-menu-btn');
-    const nav = document.getElementById('main-navigation');
+    const menu = document.getElementById('main-nav-list');
+    if (!btn || !menu) return;
 
-    if (!btn || !nav) return;
+    btn.onclick = () => {
+      const isOpen = btn.getAttribute('aria-expanded') === 'true';
+      const nextState = !isOpen;
 
-    const setMenuState = (open: boolean) => {
-      nav.classList.toggle('is-open', open);
-      btn.setAttribute('aria-expanded', String(open));
-      btn.setAttribute('aria-label', open ? 'Fechar menu principal' : 'Abrir menu principal');
+      btn.setAttribute('aria-expanded', String(nextState));
+      btn.setAttribute('aria-label', nextState ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
+      menu.classList.toggle('open', nextState);
     };
-
-    // Garante menu fechado ao navegar entre páginas
-    setMenuState(false);
-
-    btn.onclick = (e) => {
-      e.stopPropagation();
-      const isOpen = nav.classList.contains('is-open');
-      setMenuState(!isOpen);
-    };
-
-    // Fecha ao clicar em qualquer link no mobile
-    nav.querySelectorAll('a').forEach((link) => {
-      link.addEventListener('click', () => setMenuState(false));
-    });
-
-    // Fecha ao clicar fora ou pressionar ESC
-    document.addEventListener('click', (e) => {
-      if (
-        nav.classList.contains('is-open') &&
-        !nav.contains(e.target as Node) &&
-        !btn.contains(e.target as Node)
-      ) {
-        setMenuState(false);
-      }
-    });
-
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && nav.classList.contains('is-open')) {
-        setMenuState(false);
-        btn.focus();
-      }
-    });
   }
 
-  setupMobileNav();
-  document.addEventListener('astro:after-swap', setupMobileNav);
+  setupMobileMenu();
+  document.addEventListener('astro:after-swap', setupMobileMenu);
 </script>
 
 <style>
   .site-nav {
+    background-color: var(--chrome-bg-alt);
+    border-bottom: 1px solid var(--chrome-border);
     width: 100%;
-    border-top: 1px solid var(--border-color);
-    background-color: transparent;
   }
 
   .nav-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.4rem;
-    width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0.55rem 1rem;
-    overflow-x: auto;
-    scrollbar-width: none;
-    box-sizing: border-box;
   }
 
-  .nav-container::-webkit-scrollbar {
+  /* Oculta o cabeçalho mobile no Desktop */
+  .mobile-nav-header {
     display: none;
   }
 
+  .nav-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 0.5rem;
+  }
+
   .nav-link {
-    position: relative;
-    display: inline-flex;
-    align-items: center;
-    padding: 0.45rem 0.85rem;
-    border-radius: var(--radius-sm);
-    color: var(--text-secondary);
-    font-size: 0.9rem;
-    font-weight: 600;
+    display: block;
+    padding: 0.85rem 1.25rem;
+    color: var(--chrome-text);
     text-decoration: none;
-    white-space: nowrap;
-    transition: color 0.2s ease, background-color 0.2s ease;
+    font-weight: 600;
+    font-size: 0.92rem;
+    border-bottom: 3px solid transparent;
+    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
   }
 
   .nav-link:hover {
-    color: var(--color-primary);
-    background-color: color-mix(in srgb, var(--color-primary) 9%, transparent);
+    color: var(--chrome-accent);
+    background-color: rgba(255, 255, 255, 0.05);
   }
 
   .nav-link.active {
-    color: var(--color-primary);
-    background-color: color-mix(in srgb, var(--color-primary) 13%, transparent);
-    font-weight: 750;
+    color: var(--chrome-accent) !important;
+    border-bottom-color: var(--chrome-accent);
   }
 
-  .nav-link:focus-visible {
-    outline: 3px solid var(--color-primary);
-    outline-offset: 2px;
-  }
-
+  /* =========================================================
+     MENU HAMBÚRGUER NO MOBILE (Telas <= 768px)
+     ========================================================= */
   @media (max-width: 768px) {
-    .site-nav {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      z-index: 99;
-      width: 100%;
-      border-top: 1px solid var(--border-color);
-      border-bottom: 1px solid var(--border-color);
-      background-color: var(--bg-secondary);
-      box-shadow: var(--shadow-lg);
-    }
-
-    .site-nav.is-open {
-      display: block;
-    }
-
     .nav-container {
       flex-direction: column;
       align-items: stretch;
-      gap: 0.35rem;
-      padding: 1rem 1.25rem 1.25rem;
     }
 
-    .nav-link {
+    .mobile-nav-header {
+      position: relative;
+      display: flex;
       justify-content: center;
-      padding: 0.7rem 1rem;
-      font-size: 0.95rem;
+      align-items: center;
+      min-height: 52px;
+      padding: 0.4rem 0;
     }
-  }
 
-  @media (prefers-reduced-motion: reduce) {
+    .mobile-nav-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      color: var(--chrome-muted);
+      text-align: center;
+      padding: 0 48px; /* Evita sobreposição com o botão em telas muito estreitas */
+    }
+
+    .hamburger-btn {
+      position: absolute;
+      left: 0;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--chrome-border);
+      color: var(--chrome-text);
+      border-radius: var(--radius-sm);
+      width: 40px;
+      height: 40px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .hamburger-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: var(--chrome-accent);
+    }
+
+    .hamburger-btn .icon-close {
+      display: none;
+    }
+
+    .hamburger-btn[aria-expanded="true"] .icon-menu {
+      display: none;
+    }
+
+    .hamburger-btn[aria-expanded="true"] .icon-close {
+      display: block;
+    }
+
+    /* Lista recolhida por padrão no mobile, com itens centralizados */
+    .nav-list {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding: 0.5rem 0 0.75rem;
+      border-top: 1px solid var(--chrome-border);
+      gap: 0.25rem;
+    }
+
+    .nav-list.open {
+      display: flex;
+    }
+
+    .nav-item {
+      width: 100%;
+    }
+
     .nav-link {
-      transition: none;
+      padding: 0.8rem 1rem;
+      border-bottom: 2px solid transparent;
+      border-right: none;
+      border-radius: var(--radius-sm);
+      text-align: center;
+    }
+
+    .nav-link.active {
+      background-color: rgba(255, 255, 255, 0.08);
+      border-bottom-color: var(--chrome-accent);
+      border-right-color: transparent;
     }
   }
 </style>

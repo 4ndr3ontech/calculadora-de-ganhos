@@ -739,6 +739,85 @@ const currentDate = new Date().toLocaleDateString('pt-BR', {
       label {
         color: var(--text-primary);
       }
+
+      /* =========================================================
+         RESPONSIVIDADE E OTIMIZAÇÃO PARA DISPOSITIVOS MÓVEIS
+         ========================================================= */
+      @media (max-width: 768px) {
+        .container {
+          padding: 0 1rem;
+        }
+
+        /* Barra Superior (Top Bar) empilhada e compacta */
+        .top-bar-container {
+          flex-direction: column;
+          gap: 0.35rem;
+          text-align: center;
+        }
+
+        /* Cabeçalho ajustado para telas estreitas */
+        .site-header {
+          padding: 0.65rem 0;
+        }
+
+        .site-logo-img {
+          height: 46px;
+        }
+
+        /* Ticker de indicadores em formato rolável horizontal no mobile */
+        .header-container {
+          flex-wrap: wrap;
+        }
+
+        .market-ticker {
+          display: flex;
+          order: 3;
+          width: 100%;
+          justify-content: flex-start;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          padding: 0.45rem 0.75rem;
+          margin-top: 0.5rem;
+          border-radius: var(--radius-sm);
+        }
+
+        .market-ticker::-webkit-scrollbar {
+          display: none;
+        }
+
+        /* Ajustes de espaçamento e tipografia no miolo */
+        .main-content {
+          padding: 1.75rem 0;
+        }
+
+        h1 {
+          font-size: 1.65rem;
+          line-height: 1.25;
+        }
+
+        h2 {
+          font-size: 1.35rem;
+        }
+
+        .card {
+          padding: 1.25rem;
+        }
+
+        /* Botões com área de toque confortável no mobile */
+        .btn {
+          width: 100%;
+          padding: 0.85rem 1rem;
+        }
+
+        /* Evita zoom automático no iOS ao focar em campos de formulário */
+        input[type="number"],
+        input[type="text"],
+        input[type="date"],
+        select {
+          font-size: 16px;
+        }
+      }
     </style>
   </body>
 </html>
