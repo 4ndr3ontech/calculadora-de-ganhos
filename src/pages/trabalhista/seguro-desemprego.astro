@@ -1,10 +1,11 @@
+
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
-  title="Calculadora de Seguro-Desemprego Online — Calculadora de Ganhos"
-  description="Calcule uma estimativa do valor e da quantidade de parcelas do seguro-desemprego. Simule o benefício conforme seu salário médio e tempo trabalhado."
+  title="Calculadora de Seguro-Desemprego 2026 — Valor e Parcelas"
+  description="Calcule o valor estimado e a quantidade de parcelas do seguro-desemprego em 2026. Informe sua média salarial, histórico de solicitações e meses trabalhados."
 >
   <main class="page-container">
     <nav class="breadcrumb" aria-label="Navegação estrutural">
@@ -19,8 +20,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <span class="eyebrow">FERRAMENTA TRABALHISTA</span>
       <h1>Calculadora de Seguro-Desemprego</h1>
       <p>
-        Descubra quanto você poderá receber por parcela e quantas parcelas
-        poderá ter direito, considerando sua média salarial e o tempo trabalhado.
+        Descubra quanto poderá receber por parcela e quantas parcelas poderá
+        ter direito, considerando sua média salarial, o histórico de solicitações
+        e o tempo trabalhado.
       </p>
     </header>
 
@@ -43,41 +45,99 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </div>
 
         <div class="field-group">
-          <label for="sd-salary">Média dos últimos 3 salários</label>
+          <label for="sd-salary">Média salarial utilizada no cálculo</label>
           <div class="input-wrapper">
             <span class="input-prefix">R$</span>
             <input
               type="number"
               id="sd-salary"
-              value="3200"
               min="0.01"
               max="1000000"
               step="0.01"
               inputmode="decimal"
+              placeholder="Ex.: 4000,00"
+              required
               aria-describedby="salary-help"
             />
           </div>
           <small id="salary-help">
-            Informe a média dos salários utilizados para o cálculo do benefício.
+            Informe a média salarial considerada para o cálculo do benefício.
           </small>
         </div>
 
         <div class="field-group">
-          <label for="sd-months">Meses trabalhados nos últimos 36 meses</label>
+          <label for="sd-request-count">Quantas vezes você já solicitou o benefício?</label>
+          <div class="input-wrapper">
+            <select id="sd-request-count" required>
+              <option value="1" selected>Primeira solicitação</option>
+              <option value="2">Segunda solicitação</option>
+              <option value="3">Terceira solicitação ou posterior</option>
+            </select>
+          </div>
+          <small>
+            Considere também solicitações anteriores, mesmo que tenham ocorrido em outros empregos.
+          </small>
+        </div>
+
+        <div class="field-group">
+          <label for="sd-months">
+            Meses trabalhados nos últimos 36 meses
+          </label>
           <div class="input-wrapper">
             <input
               type="number"
               id="sd-months"
-              value="24"
-              min="0"
+              min="1"
               max="36"
               step="1"
               inputmode="numeric"
+              placeholder="Ex.: 12"
+              required
+              aria-describedby="months-help"
             />
             <span class="input-suffix">meses</span>
           </div>
+          <small id="months-help">
+            Informe o total de meses trabalhados nos últimos três anos.
+          </small>
+        </div>
+
+        <div class="field-group">
+          <label for="sd-qualifying-months">
+            Meses trabalhados na janela de referência
+          </label>
+          <div class="input-wrapper">
+            <input
+              type="number"
+              id="sd-qualifying-months"
+              min="1"
+              max="18"
+              step="1"
+              inputmode="numeric"
+              placeholder="Informe os meses"
+              required
+              aria-describedby="qualifying-help"
+            />
+            <span class="input-suffix">meses</span>
+          </div>
+          <small id="qualifying-help">
+            Primeira solicitação: informe os meses trabalhados nos últimos 18 meses.
+          </small>
+        </div>
+
+        <div class="field-group" id="sd-consecutive-group" hidden>
+          <label for="sd-consecutive">
+            Trabalhou em cada um dos 6 meses imediatamente anteriores à dispensa?
+          </label>
+          <div class="input-wrapper">
+            <select id="sd-consecutive">
+              <option value="" selected>Selecione uma opção</option>
+              <option value="yes">Sim</option>
+              <option value="no">Não</option>
+            </select>
+          </div>
           <small>
-            Considere os meses trabalhados dentro dos últimos três anos.
+            Essa confirmação é solicitada para a terceira solicitação ou posterior.
           </small>
         </div>
 
@@ -91,7 +151,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </span>
           <p>
             O direito ao benefício também depende de outros requisitos legais,
-            como o motivo do desligamento e o histórico de solicitações.
+            como dispensa sem justa causa, ausência de renda própria suficiente
+            e histórico de benefícios previdenciários.
           </p>
         </div>
 
@@ -113,7 +174,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </p>
       </div>
 
-      <div class="panel result-panel" aria-live="polite">
+      <div class="panel result-panel">
         <div class="result-heading">
           <div>
             <span class="result-overline">SUA SIMULAÇÃO</span>
@@ -162,6 +223,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </div>
         </div>
 
+        <p id="sd-result-note" class="result-note" aria-live="polite">
+          Preencha os dados e clique em calcular para visualizar sua estimativa.
+        </p>
+
         <p class="result-disclaimer">
           Esta é uma estimativa para fins informativos. A concessão e o valor
           definitivo dependem da análise oficial dos órgãos responsáveis.
@@ -190,16 +255,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </span>
           <h3>Valor das parcelas</h3>
           <p>
-            O valor é calculado com base na média salarial utilizada pela regra
-            vigente, respeitando os limites mínimo e máximo estabelecidos
-            oficialmente.
+            O valor é calculado com base na média salarial aplicável, respeitando
+            os limites mínimo e máximo estabelecidos oficialmente para o ano.
           </p>
         </article>
 
         <article class="info-card">
           <span class="card-icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+              <rect x="3" y="4" width="18" height="18" rx="2"></rect>
               <line x1="16" y1="2" x2="16" y2="6"></line>
               <line x1="8" y1="2" x2="8" y2="6"></line>
               <line x1="3" y1="10" x2="21" y2="10"></line>
@@ -235,10 +299,31 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <section class="content-section rules-section">
       <div class="section-heading">
         <span class="eyebrow">REGRAS GERAIS</span>
-        <h2>Quem pode receber o seguro-desemprego?</h2>
+        <h2>Qual é o tempo mínimo de trabalho exigido?</h2>
         <p>
-          Para o trabalhador formal, os principais requisitos incluem:
+          Para o trabalhador formal, o período mínimo varia conforme o número
+          de solicitações anteriores:
         </p>
+      </div>
+
+      <div class="requirements-grid">
+        <article class="requirement-card">
+          <h3>Primeira solicitação</h3>
+          <strong>12 meses</strong>
+          <p>Nos últimos 18 meses anteriores à dispensa.</p>
+        </article>
+
+        <article class="requirement-card">
+          <h3>Segunda solicitação</h3>
+          <strong>9 meses</strong>
+          <p>Nos últimos 12 meses anteriores à dispensa.</p>
+        </article>
+
+        <article class="requirement-card">
+          <h3>Terceira ou posterior</h3>
+          <strong>6 meses</strong>
+          <p>Em cada um dos 6 meses imediatamente anteriores à dispensa.</p>
+        </article>
       </div>
 
       <ul class="rules-list">
@@ -267,9 +352,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       <div class="legal-note">
         <strong>Importante:</strong>
-        Os requisitos variam conforme a modalidade do trabalhador e a
-        quantidade de vezes em que o benefício foi solicitado. A simulação
-        simplificada desta página não substitui a análise oficial.
+        A calculadora considera os critérios temporais do trabalhador formal.
+        A concessão depende também dos demais requisitos legais e da análise
+        oficial do benefício.
       </div>
     </section>
 
@@ -357,8 +442,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </a>
       </div>
       <p class="updated-note">
-        Ferramenta de caráter informativo. As regras, faixas salariais e limites
-        podem ser atualizados pelo governo.
+        Tabela de valores considerada: 2026. As regras, faixas salariais e
+        limites podem ser atualizados pelo governo.
       </p>
     </section>
   </main>
@@ -368,15 +453,24 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     import { formatBRL } from '../../engines/common/currency';
 
     const salaryInput = document.getElementById('sd-salary') as HTMLInputElement;
+    const requestCountInput = document.getElementById('sd-request-count') as HTMLSelectElement;
     const monthsInput = document.getElementById('sd-months') as HTMLInputElement;
+    const qualifyingMonthsInput = document.getElementById('sd-qualifying-months') as HTMLInputElement;
+
+    const consecutiveGroup = document.getElementById('sd-consecutive-group') as HTMLDivElement;
+    const consecutiveInput = document.getElementById('sd-consecutive') as HTMLSelectElement;
 
     const parcelOutput = document.getElementById('res-parcel')!;
     const countOutput = document.getElementById('res-count')!;
     const totalOutput = document.getElementById('res-total')!;
     const statusOutput = document.getElementById('res-status')!;
     const errorOutput = document.getElementById('sd-error')!;
+    const resultNote = document.getElementById('sd-result-note')!;
 
-    function setStatus(message: string, type: 'success' | 'error' | 'neutral') {
+    function setStatus(
+      message: string,
+      type: 'success' | 'error' | 'neutral'
+    ) {
       statusOutput.textContent = message;
       statusOutput.className = `status-badge status-${type}`;
     }
@@ -396,44 +490,174 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       countOutput.textContent = '0 parcelas';
       totalOutput.textContent = 'R$ 0,00';
       setStatus('Aguardando dados', 'neutral');
+      resultNote.textContent =
+        'Preencha os dados e clique em calcular para visualizar sua estimativa.';
+    }
+
+    function updateReferencePeriod() {
+      const requestCount = Number(requestCountInput.value);
+
+      const referencePeriod =
+        requestCount === 1 ? 18 :
+        requestCount === 2 ? 12 : 6;
+
+      const minimumRequired =
+        requestCount === 1 ? 12 :
+        requestCount === 2 ? 9 : 6;
+
+      qualifyingMonthsInput.max = String(referencePeriod);
+      qualifyingMonthsInput.value = '';
+      qualifyingMonthsInput.placeholder = `Mínimo de ${minimumRequired}`;
+
+      if (requestCount === 1) {
+        qualifyingMonthsInput.min = '12';
+        qualifyingMonthsInput.max = '18';
+        document.getElementById('qualifying-help')!.textContent =
+          'Informe quantos meses trabalhou nos últimos 18 meses. São exigidos pelo menos 12.';
+      } else if (requestCount === 2) {
+        qualifyingMonthsInput.min = '9';
+        qualifyingMonthsInput.max = '12';
+        document.getElementById('qualifying-help')!.textContent =
+          'Informe quantos meses trabalhou nos últimos 12 meses. São exigidos pelo menos 9.';
+      } else {
+        qualifyingMonthsInput.min = '6';
+        qualifyingMonthsInput.max = '6';
+        qualifyingMonthsInput.placeholder = 'Informe 6 meses';
+        document.getElementById('qualifying-help')!.textContent =
+          'Informe os meses trabalhados nos últimos 6 meses. É necessário cumprir os seis meses.';
+      }
+
+      const isThirdOrLater = requestCount >= 3;
+
+      consecutiveGroup.hidden = !isThirdOrLater;
+      consecutiveInput.required = isThirdOrLater;
+      consecutiveInput.value = '';
+
+      clearError();
+      resetResults();
     }
 
     function runCalc() {
       clearError();
 
-      const salary = Number(salaryInput.value);
-      const months = Number(monthsInput.value);
+      const salaryText = salaryInput.value.trim();
+      const monthsText = monthsInput.value.trim();
+      const qualifyingText = qualifyingMonthsInput.value.trim();
 
-      if (!Number.isFinite(salary) || salary <= 0) {
-        showError('Informe uma média salarial válida e maior que zero.');
+      if (!salaryText) {
+        showError('Informe sua média salarial.');
         resetResults();
         salaryInput.focus();
         return;
       }
 
-      if (!Number.isInteger(months) || months < 0 || months > 36) {
-        showError('Informe uma quantidade de meses entre 0 e 36.');
+      const salary = Number(salaryText);
+
+      if (
+        !Number.isFinite(salary) ||
+        salary <= 0 ||
+        salary > 1000000
+      ) {
+        showError('Informe uma média salarial maior que zero e de até R$ 1.000.000,00.');
+        resetResults();
+        salaryInput.focus();
+        return;
+      }
+
+      if (!monthsText) {
+        showError('Informe os meses trabalhados nos últimos 36 meses.');
         resetResults();
         monthsInput.focus();
         return;
       }
 
+      const months = Number(monthsText);
+
+      if (
+        !Number.isInteger(months) ||
+        months < 1 ||
+        months > 36
+      ) {
+        showError('Informe uma quantidade inteira entre 1 e 36 meses.');
+        resetResults();
+        monthsInput.focus();
+        return;
+      }
+
+      const requestCount = Number(requestCountInput.value);
+
+      if (![1, 2, 3].includes(requestCount)) {
+        showError('Selecione o histórico de solicitações do benefício.');
+        resetResults();
+        requestCountInput.focus();
+        return;
+      }
+
+      if (!qualifyingText) {
+        showError('Informe os meses trabalhados na janela de referência.');
+        resetResults();
+        qualifyingMonthsInput.focus();
+        return;
+      }
+
+      const qualifyingMonths = Number(qualifyingText);
+
+      const referencePeriod =
+        requestCount === 1 ? 18 :
+        requestCount === 2 ? 12 : 6;
+
+      const minimumRequired =
+        requestCount === 1 ? 12 :
+        requestCount === 2 ? 9 : 6;
+
+      if (
+        !Number.isInteger(qualifyingMonths) ||
+        qualifyingMonths < minimumRequired ||
+        qualifyingMonths > referencePeriod
+      ) {
+        showError(
+          `Para esta solicitação, informe entre ${minimumRequired} e ${referencePeriod} meses na janela de referência.`
+        );
+        resetResults();
+        qualifyingMonthsInput.focus();
+        return;
+      }
+
+      if (qualifyingMonths > months) {
+        showError(
+          'Os meses informados na janela de referência não podem superar o total trabalhado nos últimos 36 meses.'
+        );
+        resetResults();
+        qualifyingMonthsInput.focus();
+        return;
+      }
+
+      let hasRequiredConsecutiveMonths: boolean | undefined;
+
+      if (requestCount >= 3) {
+        if (consecutiveInput.value === '') {
+          showError(
+            'Informe se trabalhou em cada um dos seis meses imediatamente anteriores à dispensa.'
+          );
+          resetResults();
+          consecutiveInput.focus();
+          return;
+        }
+
+        hasRequiredConsecutiveMonths =
+          consecutiveInput.value === 'yes';
+      }
+
       try {
         const result = calculateUnemploymentInsurance({
           averageSalary: salary,
-          requestCount: 1,
+          requestCount,
           workedMonthsLast3Years: months,
+          qualifyingMonthsInReferencePeriod: qualifyingMonths,
+          ...(requestCount >= 3
+            ? { hasRequiredConsecutiveMonths }
+            : {}),
         });
-
-        if (!result.eligible) {
-          resetResults();
-          setStatus('Não elegível', 'error');
-
-          showError(
-            'Com os dados informados, os requisitos de elegibilidade considerados pelo simulador não foram atingidos.'
-          );
-          return;
-        }
 
         const parcelValue = Number(result.averageParcelValue);
         const parcels = Number(result.parcels);
@@ -441,33 +665,64 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         if (
           !Number.isFinite(parcelValue) ||
           parcelValue < 0 ||
-          !Number.isFinite(parcels) ||
-          parcels < 0
+          !Number.isInteger(parcels) ||
+          parcels < 0 ||
+          parcels > 5
         ) {
-          throw new Error('O motor de cálculo retornou valores inválidos.');
+          throw new Error(
+            'O motor de cálculo retornou valores inválidos.'
+          );
+        }
+
+        if (!result.eligible) {
+          parcelOutput.textContent = 'R$ 0,00';
+          countOutput.textContent = '0 parcelas';
+          totalOutput.textContent = 'R$ 0,00';
+
+          setStatus('Critérios não atendidos', 'error');
+          resultNote.textContent = result.eligibilityNote;
+
+          return;
+        }
+
+        const total = parcelValue * parcels;
+
+        if (!Number.isFinite(total)) {
+          throw new Error(
+            'O total calculado ultrapassou o limite numérico permitido.'
+          );
         }
 
         parcelOutput.textContent = formatBRL(parcelValue);
-        countOutput.textContent = `${parcels} ${parcels === 1 ? 'parcela' : 'parcelas'}`;
-        totalOutput.textContent = formatBRL(parcelValue * parcels);
 
-        setStatus('Elegibilidade preliminar', 'success');
+        countOutput.textContent =
+          `${parcels} ${parcels === 1 ? 'parcela' : 'parcelas'}`;
+
+        totalOutput.textContent = formatBRL(total);
+
+        setStatus('Requisitos temporais atendidos', 'success');
+
+        resultNote.textContent =
+          `${result.eligibilityNote} A simulação não confirma os demais requisitos legais.`;
       } catch (error) {
         console.error('Erro ao calcular seguro-desemprego:', error);
+
         resetResults();
         setStatus('Erro no cálculo', 'error');
+
         showError(
           'Não foi possível realizar a simulação. Verifique os dados e tente novamente.'
         );
       }
     }
 
+    requestCountInput.addEventListener('change', updateReferencePeriod);
+
     document.getElementById('calc-btn')?.addEventListener('click', runCalc);
 
-    salaryInput.addEventListener('input', runCalc);
-    monthsInput.addEventListener('input', runCalc);
-
-    runCalc();
+    // Inicializa a interface sem calcular automaticamente.
+    updateReferencePeriod();
+    resetResults();
   </script>
 
   <style>
@@ -608,7 +863,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 15%, transparent);
     }
 
-    .input-wrapper input {
+    .input-wrapper input,
+    .input-wrapper select {
       width: 100%;
       min-width: 0;
       padding: 0.85rem;
@@ -618,6 +874,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       color: var(--text-primary);
       font: inherit;
       font-size: 1rem;
+    }
+
+    .input-wrapper select {
+      cursor: pointer;
+    }
+
+    .input-wrapper select option {
+      color: #111827;
+      background: #ffffff;
     }
 
     .input-prefix,
@@ -816,6 +1081,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       color: var(--text-secondary);
     }
 
+    .result-note {
+      margin: 1rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      line-height: 1.6;
+    }
+
     .result-disclaimer {
       margin: auto 0 0;
       padding-top: 1.25rem;
@@ -875,6 +1147,39 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       color: var(--text-secondary);
       font-size: 0.85rem;
       line-height: 1.7;
+    }
+
+    .requirements-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 1.5rem 0 2rem;
+    }
+
+    .requirement-card {
+      padding: 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 13px;
+      background: var(--bg-secondary);
+    }
+
+    .requirement-card h3 {
+      margin: 0 0 0.7rem;
+      font-size: 0.9rem;
+    }
+
+    .requirement-card strong {
+      display: block;
+      color: var(--color-primary);
+      font-size: 1.7rem;
+      font-weight: 850;
+    }
+
+    .requirement-card p {
+      margin: 0.45rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      line-height: 1.6;
     }
 
     .rules-list {
@@ -1010,7 +1315,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         grid-template-columns: 1fr;
       }
 
-      .information-grid {
+      .information-grid,
+      .requirements-grid {
         grid-template-columns: 1fr;
       }
 
