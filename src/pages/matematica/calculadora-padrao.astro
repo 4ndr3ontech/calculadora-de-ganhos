@@ -1,0 +1,1115 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora Online Grátis — Calculadora de Ganhos"
+  description="Use nossa calculadora online gratuita para fazer adição, subtração, multiplicação, divisão e porcentagens. Faça cálculos rápidos pelo celular ou computador."
+>
+  <main class="math-tool-page">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <a href="/matematica/">Matemática</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Calculadora Padrão</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="eyebrow">FERRAMENTAS MATEMÁTICAS</span>
+      <h1>Calculadora Padrão Online</h1>
+      <p>
+        Realize cálculos rápidos de adição, subtração, multiplicação, divisão e
+        porcentagem diretamente pelo navegador, com suporte ao teclado físico e
+        histórico da sessão.
+      </p>
+    </header>
+
+    <section class="calculator card" aria-labelledby="calc-padrao-title">
+      <div class="calculator-heading">
+        <div>
+          <span class="section-label">CALCULADORA ONLINE</span>
+          <h2 id="calc-padrao-title">Operações Básicas e Cotidianas</h2>
+        </div>
+        <div class="calculator-icon" aria-hidden="true">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="16" height="20" x="4" y="2" rx="2"/><line x1="8" x2="16" y1="6" y2="6"/><line x1="16" x2="16" y1="14" y2="18"/><path d="M16 10h.01"/><path d="M12 10h.01"/><path d="M8 10h.01"/><path d="M12 14h.01"/><path d="M8 14h.01"/><path d="M12 18h.01"/><path d="M8 18h.01"/>
+          </svg>
+        </div>
+      </div>
+
+      <div class="calc-workspace">
+        <!-- PAINEL DA CALCULADORA -->
+        <div class="calc-machine" role="region" aria-label="Teclado e visor da calculadora padrão">
+          <div class="calc-display">
+            <div class="calc-display-top">
+              <span class="calc-mode-badge">PADRÃO • PT-BR</span>
+              <span class="calc-kbd-hint">Teclado físico ativo</span>
+            </div>
+            <div id="basic-expression" class="calc-expression" aria-label="Expressão atual">
+              &nbsp;
+            </div>
+            <div
+              id="basic-result"
+              class="calc-result"
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              0
+            </div>
+          </div>
+
+          <div id="basic-error" class="error-message hidden" role="alert"></div>
+
+          <div class="keypad-grid" role="group" aria-label="Botões da calculadora">
+            <button type="button" class="key-btn key-util" data-action="ac" aria-label="Limpar tudo (AC)">
+              AC
+            </button>
+            <button type="button" class="key-btn key-util" data-action="backspace" aria-label="Apagar último dígito">
+              ⌫
+            </button>
+            <button type="button" class="key-btn key-util" data-action="percent" aria-label="Porcentagem">
+              %
+            </button>
+            <button type="button" class="key-btn key-op" data-op="÷" aria-label="Dividir">
+              ÷
+            </button>
+
+            <button type="button" class="key-btn" data-digit="7">7</button>
+            <button type="button" class="key-btn" data-digit="8">8</button>
+            <button type="button" class="key-btn" data-digit="9">9</button>
+            <button type="button" class="key-btn key-op" data-op="×" aria-label="Multiplicar">
+              ×
+            </button>
+
+            <button type="button" class="key-btn" data-digit="4">4</button>
+            <button type="button" class="key-btn" data-digit="5">5</button>
+            <button type="button" class="key-btn" data-digit="6">6</button>
+            <button type="button" class="key-btn key-op" data-op="-" aria-label="Subtrair">
+              −
+            </button>
+
+            <button type="button" class="key-btn" data-digit="1">1</button>
+            <button type="button" class="key-btn" data-digit="2">2</button>
+            <button type="button" class="key-btn" data-digit="3">3</button>
+            <button type="button" class="key-btn key-op" data-op="+" aria-label="Somar">
+              +
+            </button>
+
+            <button type="button" class="key-btn key-util" data-action="sign" aria-label="Inverter sinal positivo ou negativo">
+              ±
+            </button>
+            <button type="button" class="key-btn" data-digit="0">0</button>
+            <button type="button" class="key-btn" data-action="decimal" aria-label="Separador decimal vírgula">
+              ,
+            </button>
+            <button type="button" class="key-btn key-equals" data-action="equals" aria-label="Calcular resultado">
+              =
+            </button>
+          </div>
+
+          <p class="privacy-note">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            Os cálculos são executados localmente no seu navegador, sem envio de dados.
+          </p>
+        </div>
+
+        <!-- PAINEL DE HISTÓRICO E ATALHOS -->
+        <aside class="result-panel history-panel" aria-labelledby="history-heading">
+          <div class="result-top">
+            <span id="history-heading" class="result-label">HISTÓRICO DA SESSÃO</span>
+            <button
+              type="button"
+              id="clear-history-btn"
+              class="clear-history-btn hidden"
+              aria-label="Limpar histórico de operações"
+            >
+              Limpar
+            </button>
+          </div>
+
+          <div id="basic-history-list" class="history-list">
+            <p class="history-empty">
+              Nenhum cálculo registrado nesta sessão. Digite uma operação e pressione <strong>=</strong> para salvar no histórico.
+            </p>
+          </div>
+
+          <div class="result-divider"></div>
+
+          <div class="shortcuts-box">
+            <span class="formula-heading">Atalhos do teclado físico</span>
+            <ul class="shortcuts-list">
+              <li><span>Números e operadores</span><code>0–9  +  -  *  /</code></li>
+              <li><span>Calcular resultado</span><code>Enter ou =</code></li>
+              <li><span>Separador decimal</span><code>, ou .</code></li>
+              <li><span>Apagar / Limpar tudo</span><code>Backspace / Esc</code></li>
+            </ul>
+          </div>
+
+          <div class="cross-tool-card">
+            <span>Precisa de seno, cosseno, logaritmos ou potências?</span>
+            <a href="/matematica/calculadora-cientifica/" class="cross-tool-link">
+              Abrir Calculadora Científica →
+            </a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- CONTEÚDO EXPLICATIVO E SEO -->
+    <section class="info-section">
+      <div class="section-heading">
+        <span class="section-label">GUIA DE USO</span>
+        <h2>Como utilizar a Calculadora Padrão Online</h2>
+        <p>
+          Desenvolvida para oferecer agilidade em contas do cotidiano, compras,
+          conferência de valores e estudos, respeitando a precedência matemática
+          e a formatação numérica brasileira.
+        </p>
+      </div>
+
+      <div class="formula-highlight">
+        <span>PRECEDÊNCIA MATEMÁTICA E PERCENTUAL</span>
+        <strong>Multiplicação e divisão são resolvidas antes de adição e subtração</strong>
+        <p>
+          Por exemplo, ao digitar <code>2 + 3 × 4</code>, o motor matemático resolve
+          primeiro <code>3 × 4 = 12</code> e soma <code>2</code>, resultando em <strong>14</strong>.
+          Já o botão <code>%</code> converte o número atual em fração decimal (ex.: <code>25% = 0,25</code>).
+        </p>
+      </div>
+
+      <div class="examples-grid">
+        <article class="example-card">
+          <span class="example-number">EXEMPLO 01</span>
+          <h3>Operações encadeadas</h3>
+          <p>Some despesas ou receitas em sequência e pressione igualdade ao final.</p>
+          <div class="example-calculation">125 + 75 × 2</div>
+          <strong>275</strong>
+        </article>
+
+        <article class="example-card">
+          <span class="example-number">EXEMPLO 02</span>
+          <h3>Cálculo com porcentagem</h3>
+          <p>Converta taxas percentuais diretamente na expressão.</p>
+          <div class="example-calculation">200 × 15%</div>
+          <strong>30</strong>
+        </article>
+
+        <article class="example-card">
+          <span class="example-number">EXEMPLO 03</span>
+          <h3>Números decimais e negativos</h3>
+          <p>Utilize a vírgula decimal e a tecla ± para ajustar saldos negativos.</p>
+          <div class="example-calculation">-45,50 + 120,75</div>
+          <strong>75,25</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="section-heading">
+        <span class="section-label">APLICAÇÕES PRÁTICAS</span>
+        <h2>Quando usar esta calculadora?</h2>
+      </div>
+
+      <div class="uses-grid">
+        <article class="use-card">
+          <div class="use-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Compras e orçamentos</h3>
+            <p>Some itens, divida contas entre pessoas e confira valores rapidamente.</p>
+          </div>
+        </article>
+
+        <article class="use-card">
+          <div class="use-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+            </svg>
+          </div>
+          <div>
+            <h3>Controle financeiro diário</h3>
+            <p>Acompanhe entradas, saídas e diferenças utilizando o histórico da sessão.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="faq-section">
+      <span class="section-label">DÚVIDAS FREQUENTES</span>
+      <h2>Perguntas sobre a Calculadora Padrão</h2>
+
+      <details>
+        <summary>Como funciona o botão de porcentagem (%)?</summary>
+        <p>
+          O botão <strong>%</strong> divide o número digitado por 100 (por exemplo,
+          <code>25%</code> equivale a <code>0,25</code>). Assim, para calcular
+          15% de 200, basta digitar <code>200 × 15%</code> e pressionar <code>=</code>.
+        </p>
+      </details>
+
+      <details>
+        <summary>Posso usar o teclado numérico do computador?</summary>
+        <p>
+          Sim. Todos os dígitos (0 a 9), operadores (+, -, *, /), vírgula ou
+          ponto para decimais, <strong>Enter</strong> para calcular,
+          <strong>Backspace</strong> para apagar e <strong>Esc</strong> para
+          limpar funcionam automaticamente quando você não está digitando em
+          outro campo de texto.
+        </p>
+      </details>
+
+      <details>
+        <summary>Como reutilizar um cálculo do histórico?</summary>
+        <p>
+          Cada operação concluída aparece no painel <strong>Histórico da Sessão</strong>.
+          Basta clicar sobre qualquer item registrado para carregar o resultado
+          de volta no visor e continuar calculando.
+        </p>
+      </details>
+
+      <details>
+        <summary>O que acontece se eu tentar dividir por zero?</summary>
+        <p>
+          A calculadora identifica a divisão por zero antes da execução e exibe
+          um alerta claro na tela sem travar a interface. Basta digitar um novo
+          número ou pressionar <strong>AC</strong> para continuar.
+        </p>
+      </details>
+    </section>
+
+    <section class="bottom-cta">
+      <h2>Explore outras ferramentas matemáticas</h2>
+      <p>
+        Acesse também a Calculadora Científica, Porcentagem, Regra de Três e
+        outras utilidades gratuitas do portal.
+      </p>
+      <div class="bottom-cta-actions">
+        <a href="/matematica/calculadora-cientifica/" class="back-link">
+          <span>Calculadora Científica</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="/matematica/" class="secondary-cta-link">
+          Ver todas de Matemática
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    import {
+      createInitialBasicState,
+      inputDigit,
+      inputDecimal,
+      inputOperator,
+      toggleSign,
+      applyPercentage,
+      backspaceBasic,
+      clearAllBasic,
+      calculateBasic,
+      reuseHistoryItem,
+      handleBasicKeyboardKey,
+      type BasicCalculatorState,
+    } from '../../engines/math/calculator-basic';
+
+    let state: BasicCalculatorState = createInitialBasicState();
+
+    const expressionEl = document.getElementById('basic-expression')!;
+    const resultEl = document.getElementById('basic-result')!;
+    const errorEl = document.getElementById('basic-error')!;
+    const historyListEl = document.getElementById('basic-history-list')!;
+    const clearHistoryBtn = document.getElementById('clear-history-btn')!;
+
+    function render() {
+      expressionEl.textContent = state.expression || '\u00A0';
+      resultEl.textContent = state.displayValue;
+
+      if (state.error) {
+        errorEl.textContent = state.error;
+        errorEl.classList.remove('hidden');
+      } else {
+        errorEl.textContent = '';
+        errorEl.classList.add('hidden');
+      }
+
+      if (state.history.length === 0) {
+        clearHistoryBtn.classList.add('hidden');
+        historyListEl.innerHTML =
+          '<p class="history-empty">Nenhum cálculo registrado nesta sessão. Digite uma operação e pressione <strong>=</strong> para salvar no histórico.</p>';
+      } else {
+        clearHistoryBtn.classList.remove('hidden');
+        historyListEl.innerHTML = '';
+
+        state.history.forEach((item) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'history-item-btn';
+          btn.setAttribute('aria-label', `Reutilizar resultado ${item.result} da expressão ${item.expression}`);
+
+          const exprSpan = document.createElement('span');
+          exprSpan.className = 'history-item-expr';
+          exprSpan.textContent = `${item.expression} =`;
+
+          const resStrong = document.createElement('strong');
+          resStrong.className = 'history-item-res';
+          resStrong.textContent = item.result;
+
+          btn.appendChild(exprSpan);
+          btn.appendChild(resStrong);
+
+          btn.addEventListener('click', () => {
+            state = reuseHistoryItem(state, item);
+            render();
+          });
+
+          historyListEl.appendChild(btn);
+        });
+      }
+    }
+
+    document.querySelectorAll<HTMLButtonElement>('[data-digit]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const digit = btn.dataset.digit;
+        if (digit) {
+          state = inputDigit(state, digit);
+          render();
+        }
+      });
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('[data-op]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const op = btn.dataset.op;
+        if (op) {
+          state = inputOperator(state, op);
+          render();
+        }
+      });
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('[data-action]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const action = btn.dataset.action;
+        switch (action) {
+          case 'ac':
+            state = clearAllBasic(state);
+            break;
+          case 'backspace':
+            state = backspaceBasic(state);
+            break;
+          case 'percent':
+            state = applyPercentage(state);
+            break;
+          case 'sign':
+            state = toggleSign(state);
+            break;
+          case 'decimal':
+            state = inputDecimal(state);
+            break;
+          case 'equals':
+            state = calculateBasic(state);
+            break;
+        }
+        render();
+      });
+    });
+
+    clearHistoryBtn.addEventListener('click', () => {
+      state = { ...state, history: [] };
+      render();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      const target = event.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.tagName === 'SELECT' ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
+      if (event.ctrlKey || event.metaKey || event.altKey) {
+        return;
+      }
+
+      const nextState = handleBasicKeyboardKey(state, event.key);
+      if (nextState) {
+        event.preventDefault();
+        state = nextState;
+        render();
+      }
+    });
+
+    render();
+  </script>
+
+  <style>
+    .math-tool-page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding-bottom: 3rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 2rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+    }
+
+    .eyebrow,
+    .section-label {
+      display: inline-block;
+      margin-bottom: 0.65rem;
+      color: var(--color-primary);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .page-header h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      line-height: 1.15;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .page-header p,
+    .section-heading p {
+      max-width: 720px;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .card {
+      padding: 1.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      background: var(--card-bg, var(--bg-secondary));
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.05);
+    }
+
+    .calculator {
+      margin-bottom: 4rem;
+    }
+
+    .calculator-heading {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .calculator-heading h2 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+
+    .calculator-icon {
+      display: grid;
+      width: 52px;
+      height: 52px;
+      place-items: center;
+      border-radius: 15px;
+      background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+      color: var(--color-primary);
+    }
+
+    .calc-workspace {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1.75rem;
+      align-items: stretch;
+    }
+
+    .calc-machine {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .calc-display {
+      padding: 1.15rem 1.25rem;
+      margin-bottom: 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      background: var(--bg-primary);
+      text-align: right;
+    }
+
+    .calc-display-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.65rem;
+      font-size: 0.72rem;
+    }
+
+    .calc-mode-badge {
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+      color: var(--color-primary);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .calc-kbd-hint {
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .calc-expression {
+      min-height: 1.4rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      overflow-wrap: anywhere;
+      margin-bottom: 0.35rem;
+    }
+
+    .calc-result {
+      color: var(--text-primary);
+      font-size: clamp(2rem, 4.5vw, 2.75rem);
+      font-weight: 850;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+      overflow-wrap: anywhere;
+    }
+
+    .keypad-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 0.6rem;
+    }
+
+    .key-btn {
+      min-height: 54px;
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 1.15rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.12s ease, border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .key-btn:hover {
+      border-color: var(--color-primary);
+      background: color-mix(in srgb, var(--color-primary) 7%, var(--bg-primary));
+    }
+
+    .key-btn:active {
+      transform: scale(0.97);
+    }
+
+    .key-btn:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    .key-util {
+      background: color-mix(in srgb, var(--text-secondary) 8%, var(--bg-primary));
+      color: var(--text-primary);
+      font-size: 1rem;
+    }
+
+    .key-op {
+      background: color-mix(in srgb, var(--color-primary) 12%, var(--bg-primary));
+      color: var(--color-primary);
+      font-size: 1.25rem;
+      font-weight: 800;
+    }
+
+    .key-equals {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #ffffff;
+      font-size: 1.3rem;
+      font-weight: 800;
+    }
+
+    .key-equals:hover {
+      background: var(--color-primary);
+      filter: brightness(1.08);
+    }
+
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 1rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      text-align: center;
+    }
+
+    .privacy-note svg {
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    .result-panel {
+      display: flex;
+      flex-direction: column;
+      padding: 1.4rem;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      background: var(--bg-primary);
+    }
+
+    .result-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .result-label {
+      color: var(--text-secondary);
+      font-size: 0.76rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .clear-history-btn {
+      padding: 0.25rem 0.6rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    .clear-history-btn:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 215px;
+      overflow-y: auto;
+      padding-right: 0.2rem;
+    }
+
+    .history-empty {
+      margin: 0;
+      padding: 1.1rem;
+      border: 1px dashed var(--border-color);
+      border-radius: 10px;
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      line-height: 1.55;
+    }
+
+    .history-list :global(.history-item-btn) {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      width: 100%;
+      padding: 0.65rem 0.85rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      text-align: right;
+      cursor: pointer;
+      transition: border-color 0.15s ease;
+    }
+
+    .history-list :global(.history-item-btn:hover) {
+      border-color: var(--color-primary);
+    }
+
+    .history-list :global(.history-item-expr) {
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .history-list :global(.history-item-res) {
+      color: var(--color-primary);
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .result-divider {
+      height: 1px;
+      margin: 1.15rem 0;
+      background: var(--border-color);
+    }
+
+    .formula-heading {
+      display: block;
+      margin-bottom: 0.65rem;
+      font-size: 0.84rem;
+      font-weight: 750;
+    }
+
+    .shortcuts-list {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: grid;
+      gap: 0.45rem;
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .shortcuts-list li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .shortcuts-list code {
+      padding: 0.18rem 0.45rem;
+      border-radius: 6px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-size: 0.75rem;
+    }
+
+    .cross-tool-card {
+      margin-top: auto;
+      padding-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .cross-tool-link {
+      color: var(--color-primary);
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .cross-tool-link:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      margin: 0 0 0.85rem;
+      padding: 0.75rem 0.95rem;
+      border: 1px solid #ef4444;
+      border-radius: 10px;
+      background: rgba(239, 68, 68, 0.08);
+      color: #dc2626;
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .info-section {
+      margin: 4rem 0;
+    }
+
+    .section-heading {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading h2,
+    .faq-section h2,
+    .bottom-cta h2 {
+      margin: 0 0 0.7rem;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+    }
+
+    .section-heading p {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .formula-highlight {
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--color-primary);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .formula-highlight span {
+      display: block;
+      margin-bottom: 0.7rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .formula-highlight strong {
+      display: block;
+      color: var(--color-primary);
+      font-size: clamp(1.05rem, 3vw, 1.3rem);
+    }
+
+    .formula-highlight p {
+      margin: 0.6rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .example-card {
+      padding: 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--card-bg, var(--bg-secondary));
+    }
+
+    .example-number {
+      color: var(--color-primary);
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .example-card h3 {
+      margin: 0.65rem 0;
+      font-size: 1rem;
+    }
+
+    .example-card p,
+    .example-calculation {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .example-calculation {
+      margin: 1rem 0 0.5rem;
+      font-family: monospace;
+    }
+
+    .example-card > strong {
+      color: var(--color-primary);
+      font-size: 1.25rem;
+    }
+
+    .uses-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .use-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1.2rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--card-bg, var(--bg-secondary));
+    }
+
+    .use-icon {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      flex-shrink: 0;
+      place-items: center;
+      border-radius: 10px;
+      background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+      color: var(--color-primary);
+    }
+
+    .use-card h3 {
+      margin: 0 0 0.4rem;
+      font-size: 0.98rem;
+    }
+
+    .use-card p {
+      margin: 0;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.55;
+    }
+
+    .faq-section {
+      margin: 4rem 0;
+    }
+
+    .faq-section h2 {
+      margin-bottom: 1.5rem;
+    }
+
+    .faq-section details {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .faq-section summary {
+      position: relative;
+      padding-right: 2rem;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq-section summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-section summary::after {
+      position: absolute;
+      right: 0;
+      content: '+';
+      color: var(--color-primary);
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .faq-section details[open] summary::after {
+      content: '−';
+    }
+
+    .faq-section details p {
+      max-width: 800px;
+      margin: 0.8rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .bottom-cta {
+      padding: 2rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+      text-align: center;
+    }
+
+    .bottom-cta p {
+      max-width: 600px;
+      margin: 0 auto 1.3rem;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .bottom-cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.85rem;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0.8rem 1.25rem;
+      border-radius: 9px;
+      background: var(--color-primary);
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      filter: brightness(1.08);
+    }
+
+    .secondary-cta-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.8rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 9px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .secondary-cta-link:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    @media (max-width: 760px) {
+      .calc-workspace {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .examples-grid,
+      .uses-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        padding: 1rem;
+      }
+
+      .key-btn {
+        min-height: 48px;
+        font-size: 1.05rem;
+      }
+
+      .calc-kbd-hint {
+        display: none;
+      }
+    }
+  </style>
+</BaseLayout>

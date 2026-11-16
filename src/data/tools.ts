@@ -317,6 +317,30 @@ export const TOOLS_DATA: Tool[] = [
     route: '/matematica/progressoes/',
     status: 'active'
   },
+  {
+    id: 'calculadora-padrao',
+    name: 'Calculadora Padrão Online',
+    slug: 'calculadora-padrao',
+    description: 'Realize contas rápidas de adição, subtração, multiplicação, divisão e porcentagens.',
+    category: 'Matemática',
+    icon: 'calculator',
+    featured: true,
+    keywords: ['calculadora', 'calculadora online', 'calculadora padrao', 'contas', 'matematica'],
+    route: '/matematica/calculadora-padrao/',
+    status: 'active'
+  },
+  {
+    id: 'calculadora-cientifica',
+    name: 'Calculadora Científica Online',
+    slug: 'calculadora-cientifica',
+    description: 'Resolva expressões com seno, cosseno, tangente, logaritmos, potências, raízes e fatorial.',
+    category: 'Matemática',
+    icon: 'cpu',
+    featured: true,
+    keywords: ['calculadora cientifica', 'seno', 'cosseno', 'tangente', 'logaritmo', 'raiz', 'potencia'],
+    route: '/matematica/calculadora-cientifica/',
+    status: 'active'
+  },
 
   // Conversores (Ativos)
   {

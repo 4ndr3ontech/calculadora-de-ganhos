@@ -1,0 +1,1126 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+---
+
+<BaseLayout
+  title="Calculadora Científica Online Grátis — Calculadora de Ganhos"
+  description="Resolva expressões matemáticas com calculadora científica online. Utilize seno, cosseno, tangente, logaritmos, potências, raízes e muito mais."
+>
+  <main class="math-tool-page">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <a href="/matematica/">Matemática</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Calculadora Científica</span>
+    </nav>
+
+    <header class="page-header">
+      <span class="eyebrow">FERRAMENTAS MATEMÁTICAS</span>
+      <h1>Calculadora Científica Online</h1>
+      <p>
+        Resolva expressões avançadas com trigonometria (DEG e RAD), funções
+        inversas, logaritmos decimal e natural, potências, raízes, fatorial e
+        constantes matemáticas diretamente no navegador.
+      </p>
+    </header>
+
+    <section class="calculator card" aria-labelledby="calc-cientifica-title">
+      <div class="calculator-heading">
+        <div>
+          <span class="section-label">CALCULADORA AVANÇADA</span>
+          <h2 id="calc-cientifica-title">Expressões Científicas e Trigonométricas</h2>
+        </div>
+
+        <div class="angle-switcher" role="group" aria-label="Unidade angular">
+          <button
+            type="button"
+            id="mode-deg-btn"
+            class="angle-btn active"
+            data-angle="DEG"
+            aria-pressed="true"
+          >
+            DEG (Graus)
+          </button>
+          <button
+            type="button"
+            id="mode-rad-btn"
+            class="angle-btn"
+            data-angle="RAD"
+            aria-pressed="false"
+          >
+            RAD (Radianos)
+          </button>
+        </div>
+      </div>
+
+      <div class="sci-workspace">
+        <!-- MÁQUINA CIENTÍFICA -->
+        <div class="calc-machine" role="region" aria-label="Visor e teclado da calculadora científica">
+          <div class="calc-display">
+            <div class="calc-display-top">
+              <span id="sci-angle-badge" class="calc-mode-badge">MODO: DEG</span>
+              <span class="calc-kbd-hint">Precedência algébrica ativa</span>
+            </div>
+            <div id="sci-expression" class="calc-expression" aria-label="Expressão científica">
+              &nbsp;
+            </div>
+            <div
+              id="sci-result"
+              class="calc-result"
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+            >
+              0
+            </div>
+          </div>
+
+          <div id="sci-error" class="error-message hidden" role="alert"></div>
+
+          <div class="sci-keypad" role="group" aria-label="Teclas científicas e numéricas">
+            <!-- Linha 1: Trigonometria e Parênteses -->
+            <button type="button" class="key-btn key-sci" data-token="sin(" aria-label="Seno">sin</button>
+            <button type="button" class="key-btn key-sci" data-token="cos(" aria-label="Cosseno">cos</button>
+            <button type="button" class="key-btn key-sci" data-token="tan(" aria-label="Tangente">tan</button>
+            <button type="button" class="key-btn key-sci" data-token="(" aria-label="Abrir parêntese">(</button>
+            <button type="button" class="key-btn key-sci" data-token=")" aria-label="Fechar parêntese">)</button>
+            <button type="button" class="key-btn key-util" data-action="backspace" aria-label="Apagar último elemento">⌫</button>
+            <button type="button" class="key-btn key-danger" data-action="ac" aria-label="Limpar tudo (AC)">AC</button>
+
+            <!-- Linha 2: Trigonometria Inversa e Logaritmos -->
+            <button type="button" class="key-btn key-sci" data-token="asin(" aria-label="Arco seno">sin⁻¹</button>
+            <button type="button" class="key-btn key-sci" data-token="acos(" aria-label="Arco cosseno">cos⁻¹</button>
+            <button type="button" class="key-btn key-sci" data-token="atan(" aria-label="Arco tangente">tan⁻¹</button>
+            <button type="button" class="key-btn key-sci" data-token="log(" aria-label="Logaritmo base 10">log</button>
+            <button type="button" class="key-btn key-sci" data-token="ln(" aria-label="Logaritmo natural">ln</button>
+            <button type="button" class="key-btn key-sci" data-token="%" aria-label="Porcentagem">%</button>
+            <button type="button" class="key-btn key-op" data-token="÷" aria-label="Dividir">÷</button>
+
+            <!-- Linha 3: Potências, Raízes e Números 7-9 -->
+            <button type="button" class="key-btn key-sci" data-wrap="sq" aria-label="Elevar ao quadrado">x²</button>
+            <button type="button" class="key-btn key-sci" data-wrap="cube" aria-label="Elevar ao cubo">x³</button>
+            <button type="button" class="key-btn key-sci" data-token="^" aria-label="Potência com expoente variável">xʸ</button>
+            <button type="button" class="key-btn" data-token="7">7</button>
+            <button type="button" class="key-btn" data-token="8">8</button>
+            <button type="button" class="key-btn" data-token="9">9</button>
+            <button type="button" class="key-btn key-op" data-token="×" aria-label="Multiplicar">×</button>
+
+            <!-- Linha 4: Raízes, Exponenciais e Números 4-6 -->
+            <button type="button" class="key-btn key-sci" data-token="sqrt(" aria-label="Raiz quadrada">√x</button>
+            <button type="button" class="key-btn key-sci" data-token="cbrt(" aria-label="Raiz cúbica">³√x</button>
+            <button type="button" class="key-btn key-sci" data-token="10^" aria-label="Potência de base 10">10ˣ</button>
+            <button type="button" class="key-btn" data-token="4">4</button>
+            <button type="button" class="key-btn" data-token="5">5</button>
+            <button type="button" class="key-btn" data-token="6">6</button>
+            <button type="button" class="key-btn key-op" data-token="-" aria-label="Subtrair">−</button>
+
+            <!-- Linha 5: Fatorial, Inverso, e^x e Números 1-3 -->
+            <button type="button" class="key-btn key-sci" data-token="!" aria-label="Fatorial">n!</button>
+            <button type="button" class="key-btn key-sci" data-wrap="inv" aria-label="Inverso multiplicativo">1/x</button>
+            <button type="button" class="key-btn key-sci" data-token="e^" aria-label="Exponencial natural">eˣ</button>
+            <button type="button" class="key-btn" data-token="1">1</button>
+            <button type="button" class="key-btn" data-token="2">2</button>
+            <button type="button" class="key-btn" data-token="3">3</button>
+            <button type="button" class="key-btn key-op" data-token="+" aria-label="Somar">+</button>
+
+            <!-- Linha 6: Constantes, Valor Absoluto, Notação Científica e 0 / , / = -->
+            <button type="button" class="key-btn key-sci" data-token="π" aria-label="Constante Pi">π</button>
+            <button type="button" class="key-btn key-sci" data-token="e" aria-label="Constante de Euler">e</button>
+            <button type="button" class="key-btn key-sci" data-token="abs(" aria-label="Valor absoluto">|x|</button>
+            <button type="button" class="key-btn key-sci" data-token="e" aria-label="Notação científica EXP">EXP</button>
+            <button type="button" class="key-btn" data-token="0">0</button>
+            <button type="button" class="key-btn" data-token="," aria-label="Separador decimal vírgula">,</button>
+            <button type="button" class="key-btn key-equals" data-action="equals" aria-label="Calcular expressão">=</button>
+          </div>
+
+          <p class="privacy-note">
+            <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            Motor simbólico seguro executado 100% no navegador, sem envio de expressões.
+          </p>
+        </div>
+
+        <!-- HISTÓRICO E REFERÊNCIA RÁPIDA -->
+        <aside class="result-panel history-panel" aria-labelledby="sci-history-heading">
+          <div class="result-top">
+            <span id="sci-history-heading" class="result-label">HISTÓRICO CIENTÍFICO</span>
+            <button
+              type="button"
+              id="sci-clear-history-btn"
+              class="clear-history-btn hidden"
+              aria-label="Limpar histórico científico"
+            >
+              Limpar
+            </button>
+          </div>
+
+          <div id="sci-history-list" class="history-list">
+            <p class="history-empty">
+              Nenhuma expressão avaliada nesta sessão. Monte sua expressão e pressione <strong>=</strong>.
+            </p>
+          </div>
+
+          <div class="result-divider"></div>
+
+          <div class="shortcuts-box">
+            <span class="formula-heading">Exemplos rápidos para testar</span>
+            <div class="quick-presets">
+              <button type="button" class="preset-chip" data-preset="sin(30)" data-preset-angle="DEG">
+                sin(30°)
+              </button>
+              <button type="button" class="preset-chip" data-preset="sin(π/2)" data-preset-angle="RAD">
+                sin(π/2 rad)
+              </button>
+              <button type="button" class="preset-chip" data-preset="log(100) + ln(e)">
+                log(100) + ln(e)
+              </button>
+              <button type="button" class="preset-chip" data-preset="sqrt(25) + 5!">
+                √25 + 5!
+              </button>
+            </div>
+          </div>
+
+          <div class="cross-tool-card">
+            <span>Precisa apenas de contas rápidas do dia a dia?</span>
+            <a href="/matematica/calculadora-padrao/" class="cross-tool-link">
+              Abrir Calculadora Padrão →
+            </a>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- CONTEÚDO EDUCATIVO E SEO (SEÇÃO 14.2) -->
+    <section class="info-section">
+      <div class="section-heading">
+        <span class="section-label">GUIA DE REFERÊNCIA</span>
+        <h2>Como utilizar a Calculadora Científica Online</h2>
+        <p>
+          Esta ferramenta interpreta expressões matemáticas completas respeitando
+          parênteses aninhados, associatividade de potências e domínios reais.
+        </p>
+      </div>
+
+      <div class="formula-highlight">
+        <span>DIFERENÇA ENTRE GRAUS (DEG) E RADIANOS (RAD)</span>
+        <strong>180 graus (DEG) equivalem exatamente a π radianos (RAD)</strong>
+        <p>
+          Antes de calcular funções trigonométricas (<code>sin</code>, <code>cos</code>,
+          <code>tan</code>) ou inversas (<code>sin⁻¹</code>, <code>cos⁻¹</code>,
+          <code>tan⁻¹</code>), confira o seletor no topo da calculadora. Em
+          <strong>DEG</strong>, <code>sin(30) = 0,5</code>; em <strong>RAD</strong>,
+          <code>sin(π/2) = 1</code>.
+        </p>
+      </div>
+
+      <div class="examples-grid">
+        <article class="example-card">
+          <span class="example-number">TRIGONOMETRIA</span>
+          <h3>Seno, Cosseno e Tangente</h3>
+          <p>Calcule razões trigonométricas e ângulos inversos com precisão.</p>
+          <div class="example-calculation">cos(60) [DEG]</div>
+          <strong>0,5</strong>
+        </article>
+
+        <article class="example-card">
+          <span class="example-number">LOGARITMOS</span>
+          <h3>Decimal (log) e Natural (ln)</h3>
+          <p><code>log(x)</code> utiliza base 10 e <code>ln(x)</code> utiliza base <em>e</em>.</p>
+          <div class="example-calculation">log(1000) + ln(e)</div>
+          <strong>4</strong>
+        </article>
+
+        <article class="example-card">
+          <span class="example-number">POTÊNCIAS E RAÍZES</span>
+          <h3>Expoentes, Raízes e Fatorial</h3>
+          <p>Suporte a raiz quadrada, cúbica, potências encadeadas e fatorial.</p>
+          <div class="example-calculation">cbrt(27) + 5!</div>
+          <strong>123</strong>
+        </article>
+      </div>
+    </section>
+
+    <section class="faq-section">
+      <span class="section-label">DÚVIDAS FREQUENTES</span>
+      <h2>Perguntas sobre a Calculadora Científica</h2>
+
+      <details>
+        <summary>Qual a diferença entre DEG e RAD?</summary>
+        <p>
+          <strong>DEG</strong> (Degrees) mede ângulos em graus (uma volta completa
+          tem 360°). <strong>RAD</strong> (Radians) mede ângulos em radianos
+          (uma volta completa tem 2π rad). Alterne entre os modos no topo da
+          calculadora conforme o enunciado do seu problema.
+        </p>
+      </details>
+
+      <details>
+        <summary>Qual a diferença entre log e ln?</summary>
+        <p>
+          A função <strong>log(x)</strong> calcula o logaritmo na base 10 (por
+          exemplo, <code>log(100) = 2</code>). Já <strong>ln(x)</strong> calcula o
+          logaritmo natural na base de Euler <em>e</em> ≈ 2,71828 (por exemplo,
+          <code>ln(e) = 1</code>). Ambas exigem argumentos estritamente maiores que zero.
+        </p>
+      </details>
+
+      <details>
+        <summary>Como funciona a precedência de potências como 2^3^2?</summary>
+        <p>
+          Na matemática, a potenciação é associativa à direita. Portanto,
+          <code>2^3^2</code> é avaliado como <code>2^(3^2) = 2^9 = 512</code>. Da
+          mesma forma, <code>-2^2 = -4</code>, enquanto <code>(-2)^2 = 4</code>.
+        </p>
+      </details>
+
+      <details>
+        <summary>Quais valores são aceitos no fatorial (n!)?</summary>
+        <p>
+          O fatorial é definido apenas para números inteiros não negativos até
+          <code>170!</code>. Valores negativos, fracionários ou acima do limite
+          numérico exibem uma mensagem explicativa sem travar a calculadora.
+        </p>
+      </details>
+    </section>
+
+    <section class="bottom-cta">
+      <h2>Explore outras ferramentas matemáticas</h2>
+      <p>
+        Utilize também a Calculadora Padrão, Regra de Três, Porcentagem,
+        Progressões (PA e PG) e MDC/MMC.
+      </p>
+      <div class="bottom-cta-actions">
+        <a href="/matematica/calculadora-padrao/" class="back-link">
+          <span>Calculadora Padrão</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
+          </svg>
+        </a>
+        <a href="/matematica/" class="secondary-cta-link">
+          Ver todas de Matemática
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    import {
+      createInitialScientificState,
+      setAngleMode,
+      appendScientificToken,
+      applyUnaryWrap,
+      backspaceScientific,
+      clearAllScientific,
+      calculateScientific,
+      reuseScientificHistoryItem,
+      handleScientificKeyboardKey,
+      type ScientificCalculatorState,
+    } from '../../engines/math/calculator-scientific';
+
+    let state: ScientificCalculatorState = createInitialScientificState();
+
+    const expressionEl = document.getElementById('sci-expression')!;
+    const resultEl = document.getElementById('sci-result')!;
+    const errorEl = document.getElementById('sci-error')!;
+    const angleBadgeEl = document.getElementById('sci-angle-badge')!;
+    const degBtn = document.getElementById('mode-deg-btn')!;
+    const radBtn = document.getElementById('mode-rad-btn')!;
+    const historyListEl = document.getElementById('sci-history-list')!;
+    const clearHistoryBtn = document.getElementById('sci-clear-history-btn')!;
+
+    function render() {
+      expressionEl.textContent = state.expression || '\u00A0';
+      resultEl.textContent = state.displayValue;
+      angleBadgeEl.textContent = `MODO: ${state.angleMode}`;
+
+      const isDeg = state.angleMode === 'DEG';
+      degBtn.classList.toggle('active', isDeg);
+      degBtn.setAttribute('aria-pressed', String(isDeg));
+      radBtn.classList.toggle('active', !isDeg);
+      radBtn.setAttribute('aria-pressed', String(!isDeg));
+
+      if (state.error) {
+        errorEl.textContent = state.error;
+        errorEl.classList.remove('hidden');
+      } else {
+        errorEl.textContent = '';
+        errorEl.classList.add('hidden');
+      }
+
+      if (state.history.length === 0) {
+        clearHistoryBtn.classList.add('hidden');
+        historyListEl.innerHTML =
+          '<p class="history-empty">Nenhuma expressão avaliada nesta sessão. Monte sua expressão e pressione <strong>=</strong>.</p>';
+      } else {
+        clearHistoryBtn.classList.remove('hidden');
+        historyListEl.innerHTML = '';
+
+        state.history.forEach((item) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'history-item-btn';
+          btn.setAttribute('aria-label', `Reutilizar resultado ${item.result} da expressão ${item.expression}`);
+
+          const exprSpan = document.createElement('span');
+          exprSpan.className = 'history-item-expr';
+          exprSpan.textContent = `${item.expression} =`;
+
+          const resStrong = document.createElement('strong');
+          resStrong.className = 'history-item-res';
+          resStrong.textContent = item.result;
+
+          btn.appendChild(exprSpan);
+          btn.appendChild(resStrong);
+
+          btn.addEventListener('click', () => {
+            state = reuseScientificHistoryItem(state, item);
+            render();
+          });
+
+          historyListEl.appendChild(btn);
+        });
+      }
+    }
+
+    degBtn.addEventListener('click', () => {
+      state = setAngleMode(state, 'DEG');
+      render();
+    });
+
+    radBtn.addEventListener('click', () => {
+      state = setAngleMode(state, 'RAD');
+      render();
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('[data-token]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const token = btn.dataset.token;
+        if (token) {
+          state = appendScientificToken(state, token);
+          render();
+        }
+      });
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('[data-wrap]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const mode = btn.dataset.wrap as 'inv' | 'sq' | 'cube' | undefined;
+        if (mode) {
+          state = applyUnaryWrap(state, mode);
+          render();
+        }
+      });
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('[data-action]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const action = btn.dataset.action;
+        if (action === 'ac') state = clearAllScientific(state);
+        if (action === 'backspace') state = backspaceScientific(state);
+        if (action === 'equals') state = calculateScientific(state);
+        render();
+      });
+    });
+
+    document.querySelectorAll<HTMLButtonElement>('[data-preset]').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const preset = btn.dataset.preset;
+        const presetAngle = btn.dataset.presetAngle as 'DEG' | 'RAD' | undefined;
+        if (preset) {
+          if (presetAngle) {
+            state = setAngleMode(state, presetAngle);
+          }
+          state = calculateScientific({
+            ...state,
+            expression: preset,
+            error: null,
+            justEvaluated: false,
+          });
+          render();
+        }
+      });
+    });
+
+    clearHistoryBtn.addEventListener('click', () => {
+      state = { ...state, history: [] };
+      render();
+    });
+
+    document.addEventListener('keydown', (event) => {
+      const target = event.target as HTMLElement | null;
+      if (
+        target &&
+        (target.tagName === 'INPUT' ||
+          target.tagName === 'TEXTAREA' ||
+          target.tagName === 'SELECT' ||
+          target.isContentEditable)
+      ) {
+        return;
+      }
+
+      if (event.ctrlKey || event.metaKey || event.altKey) {
+        return;
+      }
+
+      const nextState = handleScientificKeyboardKey(state, event.key);
+      if (nextState) {
+        event.preventDefault();
+        state = nextState;
+        render();
+      }
+    });
+
+    render();
+  </script>
+
+  <style>
+    .math-tool-page {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding-bottom: 3rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.55rem;
+      margin-bottom: 2rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+
+    .page-header {
+      margin-bottom: 2rem;
+    }
+
+    .eyebrow,
+    .section-label {
+      display: inline-block;
+      margin-bottom: 0.65rem;
+      color: var(--color-primary);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+    }
+
+    .page-header h1 {
+      margin: 0 0 0.75rem;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      line-height: 1.15;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+    }
+
+    .page-header p,
+    .section-heading p {
+      max-width: 720px;
+      color: var(--text-secondary);
+      font-size: 1.05rem;
+      line-height: 1.7;
+    }
+
+    .card {
+      padding: 1.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      background: var(--card-bg, var(--bg-secondary));
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.05);
+    }
+
+    .calculator {
+      margin-bottom: 4rem;
+    }
+
+    .calculator-heading {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .calculator-heading h2 {
+      margin: 0;
+      font-size: 1.4rem;
+    }
+
+    .angle-switcher {
+      display: inline-flex;
+      padding: 0.3rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-primary);
+      gap: 0.25rem;
+    }
+
+    .angle-btn {
+      padding: 0.45rem 0.85rem;
+      border: 0;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      font-weight: 750;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .angle-btn.active {
+      background: var(--color-primary);
+      color: #ffffff;
+    }
+
+    .sci-workspace {
+      display: grid;
+      grid-template-columns: 1.45fr 0.75fr;
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+
+    .calc-machine {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .calc-display {
+      padding: 1.1rem 1.25rem;
+      margin-bottom: 0.95rem;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      background: var(--bg-primary);
+      text-align: right;
+    }
+
+    .calc-display-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.6rem;
+      font-size: 0.72rem;
+    }
+
+    .calc-mode-badge {
+      padding: 0.2rem 0.55rem;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--color-primary) 12%, transparent);
+      color: var(--color-primary);
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .calc-kbd-hint {
+      color: var(--text-secondary);
+      font-weight: 600;
+    }
+
+    .calc-expression {
+      min-height: 1.4rem;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      overflow-wrap: anywhere;
+      margin-bottom: 0.35rem;
+    }
+
+    .calc-result {
+      color: var(--text-primary);
+      font-size: clamp(1.85rem, 4vw, 2.55rem);
+      font-weight: 850;
+      line-height: 1.15;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+      overflow-wrap: anywhere;
+    }
+
+    .sci-keypad {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 0.45rem;
+    }
+
+    .key-btn {
+      min-height: 48px;
+      padding: 0.5rem 0.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-family: inherit;
+      font-size: 0.98rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.1s ease, border-color 0.15s ease, background-color 0.15s ease;
+    }
+
+    .key-btn:hover {
+      border-color: var(--color-primary);
+      background: color-mix(in srgb, var(--color-primary) 7%, var(--bg-primary));
+    }
+
+    .key-btn:active {
+      transform: scale(0.97);
+    }
+
+    .key-btn:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: 2px;
+    }
+
+    .key-sci {
+      background: color-mix(in srgb, var(--text-secondary) 7%, var(--bg-primary));
+      font-size: 0.84rem;
+      font-weight: 650;
+    }
+
+    .key-util {
+      background: color-mix(in srgb, var(--text-secondary) 11%, var(--bg-primary));
+      font-size: 0.95rem;
+    }
+
+    .key-danger {
+      background: rgba(239, 68, 68, 0.1);
+      border-color: rgba(239, 68, 68, 0.3);
+      color: #dc2626;
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+
+    .key-op {
+      background: color-mix(in srgb, var(--color-primary) 12%, var(--bg-primary));
+      color: var(--color-primary);
+      font-size: 1.15rem;
+      font-weight: 800;
+    }
+
+    .key-equals {
+      background: var(--color-primary);
+      border-color: var(--color-primary);
+      color: #ffffff;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .key-equals:hover {
+      background: var(--color-primary);
+      filter: brightness(1.08);
+    }
+
+    .privacy-note {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin: 1rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+      text-align: center;
+    }
+
+    .privacy-note svg {
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    .result-panel {
+      display: flex;
+      flex-direction: column;
+      padding: 1.3rem;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      background: var(--bg-primary);
+    }
+
+    .result-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+      margin-bottom: 0.85rem;
+    }
+
+    .result-label {
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .clear-history-btn {
+      padding: 0.25rem 0.6rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      font-weight: 650;
+      cursor: pointer;
+    }
+
+    .clear-history-btn:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      max-height: 210px;
+      overflow-y: auto;
+      padding-right: 0.2rem;
+    }
+
+    .history-empty {
+      margin: 0;
+      padding: 1rem;
+      border: 1px dashed var(--border-color);
+      border-radius: 10px;
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      line-height: 1.55;
+    }
+
+    .history-list :global(.history-item-btn) {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      width: 100%;
+      padding: 0.6rem 0.8rem;
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      text-align: right;
+      cursor: pointer;
+    }
+
+    .history-list :global(.history-item-btn:hover) {
+      border-color: var(--color-primary);
+    }
+
+    .history-list :global(.history-item-expr) {
+      color: var(--text-secondary);
+      font-size: 0.75rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    }
+
+    .history-list :global(.history-item-res) {
+      color: var(--color-primary);
+      font-size: 1rem;
+      font-weight: 800;
+    }
+
+    .result-divider {
+      height: 1px;
+      margin: 1.1rem 0;
+      background: var(--border-color);
+    }
+
+    .formula-heading {
+      display: block;
+      margin-bottom: 0.6rem;
+      font-size: 0.82rem;
+      font-weight: 750;
+    }
+
+    .quick-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem;
+    }
+
+    .preset-chip {
+      padding: 0.35rem 0.65rem;
+      border: 1px solid var(--border-color);
+      border-radius: 999px;
+      background: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 0.76rem;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      cursor: pointer;
+    }
+
+    .preset-chip:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    .cross-tool-card {
+      margin-top: auto;
+      padding-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      font-size: 0.82rem;
+      color: var(--text-secondary);
+    }
+
+    .cross-tool-link {
+      color: var(--color-primary);
+      font-weight: 750;
+      text-decoration: none;
+    }
+
+    .cross-tool-link:hover {
+      text-decoration: underline;
+    }
+
+    .error-message {
+      margin: 0 0 0.85rem;
+      padding: 0.75rem 0.95rem;
+      border: 1px solid #ef4444;
+      border-radius: 10px;
+      background: rgba(239, 68, 68, 0.08);
+      color: #dc2626;
+      font-size: 0.86rem;
+      line-height: 1.45;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .info-section {
+      margin: 4rem 0;
+    }
+
+    .section-heading {
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading h2,
+    .faq-section h2,
+    .bottom-cta h2 {
+      margin: 0 0 0.7rem;
+      font-size: clamp(1.5rem, 4vw, 2rem);
+      font-weight: 800;
+      letter-spacing: -0.025em;
+    }
+
+    .section-heading p {
+      margin: 0;
+      font-size: 0.95rem;
+    }
+
+    .formula-highlight {
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border-color);
+      border-left: 4px solid var(--color-primary);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .formula-highlight span {
+      display: block;
+      margin-bottom: 0.7rem;
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+    }
+
+    .formula-highlight strong {
+      display: block;
+      color: var(--color-primary);
+      font-size: clamp(1.05rem, 3vw, 1.3rem);
+    }
+
+    .formula-highlight p {
+      margin: 0.6rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.88rem;
+      line-height: 1.65;
+    }
+
+    .examples-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .example-card {
+      padding: 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--card-bg, var(--bg-secondary));
+    }
+
+    .example-number {
+      color: var(--color-primary);
+      font-size: 0.75rem;
+      font-weight: 800;
+    }
+
+    .example-card h3 {
+      margin: 0.65rem 0;
+      font-size: 1rem;
+    }
+
+    .example-card p,
+    .example-calculation {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .example-calculation {
+      margin: 1rem 0 0.5rem;
+      font-family: monospace;
+    }
+
+    .example-card > strong {
+      color: var(--color-primary);
+      font-size: 1.25rem;
+    }
+
+    .faq-section {
+      margin: 4rem 0;
+    }
+
+    .faq-section h2 {
+      margin-bottom: 1.5rem;
+    }
+
+    .faq-section details {
+      padding: 1rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .faq-section summary {
+      position: relative;
+      padding-right: 2rem;
+      font-weight: 700;
+      cursor: pointer;
+      list-style: none;
+    }
+
+    .faq-section summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .faq-section summary::after {
+      position: absolute;
+      right: 0;
+      content: '+';
+      color: var(--color-primary);
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .faq-section details[open] summary::after {
+      content: '−';
+    }
+
+    .faq-section details p {
+      max-width: 800px;
+      margin: 0.8rem 0 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .bottom-cta {
+      padding: 2rem;
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      background: var(--bg-secondary);
+      text-align: center;
+    }
+
+    .bottom-cta p {
+      max-width: 600px;
+      margin: 0 auto 1.3rem;
+      color: var(--text-secondary);
+      font-size: 0.92rem;
+      line-height: 1.6;
+    }
+
+    .bottom-cta-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.85rem;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 0.8rem 1.25rem;
+      border-radius: 9px;
+      background: var(--color-primary);
+      color: white;
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      filter: brightness(1.08);
+    }
+
+    .secondary-cta-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.8rem 1.25rem;
+      border: 1px solid var(--border-color);
+      border-radius: 9px;
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      font-weight: 700;
+      text-decoration: none;
+    }
+
+    .secondary-cta-link:hover {
+      border-color: var(--color-primary);
+      color: var(--color-primary);
+    }
+
+    @media (max-width: 860px) {
+      .sci-workspace {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .examples-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 540px) {
+      .card {
+        padding: 1rem;
+      }
+
+      .sci-keypad {
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 0.4rem;
+      }
+
+      .key-btn {
+        min-height: 44px;
+        font-size: 0.88rem;
+      }
+
+      .calc-kbd-hint {
+        display: none;
+      }
+    }
+  </style>
+</BaseLayout>
