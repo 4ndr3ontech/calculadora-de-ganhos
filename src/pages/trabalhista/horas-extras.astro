@@ -1,3 +1,4 @@
+
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
@@ -436,10 +437,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     };
 
     function runCalc() {
-      const salary = Number(getInput('oe-salary').value);
-      const monthlyHours = Number(getInput('oe-hours').value);
-      const hours50 = Number(getInput('oe-h50').value);
-      const hours100 = Number(getInput('oe-h100').value);
+      const salaryInput = getInput('oe-salary');
+      const monthlyHoursInput = getInput('oe-hours');
+      const hours50Input = getInput('oe-h50');
+      const hours100Input = getInput('oe-h100');
+
+      const salary = Number(salaryInput.value);
+      const monthlyHours = Number(monthlyHoursInput.value);
+      const hours50 = Number(hours50Input.value);
+      const hours100 = Number(hours100Input.value);
 
       const error = document.getElementById('calc-error');
 
@@ -455,23 +461,51 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         error.setAttribute('hidden', '');
       }
 
-      if (!Number.isFinite(salary) || salary <= 0) {
-        showError('Informe um salário bruto maior que zero.');
+      if (
+        salaryInput.validity.badInput ||
+        !Number.isFinite(salary) ||
+        salary <= 0
+      ) {
+        showError('Informe um salário bruto válido e maior que zero.');
         return;
       }
 
-      if (!Number.isFinite(monthlyHours) || monthlyHours <= 0) {
-        showError('Informe uma jornada mensal válida.');
+      if (salaryInput.validity.stepMismatch) {
+        showError('O salário deve ser informado em incrementos de R$ 0,01.');
         return;
       }
 
       if (
+        monthlyHoursInput.validity.badInput ||
+        !Number.isFinite(monthlyHours) ||
+        monthlyHours <= 0
+      ) {
+        showError('Informe uma jornada mensal válida e maior que zero.');
+        return;
+      }
+
+      if (monthlyHoursInput.validity.stepMismatch) {
+        showError('A jornada mensal deve ser informada em horas inteiras.');
+        return;
+      }
+
+      if (
+        hours50Input.validity.badInput ||
+        hours100Input.validity.badInput ||
         !Number.isFinite(hours50) ||
         !Number.isFinite(hours100) ||
         hours50 < 0 ||
         hours100 < 0
       ) {
         showError('Informe quantidades válidas de horas extras. Os valores não podem ser negativos.');
+        return;
+      }
+
+      if (
+        hours50Input.validity.stepMismatch ||
+        hours100Input.validity.stepMismatch
+      ) {
+        showError('As horas extras devem ser informadas em intervalos de 0,25 hora (15 minutos).');
         return;
       }
 
@@ -483,6 +517,21 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       const total100 = hourlyRate100 * hours100;
       const total = total50 + total100;
       const totalHours = hours50 + hours100;
+
+      if (
+        ![
+          hourlyRate,
+          hourlyRate50,
+          hourlyRate100,
+          total50,
+          total100,
+          total,
+          totalHours
+        ].every(Number.isFinite)
+      ) {
+        showError('Não foi possível calcular os valores informados. Verifique os dados e tente novamente.');
+        return;
+      }
 
       setText('res-normal', formatBRL(hourlyRate));
       setText('res-hour50', formatBRL(hourlyRate50));

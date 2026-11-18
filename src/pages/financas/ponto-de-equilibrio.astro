@@ -678,15 +678,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           return;
         }
 
-        const expectedRevenue = expectedUnits * unitPrice;
+        // Faturamento matemático do ponto de equilíbrio,
+        // antes do arredondamento das unidades para cima.
+        const theoreticalRevenue = fixedCosts / (contribution / unitPrice);
 
         if (
-          Math.abs(result.breakEvenRevenue - expectedRevenue) >
-          Math.max(0.01, expectedRevenue * 0.000001)
+          Math.abs(result.breakEvenRevenue - theoreticalRevenue) >
+          Math.max(0.01, theoreticalRevenue * 0.000001)
         ) {
-          showError('O faturamento retornado pelo motor não corresponde às unidades necessárias. Verifique o motor de cálculo.');
+          showError(
+            'O faturamento matemático retornado pelo motor não corresponde aos dados informados. Verifique o motor de cálculo.'
+          );
           return;
         }
+
+        // Faturamento operacional considerando unidades inteiras.
+        const expectedRevenue = expectedUnits * unitPrice;
 
         const contributionPercentage = (contribution / unitPrice) * 100;
 

@@ -1,3 +1,4 @@
+
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
@@ -16,7 +17,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <span aria-current="page">Média Aritmética</span>
     </nav>
 
-    <!-- APRESENTAÇÃO -->
     <header class="page-header">
       <span class="eyebrow">
         <span class="eyebrow-dot" aria-hidden="true"></span>
@@ -38,7 +38,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </header>
 
-    <!-- CALCULADORA -->
     <section class="calculator-section" aria-labelledby="calculator-title">
       <div class="section-heading">
         <div>
@@ -52,7 +51,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       <div class="calculator-layout">
 
-        <!-- ENTRADAS -->
         <div class="panel input-panel">
           <div class="panel-heading">
             <div class="panel-icon" aria-hidden="true">∑</div>
@@ -100,7 +98,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <p id="error-message" class="error-message" role="alert" hidden></p>
         </div>
 
-        <!-- RESULTADOS -->
         <div class="panel results-panel" aria-live="polite" aria-atomic="true">
           <div class="panel-heading">
             <div class="panel-icon" aria-hidden="true">
@@ -155,7 +152,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </section>
 
-    <!-- PASSO A PASSO -->
     <section class="details-section">
       <div class="section-heading">
         <div>
@@ -212,7 +208,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </section>
 
-    <!-- CONTEÚDO EDUCATIVO -->
     <section class="content-section">
       <span class="section-label">APRENDA MATEMÁTICA</span>
 
@@ -321,7 +316,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </section>
 
-    <!-- FAQ -->
     <section class="faq-section">
       <span class="section-label">DÚVIDAS FREQUENTES</span>
       <h2>Perguntas sobre média aritmética</h2>
@@ -396,7 +390,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </details>
     </section>
 
-    <!-- CTA -->
     <section class="bottom-cta">
       <div>
         <span class="section-label">CALCULADORA DE GANHOS</span>
@@ -469,6 +462,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       const tokens = raw.trim().split(/[;,\s]+/);
 
       if (!tokens.length || tokens.some(token => token === '')) {
+        showError('Informe pelo menos um número válido.');
         return null;
       }
 
@@ -478,7 +472,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       }
 
       const numberPattern = /^[+-]?(?:\d+(?:\.\d*)?|\.\d+)$/;
-
       const numbers: number[] = [];
 
       for (const token of tokens) {
@@ -502,6 +495,39 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       return numbers;
     }
 
+    /**
+     * Soma os valores usando normalização e compensação.
+     * Isso reduz erros de precisão e evita overflow intermediário
+     * quando o resultado matemático ainda é representável.
+     */
+    function calculateStableSum(values: number[]): number {
+      const maxAbs = Math.max(...values.map(value => Math.abs(value)));
+
+      if (maxAbs === 0) return 0;
+
+      let sum = 0;
+      let compensation = 0;
+
+      for (const value of values) {
+        const normalized = value / maxAbs;
+        const adjusted = normalized - compensation;
+        const nextSum = sum + adjusted;
+
+        compensation = (nextSum - sum) - adjusted;
+        sum = nextSum;
+      }
+
+      const result = sum * maxAbs;
+
+      if (!Number.isFinite(result)) {
+        throw new RangeError(
+          'A soma dos valores ultrapassou o limite numérico suportado.'
+        );
+      }
+
+      return Object.is(result, -0) ? 0 : result;
+    }
+
     function calculateMedian(sorted: number[]): number {
       const middle = Math.floor(sorted.length / 2);
 
@@ -510,6 +536,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       }
 
       return sorted[middle - 1] / 2 + sorted[middle] / 2;
+    }
+
+    function compareNumbers(a: number, b: number): number {
+      if (a < b) return -1;
+      if (a > b) return 1;
+      return 0;
     }
 
     function clearResults(): void {
@@ -553,85 +585,87 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         return;
       }
 
-      // Cálculo da soma com verificação de precisão.
-      const sum = numbers.reduce((total, value) => total + value, 0);
+      try {
+        const count = numbers.length;
 
-      if (!Number.isFinite(sum)) {
+        // Soma numericamente estável.
+        const sum = calculateStableSum(numbers);
+
+        // Média calculada pelo motor matemático existente.
+        const average = calculateArithmeticAverage(numbers);
+
+        if (!Number.isFinite(average)) {
+          throw new RangeError(
+            'Não foi possível calcular a média com os valores informados.'
+          );
+        }
+
+        // Ordenação sem subtração, evitando Infinity no comparador.
+        const sorted = [...numbers].sort(compareNumbers);
+
+        const minimum = sorted[0];
+        const maximum = sorted[sorted.length - 1];
+        const median = calculateMedian(sorted);
+        const range = maximum - minimum;
+
+        if (
+          !Number.isFinite(sum) ||
+          !Number.isFinite(median) ||
+          !Number.isFinite(range)
+        ) {
+          throw new RangeError(
+            'Um ou mais resultados ultrapassaram o limite numérico suportado.'
+          );
+        }
+
+        // Todos os cálculos são validados antes de atualizar a interface.
+        if (averageElement) averageElement.textContent = formatNumber(average);
+        if (sumElement) sumElement.textContent = formatNumber(sum);
+        if (countElement) countElement.textContent = formatNumber(count);
+        if (maxElement) maxElement.textContent = formatNumber(maximum);
+        if (minElement) minElement.textContent = formatNumber(minimum);
+        if (medianElement) medianElement.textContent = formatNumber(median);
+        if (rangeElement) rangeElement.textContent = formatNumber(range);
+
+        // Resolução detalhada.
+        if (stepSum) {
+          const expression = numbers.map(formatNumber).join(' + ');
+          stepSum.textContent = `${expression} = ${formatNumber(sum)}`;
+        }
+
+        if (stepCount) {
+          stepCount.textContent =
+            `A quantidade de números informados é ${formatNumber(count)}.`;
+        }
+
+        if (stepDivision) {
+          stepDivision.textContent =
+            `${formatNumber(sum)} ÷ ${formatNumber(count)} = ${formatNumber(average)}`;
+        }
+
+        if (stepResult) {
+          stepResult.textContent =
+            `Média aritmética = ${formatNumber(average)}`;
+        }
+
+        if (orderedValues) {
+          orderedValues.textContent = sorted.map(formatNumber).join(' · ');
+        }
+      } catch (error) {
         clearResults();
-        showError('A soma dos valores ultrapassou o limite numérico suportado.');
-        return;
-      }
 
-      // Média utilizando o motor matemático existente.
-      const average = calculateArithmeticAverage(numbers);
-
-      if (!Number.isFinite(average)) {
-        clearResults();
-        showError('Não foi possível calcular a média com os valores informados.');
-        return;
-      }
-
-      const sorted = [...numbers].sort((a, b) => a - b);
-
-      const count = numbers.length;
-      const minimum = sorted[0];
-      const maximum = sorted[sorted.length - 1];
-      const median = calculateMedian(sorted);
-      const range = maximum - minimum;
-
-      if (!Number.isFinite(range)) {
-        clearResults();
-        showError('A amplitude dos valores ultrapassou o limite numérico suportado.');
-        return;
-      }
-
-      // Atualização dos resultados.
-      if (averageElement) averageElement.textContent = formatNumber(average);
-      if (sumElement) sumElement.textContent = formatNumber(sum);
-      if (countElement) countElement.textContent = formatNumber(count);
-      if (maxElement) maxElement.textContent = formatNumber(maximum);
-      if (minElement) minElement.textContent = formatNumber(minimum);
-      if (medianElement) medianElement.textContent = formatNumber(median);
-      if (rangeElement) rangeElement.textContent = formatNumber(range);
-
-      // Resolução detalhada.
-      if (stepSum) {
-        const expression = numbers
-          .map(formatNumber)
-          .join(' + ');
-
-        stepSum.textContent = `${expression} = ${formatNumber(sum)}`;
-      }
-
-      if (stepCount) {
-        stepCount.textContent =
-          `A quantidade de números informados é ${formatNumber(count)}.`;
-      }
-
-      if (stepDivision) {
-        stepDivision.textContent =
-          `${formatNumber(sum)} ÷ ${formatNumber(count)} = ${formatNumber(average)}`;
-      }
-
-      if (stepResult) {
-        stepResult.textContent =
-          `Média aritmética = ${formatNumber(average)}`;
-      }
-
-      if (orderedValues) {
-        orderedValues.textContent = sorted
-          .map(formatNumber)
-          .join(' · ');
+        showError(
+          error instanceof Error
+            ? error.message
+            : 'Não foi possível realizar o cálculo. Verifique os valores informados.'
+        );
       }
     }
 
-    // Botão de cálculo.
     calcButton?.addEventListener('click', runCalc);
 
-    // Atualização automática.
     input?.addEventListener('input', runCalc);
 
-    // Limpar calculadora.
     clearButton?.addEventListener('click', () => {
       if (!input) return;
 
@@ -641,7 +675,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       input.focus();
     });
 
-    // Exemplos rápidos.
     document.querySelectorAll<HTMLButtonElement>('.example-btn').forEach(button => {
       button.addEventListener('click', () => {
         if (!input) return;
@@ -651,7 +684,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       });
     });
 
-    // Primeiro cálculo.
     runCalc();
   </script>
 

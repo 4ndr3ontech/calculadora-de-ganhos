@@ -1,3 +1,4 @@
+
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
@@ -295,7 +296,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <div class="content-heading">
         <span class="eyebrow">TABELA DE REFERÊNCIA</span>
         <h2>Classificação do IMC em adultos</h2>
-        <p>Faixas de referência geralmente utilizadas para adultos com 20 anos ou mais.</p>
+        <p>Faixas de referência geralmente utilizadas para adultos.</p>
       </div>
 
       <div class="table-scroll">
@@ -459,7 +460,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       if (imc < 35) {
         return {
-          label: 'Obesidade I',
+          label: 'Obesidade grau I',
           description: 'O resultado corresponde à faixa de obesidade grau I.',
           className: 'tag-danger'
         };
@@ -467,20 +468,34 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       if (imc < 40) {
         return {
-          label: 'Obesidade II',
+          label: 'Obesidade grau II',
           description: 'O resultado corresponde à faixa de obesidade grau II.',
           className: 'tag-danger'
         };
       }
 
       return {
-        label: 'Obesidade III',
+        label: 'Obesidade grau III',
         description: 'O resultado corresponde à faixa de obesidade grau III.',
         className: 'tag-danger'
       };
     }
 
+    function clearResults() {
+      imcOutput.textContent = '--';
+      imcClassOutput.textContent = 'Aguardando';
+      imcClassOutput.className = 'result-tag';
+      imcDescriptionOutput.textContent = 'O resultado aparecerá após o cálculo.';
+
+      tdeeOutput.textContent = '--';
+      tmbOutput.textContent = 'Metabolismo basal (TMB): -- kcal/dia';
+
+      waterOutput.textContent = '--';
+      waterMlOutput.textContent = 'Equivalente em mililitros: --';
+    }
+
     function showError(message: string) {
+      clearResults();
       errorElement.textContent = message;
       errorElement.hidden = false;
     }
@@ -490,13 +505,32 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       errorElement.hidden = true;
     }
 
-    function validateInputs(weight: number, height: number, age: number) {
+    function validateInputs(
+      weightValue: string,
+      heightValue: string,
+      ageValue: string,
+      weight: number,
+      height: number,
+      age: number
+    ): string {
+      if (weightValue.trim() === '') {
+        return 'Informe seu peso corporal.';
+      }
+
       if (!Number.isFinite(weight) || weight <= 0 || weight > 500) {
         return 'Informe um peso válido, maior que zero e até 500 kg.';
       }
 
+      if (heightValue.trim() === '') {
+        return 'Informe sua altura.';
+      }
+
       if (!Number.isFinite(height) || height < 50 || height > 250) {
         return 'Informe uma altura válida entre 50 e 250 centímetros.';
+      }
+
+      if (ageValue.trim() === '') {
+        return 'Informe sua idade.';
       }
 
       if (!Number.isInteger(age) || age < 18 || age > 120) {
@@ -507,52 +541,81 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     }
 
     function runCalc() {
-      const weight = Number(weightInput.value);
-      const heightCm = Number(heightInput.value);
-      const age = Number(ageInput.value);
-      const gender = genderInput.value as 'male' | 'female';
+      const weightValue = weightInput.value;
+      const heightValue = heightInput.value;
+      const ageValue = ageInput.value;
+
+      const weight = Number(weightValue);
+      const heightCm = Number(heightValue);
+      const age = Number(ageValue);
+      const gender = genderInput.value;
       const activity = Number(activityInput.value);
 
-      const validationError = validateInputs(weight, heightCm, age);
+      const validationError = validateInputs(
+        weightValue,
+        heightValue,
+        ageValue,
+        weight,
+        heightCm,
+        age
+      );
 
       if (validationError) {
         showError(validationError);
         return;
       }
 
-      if (!['male', 'female'].includes(gender) || ![1.2, 1.375, 1.55, 1.725].includes(activity)) {
-        showError('Verifique as opções selecionadas e tente novamente.');
+      if (
+        gender !== 'male' &&
+        gender !== 'female'
+      ) {
+        showError('Selecione uma opção válida para o sexo biológico.');
+        return;
+      }
+
+      if (![1.2, 1.375, 1.55, 1.725].includes(activity)) {
+        showError('Selecione um nível de atividade física válido.');
         return;
       }
 
       try {
-        clearError();
-
         const heightM = heightCm / 100;
 
         const imcResult = calculateIMC(weight, heightM);
-        const tmbResult = calculateTMB(weight, heightCm, age, gender, activity);
+        const tmbResult = calculateTMB(
+          weight,
+          heightCm,
+          age,
+          gender,
+          activity
+        );
         const waterResult = calculateWaterIntake(weight);
 
-        const imc = Number(imcResult.imc);
-        const tmb = Number(tmbResult.tmb);
-        const tdee = Number(tmbResult.tdee);
-        const water = Number(waterResult);
+        const imc = imcResult.imc;
+        const tmb = tmbResult.tmb;
+        const tdee = tmbResult.tdee;
+        const water = waterResult;
+        const waterMl = water * 1000;
 
         if (
           !Number.isFinite(imc) ||
           !Number.isFinite(tmb) ||
           !Number.isFinite(tdee) ||
           !Number.isFinite(water) ||
+          !Number.isFinite(waterMl) ||
           imc <= 0 ||
           tmb <= 0 ||
           tdee <= 0 ||
           water <= 0
         ) {
-          throw new Error('Não foi possível gerar uma estimativa válida com os dados informados.');
+          throw new Error(
+            'Não foi possível gerar uma estimativa válida com os dados informados.'
+          );
         }
 
         const classification = getIMCClassification(imc);
+
+        clearError();
 
         imcOutput.textContent = numberFormat.format(imc);
         imcClassOutput.textContent = classification.label;
@@ -560,10 +623,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         imcDescriptionOutput.textContent = classification.description;
 
         tdeeOutput.textContent = integerFormat.format(tdee);
-        tmbOutput.textContent = `Metabolismo basal (TMB): ${integerFormat.format(tmb)} kcal/dia`;
+        tmbOutput.textContent =
+          `Metabolismo basal (TMB): ${integerFormat.format(tmb)} kcal/dia`;
 
         waterOutput.textContent = numberFormat.format(water);
-        waterMlOutput.textContent = `Equivalente aproximado: ${integerFormat.format(water * 1000)} ml/dia`;
+        waterMlOutput.textContent =
+          `Equivalente aproximado: ${integerFormat.format(waterMl)} ml/dia`;
       } catch (error) {
         showError(
           error instanceof Error
@@ -575,7 +640,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     calculateButton.addEventListener('click', runCalc);
 
-    [weightInput, heightInput, ageInput, genderInput, activityInput].forEach((input) => {
+    [
+      weightInput,
+      heightInput,
+      ageInput,
+      genderInput,
+      activityInput
+    ].forEach((input) => {
       input.addEventListener('change', runCalc);
     });
 

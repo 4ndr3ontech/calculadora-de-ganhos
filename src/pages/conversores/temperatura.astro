@@ -1768,6 +1768,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       const scale = scaleInput.value;
 
       const showError = (message: string) => {
+        // Limpa resultados anteriores para evitar exibir
+        // valores que não correspondem à entrada atual.
+        resultC.textContent = '—';
+        resultF.textContent = '—';
+        resultK.textContent = '—';
+
         errorElement.textContent = message;
         errorElement.hidden = false;
       };

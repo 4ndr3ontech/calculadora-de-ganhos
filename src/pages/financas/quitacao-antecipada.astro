@@ -1,10 +1,11 @@
+
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
   title="Calculadora de Quitação e Amortização de Financiamento — Calculadora de Ganhos"
-  description="Simule a amortização ou quitação do seu financiamento. Descubra a economia estimada de juros e compare a redução do prazo com a redução da prestação."
+  description="Simule a amortização de um financiamento pelo sistema Price. Compare a redução do prazo ou da prestação e estime a economia de juros."
 >
   <main class="page-container">
     <nav class="breadcrumb" aria-label="Navegação">
@@ -27,7 +28,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     <section class="calculator-section" aria-label="Simulador de amortização">
       <div class="calculator-grid">
-        <!-- Entradas -->
         <div class="card input-card">
           <div class="card-heading">
             <div class="icon-badge" aria-hidden="true">
@@ -41,7 +41,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             </div>
           </div>
 
-          <form id="amortization-form">
+          <form id="amortization-form" novalidate>
             <div class="field-group">
               <label for="balance">Saldo devedor atual</label>
               <div class="input-wrapper">
@@ -76,7 +76,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             </div>
 
             <div class="field-group">
-              <label for="interest-rate">Taxa de juros anual</label>
+              <label for="interest-rate">Taxa efetiva anual de juros</label>
               <div class="input-wrapper">
                 <input
                   type="number"
@@ -89,7 +89,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                 />
                 <span class="input-suffix">% a.a.</span>
               </div>
-              <small>Taxa anual informada no contrato.</small>
+              <small>
+                Informe a taxa efetiva anual do financiamento, conforme o contrato.
+                Não utilize a taxa nominal anual sem antes verificar sua equivalência.
+              </small>
             </div>
 
             <div class="field-group">
@@ -138,7 +141,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </form>
         </div>
 
-        <!-- Resultados -->
         <div class="card result-card" aria-live="polite">
           <div>
             <div class="card-heading">
@@ -218,15 +220,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
           <p class="result-disclaimer">
             <strong>Importante:</strong>
-            esta ferramenta apresenta uma estimativa matemática. O resultado
-            efetivo depende do sistema de amortização, das condições do contrato,
-            dos encargos, dos seguros e das regras aplicáveis ao financiamento.
+            esta ferramenta utiliza uma simulação matemática pelo sistema Price.
+            O resultado é estimado e não substitui o demonstrativo oficial do banco.
+            O cálculo não considera seguros, tarifas, indexadores, correção monetária
+            ou outras condições específicas do contrato.
           </p>
         </div>
       </div>
     </section>
 
-    <!-- Conteúdo educativo -->
     <section class="content-section">
       <div class="section-heading">
         <span class="section-kicker">ENTENDA A SIMULAÇÃO</span>
@@ -286,20 +288,23 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
 
       <p>
-        A simulação utiliza o saldo devedor, o prazo restante, a taxa de juros
-        anual e o valor extra que será destinado à amortização. Com essas
-        informações, o motor de cálculo estima o efeito financeiro da
-        antecipação conforme a modalidade escolhida.
+        A simulação utiliza o saldo devedor, o prazo restante, a taxa efetiva
+        anual e o valor extra destinado à amortização. A taxa efetiva anual
+        é convertida para uma taxa mensal equivalente. Os juros são calculados
+        sobre o saldo devedor no início de cada mês, antes da aplicação da
+        prestação.
       </p>
 
       <div class="formula-card">
-        <h3>Dados utilizados na simulação</h3>
+        <h3>Premissas utilizadas na simulação</h3>
         <div class="formula">
-          Saldo devedor + Prazo restante + Taxa de juros + Amortização extra
+          Sistema Price + Taxa mensal equivalente + Amortização antecipada
         </div>
         <p>
-          Os resultados dependem das regras matemáticas implementadas no
-          simulador e não substituem o demonstrativo oficial do banco.
+          Na redução do prazo, a prestação original é mantida. Na redução da
+          prestação, o prazo restante é mantido e a prestação é recalculada.
+          A simulação não reproduz automaticamente todos os encargos e regras
+          de um contrato bancário.
         </p>
       </div>
 
@@ -332,7 +337,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </p>
     </section>
 
-    <!-- FAQ -->
     <section class="content-section">
       <div class="section-heading">
         <span class="section-kicker">DÚVIDAS FREQUENTES</span>
@@ -371,19 +375,20 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <details class="faq-item">
           <summary>A calculadora informa o valor exato da economia?</summary>
           <p>
-            Não. O resultado é uma estimativa baseada nos dados informados.
-            O cálculo oficial pode considerar seguros, tarifas, indexadores,
-            atualização monetária e regras específicas do contrato.
+            Não. O resultado é uma estimativa baseada em uma simulação pelo
+            sistema Price e nos dados informados. O cálculo oficial pode
+            considerar seguros, tarifas, indexadores, atualização monetária
+            e regras específicas do contrato.
           </p>
         </details>
 
         <details class="faq-item">
           <summary>Posso usar esta ferramenta para financiamento imobiliário?</summary>
           <p>
-            Sim, ela pode ser utilizada para fazer uma simulação inicial de
-            amortização imobiliária. Entretanto, sistemas como SAC e Price,
-            correções do saldo devedor e encargos adicionais podem produzir
-            resultados diferentes dos apresentados.
+            Sim, como referência inicial para contratos que utilizam o sistema
+            Price. Ela não reproduz contratos pelo sistema SAC. Em financiamentos
+            com SAC, correções do saldo devedor, seguros e encargos adicionais,
+            os resultados podem ser diferentes.
           </p>
         </details>
       </div>
@@ -425,7 +430,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     const prestacaoElement = document.getElementById('result-detail-prestacao') as HTMLDivElement;
     const messageElement = document.getElementById('result-message')!;
 
+    function clearResults() {
+      savedElement.textContent = '—';
+      monthsElement.textContent = '—';
+      paymentElement.textContent = '—';
+      amortElement.textContent = '—';
+      balanceElement.textContent = '—';
+
+      prazoElement.hidden = true;
+      prestacaoElement.hidden = true;
+
+      messageElement.textContent =
+        'Corrija os dados informados e calcule novamente para visualizar o resultado.';
+    }
+
     function showError(message: string) {
+      clearResults();
       errorElement.textContent = message;
       errorElement.hidden = false;
     }
@@ -437,6 +457,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     function runCalc() {
       clearError();
+      clearResults();
 
       const balance = Number(balanceInput.value);
       const months = Number(monthsInput.value);
@@ -450,12 +471,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       }
 
       if (!Number.isInteger(months) || months < 1 || months > 600) {
-        showError('Informe um prazo entre 1 e 600 meses.');
+        showError('Informe um prazo inteiro entre 1 e 600 meses.');
         return;
       }
 
       if (!Number.isFinite(interestRate) || interestRate < 0 || interestRate > 100) {
-        showError('Informe uma taxa anual entre 0% e 100%.');
+        showError('Informe uma taxa efetiva anual entre 0% e 100%.');
         return;
       }
 
@@ -466,6 +487,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       if (amortAmount > balance) {
         showError('O valor de amortização não pode ser maior que o saldo devedor.');
+        return;
+      }
+
+      if (amortType !== 'prazo' && amortType !== 'prestacao') {
+        showError('Selecione uma modalidade de amortização válida.');
         return;
       }
 
@@ -480,9 +506,28 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
         if (
           !Number.isFinite(result.interestSaved) ||
-          result.interestSaved < 0
+          result.interestSaved < 0 ||
+          !Number.isFinite(result.currentTotalInterest) ||
+          result.currentTotalInterest < 0 ||
+          !Number.isFinite(result.newTotalInterest) ||
+          result.newTotalInterest < 0
         ) {
           throw new Error('Não foi possível calcular uma economia válida.');
+        }
+
+        if (
+          !Number.isInteger(result.monthsReduced) ||
+          result.monthsReduced < 0 ||
+          result.monthsReduced > months
+        ) {
+          throw new Error('O resultado da redução do prazo é inválido.');
+        }
+
+        if (
+          !Number.isFinite(result.newMonthlyPaymentEstimate) ||
+          result.newMonthlyPaymentEstimate < 0
+        ) {
+          throw new Error('O resultado da nova prestação é inválido.');
         }
 
         savedElement.textContent = formatBRL(result.interestSaved);
@@ -490,13 +535,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         balanceElement.textContent = formatBRL(balance);
 
         if (amortType === 'prazo') {
-          if (
-            !Number.isFinite(result.monthsReduced) ||
-            result.monthsReduced < 0
-          ) {
-            throw new Error('O resultado da redução do prazo é inválido.');
-          }
-
           prazoElement.hidden = false;
           prestacaoElement.hidden = true;
 
@@ -504,25 +542,21 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             `${result.monthsReduced} meses (~${(result.monthsReduced / 12).toFixed(1)} anos)`;
 
           messageElement.textContent =
-            'Simulação realizada com foco na redução do prazo do financiamento.';
+            result.monthsReduced === months
+              ? 'A amortização informada quita integralmente o saldo devedor na simulação.'
+              : 'Simulação realizada pelo sistema Price, mantendo a prestação original e reduzindo o prazo do financiamento.';
         } else {
-          if (
-            !Number.isFinite(result.newMonthlyPaymentEstimate) ||
-            result.newMonthlyPaymentEstimate < 0
-          ) {
-            throw new Error('O resultado da nova prestação é inválido.');
-          }
-
           prazoElement.hidden = true;
           prestacaoElement.hidden = false;
 
           paymentElement.textContent = formatBRL(result.newMonthlyPaymentEstimate);
 
           messageElement.textContent =
-            'Simulação realizada com foco na redução do valor da prestação mensal.';
+            'Simulação realizada pelo sistema Price, mantendo o prazo restante e reduzindo o valor estimado da prestação.';
         }
       } catch (error) {
         console.error('Erro ao calcular amortização:', error);
+
         showError(
           error instanceof Error
             ? error.message

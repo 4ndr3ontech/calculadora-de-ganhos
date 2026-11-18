@@ -7,7 +7,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
   description="Simule um financiamento imobiliário pelo sistema SAC. Calcule valor financiado, primeira parcela, juros totais e custo do imóvel."
 >
   <div class="financing-page">
-    <!-- NAVEGAÇÃO -->
     <nav class="breadcrumb" aria-label="Navegação estrutural">
       <a href="/">Início</a>
       <span aria-hidden="true">›</span>
@@ -16,10 +15,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <span aria-current="page">Financiamento Imobiliário SAC</span>
     </nav>
 
-    <!-- CABEÇALHO -->
     <header class="hero">
       <span class="eyebrow">PLANEJAMENTO FINANCEIRO</span>
-
       <h1>Simulador de Financiamento Imobiliário SAC</h1>
 
       <p>
@@ -58,7 +55,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </header>
 
-    <!-- CALCULADORA -->
     <section class="calculator-section" id="calculadora" aria-labelledby="calculator-title">
       <div class="section-heading">
         <span class="section-label">SIMULADOR GRATUITO</span>
@@ -70,7 +66,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
 
       <div class="calc-grid">
-        <!-- ENTRADAS -->
         <div class="card input-card">
           <div class="card-heading">
             <div class="icon-badge" aria-hidden="true">
@@ -126,7 +121,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
           <div class="field-row">
             <div class="field-group">
-              <label for="rate">Taxa anual (% a.a.)</label>
+              <label for="rate">Taxa de juros nominal anual (% a.a.)</label>
               <div class="input-wrapper">
                 <input
                   type="number"
@@ -141,7 +136,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                 <span class="input-suffix">%</span>
               </div>
               <small id="rate-help">
-                Taxa anual de referência da proposta.
+                Taxa nominal anual. O cálculo divide essa taxa por 12 para
+                obter a taxa mensal. Não informe aqui uma taxa efetiva anual.
               </small>
             </div>
 
@@ -161,7 +157,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                 <span class="input-suffix">anos</span>
               </div>
               <small id="years-help">
-                Convertido em meses para o cálculo.
+                Informe anos inteiros. O prazo será convertido em meses.
               </small>
             </div>
           </div>
@@ -195,7 +191,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </p>
         </div>
 
-        <!-- RESULTADOS -->
         <div class="card result-card" aria-live="polite" aria-atomic="true">
           <div>
             <div class="card-heading">
@@ -258,7 +253,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </section>
 
-    <!-- INTRODUÇÃO -->
     <section class="content-section" aria-labelledby="what-title">
       <div class="section-heading">
         <span class="section-label">ENTENDA O SISTEMA SAC</span>
@@ -316,7 +310,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </section>
 
-    <!-- METODOLOGIA -->
     <section class="content-section" aria-labelledby="methodology-title">
       <div class="section-heading">
         <span class="section-label">METODOLOGIA DE CÁLCULO</span>
@@ -351,11 +344,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </div>
 
         <div>
-          <h3>3. Amortização</h3>
+          <h3>3. Conversão da taxa de juros</h3>
+          <p>
+            A taxa nominal anual informada é dividida por 12 para obter a taxa
+            nominal mensal utilizada no cálculo dos juros de cada período.
+          </p>
+          <div class="formula">
+            Taxa mensal = Taxa nominal anual ÷ 12
+          </div>
+        </div>
+
+        <div>
+          <h3>4. Amortização</h3>
           <p>
             No sistema SAC, o valor amortizado mensalmente é constante.
-            Em uma representação simplificada, ele corresponde ao saldo
-            financiado dividido pelo número de parcelas.
+            Ele corresponde ao valor financiado dividido pelo número
+            de parcelas.
           </p>
           <div class="formula">
             Amortização mensal = Valor financiado ÷ Número de parcelas
@@ -363,11 +367,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </div>
 
         <div>
-          <h3>4. Composição da parcela</h3>
+          <h3>5. Composição da parcela</h3>
           <p>
             Cada prestação é composta por uma parte de amortização e outra
-            de juros. Como o saldo devedor diminui, os juros tendem a cair
-            ao longo do tempo.
+            de juros. Os juros de cada mês são calculados sobre o saldo
+            devedor no início daquele período.
           </p>
           <div class="formula">
             Parcela = Amortização + Juros do período
@@ -375,23 +379,23 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </div>
 
         <div class="methodology-note">
-          <strong>Atenção:</strong>
-          as fórmulas acima explicam o funcionamento conceitual do SAC.
-          A conversão da taxa anual para mensal, os critérios de arredondamento
-          e os valores finais exibidos dependem da implementação de
-          <code>calculateFinancingSAC</code> utilizada nesta página.
+          <strong>Importante:</strong>
+          esta simulação utiliza taxa nominal anual dividida por 12,
+          amortização constante e juros calculados sobre o saldo devedor
+          de cada período. Os resultados são estimativas matemáticas e não
+          incluem seguros, tarifas, indexadores ou outros encargos que possam
+          fazer parte de um contrato bancário.
         </div>
       </div>
     </section>
 
-    <!-- EXEMPLO PRÁTICO -->
     <section class="content-section" aria-labelledby="example-title">
       <div class="section-heading">
         <span class="section-label">EXEMPLO PRÁTICO</span>
         <h2 id="example-title">Simulação de compra de um imóvel</h2>
         <p>
           Considere um imóvel de R$ 350 mil, com entrada de R$ 70 mil,
-          taxa anual informada de 9,5% e prazo de 30 anos.
+          taxa de juros nominal anual de 9,5% e prazo de 30 anos.
         </p>
       </div>
 
@@ -420,8 +424,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </div>
 
           <div>
-            <span>Taxa anual informada</span>
-            <strong>9,5%</strong>
+            <span>Taxa nominal anual informada</span>
+            <strong>9,5% a.a.</strong>
           </div>
 
           <div>
@@ -438,7 +442,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </section>
 
-    <!-- COMPARAÇÃO -->
     <section class="content-section" aria-labelledby="comparison-title">
       <div class="section-heading">
         <span class="section-label">COMPARAÇÃO</span>
@@ -494,7 +497,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </p>
     </section>
 
-    <!-- DICAS DE PLANEJAMENTO -->
     <section class="content-section" aria-labelledby="tips-title">
       <div class="section-heading">
         <span class="section-label">PLANEJAMENTO</span>
@@ -561,7 +563,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </section>
 
-    <!-- FAQ -->
     <section class="faq-section" aria-labelledby="faq-title">
       <div class="section-heading">
         <span class="section-label">DÚVIDAS FREQUENTES</span>
@@ -600,9 +601,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <details class="faq-item">
           <summary>O simulador inclui seguro MIP e DFI?</summary>
           <p>
-            Não há campos específicos para esses seguros nesta calculadora.
-            Portanto, não considere esses valores incluídos no resultado
-            sem verificar a implementação do motor de cálculo.
+            Não. Esta calculadora não possui campos específicos para esses
+            seguros. Portanto, os valores apresentados não incluem MIP,
+            DFI ou outros encargos contratuais.
           </p>
         </details>
 
@@ -636,7 +637,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </section>
 
-    <!-- AVISO LEGAL -->
     <aside class="final-notice">
       <div class="notice-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -653,7 +653,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </p>
     </aside>
 
-    <!-- CTA -->
     <section class="final-cta">
       <div class="cta-icon" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -720,14 +719,17 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       function readNumber(input: HTMLInputElement): number | null {
         const value = input.value.trim();
-        if (value === '') return null;
+
+        if (value === '') {
+          return null;
+        }
+
         const number = Number(value);
+
         return Number.isFinite(number) ? number : null;
       }
 
       function updateEntrySummary() {
-        if (!summaryEntryOutput || !summaryPercentOutput) return;
-
         const propertyValue = readNumber(fields.propertyValue);
         const downPayment = readNumber(fields.downPayment);
 
@@ -735,7 +737,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           propertyValue === null ||
           downPayment === null ||
           propertyValue <= 0 ||
-          downPayment < 0
+          downPayment < 0 ||
+          downPayment > propertyValue
         ) {
           summaryEntryOutput.textContent = '—';
           summaryPercentOutput.textContent = '—';
@@ -751,36 +754,45 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         })}%`;
       }
 
-      function validateInputs() {
+      function validateInputs(): string | null {
         const propertyValue = readNumber(fields.propertyValue);
         const downPayment = readNumber(fields.downPayment);
         const rate = readNumber(fields.rate);
         const years = readNumber(fields.years);
 
-        if (propertyValue === null || propertyValue <= 0 || propertyValue > 100000000) {
-          return 'Informe um valor de imóvel válido, maior que zero.';
+        if (
+          propertyValue === null ||
+          propertyValue <= 0 ||
+          propertyValue > 100000000
+        ) {
+          return 'Informe um valor de imóvel válido, maior que zero e até R$ 100.000.000,00.';
         }
 
-        if (downPayment === null || downPayment < 0 || downPayment >= propertyValue) {
+        if (
+          downPayment === null ||
+          downPayment < 0 ||
+          downPayment >= propertyValue
+        ) {
           return 'A entrada deve ser igual ou maior que zero e menor que o valor do imóvel.';
         }
 
         if (rate === null || rate < 0 || rate > 100) {
-          return 'Informe uma taxa anual entre 0% e 100%.';
+          return 'Informe uma taxa de juros nominal anual entre 0% e 100%.';
         }
 
-        if (years === null || years < 1 || years > 40) {
-          return 'Informe um prazo entre 1 e 40 anos.';
+        if (
+          years === null ||
+          !Number.isInteger(years) ||
+          years < 1 ||
+          years > 40
+        ) {
+          return 'Informe um prazo em anos inteiros, entre 1 e 40.';
         }
 
         return null;
       }
 
       function showError(message: string) {
-        if (!errorElement || !firstOutput || !financedOutput || !interestOutput || !totalOutput) {
-          return;
-        }
-
         errorElement.textContent = message;
         errorElement.hidden = false;
 
@@ -791,14 +803,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       }
 
       function clearError() {
-        if (!errorElement) return;
         errorElement.textContent = '';
         errorElement.hidden = true;
       }
 
       function runCalc() {
-        if (!firstOutput || !financedOutput || !interestOutput || !totalOutput) return;
-
         updateEntrySummary();
 
         const validationError = validateInputs();
@@ -816,7 +825,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           const rate = readNumber(fields.rate)!;
           const years = readNumber(fields.years)!;
 
-          const months = Math.round(years * 12);
+          const months = years * 12;
 
           const result = calculateFinancingSAC({
             propertyValue,
@@ -838,10 +847,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             throw new Error('O motor retornou resultados inválidos.');
           }
 
-          const firstInstallment =
-            result.schedule.length > 0 ? result.schedule[0].installment : 0;
+          if (result.schedule.length !== months) {
+            throw new Error('O cronograma retornado possui quantidade inválida de parcelas.');
+          }
 
-          if (!Number.isFinite(firstInstallment) || firstInstallment < 0) {
+          const firstInstallment = result.schedule[0]?.installment;
+
+          if (
+            !Number.isFinite(firstInstallment) ||
+            firstInstallment < 0
+          ) {
             throw new Error('A primeira parcela retornada é inválida.');
           }
 
@@ -1407,12 +1422,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     .methodology-note strong {
       color: var(--text-primary);
-    }
-
-    .methodology-note code {
-      color: var(--color-primary);
-      font-weight: 600;
-      overflow-wrap: anywhere;
     }
 
     .example-card {

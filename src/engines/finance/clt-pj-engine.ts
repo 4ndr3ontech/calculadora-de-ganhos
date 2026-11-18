@@ -189,7 +189,11 @@ function calculateSimplesEffectiveRate(
         { limit: 4800000, rate: 0.33, deduction: 828000 },
       ];
 
-  if (revenueLast12Months <= 0) return 0;
+  if (revenueLast12Months <= 0) {
+    throw new RangeError(
+      'A receita acumulada dos últimos 12 meses precisa ser maior que zero quando existe faturamento.'
+    );
+  }
 
   const bracket = brackets.find(
     (item) => revenueLast12Months <= item.limit
@@ -219,6 +223,12 @@ function validateInput(input: CltPjInput): void {
     pjMonthlyProLabore,
     meiMonthlyDas,
   } = input;
+
+  if (typeof input.cltHasBenefits !== 'boolean') {
+    throw new Error(
+      'A informação sobre recebimento de benefícios precisa ser válida.'
+    );
+  }
 
   const values = [
     cltGrossSalary,
@@ -265,8 +275,10 @@ function validateInput(input: CltPjInput): void {
     );
   }
 
-  if (pjMonthlyProLabore !== undefined &&
-      pjMonthlyProLabore > pjMonthlyBilling) {
+  if (
+    pjMonthlyProLabore !== undefined &&
+    pjMonthlyProLabore > pjMonthlyBilling
+  ) {
     throw new RangeError(
       'O pró-labore não pode ser maior que o faturamento mensal.'
     );
@@ -379,7 +391,7 @@ export function calculateCltVsPj(
     // 5% do salário mínimo + R$ 5,00 de ISS.
     // O valor pode ser informado conforme a atividade.
     pjMonthlyTax = input.meiMonthlyDas ?? 86.05;
-  } else {
+  } else if (pjMonthlyBilling > 0) {
     const revenueLast12Months =
       input.pjRevenueLast12Months ??
       pjMonthlyBilling * 12;
@@ -397,10 +409,14 @@ export function calculateCltVsPj(
   const monthlyProLabore =
     input.pjMonthlyProLabore ?? 0;
 
-  const pjInss = Math.min(
-    monthlyProLabore * 0.11,
-    INSS_CEILING_2026 * 0.11
-  );
+  // No MEI, a contribuição previdenciária já está contemplada
+  // no DAS. Não aplicar novamente o desconto de 11% nesta estimativa.
+  const pjInss = pjTaxRegime === 'mei'
+    ? 0
+    : Math.min(
+        monthlyProLabore * 0.11,
+        INSS_CEILING_2026 * 0.11
+      );
 
   const pjIrrf = calculateIrrf2026(
     monthlyProLabore,

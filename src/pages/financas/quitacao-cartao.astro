@@ -1,3 +1,4 @@
+
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
@@ -82,7 +83,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             </div>
 
             <div class="field-group">
-              <label for="monthly-payment">Pagamento fixo mensal</label>
+              <label for="monthly-payment">Pagamento mensal máximo</label>
               <div class="input-wrapper">
                 <span class="input-prefix">R$</span>
                 <input
@@ -95,8 +96,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                 />
               </div>
               <small>
-                Valor que você pretende pagar mensalmente para reduzir
-                e quitar a dívida.
+                Valor máximo que você pretende pagar mensalmente.
+                A última parcela poderá ser menor, conforme o saldo restante.
               </small>
             </div>
 
@@ -176,7 +177,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                 <div>
                   <span class="result-dot"></span>
                   <div>
-                    <strong>Pagamento mensal</strong>
+                    <strong>Pagamento mensal máximo</strong>
                     <span>Valor informado pelo usuário</span>
                   </div>
                 </div>
@@ -198,6 +199,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             esta simulação é uma projeção matemática simplificada.
             O resultado real pode variar conforme encargos, impostos,
             tarifas, pagamentos adicionais e condições de renegociação.
+            O simulador não aplica automaticamente os limites legais de juros
+            e encargos eventualmente aplicáveis à operação.
           </p>
         </div>
       </div>
@@ -281,20 +284,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       <p>
         O simulador considera três informações principais: o saldo devedor,
-        a taxa de juros mensal e o valor que você pretende pagar a cada mês.
-        Com esses dados, o motor de cálculo projeta o prazo necessário
-        para quitar a dívida e estima os juros acumulados.
+        a taxa de juros mensal e o valor máximo que você pretende pagar
+        a cada mês. Os juros são calculados sobre o saldo no início de cada
+        mês, antes da aplicação do pagamento. A última parcela é limitada
+        ao valor necessário para quitar o saldo restante.
       </p>
 
       <div class="formula-card">
         <h3>Informações utilizadas</h3>
         <div class="formula">
-          Dívida atual + Taxa mensal de juros + Pagamento mensal
+          Dívida atual + Taxa mensal de juros + Pagamento mensal máximo
         </div>
         <p>
-          A projeção considera os parâmetros informados e as regras
-          matemáticas implementadas no simulador. Ela não substitui
-          o demonstrativo oficial da administradora do cartão.
+          A projeção mantém a taxa informada constante durante a simulação,
+          considera a incidência mensal de juros e não inclui novas compras,
+          multas ou encargos adicionais. O cálculo não reproduz todas as
+          condições de uma fatura ou contrato bancário.
         </p>
       </div>
 
@@ -348,10 +353,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <details class="faq-item">
           <summary>Como saber se meu pagamento mensal é suficiente?</summary>
           <p>
-            O pagamento precisa ser suficiente para cobrir os encargos
-            considerados na simulação e também reduzir o saldo devedor.
-            Se o valor for insuficiente, a ferramenta poderá indicar
-            que a quitação não é viável.
+            O pagamento precisa ser superior aos juros mensais calculados
+            sobre o saldo devedor para que a dívida comece a diminuir.
+            A ferramenta também possui um limite de 1.200 meses para a
+            simulação. Se a quitação não for alcançada, o resultado indicará
+            que ela não foi viável nas condições simuladas.
           </p>
         </details>
 
@@ -380,17 +386,20 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             Não. O resultado é uma estimativa matemática baseada nos dados
             informados. Encargos adicionais, regras do cartão, mudanças
             nas taxas e condições de negociação podem alterar o valor real.
+            A ferramenta também não aplica automaticamente limites legais
+            específicos de juros e encargos.
           </p>
         </details>
 
         <details class="faq-item">
           <summary>O que é o limite de juros do cartão de crédito?</summary>
           <p>
-            Para operações de crédito rotativo e parcelamento da fatura
-            abrangidas pela regra vigente desde janeiro de 2024, os juros
-            e encargos financeiros não podem ultrapassar o valor original
-            da dívida. Existem condições específicas para aplicação dessa
-            regra, portanto é importante conferir a modalidade da operação.
+            Para determinadas operações de crédito rotativo e parcelamento
+            de fatura abrangidas pela legislação vigente desde janeiro de
+            2024, os juros e encargos financeiros não podem ultrapassar
+            o valor original da dívida. A aplicação depende das características
+            da operação. Esta calculadora não verifica esse limite nem substitui
+            o demonstrativo oficial da instituição financeira.
           </p>
         </details>
       </div>
@@ -430,7 +439,20 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     const monthlyPaymentElement = document.getElementById('res-payment')!;
     const messageElement = document.getElementById('result-message')!;
 
+    const initialMessage =
+      'Informe os dados da dívida e clique em simular para visualizar a projeção.';
+
+    function clearResults() {
+      timeElement.textContent = '—';
+      interestElement.textContent = '—';
+      totalElement.textContent = '—';
+      debtElement.textContent = '—';
+      monthlyPaymentElement.textContent = '—';
+      messageElement.textContent = initialMessage;
+    }
+
     function showError(message: string) {
+      clearResults();
       errorElement.textContent = message;
       errorElement.hidden = false;
     }
@@ -469,21 +491,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           monthlyPayment: payment,
         });
 
-        debtElement.textContent = formatBRL(debt);
-        monthlyPaymentElement.textContent = formatBRL(payment);
-
-        if (!result.isViable) {
-          timeElement.textContent = 'Não é viável';
-          interestElement.textContent = '—';
-          totalElement.textContent = '—';
-
-          messageElement.textContent =
-            'O pagamento informado não é suficiente para quitar a dívida nas condições simuladas. Considere aumentar o valor mensal ou negociar uma taxa menor.';
-
-          return;
-        }
-
         if (
+          typeof result.isViable !== 'boolean' ||
           !Number.isFinite(result.monthsToPayoff) ||
           result.monthsToPayoff < 0 ||
           !Number.isFinite(result.totalInterestPaid) ||
@@ -494,6 +503,27 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           throw new Error('O motor retornou valores inválidos para a simulação.');
         }
 
+        debtElement.textContent = formatBRL(debt);
+        monthlyPaymentElement.textContent = formatBRL(payment);
+
+        if (!result.isViable) {
+          timeElement.textContent = 'Não foi possível quitar';
+          interestElement.textContent = '—';
+          totalElement.textContent = '—';
+
+          messageElement.textContent =
+            'A quitação não foi alcançada nas condições informadas. O pagamento pode não cobrir os juros mensais ou o prazo necessário pode ultrapassar o limite de 1.200 meses da simulação. Considere aumentar o pagamento ou negociar uma taxa menor.';
+
+          return;
+        }
+
+        if (
+          !Number.isInteger(result.monthsToPayoff) ||
+          result.monthsToPayoff <= 0
+        ) {
+          throw new Error('O motor retornou um prazo inválido para a quitação.');
+        }
+
         timeElement.textContent =
           `${result.monthsToPayoff} meses (~${(result.monthsToPayoff / 12).toFixed(1)} anos)`;
 
@@ -501,7 +531,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         totalElement.textContent = formatBRL(result.totalAmountPaid);
 
         messageElement.textContent =
-          'Simulação concluída. Os valores representam uma estimativa do pagamento da dívida com a taxa e a parcela informadas.';
+          'Simulação concluída. Os valores representam uma estimativa com a taxa informada. O pagamento mensal funciona como limite máximo e a última parcela pode ser menor.';
       } catch (error) {
         console.error('Erro na simulação de quitação:', error);
 

@@ -1,13 +1,13 @@
+
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
   title="Comprar ou Alugar Imóvel: Simulador Financeiro | Calculadora de Ganhos"
-  description="Compare comprar um imóvel financiado ou alugar e investir o dinheiro da entrada. Simule o patrimônio futuro e avalie os cenários."
+  description="Compare comprar um imóvel financiado ou alugar e investir o dinheiro disponível. Simule o patrimônio líquido futuro e avalie os cenários."
 >
   <div class="buy-rent-page">
-    <!-- NAVEGAÇÃO -->
     <nav class="breadcrumb" aria-label="Navegação estrutural">
       <a href="/">Início</a>
       <span aria-hidden="true">›</span>
@@ -16,7 +16,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <span aria-current="page">Comprar vs. Alugar</span>
     </nav>
 
-    <!-- CABEÇALHO -->
     <header class="hero">
       <span class="eyebrow">PLANEJAMENTO FINANCEIRO E PATRIMONIAL</span>
 
@@ -58,7 +57,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </header>
 
-    <!-- CALCULADORA -->
     <section class="calculator-section" id="calculadora" aria-labelledby="calculator-title">
       <div class="section-heading">
         <span class="section-label">FERRAMENTA GRATUITA</span>
@@ -70,7 +68,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
 
       <div class="calc-grid">
-        <!-- ENTRADAS -->
         <div class="card input-card">
           <h3>Parâmetros da simulação</h3>
 
@@ -115,6 +112,30 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </div>
 
           <div class="field-group">
+            <label for="own-capital">
+              Capital próprio disponível para investir se alugar (R$)
+            </label>
+            <div class="input-wrapper">
+              <span class="input-prefix">R$</span>
+              <input
+                type="number"
+                id="own-capital"
+                value="80000"
+                min="0"
+                step="5000"
+                inputmode="decimal"
+                required
+                aria-describedby="own-capital-help"
+              />
+            </div>
+            <small id="own-capital-help">
+              Informe o dinheiro próprio que poderia ser investido caso escolha
+              alugar. Não inclua FGTS neste valor. Ele é independente da entrada
+              informada acima.
+            </small>
+          </div>
+
+          <div class="field-group">
             <label for="monthly-rent">Aluguel mensal equivalente (R$)</label>
             <div class="input-wrapper">
               <span class="input-prefix">R$</span>
@@ -135,7 +156,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </div>
 
           <div class="field-group">
-            <label for="inv-rate">Rentabilidade dos investimentos (% a.a.)</label>
+            <label for="inv-rate">
+              Rentabilidade efetiva dos investimentos (% a.a.)
+            </label>
             <div class="input-wrapper">
               <input
                 type="number"
@@ -150,7 +173,32 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
               <span class="input-suffix">% a.a.</span>
             </div>
             <small id="inv-rate-help">
-              Rentabilidade anual estimada. Prefira informar uma taxa líquida de impostos e custos.
+              Informe uma estimativa de rentabilidade efetiva anual. Prefira
+              utilizar uma taxa líquida de impostos e custos.
+            </small>
+          </div>
+
+          <div class="field-group">
+            <label for="financing-years">
+              Prazo do financiamento (anos)
+            </label>
+            <div class="input-wrapper">
+              <input
+                type="number"
+                id="financing-years"
+                value="30"
+                min="1"
+                max="40"
+                step="1"
+                inputmode="numeric"
+                required
+                aria-describedby="financing-years-help"
+              />
+              <span class="input-suffix">anos</span>
+            </div>
+            <small id="financing-years-help">
+              Prazo utilizado para calcular as prestações e o saldo devedor.
+              Informe um período inteiro entre 1 e 40 anos.
             </small>
           </div>
 
@@ -171,24 +219,30 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
               <span class="input-suffix">anos</span>
             </div>
             <small id="years-help">
-              Período utilizado para projetar os dois cenários, de 1 a 30 anos.
+              Período utilizado para comparar os dois cenários, de 1 a 30 anos.
+              Pode ser diferente do prazo do financiamento.
             </small>
           </div>
 
           <div class="assumptions-box">
             <strong>Premissas fixas do simulador</strong>
             <div class="assumptions-line">
-              <span>Taxa de financiamento</span>
+              <span>Taxa efetiva do financiamento</span>
               <strong>10% a.a.</strong>
             </div>
             <div class="assumptions-line">
-              <span>Valorização imobiliária</span>
+              <span>Valorização do imóvel</span>
+              <strong>4% a.a.</strong>
+            </div>
+            <div class="assumptions-line">
+              <span>Reajuste anual do aluguel</span>
               <strong>4% a.a.</strong>
             </div>
             <small>
-              Esses parâmetros são definidos no código e não podem ser
-              alterados diretamente nesta versão da ferramenta. A taxa efetiva
-              e o custo total do financiamento podem variar conforme a instituição.
+              As taxas anuais efetivas são convertidas em taxas mensais
+              equivalentes pelo motor de cálculo. Esses parâmetros são fixos
+              nesta versão. As condições reais de financiamento podem variar
+              conforme a instituição.
             </small>
           </div>
 
@@ -214,7 +268,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </p>
         </div>
 
-        <!-- RESULTADOS -->
         <div class="card result-card" aria-live="polite" aria-atomic="true">
           <div>
             <span class="section-label">RESULTADO DA SIMULAÇÃO</span>
@@ -222,15 +275,24 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
             <div class="result-grid">
               <div class="result-box property-result">
-                <span class="result-label">Valor projetado no cenário de compra</span>
+                <span class="result-label">
+                  Patrimônio líquido no cenário de compra
+                </span>
                 <strong id="res-prop">—</strong>
-                <small>Valor retornado pelo motor de cálculo</small>
+                <small>
+                  Valor do imóvel menos saldo devedor, somado aos investimentos
+                  acumulados.
+                </small>
               </div>
 
               <div class="result-box investment-result">
-                <span class="result-label">Patrimônio no cenário de aluguel</span>
+                <span class="result-label">
+                  Patrimônio acumulado no cenário de aluguel
+                </span>
                 <strong id="res-inv">—</strong>
-                <small>Valor futuro dos investimentos</small>
+                <small>
+                  Capital próprio inicial e aportes acumulados com rendimentos.
+                </small>
               </div>
             </div>
 
@@ -248,16 +310,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             <strong>Importante:</strong>
             <p>
               Os valores representam projeções matemáticas baseadas nas
-              premissas do simulador. Não constituem garantia de valorização
-              imobiliária ou rentabilidade de investimentos. Verifique se o
-              resultado da compra considera o saldo devedor do financiamento.
+              premissas do simulador. No cenário de compra, o saldo devedor
+              restante é descontado do valor projetado do imóvel. Os resultados
+              não constituem garantia de valorização imobiliária ou rentabilidade
+              de investimentos.
             </p>
           </div>
         </div>
       </div>
     </section>
 
-    <!-- CONCEITO -->
     <section class="content-section" aria-labelledby="what-title">
       <div class="section-heading">
         <span class="section-label">ENTENDA A COMPARAÇÃO</span>
@@ -275,7 +337,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <p>
         Comprar pode representar a construção de patrimônio imobiliário,
         enquanto alugar pode oferecer flexibilidade e permitir que o dinheiro
-        que seria utilizado na entrada seja direcionado para investimentos.
+        próprio que seria utilizado na entrada seja direcionado para investimentos.
+        Nesta simulação, o FGTS informado na entrada da compra não é tratado
+        como dinheiro disponível para investimento no cenário de aluguel.
       </p>
 
       <p>
@@ -322,16 +386,16 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
               <polyline points="16 7 22 7 22 13"/>
             </svg>
           </div>
-          <h3>Investir a entrada</h3>
+          <h3>Investir o capital próprio</h3>
           <p>
-            O dinheiro que seria utilizado na compra pode ser aplicado,
-            buscando rentabilidade ao longo do período analisado.
+            O dinheiro próprio que seria utilizado na compra pode ser aplicado
+            no cenário de aluguel, buscando rentabilidade ao longo do período
+            analisado.
           </p>
         </article>
       </div>
     </section>
 
-    <!-- COMO USAR -->
     <section class="content-section" aria-labelledby="how-title">
       <div class="section-heading">
         <span class="section-label">PASSO A PASSO</span>
@@ -369,6 +433,18 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <article class="instruction-card">
           <span class="step-number">03</span>
           <div>
+            <h3>Informe o capital próprio disponível para investir</h3>
+            <p>
+              Informe quanto do seu dinheiro próprio poderia ser investido
+              caso escolha alugar. Não inclua FGTS nesse campo. Esse valor
+              não precisa ser igual à entrada total informada para a compra.
+            </p>
+          </div>
+        </article>
+
+        <article class="instruction-card">
+          <span class="step-number">04</span>
+          <div>
             <h3>Informe o aluguel mensal</h3>
             <p>
               Utilize o valor aproximado do aluguel de um imóvel com
@@ -378,19 +454,31 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </article>
 
         <article class="instruction-card">
-          <span class="step-number">04</span>
+          <span class="step-number">05</span>
           <div>
             <h3>Informe a rentabilidade dos investimentos</h3>
             <p>
-              Digite uma estimativa de rentabilidade anual para o dinheiro
-              que seria aplicado no cenário de aluguel. Sempre que possível,
-              utilize uma taxa líquida de impostos e custos.
+              Digite uma estimativa de rentabilidade efetiva anual para o
+              dinheiro que seria aplicado no cenário de aluguel. Sempre que
+              possível, utilize uma taxa líquida de impostos e custos.
             </p>
           </div>
         </article>
 
         <article class="instruction-card">
-          <span class="step-number">05</span>
+          <span class="step-number">06</span>
+          <div>
+            <h3>Informe o prazo do financiamento</h3>
+            <p>
+              Digite o prazo previsto para pagar o financiamento. Esse período
+              é independente do horizonte de análise e influencia o valor
+              das prestações e o saldo devedor restante.
+            </p>
+          </div>
+        </article>
+
+        <article class="instruction-card">
+          <span class="step-number">07</span>
           <div>
             <h3>Escolha o período de análise</h3>
             <p>
@@ -401,11 +489,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </article>
 
         <article class="instruction-card">
-          <span class="step-number">06</span>
+          <span class="step-number">08</span>
           <div>
             <h3>Analise a projeção</h3>
             <p>
-              Clique em comparar cenários para visualizar os resultados
+              Clique em comparar cenários para visualizar os patrimônios
               estimados e a indicação gerada pelo motor financeiro.
             </p>
           </div>
@@ -413,7 +501,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </section>
 
-    <!-- CENÁRIOS -->
     <section class="content-section" aria-labelledby="scenarios-title">
       <div class="section-heading">
         <span class="section-label">DINÂMICA DOS CENÁRIOS</span>
@@ -428,9 +515,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <div>
           <h3>Cenário 1 — Compra financiada</h3>
           <p>
-            O comprador utiliza recursos próprios como entrada e financia o
-            saldo restante. O imóvel pode se valorizar ao longo do tempo,
-            mas exige gastos de aquisição e manutenção.
+            O comprador utiliza recursos próprios e, quando aplicável, FGTS
+            como entrada e financia o saldo restante. O imóvel pode se valorizar
+            ao longo do tempo, mas exige gastos de aquisição e manutenção.
           </p>
           <ul>
             <li>Valor inicial do imóvel e entrada disponível.</li>
@@ -443,21 +530,20 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <div>
           <h3>Cenário 2 — Aluguel e investimento</h3>
           <p>
-            O morador paga pelo uso do imóvel e aplica o capital que seria
-            utilizado na entrada, exigindo disciplina para manter os aportes
-            e rendimentos ao longo do prazo.
+            O morador paga pelo uso do imóvel e aplica o capital próprio
+            disponível para investimento, exigindo disciplina para manter
+            os aportes e rendimentos ao longo do prazo.
           </p>
           <ul>
-            <li>Capital inicial disponível para aplicação financeira.</li>
-            <li>Rentabilidade líquida dos investimentos no período.</li>
-            <li>Valor mensal do aluguel e reajustes contratuais.</li>
+            <li>Capital próprio inicial disponível para aplicação.</li>
+            <li>Rentabilidade dos investimentos no período.</li>
+            <li>Valor mensal do aluguel e reajuste anual estimado.</li>
             <li>Disciplina para reinvestir a diferença de custos.</li>
           </ul>
         </div>
       </div>
     </section>
 
-    <!-- EXEMPLO -->
     <section class="content-section" aria-labelledby="example-title">
       <div class="section-heading">
         <span class="section-label">EXEMPLO PRÁTICO</span>
@@ -484,13 +570,23 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </div>
 
           <div>
+            <span>Capital próprio para investir</span>
+            <strong>R$ 80.000,00</strong>
+          </div>
+
+          <div>
             <span>Aluguel mensal</span>
             <strong>R$ 2.000,00</strong>
           </div>
 
           <div>
-            <span>Rentabilidade estimada</span>
+            <span>Rentabilidade efetiva estimada</span>
             <strong>10% a.a.</strong>
+          </div>
+
+          <div>
+            <span>Prazo do financiamento</span>
+            <strong>30 anos</strong>
           </div>
 
           <div>
@@ -500,7 +596,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
           <div>
             <span>Premissas fixas</span>
-            <strong>10% juros / 4% valoriz.</strong>
+            <strong>10% juros / 4% valorização / 4% aluguel</strong>
           </div>
         </div>
 
@@ -512,7 +608,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </section>
 
-    <!-- INTERPRETAÇÃO -->
     <section class="content-section" aria-labelledby="results-title">
       <div class="section-heading">
         <span class="section-label">INTERPRETAÇÃO DOS RESULTADOS</span>
@@ -524,7 +619,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <div class="icon-badge" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/>
-              <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2"/>
+              <path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h-2"/>
               <path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2"/>
               <path d="M10 6h4"/>
               <path d="M10 10h4"/>
@@ -532,11 +627,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
               <path d="M10 18h4"/>
             </svg>
           </div>
-          <h3>Valor no cenário de compra</h3>
+          <h3>Patrimônio líquido na compra</h3>
           <p>
-            Representa o valor futuro do imóvel apresentado pelo motor
-            financeiro. Para ser comparado corretamente com os investimentos,
-            o resultado patrimonial deve descontar o saldo devedor do financiamento.
+            Representa o valor projetado do imóvel menos o saldo devedor
+            restante do financiamento, somado aos investimentos acumulados
+            pelo comprador.
           </p>
         </article>
 
@@ -549,9 +644,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </div>
           <h3>Patrimônio no cenário de aluguel</h3>
           <p>
-            Representa o valor futuro dos investimentos calculado pelo
-            simulador. O resultado depende da rentabilidade informada e
-            das regras de investimento implementadas no motor.
+            Representa o capital próprio investido inicialmente, somado aos
+            aportes e rendimentos acumulados conforme as regras implementadas
+            no motor financeiro.
           </p>
         </article>
 
@@ -564,16 +659,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </div>
           <h3>Recomendação da ferramenta</h3>
           <p>
-            É uma indicação gerada a partir dos resultados calculados.
-            Deve ser interpretada como uma referência matemática, e não
-            como uma decisão definitiva sobre qual alternativa é melhor
+            É uma indicação gerada a partir da comparação entre os patrimônios
+            estimados. Deve ser interpretada como uma referência matemática,
+            e não como uma decisão definitiva sobre qual alternativa é melhor
             para sua vida financeira.
           </p>
         </article>
       </div>
     </section>
 
-    <!-- FATORES -->
     <section class="content-section" aria-labelledby="factors-title">
       <div class="section-heading">
         <span class="section-label">ANÁLISE FINANCEIRA</span>
@@ -632,7 +726,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </section>
 
-    <!-- LIMITAÇÕES -->
     <section class="attention-section" aria-labelledby="limitations-title">
       <div class="icon-badge icon-badge-amber attention-badge" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -668,7 +761,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </li>
           <li>
             <strong>Reajuste do aluguel:</strong>
-            os contratos podem prever atualizações periódicas do valor mensal.
+            o simulador utiliza um reajuste fixo de 4% a cada 12 meses.
+            Os contratos reais podem prever índices e condições diferentes.
           </li>
           <li>
             <strong>Tributação dos investimentos:</strong>
@@ -680,20 +774,20 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </li>
           <li>
             <strong>Saldo devedor:</strong>
-            o valor ainda devido no financiamento precisa ser descontado
-            do valor do imóvel para apurar o patrimônio líquido.
+            o valor ainda devido no financiamento é descontado do valor
+            projetado do imóvel para apurar o patrimônio líquido.
           </li>
         </ul>
 
         <p>
-          Além disso, os parâmetros de financiamento e valorização imobiliária
-          desta versão são fixos. Por isso, o resultado não deve ser utilizado
-          isoladamente para decidir sobre a compra de um imóvel.
+          Além disso, os parâmetros de financiamento, valorização imobiliária
+          e reajuste do aluguel desta versão são fixos. Por isso, o resultado
+          não deve ser utilizado isoladamente para decidir sobre a compra
+          de um imóvel.
         </p>
       </div>
     </section>
 
-    <!-- FAQ -->
     <section class="faq-section" aria-labelledby="faq-title">
       <div class="section-heading">
         <span class="section-label">DÚVIDAS FREQUENTES</span>
@@ -715,9 +809,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <summary>Vale a pena alugar e investir o dinheiro da entrada?</summary>
           <p>
             Pode ser uma alternativa interessante quando a rentabilidade
-            líquida dos investimentos e a disciplina de aplicação dos recursos
+            dos investimentos e a disciplina de aplicação dos recursos
             compensam os custos do aluguel. É necessário comparar os dois
-            cenários considerando as mesmas condições de análise.
+            cenários considerando as mesmas condições de análise. Nesta
+            ferramenta, o capital investido no cenário de aluguel deve ser
+            informado separadamente e não inclui FGTS.
           </p>
         </details>
 
@@ -726,49 +822,56 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <p>
             É uma estimativa do valor dos bens ou investimentos acumulados
             ao final do período escolhido. No cenário de compra financiada,
-            o patrimônio líquido deve considerar também o saldo devedor
-            que ainda existir no encerramento da simulação.
+            o patrimônio líquido considera o valor projetado do imóvel menos
+            o saldo devedor restante, somado aos investimentos acumulados.
           </p>
         </details>
 
         <details class="faq-item">
           <summary>A calculadora considera a valorização do imóvel?</summary>
           <p>
-            Sim. Nesta versão, o motor recebe uma taxa de valorização imobiliária
-            fixa de 4% ao ano. A valorização real pode ser maior, menor ou até
-            negativa, dependendo do imóvel e do mercado.
+            Sim. Nesta versão, o motor utiliza uma taxa de valorização
+            imobiliária efetiva de 4% ao ano. A valorização real pode ser
+            maior, menor ou até negativa, dependendo do imóvel e do mercado.
           </p>
         </details>
 
         <details class="faq-item">
           <summary>Posso alterar a taxa de juros do financiamento?</summary>
           <p>
-            Na versão atual, a taxa de financiamento é definida no código
-            como 10% ao ano. O usuário pode alterar a rentabilidade dos
-            investimentos, mas não a taxa de financiamento diretamente
-            pela interface.
+            Na versão atual, a taxa efetiva de financiamento é definida
+            no código como 10% ao ano. O usuário pode alterar a rentabilidade
+            dos investimentos e o prazo do financiamento, mas não a taxa
+            de juros diretamente pela interface.
           </p>
         </details>
 
         <details class="faq-item">
           <summary>A calculadora considera o reajuste anual do aluguel?</summary>
           <p>
-            A interface atual não disponibiliza um campo específico para
-            reajuste do aluguel. O tratamento dessa variável depende da
-            implementação interna do motor financeiro. Se não houver
-            reajuste no motor, o aluguel será tratado conforme essa premissa
-            simplificada.
+            Sim. O motor aplica um reajuste fixo de 4% a cada 12 meses.
+            Esse percentual é uma premissa simplificada do simulador e pode
+            ser diferente dos reajustes previstos em contratos reais.
           </p>
         </details>
 
         <details class="faq-item">
           <summary>A calculadora considera o saldo devedor do financiamento?</summary>
           <p>
-            Isso depende da implementação do motor financeiro. Para uma
-            comparação patrimonial correta, o valor futuro do imóvel deve
-            ser ajustado pelo saldo devedor restante. Comparar o valor bruto
-            do imóvel com o saldo dos investimentos pode favorecer
-            indevidamente o cenário de compra.
+            Sim. O motor calcula a evolução do saldo devedor conforme o
+            sistema Price e o prazo informado. Ao final do período de análise,
+            o saldo devedor restante é descontado do valor projetado do imóvel
+            para calcular o patrimônio líquido no cenário de compra.
+          </p>
+        </details>
+
+        <details class="faq-item">
+          <summary>Qual é a diferença entre prazo do financiamento e período de análise?</summary>
+          <p>
+            O prazo do financiamento determina por quantos meses as prestações
+            serão pagas. O período de análise define por quanto tempo os dois
+            cenários serão comparados. Por isso, o financiamento pode continuar
+            tendo saldo devedor ao final da simulação.
           </p>
         </details>
 
@@ -777,7 +880,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <p>
             Não. Os resultados são projeções baseadas em premissas simplificadas.
             Mudanças no mercado imobiliário, nos investimentos e nas condições
-            financeiras podem modificar completamente o resultado.
+            financeiras podem modificar o resultado.
           </p>
         </details>
 
@@ -791,7 +894,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </section>
 
-    <!-- AVISO LEGAL -->
     <aside class="final-notice">
       <div class="notice-title">
         <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -810,7 +912,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </p>
     </aside>
 
-    <!-- CTA -->
     <section class="final-cta">
       <span class="section-label">CALCULADORA DE GANHOS</span>
       <h2>Faça escolhas financeiras mais conscientes</h2>
@@ -835,7 +936,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     let pageController: AbortController | null = null;
 
     function initPage() {
-      // Evita listeners duplicados após navegações internas do Astro.
       pageController?.abort();
       pageController = new AbortController();
 
@@ -843,8 +943,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       const propInput = document.getElementById('prop-value') as HTMLInputElement | null;
       const downPaymentInput = document.getElementById('down-payment') as HTMLInputElement | null;
+      const ownCapitalInput = document.getElementById('own-capital') as HTMLInputElement | null;
       const rentInput = document.getElementById('monthly-rent') as HTMLInputElement | null;
       const investmentRateInput = document.getElementById('inv-rate') as HTMLInputElement | null;
+      const financingYearsInput = document.getElementById('financing-years') as HTMLInputElement | null;
       const yearsInput = document.getElementById('years') as HTMLInputElement | null;
 
       const calcButton = document.getElementById('calc-btn') as HTMLButtonElement | null;
@@ -857,8 +959,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       if (
         !propInput ||
         !downPaymentInput ||
+        !ownCapitalInput ||
         !rentInput ||
         !investmentRateInput ||
+        !financingYearsInput ||
         !yearsInput ||
         !calcButton ||
         !errorElement ||
@@ -898,7 +1002,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         const value = Number(input.value);
 
         if (!Number.isFinite(value)) {
-          throw new Error(`Informe um valor numérico válido para "${fieldName}".`);
+          throw new Error(
+            `Informe um valor numérico válido para "${fieldName}".`
+          );
         }
 
         return value;
@@ -918,6 +1024,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             'Valor da entrada'
           );
 
+          const ownCapitalAvailable = readRequiredNumber(
+            ownCapitalInput,
+            'Capital próprio disponível para investir se alugar'
+          );
+
           const monthlyRent = readRequiredNumber(
             rentInput,
             'Aluguel mensal'
@@ -928,13 +1039,20 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             'Rentabilidade dos investimentos'
           );
 
+          const financingYears = readRequiredNumber(
+            financingYearsInput,
+            'Prazo do financiamento'
+          );
+
           const years = readRequiredNumber(
             yearsInput,
             'Horizonte de análise'
           );
 
           if (propValue <= 0) {
-            throw new Error('Informe um valor de imóvel maior que zero.');
+            throw new Error(
+              'Informe um valor de imóvel maior que zero.'
+            );
           }
 
           if (downPayment < 0) {
@@ -946,6 +1064,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           if (downPayment >= propValue) {
             throw new Error(
               'O valor da entrada deve ser menor que o valor do imóvel nesta simulação de financiamento.'
+            );
+          }
+
+          if (ownCapitalAvailable < 0) {
+            throw new Error(
+              'O capital próprio disponível para investimento não pode ser negativo.'
             );
           }
 
@@ -961,42 +1085,50 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             );
           }
 
+          if (
+            !Number.isInteger(financingYears) ||
+            financingYears < 1 ||
+            financingYears > 40
+          ) {
+            throw new Error(
+              'Informe um prazo de financiamento inteiro entre 1 e 40 anos.'
+            );
+          }
+
           if (!Number.isInteger(years) || years < 1 || years > 30) {
             throw new Error(
-              'Informe um período inteiro entre 1 e 30 anos.'
+              'Informe um período de análise inteiro entre 1 e 30 anos.'
             );
           }
 
           const result = calculateBuyVsRent({
             propertyValue: propValue,
             downPayment,
+            ownCapitalAvailable,
             annualInterestRate: 10,
-            financingMonths: years * 12,
+            financingMonths: financingYears * 12,
             monthlyRent,
             propertyAppreciationRate: 4,
             investmentReturnRate: invRate,
             simulationYears: years,
           });
 
-          const propertyValue = result.totalPropertyFutureValue;
-          const investmentValue = result.totalInvestmentFutureValue;
+          const buyingNetWorth = result.buyingNetWorth;
+          const rentingNetWorth = result.rentingNetWorth;
           const recommendation = result.recommendation;
 
-          if (
-            !Number.isFinite(propertyValue) ||
-            propertyValue < 0
-          ) {
+          if (!Number.isFinite(buyingNetWorth)) {
             throw new Error(
-              'O motor retornou um valor inválido para o cenário de compra.'
+              'O motor retornou um patrimônio inválido para o cenário de compra.'
             );
           }
 
           if (
-            !Number.isFinite(investmentValue) ||
-            investmentValue < 0
+            !Number.isFinite(rentingNetWorth) ||
+            rentingNetWorth < 0
           ) {
             throw new Error(
-              'O motor retornou um valor inválido para o cenário de aluguel.'
+              'O motor retornou um patrimônio inválido para o cenário de aluguel.'
             );
           }
 
@@ -1009,8 +1141,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             );
           }
 
-          propertyOutput.textContent = formatBRL(propertyValue);
-          investmentOutput.textContent = formatBRL(investmentValue);
+          propertyOutput.textContent = formatBRL(buyingNetWorth);
+          investmentOutput.textContent = formatBRL(rentingNetWorth);
           recommendationOutput.textContent = recommendation;
         } catch (error) {
           const message =
@@ -1027,8 +1159,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       [
         propInput,
         downPaymentInput,
+        ownCapitalInput,
         rentInput,
         investmentRateInput,
+        financingYearsInput,
         yearsInput,
       ].forEach(input => {
         input.addEventListener('input', runCalc, { signal });
@@ -1133,8 +1267,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     :global([data-theme="dark"]) .highlight-icon {
       background: rgba(16, 185, 129, 0.14);
     }
-
-    /* ÍCONES SVG PADRONIZADOS */
 
     .icon-badge {
       display: inline-flex;
@@ -1418,6 +1550,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       margin-top: 0.45rem;
       color: var(--text-secondary);
       font-size: 0.76rem;
+      line-height: 1.5;
     }
 
     .recommendation-box {

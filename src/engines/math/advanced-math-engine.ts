@@ -72,6 +72,34 @@ export function calcularMMC(a: number, b: number): number {
 }
 
 // =====================================================
+// VALIDAÇÃO COMPARTILHADA DAS PROGRESSÕES
+// =====================================================
+
+const MAX_PROGRESSION_TERMS = 10000;
+
+function validateProgressionInput(
+  a1: number,
+  razao: number,
+  n: number
+): void {
+  if (!Number.isFinite(a1) || !Number.isFinite(razao)) {
+    throw new RangeError(
+      'O primeiro termo e a razão precisam ser números válidos.'
+    );
+  }
+
+  if (
+    !Number.isSafeInteger(n) ||
+    n < 1 ||
+    n > MAX_PROGRESSION_TERMS
+  ) {
+    throw new RangeError(
+      `A posição precisa ser um número inteiro entre 1 e ${MAX_PROGRESSION_TERMS}.`
+    );
+  }
+}
+
+// =====================================================
 // PA - PROGRESSÃO ARITMÉTICA
 // =====================================================
 
@@ -93,21 +121,13 @@ export interface PAResult {
 export function calcularPA(input: PAInput): PAResult {
   const { a1, razao, n } = input;
 
-  if (!Number.isFinite(a1) || !Number.isFinite(razao)) {
-    throw new Error(
-      'O primeiro termo e a razão precisam ser números válidos.'
-    );
-  }
-
-  if (!Number.isSafeInteger(n) || n < 1) {
-    throw new RangeError(
-      'A posição precisa ser um número inteiro positivo.'
-    );
-  }
+  validateProgressionInput(a1, razao, n);
 
   const termoN = a1 + (n - 1) * razao;
 
-  const somaN = (n * (a1 + termoN)) / 2;
+  // Divide os valores antes da soma para reduzir
+  // o risco de estouro intermediário.
+  const somaN = n * (a1 / 2 + termoN / 2);
 
   if (!Number.isFinite(termoN) || !Number.isFinite(somaN)) {
     throw new RangeError(
@@ -139,42 +159,40 @@ export interface PGResult {
 /**
  * Calcula o termo geral e a soma dos primeiros
  * n termos de uma Progressão Geométrica.
+ *
+ * O cálculo iterativo evita a perda de precisão
+ * da fórmula fechada quando a razão está próxima de 1.
  */
 export function calcularPG(input: PGInput): PGResult {
   const { a1, razao, n } = input;
 
-  if (!Number.isFinite(a1) || !Number.isFinite(razao)) {
-    throw new Error(
-      'O primeiro termo e a razão precisam ser números válidos.'
-    );
-  }
+  validateProgressionInput(a1, razao, n);
 
-  if (!Number.isSafeInteger(n) || n < 1) {
-    throw new RangeError(
-      'A posição precisa ser um número inteiro positivo.'
-    );
-  }
+  let termo = a1;
+  let soma = 0;
 
-  const termoN = a1 * Math.pow(razao, n - 1);
+  for (let i = 0; i < n; i++) {
+    soma += termo;
 
-  let somaN: number;
+    if (!Number.isFinite(soma)) {
+      throw new RangeError(
+        'A soma da PG ultrapassou o limite numérico.'
+      );
+    }
 
-  if (razao === 1) {
-    somaN = a1 * n;
-  } else {
-    somaN =
-      (a1 * (Math.pow(razao, n) - 1)) /
-      (razao - 1);
-  }
+    if (i < n - 1) {
+      termo *= razao;
 
-  if (!Number.isFinite(termoN) || !Number.isFinite(somaN)) {
-    throw new RangeError(
-      'O resultado da PG ultrapassou o limite numérico.'
-    );
+      if (!Number.isFinite(termo)) {
+        throw new RangeError(
+          'O termo da PG ultrapassou o limite numérico.'
+        );
+      }
+    }
   }
 
   return {
-    termoN: roundToDecimal(termoN),
-    somaN: roundToDecimal(somaN),
+    termoN: roundToDecimal(termo),
+    somaN: roundToDecimal(soma),
   };
 }

@@ -41,7 +41,6 @@ export function roundToDecimal(
   const negative = value < 0;
   const absoluteValue = Math.abs(value);
 
-  // Obtém a representação decimal mais curta do número.
   const [coefficient, exponentText] =
     absoluteValue.toString().toLowerCase().split('e');
 
@@ -56,32 +55,26 @@ export function roundToDecimal(
     `${integerPart}${decimalPart}`
   );
 
-  // Ajusta a quantidade de casas decimais desejada.
   const shift =
     exponent - decimalPart.length + decimals;
 
   let roundedInteger: bigint;
 
   if (shift >= 0) {
-    // Não há dígitos adicionais a descartar.
     roundedInteger =
       digits * (10n ** BigInt(shift));
   } else {
-    // Calcula quociente e resto para arredondamento decimal.
     const divisor = 10n ** BigInt(-shift);
 
     const quotient = digits / divisor;
     const remainder = digits % divisor;
 
-    // Arredonda meio para cima na magnitude absoluta.
     roundedInteger =
       remainder * 2n >= divisor
         ? quotient + 1n
         : quotient;
   }
 
-  // Reconstrói o número decimal sem multiplicação
-  // intermediária que possa provocar overflow.
   let resultText = roundedInteger.toString();
 
   if (decimals > 0) {
@@ -108,6 +101,5 @@ export function roundToDecimal(
     );
   }
 
-  // Evita retornar -0.
   return Object.is(result, -0) ? 0 : result;
 }

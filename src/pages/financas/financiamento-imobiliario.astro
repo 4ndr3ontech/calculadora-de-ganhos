@@ -117,7 +117,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
           <div class="field-row">
             <div class="field-group">
-              <label for="rate">Taxa anual (% a.a.)</label>
+              <label for="rate">Taxa de juros nominal anual (% a.a.)</label>
               <div class="input-wrapper">
                 <input
                   type="number"
@@ -132,7 +132,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                 <span class="input-suffix">%</span>
               </div>
               <small id="rate-help">
-                Taxa anual de referência da proposta.
+                Informe a taxa nominal anual. O simulador divide essa taxa
+                por 12 para calcular os juros mensais.
               </small>
             </div>
 
@@ -328,7 +329,18 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </div>
 
         <div>
-          <h3>3. Amortização</h3>
+          <h3>3. Conversão da taxa de juros</h3>
+          <p>
+            O simulador considera uma taxa nominal anual com capitalização
+            mensal. Para obter a taxa mensal, divide o percentual anual por 12.
+          </p>
+          <div class="formula">
+            Taxa mensal = Taxa nominal anual ÷ 12
+          </div>
+        </div>
+
+        <div>
+          <h3>4. Amortização</h3>
           <p>
             No sistema SAC, o valor amortizado mensalmente é constante.
             Em uma representação simplificada, ele corresponde ao saldo
@@ -340,11 +352,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         </div>
 
         <div>
-          <h3>4. Composição da parcela</h3>
+          <h3>5. Composição da parcela</h3>
           <p>
             Cada prestação é composta por uma parte de amortização e outra
-            de juros. Como o saldo devedor diminui, os juros tendem a cair
-            ao longo do tempo.
+            de juros. Os juros são calculados sobre o saldo devedor no início
+            de cada mês. Como esse saldo diminui, os juros também tendem a cair.
           </p>
           <div class="formula">
             Parcela = Amortização + Juros do período
@@ -353,10 +365,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
         <div class="methodology-note">
           <strong>Atenção:</strong>
-          as fórmulas acima explicam o funcionamento conceitual do SAC.
-          A conversão da taxa anual para mensal, os critérios de arredondamento
-          e os valores finais exibidos dependem da implementação de
-          <code>calculateFinancingSAC</code> utilizada nesta página.
+          esta simulação utiliza taxa nominal anual dividida por 12 para obter
+          a taxa mensal. O cálculo considera amortização constante e juros
+          sobre o saldo devedor no início de cada mês. Não inclui seguros,
+          tarifas, TR ou outros indexadores que possam existir no contrato real.
         </div>
       </div>
     </section>
@@ -368,7 +380,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <h2 id="example-title">Simulação de compra de um imóvel</h2>
         <p>
           Considere um imóvel de R$ 350 mil, com entrada de R$ 70 mil,
-          taxa anual informada de 9,5% e prazo de 30 anos.
+          taxa de juros nominal anual de 9,5% e prazo de 30 anos.
         </p>
       </div>
 
@@ -397,7 +409,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </div>
 
           <div>
-            <span>Taxa anual informada</span>
+            <span>Taxa de juros nominal anual</span>
             <strong>9,5%</strong>
           </div>
 
@@ -793,7 +805,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         }
 
         if (values.rate < 0 || values.rate > 100) {
-          return 'Informe uma taxa anual entre 0% e 100%.';
+          return 'Informe uma taxa nominal anual entre 0% e 100%.';
         }
 
         if (

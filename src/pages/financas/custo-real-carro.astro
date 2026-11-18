@@ -1,3 +1,4 @@
+
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
@@ -374,7 +375,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <h2 id="methodology-title">Como funciona o cálculo?</h2>
         <p>
           A calculadora utiliza os valores informados para estimar os custos
-          mensais e anuais conforme as regras do motor de cálculo.
+          mensais e anuais, aplicando as fórmulas descritas abaixo.
         </p>
       </div>
 
@@ -383,44 +384,79 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <h3>Despesas recorrentes</h3>
           <p>
             Combustível, seguro e manutenção são informados como valores mensais.
-            O IPVA e a desvalorização são informados como percentuais anuais.
+            Esses três valores são somados diretamente no cálculo do custo mensal.
           </p>
         </div>
 
         <div>
-          <h3>IPVA</h3>
+          <h3>IPVA anual</h3>
           <p>
-            A alíquota informada representa o percentual anual utilizado pelo
-            cálculo sobre a referência de valor do veículo. O valor efetivo do
-            imposto pode variar conforme a base de cálculo e as regras estaduais.
+            O IPVA estimado é calculado multiplicando o preço informado do veículo
+            pela alíquota percentual de IPVA.
+          </p>
+          <p>
+            <strong>IPVA anual = preço do veículo × (alíquota de IPVA ÷ 100)</strong>
+          </p>
+          <p>
+            O valor anual é dividido por 12 para compor a estimativa mensal.
+            O simulador utiliza o preço informado como referência, mas o IPVA
+            efetivo pode depender da base oficial de cálculo e das regras
+            específicas de cada estado.
           </p>
         </div>
 
         <div>
-          <h3>Desvalorização</h3>
+          <h3>Depreciação anual</h3>
           <p>
-            O percentual informado representa a estimativa anual de perda
-            de valor do veículo. O resultado apresentado deve ser interpretado
-            como perda patrimonial estimada, não como pagamento realizado.
+            A depreciação estimada é calculada aplicando o percentual informado
+            diretamente sobre o preço inicial do veículo.
+          </p>
+          <p>
+            <strong>Depreciação anual = preço do veículo × (taxa de depreciação ÷ 100)</strong>
+          </p>
+          <p>
+            O valor anual é dividido por 12 para compor a estimativa mensal.
+            O cálculo utiliza o preço inicial informado e não aplica depreciação
+            composta ou acumulada ano a ano.
+          </p>
+          <p>
+            A depreciação representa uma perda patrimonial estimada, não
+            necessariamente uma despesa efetivamente paga.
           </p>
         </div>
 
         <div>
-          <h3>Custo mensal e anual</h3>
+          <h3>Custo mensal total</h3>
           <p>
-            O custo mensal pode considerar o rateio de despesas anuais para
-            facilitar o planejamento. A composição e a forma de rateio dependem
-            das regras implementadas no motor de cálculo.
+            O custo mensal reúne as três despesas recorrentes e o rateio mensal
+            do IPVA e da depreciação.
+          </p>
+          <p>
+            <strong>
+              Custo mensal = combustível + seguro + manutenção +
+              (IPVA anual ÷ 12) + (depreciação anual ÷ 12)
+            </strong>
+          </p>
+        </div>
+
+        <div>
+          <h3>Custo anual total</h3>
+          <p>
+            O custo anual é obtido multiplicando o custo mensal calculado por 12.
+          </p>
+          <p>
+            <strong>Custo anual = custo mensal × 12</strong>
           </p>
         </div>
 
         <div class="methodology-note">
-          <strong>Importante:</strong>
-          a composição exata do custo mensal e anual depende da implementação
-          de <code>calculateVehicleTCO</code>. O simulador não deve ser tratado
-          como uma apuração completa de todos os gastos possíveis do veículo.
-          Confira quais itens estão incluídos antes de utilizar os resultados
-          como referência financeira definitiva.
+          <strong>Limitações da estimativa:</strong>
+          o cálculo considera somente os valores informados e os itens descritos
+          nesta metodologia. Não inclui financiamento, licenciamento,
+          estacionamento, pedágios, multas, lavagem ou despesas extraordinárias
+          que não tenham sido informadas. Os resultados servem como referência
+          para planejamento financeiro e não representam a apuração completa
+          de todos os custos de propriedade do veículo.
         </div>
       </div>
     </section>
@@ -1356,12 +1392,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     .methodology-note strong {
       color: var(--text-primary);
-    }
-
-    .methodology-note code {
-      color: var(--color-primary);
-      font-weight: 600;
-      overflow-wrap: anywhere;
     }
 
     .example-card {

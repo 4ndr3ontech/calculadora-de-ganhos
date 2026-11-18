@@ -561,6 +561,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       percentageBar: document.getElementById('percentage-bar') as HTMLSpanElement
     };
 
+    function roundCurrency(value: number): number {
+      return Math.round((value + Number.EPSILON) * 100) / 100;
+    }
+
     function calculateINSS(gross: number): number {
       const contributionBase = Math.min(gross, INSS_CEILING);
       let previousLimit = 0;
@@ -580,16 +584,21 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         }
       }
 
-      return Math.round((contribution + Number.EPSILON) * 100) / 100;
+      return roundCurrency(contribution);
     }
 
     function calculateProgressiveIRRF(base: number): number {
       if (base <= 0) return 0;
 
-      const bracket = IRRF_BRACKETS.find(item => base <= item.limit)!;
+      const bracket = IRRF_BRACKETS.find(item => base <= item.limit);
+
+      if (!bracket) {
+        throw new Error('Não foi possível identificar a faixa do IRRF.');
+      }
+
       const tax = base * bracket.rate - bracket.deduction;
 
-      return Math.max(0, Math.round((tax + Number.EPSILON) * 100) / 100);
+      return Math.max(0, roundCurrency(tax));
     }
 
     function calculateIRRFReduction(gross: number, tax: number): number {
@@ -601,7 +610,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         reduction = 978.62 - (0.133145 * gross);
       }
 
-      reduction = Math.max(0, reduction);
+      reduction = Math.max(0, roundCurrency(reduction));
 
       // A redução não pode superar o imposto calculado.
       return Math.min(tax, reduction);
@@ -633,11 +642,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       const irrf = Math.max(
         0,
-        Math.round((progressiveTax - irrfReduction + Number.EPSILON) * 100) / 100
+        roundCurrency(progressiveTax - irrfReduction)
       );
 
-      const totalDeductions = inss + irrf + others;
-      const net = gross - totalDeductions;
+      const totalDeductions = roundCurrency(inss + irrf + others);
+      const net = roundCurrency(gross - totalDeductions);
 
       return {
         inss,
@@ -650,7 +659,24 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       };
     }
 
+    function resetResults() {
+      outputs.net.textContent = 'R$ 0,00';
+      outputs.gross.textContent = 'R$ 0,00';
+      outputs.inss.textContent = '- R$ 0,00';
+      outputs.irrf.textContent = '- R$ 0,00';
+      outputs.others.textContent = '- R$ 0,00';
+      outputs.deductions.textContent = 'R$ 0,00';
+
+      outputs.irrfBase.textContent = 'R$ 0,00';
+      outputs.irrfDeduction.textContent = 'R$ 0,00';
+      outputs.irrfReduction.textContent = 'R$ 0,00';
+
+      outputs.percentage.textContent = '0%';
+      outputs.percentageBar.style.width = '0%';
+    }
+
     function showError(message: string) {
+      resetResults();
       errorElement.textContent = message;
       errorElement.hidden = false;
     }
@@ -661,29 +687,68 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     }
 
     function runCalc() {
-      const gross = Number(salaryInput.value);
-      const dependents = Number(dependentsInput.value);
-      const others = Number(otherDiscountsInput.value);
+      const grossValue = salaryInput.value.trim();
+      const dependentsValue = dependentsInput.value.trim();
+      const othersValue = otherDiscountsInput.value.trim();
 
-      if (!Number.isFinite(gross) || gross <= 0 || gross > 100000000) {
+      // Não permite que campos vazios sejam interpretados automaticamente como zero.
+      if (!grossValue || !dependentsValue || !othersValue) {
+        showError('Preencha todos os campos antes de realizar o cálculo.');
+        return;
+      }
+
+      const gross = Number(grossValue);
+      const dependents = Number(dependentsValue);
+      const others = Number(othersValue);
+
+      if (
+        !Number.isFinite(gross) ||
+        gross <= 0 ||
+        gross > 100000000
+      ) {
         showError('Informe um salário bruto válido e maior que zero.');
         return;
       }
 
-      if (!Number.isInteger(dependents) || dependents < 0 || dependents > 50) {
+      if (
+        !Number.isInteger(dependents) ||
+        dependents < 0 ||
+        dependents > 50
+      ) {
         showError('Informe um número válido de dependentes, entre 0 e 50.');
         return;
       }
 
-      if (!Number.isFinite(others) || others < 0 || others > gross) {
-        showError('Informe um valor válido para os outros descontos, sem superar o salário bruto.');
+      if (
+        !Number.isFinite(others) ||
+        others < 0 ||
+        others > 100000000
+      ) {
+        showError('Informe um valor válido para os outros descontos.');
         return;
       }
 
       try {
-        clearError();
-
         const result = calculateSalary(gross, dependents, others);
+
+        // Impede que os descontos ultrapassem a remuneração bruta.
+        if (result.totalDeductions > gross) {
+          showError(
+            'Os outros descontos informados são muito elevados. Reduza esse valor para que o total dos descontos não ultrapasse o salário bruto.'
+          );
+          return;
+        }
+
+        if (
+          !Number.isFinite(result.net) ||
+          !Number.isFinite(result.totalDeductions) ||
+          result.net < 0
+        ) {
+          showError('Não foi possível obter um resultado válido. Verifique os valores informados.');
+          return;
+        }
+
+        clearError();
 
         outputs.net.textContent = formatBRL(result.net);
         outputs.gross.textContent = formatBRL(gross);
@@ -701,7 +766,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           Math.min(100, (result.net / gross) * 100)
         );
 
-        outputs.percentage.textContent = `${percentage.toFixed(1).replace('.', ',')}%`;
+        outputs.percentage.textContent =
+          `${percentage.toFixed(1).replace('.', ',')}%`;
+
         outputs.percentageBar.style.width = `${percentage}%`;
       } catch (error) {
         showError(
@@ -851,7 +918,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     .field input {
       width: 100%;
       min-height: 46px;
-      padding: 0.7rem 0.85Reference;
       padding: 0.7rem 0.85rem;
       border: 1px solid var(--border-color);
       border-radius: 9px;

@@ -1,3 +1,4 @@
+
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
@@ -389,19 +390,33 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         maximumFractionDigits: 6
       });
 
-    function showError(message: string) {
-      errorMessage.textContent = message;
-      errorMessage.hidden = false;
-    }
-
     function clearError() {
       errorMessage.textContent = '';
       errorMessage.hidden = true;
     }
 
+    function clearResults() {
+      resultLabel.textContent = 'RESULTADO';
+      resultValue.textContent = '—';
+      resultDescription.textContent = 'Informe os valores para realizar o cálculo.';
+      resultFormula.textContent = '—';
+      resultFootnote.textContent = '';
+      originalOutput.textContent = '—';
+      finalOutput.textContent = '—';
+      secondaryResults.classList.add('hidden');
+    }
+
+    function showError(message: string) {
+      clearResults();
+      errorMessage.textContent = message;
+      errorMessage.hidden = false;
+    }
+
     function setMode(mode: CalculationMode) {
       currentMode = mode;
+
       clearError();
+      clearResults();
 
       document.querySelectorAll<HTMLButtonElement>('.tab').forEach((button) => {
         const active = button.dataset.mode === mode;
@@ -419,7 +434,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       modeDescription.textContent = descriptions[mode];
 
       variationField.classList.toggle('hidden', mode !== 'variation');
-      percentageInput.parentElement!.parentElement!.classList.toggle('hidden', mode === 'variation');
+
+      percentageInput.parentElement!.parentElement!.classList.toggle(
+        'hidden',
+        mode === 'variation'
+      );
 
       const labels: Record<CalculationMode, string> = {
         percentage: 'Porcentagem (%)',
@@ -431,7 +450,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       percentageLabel.textContent = labels[mode];
 
       if (valueLabel) {
-        valueLabel.textContent = mode === 'variation' ? 'Valor inicial (R$)' : 'Valor base (R$)';
+        valueLabel.textContent =
+          mode === 'variation' ? 'Valor inicial (R$)' : 'Valor base (R$)';
       }
 
       if (mode === 'variation') {
@@ -445,63 +465,97 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     function runCalculation() {
       clearError();
 
-      const percentage = Number(percentageInput.value);
-      const value = Number(valueInput.value);
-      const newValue = Number(newValueInput.value);
+      const percentageText = percentageInput.value.trim();
+      const valueText = valueInput.value.trim();
+      const newValueText = newValueInput.value.trim();
 
-      const validNumber = (number: number) => Number.isFinite(number);
+      const percentage = Number(percentageText);
+      const value = Number(valueText);
+      const newValue = Number(newValueText);
 
       if (currentMode === 'variation') {
-        if (valueInput.value.trim() === '' || newValueInput.value.trim() === '') {
-          showError('Informe o valor inicial e o novo valor para calcular a variação.');
+        if (valueText === '' || newValueText === '') {
+          showError(
+            'Informe o valor inicial e o novo valor para calcular a variação.'
+          );
           return;
         }
 
-        if (!validNumber(value) || !validNumber(newValue) || value <= 0 || newValue < 0) {
-          showError('Informe valores válidos. O valor inicial deve ser maior que zero e o novo valor não pode ser negativo.');
+        if (
+          !Number.isFinite(value) ||
+          !Number.isFinite(newValue) ||
+          value <= 0 ||
+          newValue < 0
+        ) {
+          showError(
+            'Informe valores válidos. O valor inicial deve ser maior que zero e o novo valor não pode ser negativo.'
+          );
           return;
         }
 
         const difference = newValue - value;
         const variation = (difference / value) * 100;
 
-        if (!validNumber(variation)) {
-          showError('Não foi possível calcular a variação com esses valores.');
+        if (!Number.isFinite(difference) || !Number.isFinite(variation)) {
+          showError(
+            'Não foi possível calcular a variação com esses valores. Utilize números menores.'
+          );
           return;
         }
 
         resultLabel.textContent = 'VARIAÇÃO PERCENTUAL';
-        resultValue.textContent = `${variation > 0 ? '+' : ''}${numberFormat(variation)}%`;
 
-        resultDescription.textContent = variation > 0
-          ? `O valor aumentou ${numberFormat(variation)}% em relação ao valor inicial.`
-          : variation < 0
-            ? `O valor diminuiu ${numberFormat(Math.abs(variation))}% em relação ao valor inicial.`
-            : 'Os dois valores são iguais. Não houve variação percentual.';
+        resultValue.textContent =
+          `${variation > 0 ? '+' : ''}${numberFormat(variation)}%`;
+
+        resultDescription.textContent =
+          variation > 0
+            ? `O valor aumentou ${numberFormat(variation)}% em relação ao valor inicial.`
+            : variation < 0
+              ? `O valor diminuiu ${numberFormat(Math.abs(variation))}% em relação ao valor inicial.`
+              : 'Os dois valores são iguais. Não houve variação percentual.';
 
         resultFormula.textContent =
           `((${numberFormat(newValue)} − ${numberFormat(value)}) ÷ ${numberFormat(value)}) × 100 = ${numberFormat(variation)}%`;
 
         originalOutput.textContent = currency(value);
         finalOutput.textContent = currency(newValue);
+
         secondaryResults.classList.remove('hidden');
 
-        resultFootnote.textContent = 'A variação é calculada em relação ao valor inicial.';
+        resultFootnote.textContent =
+          'A variação é calculada em relação ao valor inicial.';
+
         return;
       }
 
-      if (percentageInput.value.trim() === '' || valueInput.value.trim() === '') {
+      if (percentageText === '' || valueText === '') {
         showError('Preencha a porcentagem e o valor para realizar o cálculo.');
         return;
       }
 
-      if (!validNumber(percentage) || !validNumber(value) || percentage < 0 || value < 0) {
+      if (
+        !Number.isFinite(percentage) ||
+        !Number.isFinite(value) ||
+        percentage < 0 ||
+        value < 0
+      ) {
         showError('Informe números válidos e não negativos.');
         return;
       }
 
-      if (percentage > 1000000 || value > Number.MAX_SAFE_INTEGER) {
-        showError('Os valores informados são muito elevados. Utilize números menores.');
+      if (
+        percentage > 1000000 ||
+        value > Number.MAX_SAFE_INTEGER
+      ) {
+        showError(
+          'Os valores informados são muito elevados. Utilize números menores.'
+        );
+        return;
+      }
+
+      if (currentMode === 'discount' && percentage > 100) {
+        showError('O desconto não pode ultrapassar 100% do valor original.');
         return;
       }
 
@@ -510,20 +564,36 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       try {
         result = calculatePercentageOfValue(value, percentage);
       } catch {
-        showError('Não foi possível realizar o cálculo. Verifique os valores informados.');
+        showError(
+          'Não foi possível realizar o cálculo. Verifique os valores informados.'
+        );
         return;
       }
 
-      if (!validNumber(result)) {
+      if (!Number.isFinite(result)) {
         showError('O resultado ultrapassou o limite numérico permitido.');
         return;
       }
 
-      const percentageValue = (percentage / 100) * value;
+      let finalValue: number;
+
+      if (currentMode === 'discount') {
+        finalValue = value - result;
+      } else if (currentMode === 'increase') {
+        finalValue = value + result;
+      } else {
+        finalValue = result;
+      }
+
+      if (!Number.isFinite(finalValue)) {
+        showError('O resultado ultrapassou o limite numérico permitido.');
+        return;
+      }
 
       if (currentMode === 'percentage') {
         resultLabel.textContent = 'VALOR DA PORCENTAGEM';
         resultValue.textContent = currency(result);
+
         resultDescription.textContent =
           `${numberFormat(percentage)}% de ${currency(value)} corresponde a ${currency(result)}.`;
 
@@ -532,14 +602,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
         originalOutput.textContent = currency(value);
         finalOutput.textContent = currency(result);
-        resultFootnote.textContent = 'O resultado representa a parte correspondente à porcentagem informada.';
+
+        resultFootnote.textContent =
+          'O resultado representa a parte correspondente à porcentagem informada.';
       }
 
       if (currentMode === 'discount') {
-        const finalValue = value - result;
-
         resultLabel.textContent = 'PREÇO COM DESCONTO';
         resultValue.textContent = currency(finalValue);
+
         resultDescription.textContent =
           `Você economiza ${currency(result)} ao aplicar ${numberFormat(percentage)}% de desconto.`;
 
@@ -548,14 +619,15 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
         originalOutput.textContent = currency(value);
         finalOutput.textContent = currency(finalValue);
-        resultFootnote.textContent = `Economia de ${currency(result)} sobre o valor original.`;
+
+        resultFootnote.textContent =
+          `Economia de ${currency(result)} sobre o valor original.`;
       }
 
       if (currentMode === 'increase') {
-        const finalValue = value + result;
-
         resultLabel.textContent = 'VALOR COM AUMENTO';
         resultValue.textContent = currency(finalValue);
+
         resultDescription.textContent =
           `O aumento de ${numberFormat(percentage)}% representa ${currency(result)}.`;
 
@@ -564,7 +636,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
         originalOutput.textContent = currency(value);
         finalOutput.textContent = currency(finalValue);
-        resultFootnote.textContent = `O acréscimo aplicado foi de ${currency(result)}.`;
+
+        resultFootnote.textContent =
+          `O acréscimo aplicado foi de ${currency(result)}.`;
       }
 
       secondaryResults.classList.remove('hidden');
@@ -573,7 +647,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     document.querySelectorAll<HTMLButtonElement>('.tab').forEach((button) => {
       button.addEventListener('click', () => {
         const mode = button.dataset.mode as CalculationMode;
-        if (mode) setMode(mode);
+
+        if (mode) {
+          setMode(mode);
+        }
       });
     });
 

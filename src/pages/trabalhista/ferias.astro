@@ -1,3 +1,4 @@
+
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
@@ -632,11 +633,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             'comparison-text',
             `A conversão de ${sellDays} ${
               sellDays === 1 ? 'dia' : 'dias'
-            } acrescenta ${formatBRL(abonoPay)} ao pagamento bruto das férias, enquanto reduz o período de descanso em ${
-              sellDays
+            } transfere ${formatBRL(abonoPay)} da remuneração dos dias de descanso para o abono pecuniário. O total bruto estimado permanece em ${formatBRL(totalGross)}, mas você terá ${
+              restDays
             } ${
-              sellDays === 1 ? 'dia' : 'dias'
-            }. O adicional constitucional já está incluído no cálculo integral.`
+              restDays === 1 ? 'dia' : 'dias'
+            } de descanso. O terço constitucional já está incluído no cálculo integral.`
           );
         } else {
           comparisonBox.hidden = false;

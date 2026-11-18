@@ -96,6 +96,39 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </small>
         </div>
 
+        <div class="form-group" id="fgts-group">
+          <label for="res-fgts-balance">Saldo do FGTS para fins rescisórios (opcional)</label>
+          <div class="input-wrapper">
+            <span class="input-prefix">R$</span>
+            <input
+              type="number"
+              id="res-fgts-balance"
+              min="0"
+              step="0.01"
+              inputmode="decimal"
+              placeholder="Ex.: 8500,00 (deixe em branco se não souber)"
+            />
+          </div>
+          <small id="fgts-help">
+            Informe o saldo base do FGTS para calcular a multa rescisória de 40%.
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="res-dependents">Dependentes para o IRRF</label>
+          <input
+            type="number"
+            id="res-dependents"
+            value="0"
+            min="0"
+            step="1"
+            inputmode="numeric"
+          />
+          <small>
+            Informe a quantidade de dependentes que podem ser considerados para fins de IRRF.
+          </small>
+        </div>
+
         <div class="form-divider"></div>
 
         <div class="section-heading compact-heading">
@@ -130,11 +163,45 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <div class="vacation-option">
           <input type="checkbox" id="res-vencida" />
           <label for="res-vencida">
-            <strong>Possuo férias vencidas não gozadas</strong>
+            <strong>Possuo férias adquiridas e ainda não gozadas</strong>
             <small>
-              Marque se existe período de férias adquirido e ainda não quitado.
+              Informe quantos períodos completos ainda não foram quitados.
             </small>
           </label>
+        </div>
+
+        <div id="vacation-details" class="vacation-details" hidden>
+          <div class="form-group">
+            <label for="res-vacation-periods">Quantidade de períodos adquiridos</label>
+            <input
+              type="number"
+              id="res-vacation-periods"
+              value="1"
+              min="1"
+              step="1"
+              inputmode="numeric"
+            />
+            <small>
+              Informe todos os períodos completos ainda não gozados ou quitados.
+            </small>
+          </div>
+
+          <div class="form-group">
+            <label for="res-vacation-overdue">
+              Quantos desses períodos devem ser pagos em dobro?
+            </label>
+            <input
+              type="number"
+              id="res-vacation-overdue"
+              value="0"
+              min="0"
+              step="1"
+              inputmode="numeric"
+            />
+            <small>
+              Informe somente os períodos que ultrapassaram o prazo legal de concessão.
+            </small>
+          </div>
         </div>
 
         <div id="calc-error" class="form-error" role="alert" hidden></div>
@@ -227,7 +294,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <div class="result-row">
             <div>
               <span class="result-label">Multa rescisória do FGTS</span>
-              <small>Estimativa conforme o cálculo realizado</small>
+              <small id="res-multa-desc">Estimativa conforme a base do FGTS informada</small>
             </div>
             <strong id="res-multa">R$ 0,00</strong>
           </div>
@@ -243,11 +310,14 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
         <div class="result-observation">
           <span aria-hidden="true">ⓘ</span>
-          <p>
-            O saldo disponível na conta do FGTS, os saques e outros descontos
-            não são necessariamente representados integralmente neste resultado.
-            Confira seu extrato e o demonstrativo oficial da rescisão.
-          </p>
+          <div>
+            <p>
+              O saldo disponível na conta do FGTS, os saques e outros descontos
+              não são necessariamente representados integralmente neste resultado.
+              Confira seu extrato e o demonstrativo oficial da rescisão.
+            </p>
+            <ul id="res-notes" class="calculation-notes" hidden></ul>
+          </div>
         </div>
       </div>
     </section>
@@ -539,10 +609,20 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       }
     }
 
+    function toggleVacationDetails() {
+      const hasVencida = getInput('res-vencida').checked;
+      const vacationDetails = document.getElementById('vacation-details');
+      if (vacationDetails) {
+        vacationDetails.hidden = !hasVencida;
+      }
+    }
+
     function updateNoticeHelp() {
       const type = getSelect('res-type').value;
       const avisoGroup = document.getElementById('aviso-group');
       const avisoHelp = document.getElementById('aviso-help');
+      const fgtsGroup = document.getElementById('fgts-group');
+      const fgtsHelp = document.getElementById('fgts-help');
 
       if (avisoHelp) {
         const messages: Record<string, string> = {
@@ -563,6 +643,17 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       if (avisoGroup) {
         avisoGroup.classList.toggle('notice-disabled', type === 'com-justa-causa');
       }
+
+      const hasFgtsFine = type === 'sem-justa-causa' || type === 'acordo-mutuo';
+      if (fgtsGroup) {
+        fgtsGroup.hidden = !hasFgtsFine;
+      }
+      if (fgtsHelp && hasFgtsFine) {
+        fgtsHelp.textContent =
+          type === 'acordo-mutuo'
+            ? 'Informe o saldo base do FGTS para calcular a multa rescisória de 20%.'
+            : 'Informe o saldo base do FGTS para calcular a multa rescisória de 40%.';
+      }
     }
 
     function runCalc() {
@@ -574,10 +665,43 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       const startDate = getInput('res-start-date').value;
       const endDate = getInput('res-end-date').value;
       const hasVencida = getInput('res-vencida').checked;
+      const rawFgts = getInput('res-fgts-balance').value.trim();
+      const dependents = Math.max(0, Math.floor(Number(getInput('res-dependents').value) || 0));
+
+      let vacationPeriodsDue: number | undefined;
+      let vacationPeriodsOverdue = 0;
+
+      if (hasVencida) {
+        const periods = Math.floor(Number(getInput('res-vacation-periods').value));
+        const overdue = Math.floor(Number(getInput('res-vacation-overdue').value) || 0);
+
+        if (!Number.isFinite(periods) || periods < 1) {
+          showError('Informe pelo menos 1 período de férias adquiridas.');
+          return;
+        }
+
+        if (!Number.isFinite(overdue) || overdue < 0 || overdue > periods) {
+          showError('A quantidade de períodos em dobro deve estar entre 0 e o total de períodos adquiridos.');
+          return;
+        }
+
+        vacationPeriodsDue = periods;
+        vacationPeriodsOverdue = overdue;
+      }
 
       if (!Number.isFinite(salary) || salary <= 0) {
         showError('Informe um salário bruto maior que zero.');
         return;
+      }
+
+      let fgtsBaseForTermination: number | undefined;
+      if (rawFgts !== '') {
+        const parsedFgts = Number(rawFgts);
+        if (!Number.isFinite(parsedFgts) || parsedFgts < 0) {
+          showError('O saldo do FGTS deve ser um valor válido e não negativo.');
+          return;
+        }
+        fgtsBaseForTermination = parsedFgts;
       }
 
       if (!startDate || !endDate) {
@@ -608,7 +732,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           avisoType: avisoType as any,
           startDate,
           endDate,
-          hasVencidaVacation: hasVencida
+          hasVencidaVacation: hasVencida,
+          fgtsBaseForTermination,
+          vacationPeriodsDue,
+          vacationPeriodsOverdue,
+          dependents
         });
 
         const values = [
@@ -654,6 +782,18 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         setText('res-ferias-venc', formatBRL(res.feriasVencidas));
         setText('res-multa', formatBRL(res.multaFgts));
 
+        const hasFgtsFine = type === 'sem-justa-causa' || type === 'acordo-mutuo';
+        setText(
+          'res-multa-desc',
+          !hasFgtsFine
+            ? 'Não aplicável nesta modalidade de desligamento'
+            : fgtsBaseForTermination === undefined
+              ? 'Informe o saldo do FGTS ao lado para calcular a multa'
+              : type === 'acordo-mutuo'
+                ? '20% sobre a base do FGTS informada (depositada em conta)'
+                : '40% sobre a base do FGTS informada (depositada em conta)'
+        );
+
         setText(
           'res-descontos',
           formatBRL(
@@ -661,6 +801,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             res.irrfDescontoTotal
           )
         );
+
+        const notesList = document.getElementById('res-notes');
+        if (notesList) {
+          if (res.calculationNotes && res.calculationNotes.length > 0) {
+            notesList.innerHTML = '';
+            res.calculationNotes.forEach((note) => {
+              const li = document.createElement('li');
+              li.textContent = note;
+              notesList.appendChild(li);
+            });
+            notesList.hidden = false;
+          } else {
+            notesList.innerHTML = '';
+            notesList.hidden = true;
+          }
+        }
       } catch (error) {
         console.error('Erro ao calcular rescisão:', error);
         showError(
@@ -680,15 +836,23 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     [
       'res-salary',
+      'res-fgts-balance',
+      'res-dependents',
       'res-start-date',
-      'res-end-date'
+      'res-end-date',
+      'res-vacation-periods',
+      'res-vacation-overdue'
     ].forEach((id) => {
       getInput(id).addEventListener('change', runCalc);
     });
 
-    getInput('res-vencida').addEventListener('change', runCalc);
+    getInput('res-vencida').addEventListener('change', () => {
+      toggleVacationDetails();
+      runCalc();
+    });
 
     updateNoticeHelp();
+    toggleVacationDetails();
 
     // Define a data atual como padrão para o afastamento.
     const endDateInput = getInput('res-end-date');
@@ -939,7 +1103,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       display: flex;
       align-items: flex-start;
       gap: 0.7rem;
-      margin-bottom: 1.4rem;
+      margin-bottom: 1.15rem;
       padding: 0.9rem;
       border: 1px solid var(--border-color);
       border-radius: var(--radius-sm);
@@ -971,6 +1135,18 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       color: var(--text-secondary);
       font-size: 0.73rem;
       line-height: 1.5;
+    }
+
+    .vacation-details {
+      margin-bottom: 1.15rem;
+      padding: 0.9rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      background: var(--bg-primary);
+    }
+
+    .vacation-details .form-group:last-child {
+      margin-bottom: 0;
     }
 
     .calculate-button {
@@ -1131,6 +1307,18 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     .result-observation p {
       margin: 0;
+    }
+
+    .calculation-notes {
+      margin: 0.65rem 0 0;
+      padding-left: 1.1rem;
+      border-top: 1px solid var(--border-color);
+      padding-top: 0.55rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.72rem;
+      line-height: 1.5;
     }
 
     .content-section,

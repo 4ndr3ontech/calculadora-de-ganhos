@@ -7,11 +7,15 @@ import { roundToDecimal } from '../common/rounding';
 
 export interface IMCResult {
   imc: number;
+  rawImc: number;
   classification: string;
 }
 
 /**
  * Calcula o Índice de Massa Corporal.
+ *
+ * A classificação utiliza o valor sem arredondamento.
+ * O campo imc contém o valor arredondado para exibição.
  *
  * Classificação destinada a adultos.
  * O IMC é um indicador de triagem, não um diagnóstico.
@@ -41,9 +45,9 @@ export function calculateIMC(
     );
   }
 
-  const imc = weightKg / (heightM * heightM);
+  const rawImc = weightKg / (heightM * heightM);
 
-  if (!Number.isFinite(imc)) {
+  if (!Number.isFinite(rawImc) || rawImc <= 0) {
     throw new RangeError(
       'Não foi possível calcular o IMC.'
     );
@@ -51,18 +55,19 @@ export function calculateIMC(
 
   let classification: string;
 
-  if (imc < 18.5) {
+  if (rawImc < 18.5) {
     classification = 'Abaixo do peso';
-  } else if (imc < 25) {
+  } else if (rawImc < 25) {
     classification = 'Peso normal';
-  } else if (imc < 30) {
+  } else if (rawImc < 30) {
     classification = 'Sobrepeso';
   } else {
     classification = 'Obesidade';
   }
 
   return {
-    imc: roundToDecimal(imc, 1),
+    imc: roundToDecimal(rawImc, 1),
+    rawImc,
     classification,
   };
 }
@@ -155,7 +160,7 @@ export function calculateTMB(
 
   const tdee = bmr * activityMultiplier;
 
-  if (!Number.isFinite(tdee)) {
+  if (!Number.isFinite(tdee) || tdee <= 0) {
     throw new RangeError(
       'Não foi possível calcular o gasto energético diário.'
     );

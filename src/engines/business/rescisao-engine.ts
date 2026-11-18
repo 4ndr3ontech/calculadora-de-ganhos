@@ -20,19 +20,9 @@ export interface RescisaoInput {
   startDate: string;
   endDate: string;
   hasVencidaVacation: boolean;
-
-  // Base real para cálculo da multa rescisória do FGTS.
-  // Deve ser informada conforme extrato/base rescisória.
   fgtsBaseForTermination?: number;
-
-  // Quantidade de períodos de férias adquiridos e não gozados.
-  // Se omitido, hasVencidaVacation considera um período simples.
   vacationPeriodsDue?: number;
-
-  // Quantidade de períodos vencidos além do prazo concessivo.
   vacationPeriodsOverdue?: number;
-
-  // Quantidade de dependentes para estimativa do IRRF.
   dependents?: number;
 }
 
@@ -56,8 +46,10 @@ export interface RescisaoResult {
 }
 
 // =====================================================
-// CONSTANTES TRIBUTÁRIAS — 2026
+// CONSTANTES — TABELAS DE 2026
 // =====================================================
+
+const TAX_YEAR = 2026;
 
 const INSS_LIMIT = 8475.55;
 
@@ -79,16 +71,22 @@ const IRRF_BRACKETS = [
 const IRRF_SIMPLIFIED_DEDUCTION = 607.20;
 const IRRF_DEPENDENT_DEDUCTION = 189.59;
 
+const DAY_IN_MS = 86400000;
+
 // =====================================================
-// FUNÇÕES AUXILIARES DE DATA
+// DATAS
 // =====================================================
 
 function parseDate(value: string): Date {
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+  if (
+    typeof value !== 'string' ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(value)
+  ) {
     throw new Error('Informe as datas no formato AAAA-MM-DD.');
   }
 
   const [year, month, day] = value.split('-').map(Number);
+
   const date = new Date(Date.UTC(year, month - 1, day));
 
   if (
@@ -109,9 +107,9 @@ function addDays(date: Date, days: number): Date {
 }
 
 function daysBetween(start: Date, end: Date): number {
-  return Math.floor(
-    (end.getTime() - start.getTime()) / 86400000
-  ) + 1;
+  return (
+    Math.floor((end.getTime() - start.getTime()) / DAY_IN_MS) + 1
+  );
 }
 
 function addYears(date: Date, years: number): Date {
@@ -134,6 +132,30 @@ function addYears(date: Date, years: number): Date {
   return result;
 }
 
+function addMonths(date: Date, months: number): Date {
+  const originalDay = date.getUTCDate();
+
+  const target = new Date(
+    Date.UTC(
+      date.getUTCFullYear(),
+      date.getUTCMonth() + months,
+      1
+    )
+  );
+
+  const lastDay = new Date(
+    Date.UTC(
+      target.getUTCFullYear(),
+      target.getUTCMonth() + 1,
+      0
+    )
+  ).getUTCDate();
+
+  target.setUTCDate(Math.min(originalDay, lastDay));
+
+  return target;
+}
+
 function completedYears(start: Date, end: Date): number {
   let years = end.getUTCFullYear() - start.getUTCFullYear();
 
@@ -144,8 +166,10 @@ function completedYears(start: Date, end: Date): number {
   return Math.max(0, years);
 }
 
-// Conta os meses com pelo menos 15 dias de vínculo.
-function countProportionalMonths(
+/**
+ * Conta os meses do ano-calendário com pelo menos 15 dias.
+ */
+function countCalendarMonths(
   start: Date,
   end: Date
 ): number {
@@ -203,14 +227,55 @@ function countProportionalMonths(
   return total;
 }
 
+/**
+ * Conta os avos de férias desde o início do período aquisitivo.
+ * Cada período completo conta 1 avo.
+ * Fração igual ou superior a 15 dias conta mais 1 avo.
+ *
+ * Não limita o resultado a 11: a projeção do aviso pode completar
+ * um período aquisitivo e ainda gerar avos do período seguinte.
+ */
+function countVacationMonths(
+  start: Date,
+  end: Date
+): number {
+  if (end.getTime() < start.getTime()) {
+    return 0;
+  }
+
+  let completedMonths = 0;
+
+  while (
+    addMonths(start, completedMonths + 1).getTime() <=
+    end.getTime()
+  ) {
+    completedMonths++;
+  }
+
+  const currentPeriodStart = addMonths(
+    start,
+    completedMonths
+  );
+
+  const remainingDays = daysBetween(
+    currentPeriodStart,
+    end
+  );
+
+  return completedMonths + (remainingDays >= 15 ? 1 : 0);
+}
+
 // =====================================================
-// CÁLCULO DE INSS — TABELA PROGRESSIVA 2026
+// INSS — 2026
 // =====================================================
 
 function calculateINSS(value: number): number {
-  if (value <= 0) return 0;
+  if (!Number.isFinite(value) || value <= 0) {
+    return 0;
+  }
 
   const base = Math.min(value, INSS_LIMIT);
+
   let previousLimit = 0;
   let total = 0;
 
@@ -223,22 +288,26 @@ function calculateINSS(value: number): number {
     total += taxableAmount * bracket.rate;
     previousLimit = bracket.limit;
 
-    if (base <= bracket.limit) break;
+    if (base <= bracket.limit) {
+      break;
+    }
   }
 
   return roundToDecimal(total, 2);
 }
 
 // =====================================================
-// CÁLCULO DE IRRF — ESTIMATIVA 2026
+// IRRF — 2026
 // =====================================================
 
 function calculateIRRF(
-  taxableIncome: number,
+  income: number,
   inss: number,
   dependents: number
 ): number {
-  if (taxableIncome <= 0) return 0;
+  if (!Number.isFinite(income) || income <= 0) {
+    return 0;
+  }
 
   const legalDeductions =
     inss + dependents * IRRF_DEPENDENT_DEDUCTION;
@@ -248,33 +317,37 @@ function calculateIRRF(
     IRRF_SIMPLIFIED_DEDUCTION
   );
 
-  const taxBase = Math.max(
-    0,
-    taxableIncome - deduction
-  );
+  const taxBase = Math.max(0, income - deduction);
 
   const bracket = IRRF_BRACKETS.find(
     (item) => taxBase <= item.limit
-  )!;
+  );
 
-  let tax =
-    taxBase * bracket.rate - bracket.deduction;
-
-  // Redução adicional do IRRF vigente em 2026.
-  if (taxableIncome <= 5000) {
-    tax = Math.max(0, tax - 312.89);
-  } else if (taxableIncome <= 7350) {
-    const reduction =
-      978.62 - 0.133145 * taxableIncome;
-
-    tax = Math.max(0, tax - reduction);
+  if (!bracket) {
+    throw new Error('Não foi possível determinar a faixa do IRRF.');
   }
 
-  return roundToDecimal(Math.max(0, tax), 2);
+  const baseTax = Math.max(
+    0,
+    taxBase * bracket.rate - bracket.deduction
+  );
+
+  let reduction = 0;
+
+  if (income <= 5000) {
+    reduction = 312.89;
+  } else if (income <= 7350) {
+    reduction = 978.62 - 0.133145 * income;
+  }
+
+  return roundToDecimal(
+    Math.max(0, baseTax - reduction),
+    2
+  );
 }
 
 // =====================================================
-// MOTOR PRINCIPAL — RESCISÃO CLT
+// MOTOR PRINCIPAL
 // =====================================================
 
 export function calculateRescisao(
@@ -297,64 +370,107 @@ export function calculateRescisao(
   // VALIDAÇÕES
   // ---------------------------------------------------
 
-  if (!Number.isFinite(monthlySalary) || monthlySalary <= 0) {
+  if (
+    !Number.isFinite(monthlySalary) ||
+    monthlySalary <= 0
+  ) {
     throw new Error('O salário mensal deve ser maior que zero.');
   }
 
-  if (
-    !['sem-justa-causa', 'com-justa-causa', 'pedido-demissao', 'acordo-mutuo']
-      .includes(resignationType)
-  ) {
+  const validResignationTypes: ResignationType[] = [
+    'sem-justa-causa',
+    'com-justa-causa',
+    'pedido-demissao',
+    'acordo-mutuo',
+  ];
+
+  if (!validResignationTypes.includes(resignationType)) {
     throw new Error('Tipo de desligamento inválido.');
   }
 
-  if (!['indenizado', 'trabalhado'].includes(avisoType)) {
+  if (
+    avisoType !== 'indenizado' &&
+    avisoType !== 'trabalhado'
+  ) {
     throw new Error('Tipo de aviso prévio inválido.');
   }
 
   if (typeof hasVencidaVacation !== 'boolean') {
-    throw new Error('Informe corretamente a situação das férias vencidas.');
+    throw new Error(
+      'Informe corretamente a situação das férias vencidas.'
+    );
   }
 
   if (
     fgtsBaseForTermination !== undefined &&
-    (!Number.isFinite(fgtsBaseForTermination) ||
-      fgtsBaseForTermination < 0)
+    (
+      !Number.isFinite(fgtsBaseForTermination) ||
+      fgtsBaseForTermination < 0
+    )
   ) {
-    throw new Error('A base do FGTS deve ser válida e não negativa.');
+    throw new Error(
+      'A base do FGTS deve ser válida e não negativa.'
+    );
   }
 
   if (
     vacationPeriodsDue !== undefined &&
-    (!Number.isInteger(vacationPeriodsDue) ||
-      vacationPeriodsDue < 0)
+    (
+      !Number.isInteger(vacationPeriodsDue) ||
+      vacationPeriodsDue < 0
+    )
   ) {
-    throw new Error('A quantidade de períodos de férias deve ser válida.');
+    throw new Error(
+      'A quantidade de períodos de férias deve ser um inteiro não negativo.'
+    );
   }
 
   if (
     !Number.isInteger(vacationPeriodsOverdue) ||
-    vacationPeriodsOverdue < 0 ||
-    vacationPeriodsOverdue > (vacationPeriodsDue ?? 1)
+    vacationPeriodsOverdue < 0
   ) {
-    throw new Error('A quantidade de férias em dobro é inválida.');
+    throw new Error(
+      'A quantidade de férias em dobro deve ser um inteiro não negativo.'
+    );
   }
 
-  if (!Number.isInteger(dependents) || dependents < 0) {
-    throw new Error('A quantidade de dependentes deve ser válida.');
+  if (
+    !Number.isInteger(dependents) ||
+    dependents < 0
+  ) {
+    throw new Error(
+      'A quantidade de dependentes deve ser um inteiro não negativo.'
+    );
+  }
+
+  const periodsDue =
+    vacationPeriodsDue ??
+    (hasVencidaVacation ? 1 : 0);
+
+  if (hasVencidaVacation !== (periodsDue > 0)) {
+    throw new Error(
+      'A situação das férias vencidas não corresponde à quantidade de períodos informada.'
+    );
+  }
+
+  if (vacationPeriodsOverdue > periodsDue) {
+    throw new Error(
+      'A quantidade de férias em dobro não pode superar os períodos adquiridos informados.'
+    );
   }
 
   const start = parseDate(startDate);
   const end = parseDate(endDate);
 
   if (start.getTime() > end.getTime()) {
-    throw new Error('A data de admissão não pode ser posterior ao desligamento.');
+    throw new Error(
+      'A data de admissão não pode ser posterior ao desligamento.'
+    );
   }
 
-  // As tabelas tributárias deste motor são de 2026.
-  if (end.getUTCFullYear() !== 2026) {
+  if (end.getUTCFullYear() !== TAX_YEAR) {
     throw new Error(
-      'Este cálculo tributário utiliza as tabelas de 2026. Atualize as tabelas antes de calcular uma rescisão de outro ano.'
+      `Este cálculo utiliza as tabelas tributárias de ${TAX_YEAR}. Atualize as tabelas antes de calcular uma rescisão de outro ano.`
     );
   }
 
@@ -369,7 +485,23 @@ export function calculateRescisao(
   // SALDO DE SALÁRIO
   // ---------------------------------------------------
 
-  const salaryDays = Math.min(30, end.getUTCDate());
+  const monthStart = new Date(
+    Date.UTC(
+      end.getUTCFullYear(),
+      end.getUTCMonth(),
+      1
+    )
+  );
+
+  const salaryPeriodStart =
+    start.getTime() > monthStart.getTime()
+      ? start
+      : monthStart;
+
+  const salaryDays = Math.min(
+    30,
+    daysBetween(salaryPeriodStart, end)
+  );
 
   const saldoSalario = roundToDecimal(
     (monthlySalary / 30) * salaryDays,
@@ -380,13 +512,15 @@ export function calculateRescisao(
   // AVISO PRÉVIO
   // ---------------------------------------------------
 
-  let avisoDays = 30;
+  let avisoDays = 0;
 
   if (
     resignationType === 'sem-justa-causa' ||
     resignationType === 'acordo-mutuo'
   ) {
     avisoDays = Math.min(90, 30 + yearsWorked * 3);
+  } else if (resignationType === 'pedido-demissao') {
+    avisoDays = 30;
   }
 
   let avisoPrevio = 0;
@@ -398,33 +532,41 @@ export function calculateRescisao(
         (monthlySalary / 30) * avisoDays,
         2
       );
-    }
-
-    if (resignationType === 'acordo-mutuo') {
+    } else if (resignationType === 'acordo-mutuo') {
       avisoPrevio = roundToDecimal(
         (monthlySalary / 30) * (avisoDays / 2),
         2
       );
-    }
-
-    if (resignationType === 'pedido-demissao') {
+    } else if (resignationType === 'pedido-demissao') {
+      // Considera aviso integral não cumprido.
+      // O desconto efetivo depende do caso concreto.
       descontoAvisoPrevio = roundToDecimal(
-        (monthlySalary / 30) * 30,
+        monthlySalary,
         2
       );
     }
   }
 
-  // A projeção integral do aviso indenizado é considerada
-  // para os avos de 13º e férias.
-  const noticeProjection =
+  /*
+   * A projeção do aviso é integral na dispensa sem justa causa.
+   * No acordo mútuo, considera-se metade do período indenizado.
+   *
+   * Como a data de projeção precisa ser expressa em dias inteiros,
+   * eventual fração de meio dia é arredondada para cima.
+   */
+  let noticeProjection = 0;
+
+  if (
     avisoType === 'indenizado' &&
-    (
-      resignationType === 'sem-justa-causa' ||
-      resignationType === 'acordo-mutuo'
-    )
-      ? avisoDays
-      : 0;
+    resignationType === 'sem-justa-causa'
+  ) {
+    noticeProjection = avisoDays;
+  } else if (
+    avisoType === 'indenizado' &&
+    resignationType === 'acordo-mutuo'
+  ) {
+    noticeProjection = Math.ceil(avisoDays / 2);
+  }
 
   const projectedEnd = addDays(end, noticeProjection);
 
@@ -436,31 +578,31 @@ export function calculateRescisao(
     Date.UTC(end.getUTCFullYear(), 0, 1)
   );
 
+  const calculationStart =
+    start.getTime() > yearStart.getTime()
+      ? start
+      : yearStart;
+
   const actual13Months = Math.min(
     12,
-    countProportionalMonths(
-      start.getTime() > yearStart.getTime() ? start : yearStart,
-      end
-    )
+    countCalendarMonths(calculationStart, end)
   );
 
-  const projected13Months = Math.min(
-    12,
-    countProportionalMonths(
-      start.getTime() > yearStart.getTime() ? start : yearStart,
-      projectedEnd
-    )
+  const projected13Months = countCalendarMonths(
+    calculationStart,
+    projectedEnd
   );
 
   const canReceive13th =
     resignationType !== 'com-justa-causa';
 
-  const decimoTerceiroProporcional = canReceive13th
-    ? roundToDecimal(
-        (monthlySalary / 12) * actual13Months,
-        2
-      )
-    : 0;
+  const decimoTerceiroProporcional =
+    canReceive13th
+      ? roundToDecimal(
+          (monthlySalary / 12) * actual13Months,
+          2
+        )
+      : 0;
 
   const decimoTerceiroIndenizado =
     canReceive13th && noticeProjection > 0
@@ -472,22 +614,29 @@ export function calculateRescisao(
       : 0;
 
   // ---------------------------------------------------
-  // FÉRIAS PROPORCIONAIS
+  // FÉRIAS PROPORCIONAIS E PROJEÇÃO
   // ---------------------------------------------------
 
-  const lastAnniversary = addYears(
-    start,
-    yearsWorked
-  );
+  const lastAnniversary = addYears(start, yearsWorked);
 
+  /*
+   * Na data efetiva do desligamento, a fração proporcional
+   * é limitada a 11 avos. Um período completo já é tratado
+   * como período aquisitivo concluído.
+   */
   const actualVacationMonths = Math.min(
     11,
-    countProportionalMonths(lastAnniversary, end)
+    countVacationMonths(lastAnniversary, end)
   );
 
-  const projectedVacationMonths = Math.min(
-    11,
-    countProportionalMonths(lastAnniversary, projectedEnd)
+  /*
+   * Na projeção, não limitar a 11 avos.
+   * O aviso pode completar o período aquisitivo e gerar
+   * avos adicionais do período seguinte.
+   */
+  const projectedVacationMonths = countVacationMonths(
+    lastAnniversary,
+    projectedEnd
   );
 
   const canReceiveProportionalVacation =
@@ -510,33 +659,35 @@ export function calculateRescisao(
     2
   );
 
+  const additionalVacationBase = Math.max(
+    0,
+    projectedVacationBase - actualVacationBase
+  );
+
   const feriasIndenizadas =
     noticeProjection > 0
       ? roundToDecimal(
-          Math.max(
-            0,
-            projectedVacationBase - actualVacationBase
-          ) * (4 / 3),
+          additionalVacationBase * (4 / 3),
           2
         )
       : 0;
 
   // ---------------------------------------------------
-  // FÉRIAS VENCIDAS
+  // FÉRIAS ADQUIRIDAS E NÃO GOZADAS
   // ---------------------------------------------------
-
-  const periodsDue =
-    vacationPeriodsDue ??
-    (hasVencidaVacation ? 1 : 0);
 
   const regularVacationPeriods =
     periodsDue - vacationPeriodsOverdue;
 
   const regularVacationValue =
-    regularVacationPeriods * monthlySalary * (4 / 3);
+    regularVacationPeriods *
+    monthlySalary *
+    (4 / 3);
 
   const overdueVacationValue =
-    vacationPeriodsOverdue * monthlySalary * (8 / 3);
+    vacationPeriodsOverdue *
+    monthlySalary *
+    (8 / 3);
 
   const feriasVencidas = roundToDecimal(
     regularVacationValue + overdueVacationValue,
@@ -556,7 +707,8 @@ export function calculateRescisao(
   }
 
   const multaFgts =
-    multaRate > 0 && fgtsBaseForTermination !== undefined
+    multaRate > 0 &&
+    fgtsBaseForTermination !== undefined
       ? roundToDecimal(
           fgtsBaseForTermination * multaRate,
           2
@@ -567,13 +719,23 @@ export function calculateRescisao(
   // INSS
   // ---------------------------------------------------
 
-  // O INSS do 13º é calculado separadamente do salário.
+  /*
+   * Saldo salarial e 13º são apurados separadamente.
+   * O 13º relativo ao aviso indenizado integra a base
+   * previdenciária do décimo terceiro.
+   *
+   * Aviso indenizado e férias indenizadas não entram
+   * nas bases utilizadas nesta estimativa.
+   */
   const inssSalario = calculateINSS(saldoSalario);
 
-  const inssDecimoTerceiro = calculateINSS(
+  const total13th = roundToDecimal(
     decimoTerceiroProporcional +
-      decimoTerceiroIndenizado
+      decimoTerceiroIndenizado,
+    2
   );
+
+  const inssDecimoTerceiro = calculateINSS(total13th);
 
   const inssDescontoTotal = roundToDecimal(
     inssSalario + inssDecimoTerceiro,
@@ -584,15 +746,16 @@ export function calculateRescisao(
   // IRRF
   // ---------------------------------------------------
 
+  /*
+   * O salário e o 13º são calculados separadamente.
+   * O décimo terceiro possui tributação exclusiva na fonte.
+   * A redução de IRRF de 2026 também se aplica ao 13º.
+   */
   const irrfSalario = calculateIRRF(
     saldoSalario,
     inssSalario,
     dependents
   );
-
-  const total13th =
-    decimoTerceiroProporcional +
-    decimoTerceiroIndenizado;
 
   const irrf13th = calculateIRRF(
     total13th,
@@ -609,22 +772,22 @@ export function calculateRescisao(
   // TOTALIZAÇÃO
   // ---------------------------------------------------
 
-  let totalVencimentos = 0;
-
-  if (resignationType === 'com-justa-causa') {
-    totalVencimentos =
-      saldoSalario + feriasVencidas;
-  } else {
-    totalVencimentos =
-      saldoSalario +
+  const totalVencimentos = roundToDecimal(
+    saldoSalario +
       avisoPrevio +
       decimoTerceiroProporcional +
       decimoTerceiroIndenizado +
       feriasProporcionais +
       feriasIndenizadas +
-      feriasVencidas;
-  }
+      feriasVencidas,
+    2
+  );
 
+  /*
+   * A multa do FGTS é apresentada separadamente.
+   * O desconto de aviso prévio é uma dedução distinta
+   * dos descontos previdenciários e tributários.
+   */
   const totalLiquido = roundToDecimal(
     totalVencimentos -
       inssDescontoTotal -
@@ -634,18 +797,17 @@ export function calculateRescisao(
   );
 
   // ---------------------------------------------------
-  // OBSERVAÇÕES DO CÁLCULO
+  // OBSERVAÇÕES
   // ---------------------------------------------------
 
   const calculationNotes: string[] = [
-    'Estimativa simplificada. Não substitui o cálculo oficial do eSocial ou a conferência do profissional responsável pela rescisão.',
+    'Estimativa simplificada. Não substitui o cálculo oficial do eSocial nem a conferência do profissional responsável pela rescisão.',
     'As tabelas de INSS e IRRF utilizadas são as de 2026.',
-    'O cálculo considera salário mensal fixo e não inclui médias de horas extras, comissões, adicionais ou outras verbas habituais.',
+    'O cálculo considera salário mensal fixo. Não inclui médias de horas extras, comissões, adicionais ou outras verbas habituais.',
     'A multa do FGTS é calculada somente quando a base rescisória real é informada.',
-    'A multa do FGTS é depositada na conta vinculada e não representa, necessariamente, dinheiro pago diretamente na rescisão.',
-    'O cálculo de férias vencidas depende da quantidade de períodos informada e da existência de períodos em dobro.',
-    'O desconto de aviso prévio no pedido de demissão pressupõe que o empregado não cumpriu os 30 dias e que o empregador efetuará o desconto.',
-    'Não são considerados dependentes, pensão alimentícia ou outras deduções específicas além das informadas.',
+    'A multa do FGTS é depositada na conta vinculada e não está incluída no total líquido apresentado.',
+    'O cálculo de férias adquiridas depende da quantidade de períodos informada e da identificação dos períodos sujeitos ao pagamento em dobro.',
+    'Não são considerados pensão alimentícia, adiantamentos, faltas, outros descontos ou deduções específicas além das informadas.',
   ];
 
   if (
@@ -662,7 +824,40 @@ export function calculateRescisao(
     vacationPeriodsDue === undefined
   ) {
     calculationNotes.push(
-      'Foi considerado apenas um período simples de férias vencidas. Confirme se existem períodos adicionais ou férias em dobro.'
+      'Foi considerado apenas um período de férias adquirido e não gozado. Confirme se existem períodos adicionais.'
+    );
+  }
+
+  if (vacationPeriodsOverdue > 0) {
+    calculationNotes.push(
+      'Foi considerado pagamento em dobro para os períodos de férias informados como vencidos além do prazo concessivo.'
+    );
+  }
+
+  if (resignationType === 'acordo-mutuo') {
+    calculationNotes.push(
+      'No acordo mútuo, o aviso prévio indenizado foi calculado pela metade, conforme o art. 484-A da CLT. A projeção do período também considera metade do aviso.'
+    );
+  }
+
+  if (
+    resignationType === 'pedido-demissao' &&
+    avisoType === 'indenizado'
+  ) {
+    calculationNotes.push(
+      'Foi considerado o desconto de 30 dias de aviso prévio não cumprido. O desconto efetivo depende das condições da rescisão e de eventual norma coletiva aplicável.'
+    );
+  }
+
+  if (resignationType === 'com-justa-causa') {
+    calculationNotes.push(
+      'Na justa causa, foram consideradas apenas as verbas compatíveis com essa modalidade: saldo de salário e férias adquiridas não gozadas.'
+    );
+  }
+
+  if (noticeProjection > 0) {
+    calculationNotes.push(
+      `A projeção do aviso prévio considerada no cálculo foi de ${noticeProjection} dias.`
     );
   }
 
@@ -677,7 +872,7 @@ export function calculateRescisao(
     feriasIndenizadas,
     feriasVencidas,
     multaFgts,
-    totalVencimentos: roundToDecimal(totalVencimentos, 2),
+    totalVencimentos,
     inssDescontoTotal,
     irrfDescontoTotal,
     totalLiquido,

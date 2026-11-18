@@ -429,7 +429,17 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         maximumFractionDigits: 2
       }).format(value);
 
+    function clearResults() {
+      bonusOutput.textContent = formatBRL(0);
+      normalOutput.textContent = formatBRL(0);
+      nightRateOutput.textContent = formatBRL(0);
+      realHoursOutput.textContent = '0,00 h';
+      legalHoursOutput.textContent = '0,00 h';
+      totalOutput.textContent = formatBRL(0);
+    }
+
     function showError(message: string) {
+      clearResults();
       errorElement.textContent = message;
       errorElement.hidden = false;
     }
@@ -440,57 +450,84 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     }
 
     function runCalc() {
+      // Impede que campos vazios sejam interpretados automaticamente como zero.
+      if (
+        salaryInput.value.trim() === '' ||
+        hoursInput.value.trim() === '' ||
+        nightHoursInput.value.trim() === ''
+      ) {
+        showError('Preencha o salário, a jornada mensal e as horas trabalhadas à noite.');
+        return;
+      }
+
       const salary = Number(salaryInput.value);
       const monthlyHours = Number(hoursInput.value);
       const realNightHours = Number(nightHoursInput.value);
 
-      if (!Number.isFinite(salary) || salary <= 0 || salary > 100000000) {
-        showError('Informe um salário válido e maior que zero.');
+      if (
+        !Number.isFinite(salary) ||
+        salary <= 0 ||
+        salary > 100000000
+      ) {
+        showError('Informe um salário válido, maior que zero e até R$ 100.000.000,00.');
         return;
       }
 
-      if (!Number.isFinite(monthlyHours) || monthlyHours <= 0 || monthlyHours > 744) {
+      if (
+        !Number.isFinite(monthlyHours) ||
+        monthlyHours <= 0 ||
+        monthlyHours > 744
+      ) {
         showError('Informe uma jornada mensal válida, entre 1 e 744 horas.');
         return;
       }
 
-      if (!Number.isFinite(realNightHours) || realNightHours < 0 || realNightHours > 744) {
-        showError('Informe uma quantidade válida de horas noturnas.');
-        return;
-      }
-
-      if (realNightHours > monthlyHours) {
-        showError('As horas noturnas não podem superar a jornada mensal informada.');
+      if (
+        !Number.isFinite(realNightHours) ||
+        realNightHours < 0 ||
+        realNightHours > 744
+      ) {
+        showError('Informe uma quantidade válida de horas noturnas, entre 0 e 744.');
         return;
       }
 
       try {
         clearError();
 
-        // Uma hora noturna urbana corresponde a 52 minutos e 30 segundos.
-        // A quantidade real de horas é convertida para horas legais reduzidas.
-        const legalNightHours = realNightHours * (60 / 52.5);
-
+        /*
+         * O motor recebe as horas reais de relógio.
+         * A conversão para horas noturnas reduzidas é feita
+         * internamente pelo calculateNightShift().
+         */
         const result = calculateNightShift({
           monthlySalary: salary,
           monthlyHours,
-          nightHoursCount: legalNightHours,
+          nightHoursCount: realNightHours,
           nightBonusPercentage: 20
         });
 
         const hourlyRate = Number(result.hourlyRate);
         const nightHourlyRate = Number(result.nightHourlyRate);
+        const legalNightHours = Number(result.nightHoursEquivalent);
         const nightBonusTotal = Number(result.nightBonusTotal);
 
         if (
           !Number.isFinite(hourlyRate) ||
           !Number.isFinite(nightHourlyRate) ||
+          !Number.isFinite(legalNightHours) ||
           !Number.isFinite(nightBonusTotal) ||
-          hourlyRate < 0 ||
-          nightHourlyRate < 0 ||
+          hourlyRate <= 0 ||
+          nightHourlyRate <= 0 ||
+          legalNightHours < 0 ||
           nightBonusTotal < 0
         ) {
           throw new Error('O motor de cálculo retornou valores inválidos.');
+        }
+
+        const monthlyTotal = salary + nightBonusTotal;
+
+        if (!Number.isFinite(monthlyTotal)) {
+          throw new Error('Não foi possível calcular a remuneração mensal estimada.');
         }
 
         bonusOutput.textContent = formatBRL(nightBonusTotal);
@@ -500,7 +537,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         realHoursOutput.textContent = `${formatHours(realNightHours)} h`;
         legalHoursOutput.textContent = `${formatHours(legalNightHours)} h`;
 
-        totalOutput.textContent = formatBRL(salary + nightBonusTotal);
+        totalOutput.textContent = formatBRL(monthlyTotal);
       } catch (error) {
         showError(
           error instanceof Error

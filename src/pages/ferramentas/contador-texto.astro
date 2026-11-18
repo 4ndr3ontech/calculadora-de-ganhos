@@ -474,9 +474,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         value.toLocaleString('pt-BR');
 
       /**
-       * Conta caracteres Unicode, incluindo emojis e caracteres compostos.
+       * Conta caracteres Unicode considerando grafemas.
+       *
+       * Um grafema representa um caractere percebido visualmente
+       * pelo usuário, mesmo quando é formado por vários pontos
+       * de código Unicode, como emojis compostos e letras acentuadas.
        */
       function countCharacters(value: string): number {
+        if (typeof Intl.Segmenter !== 'undefined') {
+          const segmenter = new Intl.Segmenter('pt-BR', {
+            granularity: 'grapheme'
+          });
+
+          return Array.from(segmenter.segment(value)).length;
+        }
+
+        // Compatibilidade com navegadores sem Intl.Segmenter.
         return Array.from(value).length;
       }
 

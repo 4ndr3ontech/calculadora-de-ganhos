@@ -3,7 +3,14 @@ import { roundToDecimal } from '../common/rounding';
 
 export interface BuyVsRentInput {
   propertyValue: number;
+
+  // Entrada total utilizada na compra, incluindo FGTS.
   downPayment: number;
+
+  // Recursos próprios disponíveis para investir no cenário de aluguel.
+  // Não inclui FGTS. É independente do valor da entrada.
+  ownCapitalAvailable: number;
+
   annualInterestRate: number;
   financingMonths: number;
   monthlyRent: number;
@@ -24,11 +31,6 @@ export interface BuyVsRentResult {
   recommendation: string;
 }
 
-/**
- * Calcula a prestação mensal de um financiamento pelo sistema Price.
- *
- * Quando a taxa de juros é zero, divide o principal pelo prazo.
- */
 function calculateMonthlyPayment(
   principal: number,
   monthlyInterestRate: number,
@@ -42,19 +44,16 @@ function calculateMonthlyPayment(
 
   const factor = Math.pow(1 + monthlyInterestRate, months);
 
-  return (
-    principal *
-    ((monthlyInterestRate * factor) / (factor - 1))
+  return principal * (
+    (monthlyInterestRate * factor) / (factor - 1)
   );
 }
 
-/**
- * Valida os dados de entrada da simulação.
- */
 function validateInput(input: BuyVsRentInput): void {
   const {
     propertyValue,
     downPayment,
+    ownCapitalAvailable,
     annualInterestRate,
     financingMonths,
     monthlyRent,
@@ -66,6 +65,7 @@ function validateInput(input: BuyVsRentInput): void {
   const numericValues = [
     propertyValue,
     downPayment,
+    ownCapitalAvailable,
     annualInterestRate,
     financingMonths,
     monthlyRent,
@@ -75,15 +75,11 @@ function validateInput(input: BuyVsRentInput): void {
   ];
 
   if (!numericValues.every(Number.isFinite)) {
-    throw new Error(
-      'Todos os campos precisam conter números válidos.'
-    );
+    throw new Error('Todos os campos precisam conter números válidos.');
   }
 
   if (propertyValue <= 0) {
-    throw new Error(
-      'O valor do imóvel precisa ser maior que zero.'
-    );
+    throw new Error('O valor do imóvel precisa ser maior que zero.');
   }
 
   if (downPayment < 0 || downPayment > propertyValue) {
@@ -92,10 +88,14 @@ function validateInput(input: BuyVsRentInput): void {
     );
   }
 
-  if (annualInterestRate < 0) {
+  if (ownCapitalAvailable < 0) {
     throw new Error(
-      'A taxa de juros do financiamento não pode ser negativa.'
+      'O capital próprio disponível para investimento não pode ser negativo.'
     );
+  }
+
+  if (annualInterestRate < 0) {
+    throw new Error('A taxa de juros do financiamento não pode ser negativa.');
   }
 
   if (
@@ -108,9 +108,7 @@ function validateInput(input: BuyVsRentInput): void {
   }
 
   if (monthlyRent < 0) {
-    throw new Error(
-      'O valor do aluguel não pode ser negativo.'
-    );
+    throw new Error('O valor do aluguel não pode ser negativo.');
   }
 
   if (propertyAppreciationRate <= -100) {
@@ -140,15 +138,20 @@ function validateInput(input: BuyVsRentInput): void {
  *
  * Premissas:
  * - Financiamento calculado pelo sistema Price.
- * - Valorização imobiliária e rentabilidade dos investimentos
- *   são taxas anuais efetivas convertidas em taxas mensais.
- * - O aluguel sofre reajuste estimado de 4% ao ano.
- * - No cenário de aluguel, a entrada disponível é investida integralmente.
- * - No cenário de compra, a diferença positiva entre aluguel e
- *   prestação é investida.
- * - No cenário de aluguel, a diferença positiva entre prestação
+ * - Taxas anuais efetivas convertidas em taxas mensais equivalentes.
+ * - A taxa do financiamento permanece fixa durante a simulação.
+ * - Valorização imobiliária estimada conforme a taxa informada.
+ * - Aluguel reajustado em 4% ao ano.
+ * - Na alternativa de aluguel, somente o capital próprio informado
+ *   é investido inicialmente. FGTS não é considerado dinheiro investível.
+ * - O capital próprio disponível para investir no aluguel é independente
+ *   da entrada total utilizada na compra.
+ * - Na alternativa de compra, a diferença positiva entre aluguel
+ *   e prestação é investida.
+ * - Na alternativa de aluguel, a diferença positiva entre prestação
  *   e aluguel é investida.
- * - O financiamento deixa de gerar prestações após sua quitação.
+ * - Não há novos aportes após a quitação do financiamento,
+ *   exceto quando a diferença entre aluguel e prestação for positiva.
  *
  * Não considera:
  * - IPTU, condomínio, manutenção e seguros.
@@ -167,6 +170,7 @@ export function calculateBuyVsRent(
   const {
     propertyValue,
     downPayment,
+    ownCapitalAvailable,
     annualInterestRate,
     financingMonths,
     monthlyRent,
@@ -178,7 +182,7 @@ export function calculateBuyVsRent(
   const financedAmount = propertyValue - downPayment;
   const simulationMonths = simulationYears * 12;
 
-  // Taxas anuais efetivas convertidas em taxas mensais.
+  // Conversão de taxas anuais efetivas para taxas mensais equivalentes.
   const monthlyInterestRate =
     Math.pow(1 + annualInterestRate / 100, 1 / 12) - 1;
 
@@ -188,35 +192,31 @@ export function calculateBuyVsRent(
   const monthlyInvestmentReturn =
     Math.pow(1 + investmentReturnRate / 100, 1 / 12) - 1;
 
-  // Prestação mensal pelo sistema Price.
   const scheduledPayment = calculateMonthlyPayment(
     financedAmount,
     monthlyInterestRate,
     financingMonths
   );
 
-  // Saldos iniciais dos dois cenários.
   let remainingBalance = financedAmount;
-
   let propertyFutureValue = propertyValue;
 
-  // Cenário 1: alugar e investir a entrada.
-  let renterInvestmentBalance = downPayment;
+  // Cenário de aluguel: investe somente o capital próprio disponível.
+  let renterInvestmentBalance = ownCapitalAvailable;
 
-  // Cenário 2: comprar e investir eventual diferença mensal.
+  // Cenário de compra: começa sem investimentos adicionais.
   let buyerInvestmentBalance = 0;
 
   let currentRent = monthlyRent;
 
-  // Premissa de reajuste anual estimado do aluguel.
   const annualRentIncrease = 0.04;
 
   for (let month = 1; month <= simulationMonths; month++) {
-    // 1. Atualiza o valor de mercado do imóvel.
+    // Atualiza o valor de mercado do imóvel.
     propertyFutureValue *=
       1 + monthlyPropertyAppreciation;
 
-    // 2. Calcula o pagamento do financiamento.
+    // Calcula o pagamento do financiamento.
     let actualPayment = 0;
 
     if (remainingBalance > 0 && month <= financingMonths) {
@@ -226,7 +226,6 @@ export function calculateBuyVsRent(
       const outstandingAmount =
         remainingBalance + interestAmount;
 
-      // Evita cobrar além do saldo devedor restante.
       actualPayment = Math.min(
         scheduledPayment,
         outstandingAmount
@@ -240,20 +239,19 @@ export function calculateBuyVsRent(
         remainingBalance - principalAmortization
       );
 
-      // Corrige pequenos resíduos de precisão numérica.
       if (remainingBalance < 0.01) {
         remainingBalance = 0;
       }
     }
 
-    // 3. Atualiza os investimentos dos dois cenários.
+    // Atualiza os investimentos com a rentabilidade mensal.
     renterInvestmentBalance *=
       1 + monthlyInvestmentReturn;
 
     buyerInvestmentBalance *=
       1 + monthlyInvestmentReturn;
 
-    // 4. Cenário de aluguel:
+    // Cenário de aluguel:
     // investe a diferença quando a prestação supera o aluguel.
     const renterMonthlyContribution = Math.max(
       0,
@@ -263,7 +261,7 @@ export function calculateBuyVsRent(
     renterInvestmentBalance +=
       renterMonthlyContribution;
 
-    // 5. Cenário de compra:
+    // Cenário de compra:
     // investe a diferença quando o aluguel supera a prestação.
     const buyerMonthlyContribution = Math.max(
       0,
@@ -273,25 +271,26 @@ export function calculateBuyVsRent(
     buyerInvestmentBalance +=
       buyerMonthlyContribution;
 
-    // 6. Reajusta o aluguel a cada 12 meses.
+    // Reajusta o aluguel a cada 12 meses.
     if (month % 12 === 0) {
       currentRent *= 1 + annualRentIncrease;
     }
   }
 
-  // 7. Calcula o patrimônio líquido de cada estratégia.
-  const propertyEquity = Math.max(
-    0,
-    propertyFutureValue - remainingBalance
-  );
+  // Patrimônio líquido do imóvel: valor de mercado menos dívida.
+  // Pode ser negativo se o saldo devedor superar o valor do imóvel.
+  const propertyEquity =
+    propertyFutureValue - remainingBalance;
 
+  // Patrimônio do comprador: patrimônio líquido do imóvel
+  // somado aos investimentos acumulados.
   const buyingNetWorth =
     propertyEquity + buyerInvestmentBalance;
 
+  // Patrimônio do locatário: investimentos acumulados.
   const rentingNetWorth =
     renterInvestmentBalance;
 
-  // 8. Define a recomendação.
   const difference = buyingNetWorth - rentingNetWorth;
 
   let recommendation: string;

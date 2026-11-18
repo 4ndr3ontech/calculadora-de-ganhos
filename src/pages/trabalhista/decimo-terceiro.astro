@@ -1,3 +1,4 @@
+
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
@@ -473,6 +474,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       { limit: Infinity, rate: 0.275, deduction: 908.73 },
     ];
 
+    // Limite mensal do desconto simplificado em 2026.
     const IRRF_SIMPLIFIED_LIMIT = 607.20;
 
     function calculateINSS(value: number): number {
@@ -497,34 +499,52 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     }
 
     function calculateIRRF(gross: number, inss: number): number {
-      // O décimo terceiro possui tributação exclusiva na fonte.
-      // Nesta simulação são consideradas as deduções legais de INSS,
-      // sem dependentes ou outras deduções individuais.
+      // O 13º possui tributação exclusiva na fonte.
+      // Compara-se o desconto simplificado com as deduções legais.
+      // Nesta simulação, o INSS representa as deduções legais consideradas.
 
-      const taxableBase = Math.max(0, gross - inss);
+      const deduction = Math.max(
+        inss,
+        IRRF_SIMPLIFIED_LIMIT
+      );
 
-      // A legislação de 2026 prevê redução do imposto para
-      // rendimentos de até R$ 7.350,00, inclusive no 13º.
-      if (gross <= 5000) {
-        return 0;
-      }
+      const taxableBase = Math.max(
+        0,
+        gross - deduction
+      );
 
       const bracket = IRRF_BRACKETS.find(
         (item) => taxableBase <= item.limit
-      )!;
+      );
+
+      if (!bracket) {
+        throw new RangeError(
+          'Não foi possível determinar a faixa de IRRF.'
+        );
+      }
 
       const tax = Math.max(
         0,
         taxableBase * bracket.rate - bracket.deduction
       );
 
+      // Redução do IRRF vigente em 2026,
+      // também aplicável à tributação do 13º salário.
       let reduction = 0;
 
-      if (gross <= 7350) {
-        reduction = 978.62 - (0.133145 * gross);
+      if (gross <= 5000) {
+        reduction = 312.89;
+      } else if (gross <= 7350) {
+        reduction = Math.max(
+          0,
+          978.62 - (0.133145 * gross)
+        );
       }
 
-      const finalTax = Math.max(0, tax - reduction);
+      const finalTax = Math.max(
+        0,
+        tax - reduction
+      );
 
       return Math.round(finalTax * 100) / 100;
     }

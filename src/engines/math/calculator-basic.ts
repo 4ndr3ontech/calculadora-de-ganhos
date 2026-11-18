@@ -1,3 +1,4 @@
+
 import {
   evaluateMathExpression,
   formatBrazilianNumber,
@@ -41,6 +42,16 @@ export function evaluateBasicExpression(expression: string) {
 }
 
 /**
+ * Converte um número formatado no padrão brasileiro para uma
+ * representação numérica que pode ser reutilizada na expressão.
+ *
+ * Exemplo: 1.234,56 -> 1234,56
+ */
+function normalizeDisplayNumber(value: string): string {
+  return value.replace(/\./g, '').trim();
+}
+
+/**
  * Extrai o último operando numérico da expressão atual para manipulação
  * de decimal, inversão de sinal (±) ou porcentagem (%).
  */
@@ -49,12 +60,14 @@ function extractTrailingOperand(expr: string): {
   operand: string;
 } {
   const trimmed = expr.trim();
+
   if (!trimmed) {
     return { prefix: '', operand: '' };
   }
 
-  // Captura número no final (inclui negativo se estiver no início ou após operador/parêntese)
+  // Captura um número no final, inclusive negativo ou entre parênteses.
   const match = trimmed.match(/^(.*?)(\(?-?\d+(?:,\d*)?\)?)$/);
+
   if (!match) {
     return { prefix: trimmed, operand: '' };
   }
@@ -73,7 +86,7 @@ export function inputDigit(
     return state;
   }
 
-  // Recuperação automática após erro ou novo cálculo após '='
+  // Recuperação automática após erro ou novo cálculo após '='.
   if (state.error || state.justEvaluated) {
     return {
       ...state,
@@ -87,9 +100,10 @@ export function inputDigit(
   const currentExpr = state.expression;
   const { prefix, operand } = extractTrailingOperand(currentExpr);
 
-  // Evita zeros à esquerda redundantes como "00" ou "5 + 00"
+  // Evita zeros à esquerda redundantes como "00" ou "5 + 00".
   if (operand === '0') {
     const nextExpr = `${prefix}${digit}`;
+
     return {
       ...state,
       expression: nextExpr,
@@ -100,6 +114,7 @@ export function inputDigit(
 
   if (operand === '-0') {
     const nextExpr = `${prefix}-${digit}`;
+
     return {
       ...state,
       expression: nextExpr,
@@ -108,8 +123,9 @@ export function inputDigit(
     };
   }
 
-  // Se o último token foi '%' ou ')', insere multiplicação implícita visual
+  // Se o último token foi '%' ou ')', insere multiplicação implícita.
   const needsMultiply = /[)%]$/.test(currentExpr.trim());
+
   const nextExpr = needsMultiply
     ? `${currentExpr.trim()} × ${digit}`
     : `${currentExpr}${digit}`;
@@ -124,7 +140,9 @@ export function inputDigit(
   };
 }
 
-export function inputDecimal(state: BasicCalculatorState): BasicCalculatorState {
+export function inputDecimal(
+  state: BasicCalculatorState
+): BasicCalculatorState {
   if (state.error || state.justEvaluated) {
     return {
       ...state,
@@ -138,14 +156,20 @@ export function inputDecimal(state: BasicCalculatorState): BasicCalculatorState 
   const currentExpr = state.expression;
   const { operand } = extractTrailingOperand(currentExpr);
 
-  // Impede múltiplos separadores decimais no mesmo número
+  // Impede múltiplos separadores decimais no mesmo número.
   if (operand.includes(',')) {
     return state;
   }
 
   if (!operand) {
-    const spacer = currentExpr.trim() && !currentExpr.endsWith(' ') ? ' ' : '';
-    const nextExpr = `${currentExpr}${spacer}0,`;
+    const trimmed = currentExpr.trim();
+    const needsMultiply = /[)%]$/.test(trimmed);
+    const spacer = trimmed && !currentExpr.endsWith(' ') ? ' ' : '';
+
+    const nextExpr = needsMultiply
+      ? `${trimmed} × 0,`
+      : `${currentExpr}${spacer}0,`;
+
     return {
       ...state,
       expression: nextExpr,
@@ -155,6 +179,7 @@ export function inputDecimal(state: BasicCalculatorState): BasicCalculatorState 
   }
 
   const nextExpr = `${currentExpr},`;
+
   return {
     ...state,
     expression: nextExpr,
@@ -177,9 +202,12 @@ export function inputOperator(
   };
 
   const op = symbolMap[rawOperator];
-  if (!op) return state;
 
-  // Se estava em estado de erro, ignora operadores exceto '-' para iniciar negativo
+  if (!op) {
+    return state;
+  }
+
+  // Se estava em estado de erro, ignora operadores exceto '-'.
   if (state.error) {
     if (op === '-') {
       return {
@@ -190,14 +218,17 @@ export function inputOperator(
         justEvaluated: false,
       };
     }
+
     return state;
   }
 
-  // Encadeamento após '=' usa o resultado exibido
+  // Encadeamento após '=' usando o resultado sem separador de milhar.
   if (state.justEvaluated) {
+    const previousResult = normalizeDisplayNumber(state.displayValue);
+
     return {
       ...state,
-      expression: `${state.displayValue} ${op} `,
+      expression: `${previousResult} ${op} `,
       error: null,
       justEvaluated: false,
     };
@@ -205,7 +236,7 @@ export function inputOperator(
 
   const trimmed = state.expression.trim();
 
-  // Permite iniciar expressão com número negativo
+  // Permite iniciar expressão com número negativo.
   if (!trimmed) {
     if (op === '-') {
       return {
@@ -215,6 +246,7 @@ export function inputOperator(
         error: null,
       };
     }
+
     return {
       ...state,
       expression: `0 ${op} `,
@@ -226,10 +258,12 @@ export function inputOperator(
     return state;
   }
 
-  // Substitui operador final caso o usuário troque de operador seguidamente
+  // Substitui o operador final caso o usuário troque de operador.
   const lastChar = trimmed.slice(-1);
+
   if (OPERATORS.has(lastChar)) {
     const withoutLastOp = trimmed.slice(0, -1).trimEnd();
+
     return {
       ...state,
       expression: `${withoutLastOp} ${op} `,
@@ -244,25 +278,34 @@ export function inputOperator(
   };
 }
 
-export function toggleSign(state: BasicCalculatorState): BasicCalculatorState {
+export function toggleSign(
+  state: BasicCalculatorState
+): BasicCalculatorState {
   if (state.error) {
     return state;
   }
 
   if (state.justEvaluated) {
-    const evalRes = evaluateBasicExpression(state.displayValue);
-    if (!evalRes.ok || evalRes.value === 0) return state;
+    const normalized = normalizeDisplayNumber(state.displayValue);
+    const evalRes = evaluateBasicExpression(normalized);
+
+    if (!evalRes.ok || evalRes.value === 0) {
+      return state;
+    }
+
     const inverted = -evalRes.value;
     const formatted = formatBrazilianNumber(inverted);
+
     return {
       ...state,
-      expression: formatted.replace(/\./g, ''),
+      expression: normalizeDisplayNumber(formatted),
       displayValue: formatted,
       justEvaluated: false,
     };
   }
 
   const trimmed = state.expression.trim();
+
   if (!trimmed) {
     return {
       ...state,
@@ -280,9 +323,13 @@ export function toggleSign(state: BasicCalculatorState): BasicCalculatorState {
   }
 
   const { prefix, operand } = extractTrailingOperand(trimmed);
-  if (!operand) return state;
+
+  if (!operand) {
+    return state;
+  }
 
   let toggledOperand: string;
+
   if (operand.startsWith('(-') && operand.endsWith(')')) {
     toggledOperand = operand.slice(2, -1);
   } else if (operand.startsWith('-')) {
@@ -294,6 +341,7 @@ export function toggleSign(state: BasicCalculatorState): BasicCalculatorState {
   }
 
   const nextExpr = `${prefix}${toggledOperand}`;
+
   return {
     ...state,
     expression: nextExpr,
@@ -301,41 +349,77 @@ export function toggleSign(state: BasicCalculatorState): BasicCalculatorState {
   };
 }
 
-export function applyPercentage(state: BasicCalculatorState): BasicCalculatorState {
-  if (state.error) return state;
+export function applyPercentage(
+  state: BasicCalculatorState
+): BasicCalculatorState {
+  if (state.error) {
+    return state;
+  }
 
   if (state.justEvaluated) {
-    const res = evaluateBasicExpression(`${state.displayValue}%`);
+    const normalized = normalizeDisplayNumber(state.displayValue);
+    const percentageExpression = `${normalized}%`;
+    const res = evaluateBasicExpression(percentageExpression);
+
     if (!res.ok) {
-      return { ...state, error: res.error };
+      return {
+        ...state,
+        displayValue: 'Erro',
+        error: res.error,
+        justEvaluated: false,
+      };
     }
+
     return {
       ...state,
-      expression: `${state.displayValue}%`,
+      expression: percentageExpression,
       displayValue: res.formatted,
+      error: null,
       justEvaluated: true,
     };
   }
 
   const trimmed = state.expression.trim();
-  if (!trimmed) return state;
+
+  if (!trimmed) {
+    return state;
+  }
 
   const { operand } = extractTrailingOperand(trimmed);
-  if (!operand) return state;
+
+  if (!operand) {
+    return state;
+  }
 
   const nextExpr = `${trimmed}%`;
   const preview = evaluateBasicExpression(nextExpr);
 
+  if (!preview.ok) {
+    return {
+      ...state,
+      expression: nextExpr,
+      displayValue: 'Erro',
+      error: preview.error,
+      justEvaluated: false,
+    };
+  }
+
   return {
     ...state,
     expression: nextExpr,
-    displayValue: preview.ok ? preview.formatted : state.displayValue,
+    displayValue: preview.formatted,
+    error: null,
   };
 }
 
-export function backspaceBasic(state: BasicCalculatorState): BasicCalculatorState {
+export function backspaceBasic(
+  state: BasicCalculatorState
+): BasicCalculatorState {
   if (state.error) {
-    return createInitialBasicState();
+    return {
+      ...createInitialBasicState(),
+      history: state.history,
+    };
   }
 
   if (state.justEvaluated) {
@@ -346,6 +430,7 @@ export function backspaceBasic(state: BasicCalculatorState): BasicCalculatorStat
   }
 
   const current = state.expression;
+
   if (!current) {
     return {
       ...state,
@@ -353,7 +438,7 @@ export function backspaceBasic(state: BasicCalculatorState): BasicCalculatorStat
     };
   }
 
-  // Remove operador com espaços (" + ") de uma vez
+  // Remove operador com espaços (" + ") de uma vez.
   const nextExpr = /\s[+\-×÷]\s$/.test(current)
     ? current.slice(0, -3)
     : current.slice(0, -1);
@@ -364,12 +449,16 @@ export function backspaceBasic(state: BasicCalculatorState): BasicCalculatorStat
   return {
     ...state,
     expression: nextExpr,
-    displayValue: operand ? operand.replace(/[()]/g, '') : trimmed || '0',
+    displayValue: operand
+      ? operand.replace(/[()]/g, '')
+      : trimmed || '0',
     error: null,
   };
 }
 
-export function clearEntryBasic(state: BasicCalculatorState): BasicCalculatorState {
+export function clearEntryBasic(
+  state: BasicCalculatorState
+): BasicCalculatorState {
   if (state.error || state.justEvaluated) {
     return {
       ...state,
@@ -381,6 +470,7 @@ export function clearEntryBasic(state: BasicCalculatorState): BasicCalculatorSta
   }
 
   const { prefix } = extractTrailingOperand(state.expression.trim());
+
   return {
     ...state,
     expression: prefix,
@@ -389,7 +479,9 @@ export function clearEntryBasic(state: BasicCalculatorState): BasicCalculatorSta
   };
 }
 
-export function clearAllBasic(state: BasicCalculatorState): BasicCalculatorState {
+export function clearAllBasic(
+  state: BasicCalculatorState
+): BasicCalculatorState {
   return {
     expression: '',
     displayValue: '0',
@@ -399,8 +491,11 @@ export function clearAllBasic(state: BasicCalculatorState): BasicCalculatorState
   };
 }
 
-export function calculateBasic(state: BasicCalculatorState): BasicCalculatorState {
+export function calculateBasic(
+  state: BasicCalculatorState
+): BasicCalculatorState {
   const expr = state.expression.trim();
+
   if (!expr) {
     return state;
   }
@@ -410,6 +505,7 @@ export function calculateBasic(state: BasicCalculatorState): BasicCalculatorStat
   if (!evaluation.ok) {
     return {
       ...state,
+      displayValue: 'Erro',
       error: evaluation.error,
       justEvaluated: false,
     };
@@ -439,7 +535,8 @@ export function reuseHistoryItem(
   state: BasicCalculatorState,
   item: HistoryEntry
 ): BasicCalculatorState {
-  const cleanNumber = item.result.replace(/\./g, '');
+  const cleanNumber = normalizeDisplayNumber(item.result);
+
   return {
     ...state,
     expression: cleanNumber,
@@ -460,23 +557,30 @@ export function handleBasicKeyboardKey(
   if (/^[0-9]$/.test(key)) {
     return inputDigit(state, key);
   }
+
   if (key === '.' || key === ',') {
     return inputDecimal(state);
   }
+
   if (key === '+' || key === '-' || key === '*' || key === '/') {
     return inputOperator(state, key);
   }
+
   if (key === '%') {
     return applyPercentage(state);
   }
+
   if (key === 'Enter' || key === '=') {
     return calculateBasic(state);
   }
+
   if (key === 'Backspace') {
     return backspaceBasic(state);
   }
+
   if (key === 'Escape') {
     return clearAllBasic(state);
   }
+
   return null;
 }

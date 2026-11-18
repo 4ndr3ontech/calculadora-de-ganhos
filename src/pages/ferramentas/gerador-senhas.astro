@@ -517,7 +517,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     let copyTimeout: ReturnType<typeof setTimeout> | undefined;
 
     function initPage() {
-      // Evita duplicação de eventos quando o Astro realiza uma navegação.
       pageController?.abort();
 
       if (copyTimeout) {
@@ -572,6 +571,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       let currentPassword = '';
 
+      /**
+       * Retorna um inteiro aleatório uniforme no intervalo [0, max).
+       * O rejection sampling evita o viés de módulo.
+       */
       function secureRandomInt(max: number): number {
         if (
           !Number.isSafeInteger(max) ||
@@ -595,15 +598,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         return value % max;
       }
 
-      function secureShuffle(array: string[]): string[] {
-        for (let i = array.length - 1; i > 0; i--) {
-          const j = secureRandomInt(i + 1);
-          [array[i], array[j]] = [array[j], array[i]];
-        }
-
-        return array;
-      }
-
       function getSelectedGroups(): string[] {
         const groups: string[] = [];
 
@@ -613,6 +607,102 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         if (symbolsCheck.checked) groups.push(charsSymbols);
 
         return groups;
+      }
+
+      /**
+       * Calcula exatamente o número de senhas possíveis que:
+       * - possuem o comprimento informado;
+       * - utilizam os grupos selecionados;
+       * - contêm pelo menos um caractere de cada grupo.
+       *
+       * Os grupos são disjuntos. A inclusão-exclusão calcula
+       * o espaço de combinações sem enumerar todas as senhas.
+       */
+      function calculateValidPasswordSpace(
+        length: number,
+        groups: string[]
+      ): bigint {
+        const poolSize = groups.reduce(
+          (total, group) => total + group.length,
+          0
+        );
+
+        let total = 0n;
+        const combinations = 1 << groups.length;
+
+        for (let mask = 0; mask < combinations; mask++) {
+          let excludedCharacters = 0;
+          let selectedCount = 0;
+
+          for (let index = 0; index < groups.length; index++) {
+            if ((mask & (1 << index)) !== 0) {
+              excludedCharacters += groups[index].length;
+              selectedCount++;
+            }
+          }
+
+          const remainingCharacters = poolSize - excludedCharacters;
+
+          const combinationsForSubset =
+            BigInt(remainingCharacters) ** BigInt(length);
+
+          if (selectedCount % 2 === 0) {
+            total += combinationsForSubset;
+          } else {
+            total -= combinationsForSubset;
+          }
+        }
+
+        return total;
+      }
+
+      /**
+       * Calcula log2 de um BigInt evitando converter o número
+       * inteiro diretamente para Number.
+       */
+      function log2BigInt(value: bigint): number {
+        if (value <= 0n) {
+          throw new Error('Espaço de combinações inválido.');
+        }
+
+        const binaryLength = value.toString(2).length;
+        const shift = Math.max(0, binaryLength - 53);
+        const leadingBits = Number(value >> BigInt(shift));
+
+        return Math.log2(leadingBits) + shift;
+      }
+
+      /**
+       * Gera uma senha uniforme entre todas as combinações válidas.
+       *
+       * Sorteia todos os caracteres independentemente e rejeita
+       * a sequência inteira quando algum grupo obrigatório estiver
+       * ausente. Assim, todas as senhas válidas têm a mesma
+       * probabilidade de serem produzidas.
+       */
+      function generateUniformPassword(
+        length: number,
+        groups: string[]
+      ): string {
+        const allChars = groups.join('');
+
+        while (true) {
+          const passwordChars: string[] = [];
+
+          for (let index = 0; index < length; index++) {
+            passwordChars.push(
+              allChars[secureRandomInt(allChars.length)]
+            );
+          }
+
+          const containsAllGroups = groups.every((group) =>
+            passwordChars.some((character) => group.includes(character))
+          );
+
+          if (containsAllGroups) {
+            return passwordChars.join('');
+          }
+        }
       }
 
       function updateStrength(length: number, groups: string[]) {
@@ -625,12 +715,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           return;
         }
 
-        const poolSize = groups.reduce(
-          (total, group) => total + group.length,
-          0
-        );
-
-        if (!poolSize || !length || !groups.length) {
+        if (!length || !groups.length) {
           strengthLabel.textContent = 'Indisponível';
           strengthFill.style.width = '0%';
           strengthFill.dataset.level = 'weak';
@@ -644,24 +729,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           return;
         }
 
-        /*
-         * Estimativa conservadora da aleatoriedade:
-         * - considera uma escolha obrigatória em cada grupo;
-         * - considera os caracteres restantes escolhidos no conjunto total.
-         *
-         * O resultado é uma estimativa matemática, não uma auditoria
-         * completa da segurança da senha.
-         */
-        const requiredGroupsEntropy = groups.reduce(
-          (total, group) => total + Math.log2(group.length),
-          0
+        const validPasswordSpace = calculateValidPasswordSpace(
+          length,
+          groups
         );
 
-        const remainingCharacters = Math.max(0, length - groups.length);
-
-        const estimatedEntropy =
-          requiredGroupsEntropy +
-          remainingCharacters * Math.log2(poolSize);
+        const estimatedEntropy = log2BigInt(validPasswordSpace);
 
         let label = '';
         let description = '';
@@ -671,7 +744,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         if (estimatedEntropy < 40) {
           label = 'Baixa';
           description =
-            'A estimativa indica um espaço de possibilidades reduzido. Considere aumentar o comprimento.';
+            'O espaço de combinações é reduzido. Considere aumentar o comprimento da senha.';
           percentage = 25;
           level = 'weak';
         } else if (estimatedEntropy < 60) {
@@ -683,13 +756,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         } else if (estimatedEntropy < 80) {
           label = 'Forte';
           description =
-            'A combinação apresenta uma quantidade elevada de possibilidades teóricas.';
+            'A senha possui um espaço elevado de combinações teóricas.';
           percentage = 75;
           level = 'strong';
         } else {
           label = 'Muito forte';
           description =
-            'A estimativa matemática indica um espaço amplo de possibilidades.';
+            'O espaço matemático de combinações é amplo.';
           percentage = 100;
           level = 'very-strong';
         }
@@ -707,7 +780,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
         strengthProgress.setAttribute(
           'aria-valuetext',
-          `${label}. Estimativa de ${Math.floor(estimatedEntropy)} bits de entropia.`
+          `${label}. Espaço de combinações equivalente a aproximadamente ${Math.floor(estimatedEntropy)} bits.`
         );
       }
 
@@ -806,34 +879,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             );
           }
 
-          const allChars = groups.join('');
-          const passwordChars: string[] = [];
-
-          /*
-           * Garante pelo menos um caractere de cada grupo selecionado.
-           */
-          for (const group of groups) {
-            passwordChars.push(
-              group[secureRandomInt(group.length)]
-            );
-          }
-
-          /*
-           * Preenche as posições restantes utilizando todos os grupos.
-           */
-          while (passwordChars.length < length) {
-            passwordChars.push(
-              allChars[secureRandomInt(allChars.length)]
-            );
-          }
-
-          /*
-           * Embaralha a senha para que os caracteres obrigatórios
-           * não permaneçam em posições previsíveis.
-           */
-          secureShuffle(passwordChars);
-
-          currentPassword = passwordChars.join('');
+          currentPassword = generateUniformPassword(length, groups);
           output.value = currentPassword;
 
           setToggleState(false);
@@ -859,6 +905,14 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           output.value = '';
 
           setToggleState(false);
+
+          if (generatorError) {
+            generatorError.hidden = false;
+            generatorError.textContent =
+              error instanceof Error
+                ? error.message
+                : 'Não foi possível gerar a senha.';
+          }
 
           if (generatorStatus) {
             generatorStatus.textContent =
@@ -890,19 +944,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         }
 
         try {
-          /*
-           * Método preferencial: Clipboard API.
-           * Em geral, exige HTTPS ou localhost.
-           */
           if (
             navigator.clipboard &&
             typeof navigator.clipboard.writeText === 'function'
           ) {
             await navigator.clipboard.writeText(currentPassword);
           } else {
-            /*
-             * Alternativa para navegadores sem suporte à Clipboard API.
-             */
             const temporaryInput = document.createElement('textarea');
 
             temporaryInput.value = currentPassword;
@@ -964,10 +1011,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         }
       }
 
-      /*
-       * Eventos vinculados ao ciclo de vida desta página.
-       * O AbortController permite removê-los na próxima inicialização.
-       */
       lengthInput.addEventListener('input', generatePassword, { signal });
 
       upperCheck.addEventListener('change', generatePassword, { signal });
@@ -982,10 +1025,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       generatePassword();
     }
 
-    // Inicialização na primeira abertura da página.
     initPage();
 
-    // Reconfiguração após navegações realizadas pelo Astro.
     document.addEventListener('astro:page-load', initPage);
   </script>
 

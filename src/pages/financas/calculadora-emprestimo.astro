@@ -65,7 +65,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <span class="section-label">FERRAMENTA GRATUITA</span>
         <h2 id="calculator-title">Calcule seu empréstimo</h2>
         <p>
-          Informe o valor solicitado, a taxa de juros anual e o prazo de
+          Informe o valor solicitado, a taxa de juros nominal anual e o prazo de
           pagamento para visualizar uma estimativa da operação.
         </p>
       </div>
@@ -95,7 +95,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </div>
 
           <div class="field-group">
-            <label for="rate">Taxa de juros anual (% a.a.)</label>
+            <label for="rate">Taxa de juros nominal anual (% a.a.)</label>
             <div class="input-wrapper">
               <input
                 type="number"
@@ -109,7 +109,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
               <span class="input-suffix">% a.a.</span>
             </div>
             <small id="rate-help">
-              Informe a taxa anual apresentada pela instituição financeira.
+              Informe a taxa nominal anual. O simulador divide essa taxa por 12
+              para obter a taxa mensal.
             </small>
           </div>
 
@@ -290,11 +291,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <article class="instruction-card">
           <span class="step-number">02</span>
           <div>
-            <h3>Informe a taxa de juros anual</h3>
+            <h3>Informe a taxa de juros nominal anual</h3>
             <p>
-              Utilize a taxa de juros anual informada pela instituição
-              financeira. Confira se ela corresponde à taxa nominal ou efetiva
-              apresentada na proposta.
+              Utilize a taxa nominal anual informada pela instituição financeira.
+              O simulador considera capitalização mensal e divide a taxa anual
+              por 12 para obter a taxa mensal. Se a proposta apresentar apenas
+              uma taxa efetiva anual, não a informe diretamente neste campo.
             </p>
           </div>
         </article>
@@ -331,7 +333,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <h2 id="example-title">Exemplo de simulação de empréstimo</h2>
         <p>
           Imagine uma pessoa que deseja contratar um empréstimo de R$ 20.000,00,
-          com uma taxa de juros anual de 24% e prazo de pagamento de 24 meses.
+          com uma taxa de juros nominal anual de 24%, capitalização mensal e
+          prazo de pagamento de 24 meses.
         </p>
       </div>
 
@@ -345,8 +348,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </div>
 
           <div>
-            <span>Taxa anual informada</span>
-            <strong>24% a.a.</strong>
+            <span>Taxa nominal anual</span>
+            <strong>24% a.a. (2% a.m.)</strong>
           </div>
 
           <div>
@@ -570,11 +573,17 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </p>
 
       <p>
-        A conversão de uma taxa anual para mensal depende da natureza da taxa
-        informada. Uma taxa anual efetiva, por exemplo, não deve ser simplesmente
-        dividida por 12 para obter a taxa mensal equivalente. Confira a
-        metodologia adotada pelo simulador e as condições apresentadas pela
-        instituição financeira.
+        Neste simulador, a taxa informada é nominal anual, com capitalização
+        mensal. Por isso, ela é dividida por 12 para obter a taxa mensal
+        utilizada na fórmula da Tabela Price. Por exemplo, uma taxa nominal
+        anual de 24% corresponde a uma taxa mensal de 2%.
+      </p>
+
+      <p>
+        Essa conversão não deve ser aplicada diretamente a uma taxa efetiva
+        anual. Se a proposta da instituição financeira apresentar uma taxa
+        efetiva anual, será necessário convertê-la para a taxa mensal
+        equivalente antes de utilizá-la em um cálculo com periodicidade mensal.
       </p>
     </section>
 

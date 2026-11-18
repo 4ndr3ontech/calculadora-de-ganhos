@@ -1,3 +1,4 @@
+
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
@@ -498,7 +499,32 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       });
     };
 
+    function clearResults() {
+      termLabel.textContent = 'Valor do termo (aₙ)';
+      termOutput.textContent = '—';
+      sumOutput.textContent = '—';
+
+      if (currentType === 'pa') {
+        termFormula.textContent = 'aₙ = a₁ + (n − 1) × r';
+        sumFormula.textContent = 'Sₙ = n × (a₁ + aₙ) ÷ 2';
+        footnote.textContent =
+          'A PA possui uma diferença constante entre termos consecutivos.';
+      } else {
+        termFormula.textContent = 'aₙ = a₁ × q⁽ⁿ⁻¹⁾';
+        sumFormula.textContent =
+          'Sₙ = a₁ × (qⁿ − 1) ÷ (q − 1), q ≠ 1';
+        footnote.textContent =
+          'Quando q = 1, a soma é calculada por Sₙ = n × a₁.';
+      }
+
+      sequenceList.replaceChildren();
+      sequenceCount.textContent = '—';
+      sequenceNote.textContent =
+        'A sequência será exibida após um cálculo válido.';
+    }
+
     function showError(message: string) {
+      clearResults();
       errorMessage.textContent = message;
       errorMessage.hidden = false;
     }
@@ -557,9 +583,11 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       let current = a1;
       let rendered = 0;
+      let interrupted = false;
 
       for (let i = 0; i < visibleTerms; i++) {
         if (!Number.isFinite(current)) {
+          interrupted = true;
           break;
         }
 
@@ -567,33 +595,42 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         item.className = 'sequence-term';
         item.textContent = formatNumber(current);
 
-        if (i === visibleTerms - 1 && n <= 30) {
-          item.classList.add('last-term');
-        }
-
         fragment.appendChild(item);
         rendered++;
 
-        current = currentType === 'pa'
-          ? current + ratio
-          : current * ratio;
+        if (i < visibleTerms - 1) {
+          current = currentType === 'pa'
+            ? current + ratio
+            : current * ratio;
+        }
+      }
+
+      const allTermsRendered = !interrupted && rendered === n;
+
+      if (allTermsRendered && rendered > 0) {
+        fragment.lastElementChild?.classList.add('last-term');
       }
 
       sequenceList.replaceChildren(fragment);
+
+      if (interrupted) {
+        sequenceCount.textContent =
+          `${rendered} de ${n.toLocaleString('pt-BR')} termos`;
+
+        sequenceNote.textContent =
+          'A visualização foi interrompida porque os valores ultrapassaram o limite numérico.';
+        return;
+      }
+
+      sequenceCount.textContent =
+        `${n.toLocaleString('pt-BR')} ${n === 1 ? 'termo' : 'termos'}`;
 
       if (n > 30) {
         const more = document.createElement('span');
         more.className = 'sequence-more';
         more.textContent = `+ ${n - 30} termos`;
         sequenceList.appendChild(more);
-      }
 
-      sequenceCount.textContent = `${n.toLocaleString('pt-BR')} ${n === 1 ? 'termo' : 'termos'}`;
-
-      if (rendered < visibleTerms) {
-        sequenceNote.textContent =
-          'A visualização foi interrompida porque os valores ultrapassaram o limite numérico.';
-      } else if (n > 30) {
         sequenceNote.textContent =
           'Exibindo os primeiros 30 termos. O termo e a soma consideram a posição total informada.';
       } else {
@@ -686,6 +723,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     typeButtons.forEach((button) => {
       button.addEventListener('click', () => {
         const type = button.dataset.type as ProgressionType;
+
         if (type === 'pa' || type === 'pg') {
           setType(type);
         }

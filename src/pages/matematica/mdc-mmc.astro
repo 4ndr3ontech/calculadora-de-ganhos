@@ -1,10 +1,11 @@
+
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
 
 <BaseLayout
   title="Calculadora de MDC e MMC Online — Máximo Divisor e Múltiplo Comum"
-  description="Calcule MDC e MMC de dois ou mais números. Descubra o máximo divisor comum e o mínimo múltiplo comum entre dois inteiros, com fatoração prima e resolução passo a passo."
+  description="Calcule MDC e MMC de dois números inteiros. Descubra o máximo divisor comum e o mínimo múltiplo comum, com fatoração prima e resolução passo a passo."
 >
   <main class="mdc-page">
     <nav class="breadcrumb" aria-label="Navegação estrutural">
@@ -144,7 +145,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
           <div class="result-relation">
             <span>Relação entre os resultados</span>
-            <strong id="result-relation">12 × 72 = 24 × 36</strong>
+            <strong id="result-relation">12 × 72 = 864</strong>
           </div>
         </div>
       </div>
@@ -203,7 +204,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         <div class="mmc-explanation">
           <h3>Como calcular o MMC?</h3>
           <p>
-            O MMC pode ser calculado utilizando o MDC e a seguinte relação:
+            Para dois números não simultaneamente nulos, o MMC pode ser
+            calculado utilizando o MDC e a seguinte relação:
           </p>
           <div class="formula-box">
             MMC(A, B) = |A × B| ÷ MDC(A, B)
@@ -418,42 +420,52 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     const numberFormatter = new Intl.NumberFormat('pt-BR');
 
-    const MAX_SAFE = Number.MAX_SAFE_INTEGER;
     const MAX_FACTORIZATION = 1_000_000_000_000;
 
     function formatNumber(value: number): string {
       return numberFormatter.format(value);
     }
 
+    function formatBigInt(value: bigint): string {
+      return numberFormatter.format(value);
+    }
+
     function gcdSteps(a: number, b: number): string[] {
-      let x = Math.abs(a);
-      let y = Math.abs(b);
+      let x = BigInt(a);
+      let y = BigInt(b);
+
+      if (x < 0n) x = -x;
+      if (y < 0n) y = -y;
 
       const steps: string[] = [];
 
-      if (x === 0 && y === 0) {
+      if (x === 0n && y === 0n) {
         return ['MDC(0, 0) = 0, pela convenção adotada.'];
       }
 
-      if (x === 0 || y === 0) {
-        const result = Math.max(x, y);
-        steps.push(`MDC(${formatNumber(a)}, ${formatNumber(b)}) = ${formatNumber(result)}`);
+      if (x === 0n || y === 0n) {
+        const result = x > y ? x : y;
+
+        steps.push(
+          `MDC(${formatNumber(a)}, ${formatNumber(b)}) = ${formatBigInt(result)}`
+        );
+
         return steps;
       }
 
-      while (y !== 0) {
-        const quotient = Math.floor(x / y);
+      while (y !== 0n) {
+        const quotient = x / y;
         const remainder = x % y;
 
         steps.push(
-          `${formatNumber(x)} ÷ ${formatNumber(y)} = ${quotient}, resto ${formatNumber(remainder)}`
+          `${formatBigInt(x)} ÷ ${formatBigInt(y)} = ${formatBigInt(quotient)}, resto ${formatBigInt(remainder)}`
         );
 
         x = y;
         y = remainder;
       }
 
-      steps.push(`MDC = ${formatNumber(x)}`);
+      steps.push(`MDC = ${formatBigInt(x)}`);
 
       return steps;
     }
@@ -556,7 +568,8 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       if (factorB) factorB.textContent = '—';
 
       if (euclidSteps) {
-        euclidSteps.innerHTML = '<p class="steps-placeholder">Informe dois números para visualizar a resolução.</p>';
+        euclidSteps.innerHTML =
+          '<p class="steps-placeholder">Informe dois números para visualizar a resolução.</p>';
       }
 
       if (mmcCalculation) {
@@ -583,17 +596,28 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
       if (!Number.isSafeInteger(a) || !Number.isSafeInteger(b)) {
         clearResults();
-        showError('Informe apenas números inteiros dentro do limite de precisão suportado.');
+        showError(
+          'Informe apenas números inteiros dentro do limite de precisão suportado.'
+        );
         return;
       }
 
       try {
-        const mdc = Math.abs(calcularMDC(a, b));
-        const mmc = Math.abs(calcularMMC(a, b));
+        // O motor não define MDC(0, 0).
+        // Nesta calculadora, adotamos a convenção MDC(0, 0) = 0.
+        const mdc = a === 0 && b === 0
+          ? 0
+          : calcularMDC(a, b);
+
+        // O motor já retorna MMC igual a zero quando
+        // pelo menos um dos valores é zero.
+        const mmc = calcularMMC(a, b);
 
         if (!Number.isSafeInteger(mdc) || !Number.isSafeInteger(mmc)) {
           clearResults();
-          showError('O resultado ultrapassa o limite de precisão numérica suportado. Tente números menores.');
+          showError(
+            'O resultado ultrapassa o limite de precisão numérica suportado. Tente números menores.'
+          );
           return;
         }
 
@@ -601,12 +625,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         if (resultMmc) resultMmc.textContent = formatNumber(mmc);
 
         if (resultRelation) {
-          if (a === 0 || b === 0) {
-            resultRelation.textContent = 'Produto dos números = 0';
-          } else {
-            resultRelation.textContent =
-              `${formatNumber(mdc)} × ${formatNumber(mmc)} = ${formatNumber(Math.abs(a * b))}`;
-          }
+          // BigInt evita perda de precisão na multiplicação
+          // de números inteiros grandes.
+          const product = BigInt(a) * BigInt(b);
+          const absoluteProduct = product < 0n ? -product : product;
+
+          resultRelation.textContent =
+            `${formatNumber(mdc)} × ${formatNumber(mmc)} = ${formatBigInt(absoluteProduct)}`;
         }
 
         if (factorATitle) factorATitle.textContent = formatNumber(a);
@@ -632,17 +657,29 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         }
 
         if (mmcCalculation) {
-          if (a === 0 || b === 0) {
+          if (a === 0 && b === 0) {
+            mmcCalculation.textContent =
+              'MMC(0, 0) = 0, pela convenção adotada nesta calculadora.';
+          } else if (a === 0 || b === 0) {
             mmcCalculation.textContent =
               `MMC(${formatNumber(a)}, ${formatNumber(b)}) = 0`;
           } else {
+            const absoluteProduct = (
+              (BigInt(a) < 0n ? -BigInt(a) : BigInt(a)) *
+              (BigInt(b) < 0n ? -BigInt(b) : BigInt(b))
+            );
+
             mmcCalculation.textContent =
-              `MMC(${formatNumber(a)}, ${formatNumber(b)}) = (${formatNumber(Math.abs(a))} × ${formatNumber(Math.abs(b))}) ÷ ${formatNumber(mdc)} = ${formatNumber(mmc)}`;
+              `MMC(${formatNumber(a)}, ${formatNumber(b)}) = ${formatBigInt(absoluteProduct)} ÷ ${formatNumber(mdc)} = ${formatNumber(mmc)}`;
           }
         }
       } catch (error) {
         clearResults();
-        showError('Não foi possível realizar o cálculo. Verifique os valores e tente novamente.');
+
+        showError(
+          'Não foi possível realizar o cálculo. Verifique os valores e tente novamente.'
+        );
+
         console.error('Erro ao calcular MDC e MMC:', error);
       }
     }

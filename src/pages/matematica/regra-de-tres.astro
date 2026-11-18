@@ -196,7 +196,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
           <div class="formula-item">
             <span>3. Resultado</span>
-            <p id="formula-result">X = 1.500 ÷ 10 = 150</p>
+            <p id="formula-result">X = (50 × 30) ÷ 10 = 150</p>
           </div>
 
           <div class="result-observation" id="result-observation">
@@ -495,12 +495,48 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       errorOutput.textContent = '';
     }
 
-    function showError(message: string) {
-      errorOutput.textContent = message;
-      errorOutput.hidden = false;
+    function updateObservation() {
+      if (currentType === 'direct') {
+        observationOutput.innerHTML =
+          '<strong>Proporção direta</strong><p>As grandezas variam no mesmo sentido. A relação entre os valores permanece proporcional.</p>';
+      } else {
+        observationOutput.innerHTML =
+          '<strong>Proporção inversa</strong><p>As grandezas variam em sentidos opostos. O produto dos valores correspondentes permanece constante.</p>';
+      }
+    }
 
+    function clearResults() {
       resultOutput.textContent = '—';
       xInput.value = '—';
+
+      if (currentType === 'direct') {
+        formulaProportion.textContent = 'A / B = C / X';
+        formulaCross.textContent = 'A × X = B × C';
+        formulaResult.textContent = 'X = (B × C) ÷ A';
+      } else {
+        formulaProportion.textContent = 'A × B = C × X';
+        formulaCross.textContent = 'A × B = C × X';
+        formulaResult.textContent = 'X = (A × B) ÷ C';
+      }
+
+      updateObservation();
+    }
+
+    function showError(message: string) {
+      clearResults();
+
+      errorOutput.textContent = message;
+      errorOutput.hidden = false;
+    }
+
+    function updateRelation() {
+      if (currentType === 'direct') {
+        relationOutput.textContent =
+          `${aInput.value || 'A'} está para ${bInput.value || 'B'} assim como ${cInput.value || 'C'} está para X.`;
+      } else {
+        relationOutput.textContent =
+          `${aInput.value || 'A'} corresponde a ${bInput.value || 'B'}, assim como ${cInput.value || 'C'} corresponde a X.`;
+      }
     }
 
     function setType(type: ProportionType) {
@@ -517,43 +553,26 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
         explanationOutput.textContent =
           'Na proporção direta, quando uma grandeza aumenta, a outra também aumenta na mesma proporção.';
-
-        relationOutput.textContent =
-          `${aInput.value || 'A'} está para ${bInput.value || 'B'} assim como ${cInput.value || 'C'} está para X.`;
-
-        observationOutput.innerHTML =
-          '<strong>Proporção direta</strong><p>As grandezas variam no mesmo sentido. A relação entre os valores permanece proporcional.</p>';
       } else {
         typeOutput.textContent = 'INVERSA';
 
         explanationOutput.textContent =
           'Na proporção inversa, quando uma grandeza aumenta, a outra diminui proporcionalmente.';
-
-        relationOutput.textContent =
-          `${aInput.value || 'A'} corresponde a ${bInput.value || 'B'}, assim como ${cInput.value || 'C'} corresponde a X.`;
-
-        observationOutput.innerHTML =
-          '<strong>Proporção inversa</strong><p>As grandezas variam em sentidos opostos. O produto dos valores correspondentes permanece constante.</p>';
       }
 
+      updateObservation();
       runCalc();
-    }
-
-    function updateRelation() {
-      if (currentType === 'direct') {
-        relationOutput.textContent =
-          `${aInput.value || 'A'} está para ${bInput.value || 'B'} assim como ${cInput.value || 'C'} está para X.`;
-      } else {
-        relationOutput.textContent =
-          `${aInput.value || 'A'} corresponde a ${bInput.value || 'B'}, assim como ${cInput.value || 'C'} corresponde a X.`;
-      }
     }
 
     function runCalc() {
       clearError();
       updateRelation();
 
-      const rawValues = [aInput.value.trim(), bInput.value.trim(), cInput.value.trim()];
+      const rawValues = [
+        aInput.value.trim(),
+        bInput.value.trim(),
+        cInput.value.trim()
+      ];
 
       if (rawValues.some((value) => value === '')) {
         showError('Preencha os três valores para calcular o resultado.');
@@ -570,26 +589,40 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       }
 
       if (currentType === 'direct' && a === 0) {
-        showError('O valor A não pode ser zero na proporção direta, pois seria necessário dividir por zero.');
+        showError(
+          'O valor A não pode ser zero na proporção direta, pois seria necessário dividir por zero.'
+        );
         return;
       }
 
       if (currentType === 'inverse' && c === 0) {
-        showError('O valor C não pode ser zero na proporção inversa, pois seria necessário dividir por zero.');
+        showError(
+          'O valor C não pode ser zero na proporção inversa, pois seria necessário dividir por zero.'
+        );
         return;
       }
 
       try {
-        let result: number;
-
-        if (currentType === 'direct') {
-          result = calculateRuleOfThreeSimple(a, b, c);
-        } else {
-          result = (a * b) / c;
-        }
+        /*
+         * Direta:
+         * X = (B × C) ÷ A
+         *
+         * Inversa:
+         * X = (A × B) ÷ C
+         *
+         * Para a inversa, reorganizamos os argumentos da função:
+         * calculateRuleOfThreeSimple(C, A, B)
+         *
+         * Assim, o motor existente é utilizado nos dois casos.
+         */
+        const result = currentType === 'direct'
+          ? calculateRuleOfThreeSimple(a, b, c)
+          : calculateRuleOfThreeSimple(c, a, b);
 
         if (!Number.isFinite(result)) {
-          showError('Não foi possível obter um resultado válido. Verifique os valores informados.');
+          showError(
+            'Não foi possível obter um resultado válido. Verifique os valores informados.'
+          );
           return;
         }
 
@@ -601,31 +634,33 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         resultOutput.textContent = formattedResult;
         xInput.value = formattedResult;
 
-        formulaProportion.textContent =
-          currentType === 'direct'
-            ? `${formattedA} / ${formattedB} = ${formattedC} / X`
-            : `${formattedA} × ${formattedB} = ${formattedC} × X`;
-
         if (currentType === 'direct') {
-          const product = b * c;
+          formulaProportion.textContent =
+            `${formattedA} / ${formattedB} = ${formattedC} / X`;
 
           formulaCross.textContent =
             `${formattedA} × X = ${formattedB} × ${formattedC}`;
 
           formulaResult.textContent =
-            `X = ${formatNumber(product)} ÷ ${formattedA} = ${formattedResult}`;
+            `X = (${formattedB} × ${formattedC}) ÷ ${formattedA} = ${formattedResult}`;
         } else {
-          const product = a * b;
+          formulaProportion.textContent =
+            `${formattedA} × ${formattedB} = ${formattedC} × X`;
 
           formulaCross.textContent =
             `${formattedA} × ${formattedB} = ${formattedC} × X`;
 
           formulaResult.textContent =
-            `X = ${formatNumber(product)} ÷ ${formattedC} = ${formattedResult}`;
+            `X = (${formattedA} × ${formattedB}) ÷ ${formattedC} = ${formattedResult}`;
         }
+
+        updateObservation();
       } catch (error) {
         console.error('Erro no cálculo da regra de três:', error);
-        showError('Ocorreu um erro durante o cálculo. Tente novamente.');
+
+        showError(
+          'Ocorreu um erro durante o cálculo. Tente novamente.'
+        );
       }
     }
 

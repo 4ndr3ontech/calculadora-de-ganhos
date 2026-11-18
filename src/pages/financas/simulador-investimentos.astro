@@ -1,3 +1,4 @@
+
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
@@ -27,7 +28,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 
     <section class="calculator-section" aria-label="Simulador de investimentos">
       <div class="calculator-grid">
-        <!-- Parâmetros -->
         <div class="card input-card">
           <div class="card-heading">
             <div class="icon-badge" aria-hidden="true">
@@ -41,7 +41,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             </div>
           </div>
 
-          <form id="investment-form">
+          <form id="investment-form" novalidate>
             <div class="field-group">
               <label for="initial">Aporte inicial</label>
               <div class="input-wrapper">
@@ -75,12 +75,12 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                 />
               </div>
               <small>
-                Quantia que será adicionada ao investimento todos os meses.
+                Quantia adicionada ao investimento no fim de cada mês.
               </small>
             </div>
 
             <div class="field-group">
-              <label for="rate">Rentabilidade anual estimada</label>
+              <label for="rate">Rentabilidade efetiva anual estimada</label>
               <div class="input-wrapper">
                 <input
                   type="number"
@@ -94,7 +94,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                 <span class="input-suffix">% a.a.</span>
               </div>
               <small>
-                Taxa anual utilizada para projetar o crescimento do patrimônio.
+                Taxa efetiva anual utilizada para calcular a taxa equivalente mensal.
               </small>
             </div>
 
@@ -105,7 +105,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                   type="number"
                   id="years"
                   value="15"
-                  min="0"
+                  min="1"
                   max="100"
                   step="1"
                   required
@@ -113,7 +113,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                 <span class="input-suffix">anos</span>
               </div>
               <small>
-                Tempo durante o qual o dinheiro permanecerá investido.
+                Tempo durante o qual o dinheiro permanecerá investido. Informe um período inteiro entre 1 e 100 anos.
               </small>
             </div>
 
@@ -132,7 +132,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           </form>
         </div>
 
-        <!-- Resultados -->
         <div class="card result-card" aria-live="polite">
           <div>
             <div class="card-heading">
@@ -172,7 +171,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
                   <span class="result-dot interest-dot"></span>
                   <div>
                     <strong>Rendimento bruto</strong>
-                    <span>Ganho estimado com os juros</span>
+                    <span>Ganho ou perda estimada com os juros</span>
                   </div>
                 </div>
                 <strong id="res-interest" class="interest-value">R$ 0,00</strong>
@@ -221,7 +220,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
     </section>
 
-    <!-- Conteúdo educativo -->
     <section class="content-section">
       <div class="section-heading">
         <span class="section-kicker">ENTENDA SEUS INVESTIMENTOS</span>
@@ -231,7 +229,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       <p>
         O simulador utiliza o conceito de juros compostos para projetar
         o crescimento de um investimento ao longo do tempo. Você informa
-        o capital inicial, os aportes mensais, a rentabilidade anual
+        o capital inicial, os aportes mensais, a rentabilidade efetiva anual
         estimada e o prazo da aplicação.
       </p>
 
@@ -296,9 +294,10 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </div>
 
       <p>
-        A simulação considera o capital inicial, os aportes mensais e
-        a taxa de rentabilidade convertida para uma taxa equivalente
-        mensal, conforme a metodologia utilizada pelo motor de cálculo.
+        A simulação considera o capital inicial, os aportes mensais realizados
+        no fim de cada mês e a taxa efetiva anual convertida para uma taxa
+        equivalente mensal. Essa conversão mantém a equivalência entre as
+        taxas anual e mensal utilizadas no cálculo.
       </p>
 
       <div class="formula-card">
@@ -366,7 +365,6 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
       </p>
     </section>
 
-    <!-- FAQ -->
     <section class="content-section">
       <div class="section-heading">
         <span class="section-kicker">DÚVIDAS FREQUENTES</span>
@@ -387,8 +385,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           <summary>O que são aportes mensais?</summary>
           <p>
             São contribuições periódicas adicionadas ao investimento.
-            Podem ser valores fixos ou variáveis, conforme a estratégia
-            e a disponibilidade financeira do investidor.
+            Nesta simulação, os aportes são considerados no fim de cada mês.
+            Na prática, podem ser valores fixos ou variáveis, conforme a
+            estratégia e a disponibilidade financeira do investidor.
           </p>
         </details>
 
@@ -476,7 +475,18 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     const periodElement = document.getElementById('res-period')!;
     const messageElement = document.getElementById('result-message')!;
 
+    function clearResults() {
+      finalElement.textContent = 'R$ 0,00';
+      investedElement.textContent = 'R$ 0,00';
+      interestElement.textContent = 'R$ 0,00';
+      initialElement.textContent = 'R$ 0,00';
+      periodElement.textContent = '—';
+      messageElement.textContent =
+        'Informe os parâmetros e clique em simular para visualizar a projeção do seu patrimônio.';
+    }
+
     function showError(message: string) {
+      clearResults();
       errorElement.textContent = message;
       errorElement.hidden = false;
     }
@@ -489,28 +499,38 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     function runCalc() {
       clearError();
 
-      const initial = Number(initialInput.value);
-      const monthly = Number(monthlyInput.value);
-      const rate = Number(rateInput.value);
-      const years = Number(yearsInput.value);
+      const rawInitial = initialInput.value.trim();
+      const rawMonthly = monthlyInput.value.trim();
+      const rawRate = rateInput.value.trim();
+      const rawYears = yearsInput.value.trim();
+
+      if (!rawInitial || !rawMonthly || !rawRate || !rawYears) {
+        showError('Preencha todos os campos para realizar a simulação.');
+        return;
+      }
+
+      const initial = Number(rawInitial);
+      const monthly = Number(rawMonthly);
+      const rate = Number(rawRate);
+      const years = Number(rawYears);
 
       if (!Number.isFinite(initial) || initial < 0) {
-        showError('Informe um aporte inicial igual ou maior que zero.');
+        showError('Informe um aporte inicial válido, igual ou maior que zero.');
         return;
       }
 
       if (!Number.isFinite(monthly) || monthly < 0) {
-        showError('Informe um aporte mensal igual ou maior que zero.');
+        showError('Informe um aporte mensal válido, igual ou maior que zero.');
         return;
       }
 
       if (!Number.isFinite(rate) || rate < -99 || rate > 1000) {
-        showError('Informe uma rentabilidade anual entre -99% e 1000%.');
+        showError('Informe uma rentabilidade efetiva anual entre -99% e 1000%.');
         return;
       }
 
-      if (!Number.isInteger(years) || years < 0 || years > 100) {
-        showError('Informe um período inteiro entre 0 e 100 anos.');
+      if (!Number.isInteger(years) || years < 1 || years > 100) {
+        showError('Informe um período inteiro entre 1 e 100 anos.');
         return;
       }
 
@@ -537,6 +557,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           throw new Error('O motor retornou valores inválidos para a simulação.');
         }
 
+        if (
+          result.finalAmount < 0 ||
+          result.totalInvested < 0
+        ) {
+          throw new Error('O motor retornou valores inconsistentes para a simulação.');
+        }
+
         finalElement.textContent = formatBRL(result.finalAmount);
         investedElement.textContent = formatBRL(result.totalInvested);
         interestElement.textContent = formatBRL(result.totalInterest);
@@ -546,7 +573,9 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           years === 1 ? '1 ano' : `${years} anos`;
 
         messageElement.textContent =
-          'Simulação concluída. O patrimônio apresentado representa uma projeção bruta baseada na taxa e nos aportes informados.';
+          result.totalInterest < 0
+            ? 'Simulação concluída. Com a taxa informada, a projeção apresenta uma perda em relação ao total investido. O resultado é bruto e não considera impostos, taxas ou inflação.'
+            : 'Simulação concluída. O patrimônio apresentado representa uma projeção bruta baseada na taxa e nos aportes informados.';
       } catch (error) {
         console.error('Erro na simulação de investimentos:', error);
 

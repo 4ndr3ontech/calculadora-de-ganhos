@@ -1,3 +1,4 @@
+
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 ---
@@ -28,7 +29,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
     <section class="intro-panel">
       <div class="icon-badge" aria-hidden="true">
         <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <path d="M7 17l92-92M7 7h10v10"/>
+          <path d="M7 17l9-9M7 7h10v10"/>
         </svg>
       </div>
       <div>
@@ -112,7 +113,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
               />
               <span class="input-suffix">% a.a.</span>
             </div>
-            <small>Rentabilidade anual hipotética do investimento.</small>
+            <small>Rentabilidade anual hipotética do investimento. Taxas negativas representam cenários de perda.</small>
           </div>
 
           <div class="field-group">
@@ -129,7 +130,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
               />
               <span class="input-suffix">anos</span>
             </div>
-            <small>Período durante o qual o dinheiro ficará investido.</small>
+            <small>Período durante o qual o dinheiro ficará investido. Informe anos inteiros.</small>
           </div>
 
           <div id="calc-error" class="error-message" role="alert" hidden></div>
@@ -191,6 +192,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
             <p>
               O resultado demonstra a diferença entre o dinheiro colocado
               por você e o valor adicional estimado pelos juros compostos.
+              Em cenários de taxa negativa, essa diferença pode ser uma perda.
             </p>
           </div>
 
@@ -424,17 +426,17 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
         return;
       }
 
-      if (rate <= -100 || rate > 100) {
-        showError('Informe uma taxa anual maior que -100% e de até 100%.');
+      if (rate < -99.99 || rate > 100) {
+        showError('Informe uma taxa anual entre -99,99% e 100%.');
         return;
       }
 
-      if (years < 1 || years > 80) {
-        showError('O prazo deve estar entre 1 e 80 anos.');
+      if (!Number.isInteger(years) || years < 1 || years > 80) {
+        showError('Informe um prazo inteiro entre 1 e 80 anos.');
         return;
       }
 
-      const months = Math.round(years * 12);
+      const months = years * 12;
 
       try {
         const result = calculateCompoundInterest({
@@ -444,13 +446,14 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
           months
         });
 
-        const values = [
-          result.finalAmount,
-          result.totalInvested,
-          result.totalInterest
-        ];
+        const validAmounts =
+          Number.isFinite(result.finalAmount) &&
+          result.finalAmount >= 0 &&
+          Number.isFinite(result.totalInvested) &&
+          result.totalInvested >= 0 &&
+          Number.isFinite(result.totalInterest);
 
-        if (!values.every((value) => Number.isFinite(value) && value >= 0)) {
+        if (!validAmounts) {
           showError('Não foi possível gerar um resultado válido. Revise os valores informados.');
           return;
         }
