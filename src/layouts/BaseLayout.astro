@@ -72,9 +72,19 @@ const currentDate = new Date().toLocaleDateString('pt-BR', {
             <strong id="ticker-ipca" class="ticker-value">4,63%</strong>
           </div>
           <span class="ticker-sep">|</span>
+          <div class="ticker-item" title="Índice Geral de Preços – Mercado (IGP-M Acumulado 12 meses - FGV)">
+            <span class="ticker-label">IGP-M</span>
+            <strong id="ticker-igpm" class="ticker-value">4,20%</strong>
+          </div>
+          <span class="ticker-sep">|</span>
           <div class="ticker-item" title="Cotação Dólar Comercial em Tempo Real">
             <span class="ticker-label">Dólar</span>
             <strong id="ticker-usd" class="ticker-value">R$ 5,67</strong>
+          </div>
+          <span class="ticker-sep">|</span>
+          <div class="ticker-item" title="Índice Bovespa (B3) em Tempo Real">
+            <span class="ticker-label">Ibovespa</span>
+            <strong id="ticker-ibov" class="ticker-value">128.450 pts</strong>
           </div>
         </div>
 
@@ -196,48 +206,129 @@ const currentDate = new Date().toLocaleDateString('pt-BR', {
         });
       }
 
-      // Atualização dos indicadores econômicos
+      // Atualização dos indicadores econômicos em tempo real com cache de 15 minutos
+      const TICKER_CACHE_KEY = 'cg_market_indicators_v1';
+      const TICKER_CACHE_TTL = 15 * 60 * 1000;
+
+      interface MarketIndicatorValues {
+        usd?: string;
+        selic?: string;
+        ipca?: string;
+        igpm?: string;
+        ibov?: string;
+      }
+
+      function applyMarketIndicators(values: MarketIndicatorValues) {
+        const map: Array<[string, string | undefined]> = [
+          ['ticker-usd', values.usd],
+          ['ticker-selic', values.selic],
+          ['ticker-ipca', values.ipca],
+          ['ticker-igpm', values.igpm],
+          ['ticker-ibov', values.ibov],
+        ];
+
+        for (const [id, text] of map) {
+          if (!text) continue;
+          const el = document.getElementById(id);
+          if (el) el.textContent = text;
+        }
+      }
+
       async function updateMarketIndicators() {
         try {
-          const usdRes = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL');
-          if (usdRes.ok) {
-            const usdData = await usdRes.json();
-            const bid = parseFloat(usdData?.USDBRL?.bid);
-            const usdEl = document.getElementById('ticker-usd');
-            if (usdEl && !isNaN(bid)) {
-              usdEl.textContent = bid.toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              });
+          const cachedRaw = localStorage.getItem(TICKER_CACHE_KEY);
+          if (cachedRaw) {
+            const cached = JSON.parse(cachedRaw);
+            if (cached?.values && Date.now() - cached.timestamp < TICKER_CACHE_TTL) {
+              applyMarketIndicators(cached.values);
+              return;
             }
           }
         } catch {}
 
-        try {
-          const selicRes = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json');
-          if (selicRes.ok) {
-            const selicData = await selicRes.json();
-            const val = parseFloat(selicData?.[0]?.valor);
-            const selicEl = document.getElementById('ticker-selic');
-            if (selicEl && !isNaN(val)) {
-              selicEl.textContent = `${val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}% a.a.`;
-            }
-          }
-        } catch {}
+        const [usdRes, selicRes, ipcaRes, igpmRes, ibovRes] = await Promise.allSettled([
+          fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL').then((r) => (r.ok ? r.json() : null)),
+          fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json').then((r) =>
+            r.ok ? r.json() : null
+          ),
+          fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.13522/dados/ultimos/1?formato=json').then((r) =>
+            r.ok ? r.json() : null
+          ),
+          fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.189/dados/ultimos/12?formato=json').then((r) =>
+            r.ok ? r.json() : null
+          ),
+          fetch('https://brapi.dev/api/quote/%5EBVSP').then((r) => (r.ok ? r.json() : null)),
+        ]);
 
-        try {
-          const ipcaRes = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.13522/dados/ultimos/1?formato=json');
-          if (ipcaRes.ok) {
-            const ipcaData = await ipcaRes.json();
-            const val = parseFloat(ipcaData?.[0]?.valor);
-            const ipcaEl = document.getElementById('ticker-ipca');
-            if (ipcaEl && !isNaN(val)) {
-              ipcaEl.textContent = `${val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}%`;
-            }
+        const nextValues: MarketIndicatorValues = {};
+
+        // Dólar comercial
+        if (usdRes.status === 'fulfilled' && usdRes.value?.USDBRL?.bid) {
+          const bid = parseFloat(usdRes.value.USDBRL.bid);
+          if (Number.isFinite(bid)) {
+            nextValues.usd = bid.toLocaleString('pt-BR', {
+              style: 'currency',
+              currency: 'BRL',
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            });
           }
-        } catch {}
+        }
+
+        // Selic Meta
+        if (selicRes.status === 'fulfilled' && selicRes.value?.[0]?.valor) {
+          const val = parseFloat(selicRes.value[0].valor);
+          if (Number.isFinite(val)) {
+            nextValues.selic = `${val.toLocaleString('pt-BR', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}% a.a.`;
+          }
+        }
+
+        // IPCA acumulado 12 meses
+        if (ipcaRes.status === 'fulfilled' && ipcaRes.value?.[0]?.valor) {
+          const val = parseFloat(ipcaRes.value[0].valor);
+          if (Number.isFinite(val)) {
+            nextValues.ipca = `${val.toLocaleString('pt-BR', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}%`;
+          }
+        }
+
+        // IGP-M acumulado 12 meses (juros compostos sobre as últimas 12 variações mensais do BCB)
+        if (igpmRes.status === 'fulfilled' && Array.isArray(igpmRes.value) && igpmRes.value.length === 12) {
+          const factor = igpmRes.value.reduce((acc: number, item: { valor: string }) => {
+            const monthly = parseFloat(item.valor) / 100;
+            return Number.isFinite(monthly) ? acc * (1 + monthly) : acc;
+          }, 1);
+          const accumulated = (factor - 1) * 100;
+          if (Number.isFinite(accumulated)) {
+            nextValues.igpm = `${accumulated.toLocaleString('pt-BR', {
+              minimumFractionDigits: 2,
+              maximumFractionDigits: 2,
+            })}%`;
+          }
+        }
+
+        // Ibovespa em tempo real (pontos)
+        if (ibovRes.status === 'fulfilled' && ibovRes.value?.results?.[0]?.regularMarketPrice) {
+          const pts = Math.round(Number(ibovRes.value.results[0].regularMarketPrice));
+          if (Number.isFinite(pts)) {
+            nextValues.ibov = `${pts.toLocaleString('pt-BR')} pts`;
+          }
+        }
+
+        if (Object.keys(nextValues).length > 0) {
+          applyMarketIndicators(nextValues);
+          try {
+            localStorage.setItem(
+              TICKER_CACHE_KEY,
+              JSON.stringify({ timestamp: Date.now(), values: nextValues })
+            );
+          } catch {}
+        }
       }
 
       updateMarketIndicators();
@@ -371,19 +462,19 @@ const currentDate = new Date().toLocaleDateString('pt-BR', {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        gap: 1rem;
+        gap: 0.85rem;
       }
       .header-left {
         display: flex;
         justify-content: flex-start;
         align-items: center;
-        flex: 1;
+        flex: 0 0 auto;
       }
       .header-right {
         display: flex;
         justify-content: flex-end;
         align-items: center;
-        flex: 1;
+        flex: 0 0 auto;
       }
       .logo-link {
         display: flex;
@@ -391,7 +482,7 @@ const currentDate = new Date().toLocaleDateString('pt-BR', {
         text-decoration: none;
       }
       .site-logo-img {
-        height: 65px;
+        height: 60px;
         width: auto;
         display: block;
         transition: transform 0.2s ease;
@@ -405,19 +496,19 @@ const currentDate = new Date().toLocaleDateString('pt-BR', {
         display: flex;
         align-items: center;
         justify-content: center;
-        gap: 0.75rem;
+        gap: 0.55rem;
         background-color: var(--chrome-bg-alt);
         border: 1px solid var(--chrome-border);
         border-radius: 999px;
-        padding: 0.4rem 1rem;
-        font-size: 0.76rem;
+        padding: 0.38rem 0.85rem;
+        font-size: 0.72rem;
         box-shadow: var(--shadow-sm);
         margin: 0 auto;
       }
       .ticker-item {
         display: flex;
         align-items: center;
-        gap: 0.3rem;
+        gap: 0.28rem;
         white-space: nowrap;
       }
       .ticker-label {
@@ -433,12 +524,22 @@ const currentDate = new Date().toLocaleDateString('pt-BR', {
         font-weight: 300;
       }
 
-      @media (max-width: 960px) {
+      @media (max-width: 1020px) {
         .header-container {
-          display: flex;
+          flex-wrap: wrap;
           justify-content: space-between;
         }
         .market-ticker {
+          order: 3;
+          width: 100%;
+          justify-content: flex-start;
+          overflow-x: auto;
+          -webkit-overflow-scrolling: touch;
+          scrollbar-width: none;
+          border-radius: var(--radius-sm);
+          margin-top: 0.35rem;
+        }
+        .market-ticker::-webkit-scrollbar {
           display: none;
         }
       }
