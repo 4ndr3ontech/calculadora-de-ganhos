@@ -214,7 +214,7 @@ import SearchTools from '../components/SearchTools.astro';
                 <polyline points="17 6 23 6 23 12"></polyline>
               </svg>
             </div>
-            <span class="category-arrow" aria-hidden="true">↗</span>
+            <span class="category-pill">Finanças</span>
           </div>
 
           <span class="category-kicker">DINHEIRO E PLANEJAMENTO</span>
@@ -237,7 +237,7 @@ import SearchTools from '../components/SearchTools.astro';
                 <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
               </svg>
             </div>
-            <span class="category-arrow" aria-hidden="true">↗</span>
+            <span class="category-pill">Trabalhista</span>
           </div>
 
           <span class="category-kicker">TRABALHO E REMUNERAÇÃO</span>
@@ -261,7 +261,7 @@ import SearchTools from '../components/SearchTools.astro';
                 <line x1="16" y1="3" x2="14" y2="21"></line>
               </svg>
             </div>
-            <span class="category-arrow" aria-hidden="true">↗</span>
+            <span class="category-pill">Matemática</span>
           </div>
 
           <span class="category-kicker">OPERAÇÕES E FÓRMULAS</span>
@@ -285,7 +285,7 @@ import SearchTools from '../components/SearchTools.astro';
                 <path d="M21 13v2a4 4 0 0 1-4 4H3"></path>
               </svg>
             </div>
-            <span class="category-arrow" aria-hidden="true">↗</span>
+            <span class="category-pill">Utilitários</span>
           </div>
 
           <span class="category-kicker">FACILIDADE E PRODUTIVIDADE</span>
@@ -319,7 +319,7 @@ import SearchTools from '../components/SearchTools.astro';
       </div>
 
       <div class="popular-grid">
-        <a href="/trabalhista/calculadora-salario-liquido/" class="popular-card">
+        <a href="/trabalhista/calculadora-salario-liquido/" class="popular-card pop-blue">
           <div class="popular-icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="12" y1="1" x2="12" y2="23"></line>
@@ -333,7 +333,7 @@ import SearchTools from '../components/SearchTools.astro';
           <span class="popular-arrow" aria-hidden="true">→</span>
         </a>
 
-        <a href="/financas/juros-compostos/" class="popular-card">
+        <a href="/financas/juros-compostos/" class="popular-card pop-green">
           <div class="popular-icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
@@ -347,7 +347,7 @@ import SearchTools from '../components/SearchTools.astro';
           <span class="popular-arrow" aria-hidden="true">→</span>
         </a>
 
-        <a href="/trabalhista/rescisao/" class="popular-card">
+        <a href="/trabalhista/rescisao/" class="popular-card pop-orange">
           <div class="popular-icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
@@ -363,7 +363,7 @@ import SearchTools from '../components/SearchTools.astro';
           <span class="popular-arrow" aria-hidden="true">→</span>
         </a>
 
-        <a href="/trabalhista/ferias/" class="popular-card">
+        <a href="/trabalhista/ferias/" class="popular-card pop-purple">
           <div class="popular-icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M21.21 15.89A10 10 0 1 1 8 2.83"></path>
@@ -377,7 +377,7 @@ import SearchTools from '../components/SearchTools.astro';
           <span class="popular-arrow" aria-hidden="true">→</span>
         </a>
 
-        <a href="/financas/financiamento-imobiliario/" class="popular-card">
+        <a href="/financas/financiamento-imobiliario/" class="popular-card pop-cyan">
           <div class="popular-icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
@@ -391,7 +391,7 @@ import SearchTools from '../components/SearchTools.astro';
           <span class="popular-arrow" aria-hidden="true">→</span>
         </a>
 
-        <a href="/matematica/" class="popular-card">
+        <a href="/matematica/" class="popular-card pop-pink">
           <div class="popular-icon" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
               <line x1="4" y1="9" x2="20" y2="9"></line>
@@ -1643,5 +1643,48 @@ import SearchTools from '../components/SearchTools.astro';
     .home-mockup:hover {
       transform: none;
     }
+  }
+
+  /* Paleta vibrante padronizada nos cards da Home */
+  .category-finance { --cat-color: #059669; --cat-bg: rgba(16, 185, 129, 0.12); }
+  .category-work    { --cat-color: #2563eb; --cat-bg: rgba(37, 99, 235, 0.12); }
+  .category-math    { --cat-color: #8b5cf6; --cat-bg: rgba(139, 92, 246, 0.12); }
+  .category-tools   { --cat-color: #ea580c; --cat-bg: rgba(234, 88, 12, 0.12); }
+
+  .category-card:hover {
+    border-color: var(--cat-color) !important;
+  }
+  .category-card .category-icon {
+    background: var(--cat-bg) !important;
+    color: var(--cat-color) !important;
+  }
+  .category-pill {
+    padding: 0.35rem 0.72rem;
+    border-radius: 999px;
+    background: var(--cat-bg);
+    color: var(--cat-color);
+    font-size: 0.72rem;
+    font-weight: 750;
+  }
+  .category-card .category-link {
+    color: var(--cat-color) !important;
+  }
+
+  .popular-card.pop-blue   { --pop-color: #2563eb; --pop-bg: rgba(37, 99, 235, 0.12); }
+  .popular-card.pop-green  { --pop-color: #059669; --pop-bg: rgba(16, 185, 129, 0.12); }
+  .popular-card.pop-orange { --pop-color: #ea580c; --pop-bg: rgba(234, 88, 12, 0.12); }
+  .popular-card.pop-purple { --pop-color: #8b5cf6; --pop-bg: rgba(139, 92, 246, 0.12); }
+  .popular-card.pop-cyan   { --pop-color: #0891b2; --pop-bg: rgba(8, 145, 178, 0.12); }
+  .popular-card.pop-pink   { --pop-color: #db2777; --pop-bg: rgba(219, 39, 119, 0.12); }
+
+  .popular-card:hover {
+    border-color: var(--pop-color) !important;
+  }
+  .popular-card .popular-icon {
+    background: var(--pop-bg) !important;
+    color: var(--pop-color) !important;
+  }
+  .popular-card .popular-arrow {
+    color: var(--pop-color) !important;
   }
 </style>

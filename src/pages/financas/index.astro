@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ToolCard from '../../components/ToolCard.astro';
 import { getToolsByCategory } from '../../data/tools';
 
 const financasTools = getToolsByCategory('Finanças');
@@ -201,28 +202,7 @@ const featuredTools = financasTools.map((tool, index) => ({
       {featuredTools.length > 0 ? (
         <div class="tools-grid">
           {featuredTools.map((tool) => (
-            <a href={tool.route} class="tool-card">
-              <div class="tool-card-top">
-                <span class="tool-number">{tool.number}</span>
-                <span class="tool-arrow" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M7 17 17 7"/><path d="M7 7h10v10"/>
-                  </svg>
-                </span>
-              </div>
-
-              <div class="tool-card-content">
-                <h3>{tool.name}</h3>
-                <p>{tool.description}</p>
-              </div>
-
-              <div class="tool-card-footer">
-                <span>Acessar calculadora</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-                </svg>
-              </div>
-            </a>
+            <ToolCard tool={tool} ctaText="Acessar calculadora" />
           ))}
         </div>
       ) : (

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ToolCard from '../../components/ToolCard.astro';
 import { getToolsByCategory } from '../../data/tools';
 
 const tools = getToolsByCategory('Matemática');
@@ -177,32 +178,7 @@ const tools = getToolsByCategory('Matemática');
         <>
           <div class="tools-grid" id="tools-grid">
             {tools.map((tool) => (
-              <a
-                href={tool.route}
-                class="tool-card"
-                data-search={`${tool.name} ${tool.description}`.toLowerCase()}
-              >
-                <div class="tool-card-top">
-                  <div class="tool-icon" aria-hidden="true">
-                    <span>ƒx</span>
-                  </div>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="tool-arrow" aria-hidden="true">
-                    <line x1="7" x2="17" y1="17" y2="7"/><polyline points="7 7 17 7 17 17"/>
-                  </svg>
-                </div>
-
-                <div class="tool-card-content">
-                  <h3>{tool.name}</h3>
-                  <p>{tool.description}</p>
-                </div>
-
-                <div class="tool-card-footer">
-                  <span>Acessar ferramenta</span>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                    <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-                  </svg>
-                </div>
-              </a>
+              <ToolCard tool={tool} dataSearch={`${tool.name} ${tool.description}`.toLowerCase()} />
             ))}
           </div>
 

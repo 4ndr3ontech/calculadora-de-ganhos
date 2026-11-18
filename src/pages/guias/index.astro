@@ -13,6 +13,16 @@ const categories = [
   ...new Set(sortedGuides.map((guide) => guide.data.category))
 ].sort((a, b) => a.localeCompare(b, 'pt-BR'));
 
+
+const getGuideColor = (cat: string) => {
+  const c = cat.toLowerCase();
+  if (c.includes("trabalh")) return "blue";
+  if (c.includes("finan")) return "green";
+  if (c.includes("matem")) return "purple";
+  if (c.includes("neg") || c.includes("empreend") || c.includes("precif")) return "orange";
+  return "cyan";
+};
+
 const formatDate = (date: string | Date) => {
   const parsed = new Date(date);
 
@@ -229,7 +239,7 @@ const formatDate = (date: string | Date) => {
             {sortedGuides.map((guide) => (
               <a
                 href={`/guias/${guide.id}/`}
-                class="guide-card"
+                class={`guide-card color-${getGuideColor(guide.data.category)}`}
                 data-title={guide.data.title}
                 data-description={guide.data.description}
                 data-category={guide.data.category}
@@ -1214,4 +1224,13 @@ const formatDate = (date: string | Date) => {
       transform: none;
     }
   }
+
+  .guide-card { --g-color: #0891b2; --g-bg: rgba(8, 145, 178, 0.12); }
+  .guide-card.color-blue { --g-color: #2563eb; --g-bg: rgba(37, 99, 235, 0.12); }
+  .guide-card.color-green { --g-color: #059669; --g-bg: rgba(16, 185, 129, 0.12); }
+  .guide-card.color-purple { --g-color: #8b5cf6; --g-bg: rgba(139, 92, 246, 0.12); }
+  .guide-card.color-orange { --g-color: #ea580c; --g-bg: rgba(234, 88, 12, 0.12); }
+  .guide-card:hover { border-color: var(--g-color) !important; }
+  .guide-card .card-category { background: var(--g-bg) !important; color: var(--g-color) !important; }
+  .guide-card .read-more, .guide-card .card-arrow { color: var(--g-color) !important; }
 </style>

@@ -128,23 +128,38 @@ import { TOOLS_DATA } from '../data/tools';
   .search-box {
     display: flex;
     align-items: center;
-    background: var(--bg-secondary);
-    border: 2px solid var(--border-color);
+    background: var(--bg-primary);
+    border: 1.5px solid color-mix(in srgb, var(--color-primary) 28%, var(--border-color));
     border-radius: var(--radius-md);
-    padding: 0.8rem 1.15rem;
-    box-shadow: var(--shadow-md);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    padding: 0.9rem 1.2rem;
+    box-shadow:
+      0 10px 25px -8px color-mix(in srgb, var(--color-primary) 18%, transparent),
+      0 2px 6px rgba(0, 0, 0, 0.04);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .search-box:hover {
+    border-color: color-mix(in srgb, var(--color-primary) 55%, var(--border-color));
+    transform: translateY(-1px);
   }
 
   .search-box:focus-within {
     border-color: var(--color-primary);
-    box-shadow: var(--shadow-lg);
+    box-shadow:
+      0 0 0 4px color-mix(in srgb, var(--color-primary) 14%, transparent),
+      0 14px 30px -8px color-mix(in srgb, var(--color-primary) 24%, transparent);
+    transform: translateY(-1px);
   }
 
   .search-icon {
-    color: var(--text-muted);
+    color: var(--color-primary);
     margin-right: 0.85rem;
     flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  .search-box:focus-within .search-icon {
+    transform: scale(1.06);
   }
 
   #tool-search-input {

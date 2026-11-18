@@ -84,7 +84,7 @@ const currentDate = new Date().toLocaleDateString('pt-BR', {
           <span class="ticker-sep">|</span>
           <div class="ticker-item" title="Índice Bovespa (B3) em Tempo Real">
             <span class="ticker-label">Ibovespa</span>
-            <strong id="ticker-ibov" class="ticker-value">128.450 pts</strong>
+            <strong id="ticker-ibov" class="ticker-value">167.550 pts</strong>
           </div>
         </div>
 
@@ -206,132 +206,101 @@ const currentDate = new Date().toLocaleDateString('pt-BR', {
         });
       }
 
-      // Atualização dos indicadores econômicos em tempo real com cache de 15 minutos
-      const TICKER_CACHE_KEY = 'cg_market_indicators_v1';
-      const TICKER_CACHE_TTL = 15 * 60 * 1000;
+      // Remove cache antigo caso exista
+      try {
+        localStorage.removeItem('cg_market_indicators_v1');
+      } catch {}
 
-      interface MarketIndicatorValues {
-        usd?: string;
-        selic?: string;
-        ipca?: string;
-        igpm?: string;
-        ibov?: string;
-      }
-
-      function applyMarketIndicators(values: MarketIndicatorValues) {
-        const map: Array<[string, string | undefined]> = [
-          ['ticker-usd', values.usd],
-          ['ticker-selic', values.selic],
-          ['ticker-ipca', values.ipca],
-          ['ticker-igpm', values.igpm],
-          ['ticker-ibov', values.ibov],
-        ];
-
-        for (const [id, text] of map) {
-          if (!text) continue;
-          const el = document.getElementById(id);
-          if (el) el.textContent = text;
-        }
-      }
-
+      // Atualização dos indicadores econômicos (APIs abertas sem bloqueio de CORS)
       async function updateMarketIndicators() {
+        // 1. Dólar Comercial (AwesomeAPI)
         try {
-          const cachedRaw = localStorage.getItem(TICKER_CACHE_KEY);
-          if (cachedRaw) {
-            const cached = JSON.parse(cachedRaw);
-            if (cached?.values && Date.now() - cached.timestamp < TICKER_CACHE_TTL) {
-              applyMarketIndicators(cached.values);
-              return;
+          const usdRes = await fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL');
+          if (usdRes.ok) {
+            const usdData = await usdRes.json();
+            const bid = parseFloat(usdData?.USDBRL?.bid);
+            const usdEl = document.getElementById('ticker-usd');
+            if (usdEl && !isNaN(bid)) {
+              usdEl.textContent = bid.toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              });
             }
           }
         } catch {}
 
-        const [usdRes, selicRes, ipcaRes, igpmRes, ibovRes] = await Promise.allSettled([
-          fetch('https://economia.awesomeapi.com.br/json/last/USD-BRL').then((r) => (r.ok ? r.json() : null)),
-          fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json').then((r) =>
-            r.ok ? r.json() : null
-          ),
-          fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.13522/dados/ultimos/1?formato=json').then((r) =>
-            r.ok ? r.json() : null
-          ),
-          fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.189/dados/ultimos/12?formato=json').then((r) =>
-            r.ok ? r.json() : null
-          ),
-          fetch('https://brapi.dev/api/quote/%5EBVSP').then((r) => (r.ok ? r.json() : null)),
-        ]);
-
-        const nextValues: MarketIndicatorValues = {};
-
-        // Dólar comercial
-        if (usdRes.status === 'fulfilled' && usdRes.value?.USDBRL?.bid) {
-          const bid = parseFloat(usdRes.value.USDBRL.bid);
-          if (Number.isFinite(bid)) {
-            nextValues.usd = bid.toLocaleString('pt-BR', {
-              style: 'currency',
-              currency: 'BRL',
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            });
+        // 2. Taxa Selic Meta (BCB Série 432)
+        try {
+          const selicRes = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.432/dados/ultimos/1?formato=json');
+          if (selicRes.ok) {
+            const selicData = await selicRes.json();
+            const val = parseFloat(selicData?.[0]?.valor);
+            const selicEl = document.getElementById('ticker-selic');
+            if (selicEl && !isNaN(val)) {
+              selicEl.textContent = `${val.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}% a.a.`;
+            }
           }
-        }
+        } catch {}
 
-        // Selic Meta
-        if (selicRes.status === 'fulfilled' && selicRes.value?.[0]?.valor) {
-          const val = parseFloat(selicRes.value[0].valor);
-          if (Number.isFinite(val)) {
-            nextValues.selic = `${val.toLocaleString('pt-BR', {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}% a.a.`;
+        // 3. IPCA Acumulado 12 meses (BCB Série 13522)
+        try {
+          const ipcaRes = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.13522/dados/ultimos/1?formato=json');
+          if (ipcaRes.ok) {
+            const ipcaData = await ipcaRes.json();
+            const val = parseFloat(ipcaData?.[0]?.valor);
+            const ipcaEl = document.getElementById('ticker-ipca');
+            if (ipcaEl && !isNaN(val)) {
+              ipcaEl.textContent = `${val.toLocaleString('pt-BR', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}%`;
+            }
           }
-        }
+        } catch {}
 
-        // IPCA acumulado 12 meses
-        if (ipcaRes.status === 'fulfilled' && ipcaRes.value?.[0]?.valor) {
-          const val = parseFloat(ipcaRes.value[0].valor);
-          if (Number.isFinite(val)) {
-            nextValues.ipca = `${val.toLocaleString('pt-BR', {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}%`;
+        // 4. IGP-M Acumulado 12 meses (BCB Série 189 — juros compostos sobre os últimos 12 meses)
+        try {
+          const igpmRes = await fetch('https://api.bcb.gov.br/dados/serie/bcdata.sgs.189/dados/ultimos/12?formato=json');
+          if (igpmRes.ok) {
+            const igpmData = await igpmRes.json();
+            if (Array.isArray(igpmData) && igpmData.length === 12) {
+              const factor = igpmData.reduce((acc: number, item: { valor: string }) => {
+                const monthly = parseFloat(item.valor) / 100;
+                return !isNaN(monthly) ? acc * (1 + monthly) : acc;
+              }, 1);
+              const accumulated = (factor - 1) * 100;
+              const igpmEl = document.getElementById('ticker-igpm');
+              if (igpmEl && !isNaN(accumulated)) {
+                igpmEl.textContent = `${accumulated.toLocaleString('pt-BR', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}%`;
+              }
+            }
           }
-        }
+        } catch {}
 
-        // IGP-M acumulado 12 meses (juros compostos sobre as últimas 12 variações mensais do BCB)
-        if (igpmRes.status === 'fulfilled' && Array.isArray(igpmRes.value) && igpmRes.value.length === 12) {
-          const factor = igpmRes.value.reduce((acc: number, item: { valor: string }) => {
-            const monthly = parseFloat(item.valor) / 100;
-            return Number.isFinite(monthly) ? acc * (1 + monthly) : acc;
-          }, 1);
-          const accumulated = (factor - 1) * 100;
-          if (Number.isFinite(accumulated)) {
-            nextValues.igpm = `${accumulated.toLocaleString('pt-BR', {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}%`;
+        // 5. Ibovespa em tempo real (Brapi índice IBOV público)
+        try {
+          const ibovRes = await fetch('https://brapi.dev/api/quote/IBOV');
+          if (ibovRes.ok) {
+            const ibovData = await ibovRes.json();
+            const pts = Math.round(Number(ibovData?.results?.[0]?.regularMarketPrice));
+            const ibovEl = document.getElementById('ticker-ibov');
+            if (ibovEl && !isNaN(pts) && pts > 0) {
+              ibovEl.textContent = `${pts.toLocaleString('pt-BR')} pts`;
+            }
           }
-        }
-
-        // Ibovespa em tempo real (pontos)
-        if (ibovRes.status === 'fulfilled' && ibovRes.value?.results?.[0]?.regularMarketPrice) {
-          const pts = Math.round(Number(ibovRes.value.results[0].regularMarketPrice));
-          if (Number.isFinite(pts)) {
-            nextValues.ibov = `${pts.toLocaleString('pt-BR')} pts`;
-          }
-        }
-
-        if (Object.keys(nextValues).length > 0) {
-          applyMarketIndicators(nextValues);
-          try {
-            localStorage.setItem(
-              TICKER_CACHE_KEY,
-              JSON.stringify({ timestamp: Date.now(), values: nextValues })
-            );
-          } catch {}
-        }
+        } catch {}
       }
 
       updateMarketIndicators();
+      document.addEventListener('astro:after-swap', updateMarketIndicators);
     </script>
 
     <style is:global>
@@ -792,6 +761,50 @@ const currentDate = new Date().toLocaleDateString('pt-BR', {
         margin-top: 0;
         margin-bottom: 1.5rem;
         flex-grow: 1;
+      }
+
+      /* Padronização Global dos Cartões Coloridos de Ferramentas */
+      .tool-card {
+        --tool-color: #2563eb;
+        --tool-bg: rgba(37, 99, 235, 0.1);
+      }
+      .tool-card.color-green {
+        --tool-color: #059669;
+        --tool-bg: rgba(16, 185, 129, 0.12);
+      }
+      .tool-card.color-purple {
+        --tool-color: #8b5cf6;
+        --tool-bg: rgba(139, 92, 246, 0.12);
+      }
+      .tool-card.color-orange {
+        --tool-color: #ea580c;
+        --tool-bg: rgba(234, 88, 12, 0.12);
+      }
+      .tool-card.color-cyan {
+        --tool-color: #0891b2;
+        --tool-bg: rgba(8, 145, 178, 0.12);
+      }
+      .tool-card.color-pink {
+        --tool-color: #db2777;
+        --tool-bg: rgba(219, 39, 119, 0.12);
+      }
+      .tool-card:hover {
+        border-color: var(--tool-color) !important;
+      }
+      .tool-card .tool-icon {
+        background: var(--tool-bg) !important;
+        color: var(--tool-color) !important;
+      }
+      .tool-card .tool-category {
+        padding: 0.35rem 0.7rem;
+        border-radius: 999px;
+        background: var(--tool-bg);
+        color: var(--tool-color);
+        font-size: 0.7rem;
+        font-weight: 750;
+      }
+      .tool-card .tool-card-footer {
+        color: var(--tool-color) !important;
       }
 
       /* Botões Globais Unificados */

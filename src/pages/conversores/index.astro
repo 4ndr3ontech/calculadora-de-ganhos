@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import ToolCard from '../../components/ToolCard.astro';
 import { getToolsByCategory } from '../../data/tools';
 
 const tools = getToolsByCategory('Conversores');
@@ -161,26 +162,7 @@ const tools = getToolsByCategory('Conversores');
       {tools.length > 0 ? (
         <div class="tools-grid">
           {tools.map((tool) => (
-            <a href={tool.route} class="tool-card">
-              <div class="tool-card-content">
-                <div class="tool-icon" aria-hidden="true">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m16 3 4 4-4 4"/><path d="M20 7H4"/><path d="m8 21-4-4 4-4"/><path d="M4 17h16"/>
-                  </svg>
-                </div>
-
-                <h3>{tool.name}</h3>
-
-                <p>{tool.description}</p>
-              </div>
-
-              <span class="tool-link">
-                <span>Acessar ferramenta</span>
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>
-                </svg>
-              </span>
-            </a>
+            <ToolCard tool={tool} />
           ))}
         </div>
       ) : (
