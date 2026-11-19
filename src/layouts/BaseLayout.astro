@@ -7,15 +7,8 @@ interface Props {
 const { title, description } = Astro.props;
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
-import { getLangFromUrl, useTranslations, getSwitchPaths } from '../i18n/ui';
 
-const url = new URL(Astro.request.url);
-const lang = getLangFromUrl(url);
-const t = useTranslations(lang);
-const switchPaths = getSwitchPaths(url.pathname);
-const siteOrigin = Astro.site ? Astro.site.origin : 'https://calculadoradeganhos.com.br';
-
-const currentDate = new Date().toLocaleDateString(lang, {
+const currentDate = new Date().toLocaleDateString('pt-BR', {
   weekday: 'long',
   day: 'numeric',
   month: 'long',
@@ -23,16 +16,13 @@ const currentDate = new Date().toLocaleDateString(lang, {
 ---
 
 <!DOCTYPE html>
-<html lang={lang}>
+<html lang="pt-BR">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="alternate" hreflang="pt-BR" href={`${siteOrigin}${switchPaths.pt}`} />
-    <link rel="alternate" hreflang="en" href={`${siteOrigin}${switchPaths.en}`} />
-    <link rel="alternate" hreflang="x-default" href={`${siteOrigin}/`} />
 
     <!-- Restaura o tema salvo ou força o modo claro por padrão absoluto -->
     <script is:inline>
@@ -49,25 +39,9 @@ const currentDate = new Date().toLocaleDateString(lang, {
       <div class="container top-bar-container">
         <span id="header-current-date" class="top-bar-date">{currentDate}</span>
         <div class="top-bar-links">
-          <a href="/contato/">{t('top.contact')}</a>
+          <a href="/contato/">Contato</a>
           <span class="top-bar-divider">•</span>
-          <a href="/privacidade/">{t('top.privacy')}</a>
-          <span class="top-bar-divider">•</span>
-          <div class="lang-switcher" role="group" aria-label="Language selector">
-            <a
-              href={switchPaths.pt}
-              data-set-lang="pt-BR"
-              class={`lang-link ${lang === 'pt-BR' ? 'active' : ''}`}
-              title="Português (Brasil)"
-            >PT</a>
-            <span class="lang-sep">|</span>
-            <a
-              href={switchPaths.en}
-              data-set-lang="en"
-              class={`lang-link ${lang === 'en' ? 'active' : ''}`}
-              title="English"
-            >EN</a>
-          </div>
+          <a href="/privacidade/">Privacidade</a>
         </div>
       </div>
     </div>
@@ -76,7 +50,7 @@ const currentDate = new Date().toLocaleDateString(lang, {
     <header class="site-header">
       <div class="container header-container">
         <div class="header-left">
-          <a href={lang === 'en' ? '/en/' : '/'} class="logo-link" aria-label="Calculadora de Ganhos">
+          <a href="/" class="logo-link" aria-label="Calculadora de Ganhos">
             <img src="/images/logo.svg" alt="Calculadora de Ganhos" class="site-logo-img" />
           </a>
         </div>
@@ -84,12 +58,12 @@ const currentDate = new Date().toLocaleDateString(lang, {
         <!-- Ticker de Indicadores Econômicos e Trabalhistas -->
         <div class="market-ticker" aria-label="Indicadores Econômicos e Trabalhistas">
           <div class="ticker-item" title="Salário Mínimo Nacional Vigente">
-            <span class="ticker-label">{lang === 'en' ? 'Min. Wage (BR)' : 'Salário Mínimo'}</span>
+            <span class="ticker-label">Salário Mínimo</span>
             <strong class="ticker-value">R$ 1.621,00</strong>
           </div>
           <span class="ticker-sep">|</span>
           <div class="ticker-item" title="Taxa Básica de Juros (Selic Meta - Banco Central)">
-            <span class="ticker-label">{lang === 'en' ? 'Selic Rate' : 'Selic'}</span>
+            <span class="ticker-label">Selic</span>
             <strong id="ticker-selic" class="ticker-value">13,75% a.a.</strong>
           </div>
           <span class="ticker-sep">|</span>
@@ -104,7 +78,7 @@ const currentDate = new Date().toLocaleDateString(lang, {
           </div>
           <span class="ticker-sep">|</span>
           <div class="ticker-item" title="Cotação Dólar Comercial em Tempo Real">
-            <span class="ticker-label">{lang === 'en' ? 'USD/BRL' : 'Dólar'}</span>
+            <span class="ticker-label">Dólar</span>
             <strong id="ticker-usd" class="ticker-value">R$ 5,67</strong>
           </div>
           <span class="ticker-sep">|</span>
@@ -114,7 +88,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
           </div>
         </div>
 
-        
         <div class="header-right">
           <button id="theme-toggle" type="button" class="theme-btn" aria-label="Alternar tema" title="Alternar tema">
             <!-- Sol (visível no modo escuro) -->
@@ -226,7 +199,7 @@ const currentDate = new Date().toLocaleDateString(lang, {
       // Data atual no cabeçalho
       const dateEl = document.getElementById('header-current-date');
       if (dateEl) {
-        dateEl.textContent = new Date().toLocaleDateString(document.documentElement.lang || 'pt-BR', {
+        dateEl.textContent = new Date().toLocaleDateString('pt-BR', {
           weekday: 'long',
           day: 'numeric',
           month: 'long',
@@ -312,25 +285,79 @@ const currentDate = new Date().toLocaleDateString(lang, {
           }
         } catch {}
 
-        // 5. Ibovespa em tempo real via Cloudflare Edge (/api/ibov) com fallback local
+        // 5. Ibovespa em tempo real via Cloudflare Edge (/api/ibov) com fallbacks e cache local
         try {
+          const ibovEl = document.getElementById('ticker-ibov');
+          const CACHE_KEY = 'cg_last_ibov_v1';
+
+          // Restaura último valor válido recente se disponível
+          try {
+            const cachedRaw = localStorage.getItem(CACHE_KEY);
+            if (cachedRaw && ibovEl) {
+              const cached = JSON.parse(cachedRaw);
+              if (cached?.pts > 1000 && Date.now() - (cached?.ts || 0) < 24 * 60 * 60 * 1000) {
+                ibovEl.textContent = `${Number(cached.pts).toLocaleString('pt-BR')} pts`;
+              }
+            }
+          } catch {}
+
           let pts = 0;
-          const ibovRes = await fetch('/api/ibov');
-          if (ibovRes.ok) {
-            const ibovData = await ibovRes.json();
-            pts = Math.round(Number(ibovData?.pts));
-          } else {
-            const yahooUrl = encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/%5EBVSP?interval=1d&range=1d');
-            const fallbackRes = await fetch(`https://api.allorigins.win/get?url=${yahooUrl}`);
-            if (fallbackRes.ok) {
-              const wrapper = await fallbackRes.json();
-              const parsed = JSON.parse(wrapper.contents || '{}');
-              pts = Math.round(Number(parsed?.chart?.result?.[0]?.meta?.regularMarketPrice));
+
+          // Tentativa 1: endpoint próprio (/api/ibov)
+          try {
+            const ibovRes = await fetch('/api/ibov', { cache: 'no-store' });
+            if (ibovRes.ok) {
+              const ibovData = await ibovRes.json();
+              const candidate = Math.round(Number(ibovData?.pts ?? ibovData?.price ?? ibovData?.regularMarketPrice));
+              if (Number.isFinite(candidate) && candidate > 1000) {
+                pts = candidate;
+              }
+            }
+          } catch {}
+
+          // Tentativa 2: Yahoo Finance direto via query1 / query2
+          if (!pts) {
+            const hosts = ['query1.finance.yahoo.com', 'query2.finance.yahoo.com'];
+            for (const host of hosts) {
+              try {
+                const yRes = await fetch(`https://${host}/v8/finance/chart/%5EBVSP?interval=1d&range=5d`);
+                if (yRes.ok) {
+                  const yData = await yRes.json();
+                  const meta = yData?.chart?.result?.[0]?.meta;
+                  const candidate = Math.round(Number(meta?.regularMarketPrice ?? meta?.previousClose));
+                  if (Number.isFinite(candidate) && candidate > 1000) {
+                    pts = candidate;
+                    break;
+                  }
+                }
+              } catch {}
             }
           }
-          const ibovEl = document.getElementById('ticker-ibov');
-          if (ibovEl && !isNaN(pts) && pts > 0) {
-            ibovEl.textContent = `${pts.toLocaleString('pt-BR')} pts`;
+
+          // Tentativa 3: proxy AllOrigins caso bloqueio CORS direto
+          if (!pts) {
+            try {
+              const yahooUrl = encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/%5EBVSP?interval=1d&range=5d');
+              const fallbackRes = await fetch(`https://api.allorigins.win/get?url=${yahooUrl}`);
+              if (fallbackRes.ok) {
+                const wrapper = await fallbackRes.json();
+                const parsed = JSON.parse(wrapper.contents || '{}');
+                const meta = parsed?.chart?.result?.[0]?.meta;
+                const candidate = Math.round(Number(meta?.regularMarketPrice ?? meta?.previousClose));
+                if (Number.isFinite(candidate) && candidate > 1000) {
+                  pts = candidate;
+                }
+              }
+            } catch {}
+          }
+
+          if (pts > 1000) {
+            if (ibovEl) {
+              ibovEl.textContent = `${pts.toLocaleString('pt-BR')} pts`;
+            }
+            try {
+              localStorage.setItem(CACHE_KEY, JSON.stringify({ pts, ts: Date.now() }));
+            } catch {}
           }
         } catch {}
       }
@@ -341,11 +368,10 @@ const currentDate = new Date().toLocaleDateString(lang, {
 
     <style is:global>
       html {
-        overflow-y: scroll; /* Força a barra de rolagem visível para evitar o deslocamento do layout */
+        overflow-y: scroll;
       }
 
       :root {
-        /* Miolo do Portal — Modo Claro (Off-white quente e Esmeralda) */
         --bg-primary: #fafaf9;
         --bg-secondary: #f5f5f4;
         --text-primary: #1c1917;
@@ -355,7 +381,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
         --color-primary: #065f46;
         --color-secondary: #047857;
 
-        /* Identidade Visual Exclusiva — Header, Nav e Footer */
         --chrome-bg: #064e3b;
         --chrome-bg-alt: #043927;
         --chrome-text: #ecfdf5;
@@ -372,7 +397,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
       }
 
       [data-theme="dark"] {
-        /* Miolo do Portal — Modo Escuro (Ardósia quente orgânico) */
         --bg-primary: #111615;
         --bg-secondary: #192220;
         --text-primary: #f5f5f4;
@@ -382,7 +406,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
         --color-primary: #10b981;
         --color-secondary: #34d399;
 
-        /* Identidade Visual — Header, Nav e Footer no Modo Escuro */
         --chrome-bg: #042f24;
         --chrome-bg-alt: #022018;
         --chrome-text: #ecfdf5;
@@ -415,7 +438,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
         box-sizing: border-box;
       }
 
-      /* Barra Superior (Top Bar) */
       .top-bar {
         width: 100%;
         background-color: var(--chrome-bg-alt);
@@ -456,7 +478,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
         font-size: 0.7rem;
       }
 
-      /* Header Global Padronizado com Simetria Perfeita */
       .site-header {
         background-color: var(--chrome-bg);
         border-bottom: 1px solid var(--chrome-border);
@@ -496,7 +517,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
         transform: scale(1.02);
       }
 
-      /* Ticker Central de Indicadores perfeitamente centralizado */
       .market-ticker {
         display: flex;
         align-items: center;
@@ -549,7 +569,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
         }
       }
 
-      /* Harmonização da Navegação Global com a identidade do Header */
       body > nav,
       .site-nav,
       .main-nav {
@@ -571,7 +590,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
         color: var(--chrome-accent) !important;
       }
 
-      /* Harmonização do Rodapé Global (Footer.astro) */
       footer,
       .site-footer {
         background-color: var(--chrome-bg) !important;
@@ -606,7 +624,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
         color: var(--chrome-accent) !important;
       }
 
-      /* Botão de Tema no Header */
       .theme-btn {
         background: rgba(255, 255, 255, 0.08);
         border: 1px solid var(--chrome-border);
@@ -634,7 +651,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
       [data-theme="dark"] .sun-icon { display: block; }
       [data-theme="dark"] .moon-icon { display: none; }
 
-      /* Botão Voltar ao Topo */
       .back-to-top {
         position: fixed;
         right: 1.5rem;
@@ -689,19 +705,16 @@ const currentDate = new Date().toLocaleDateString(lang, {
         }
       }
 
-      /* Main Content Global */
       .main-content {
         flex: 1;
         padding: 3rem 0;
       }
 
-      /* CENTRALIZAÇÃO GLOBAL DE TODOS OS TÍTULOS DO SITE */
       h1, h2, h3, h4, h5, h6 {
         text-align: center;
         width: 100%;
       }
 
-      /* Cabeçalhos e seções informativas com alinhamento centralizado padronizado */
       .section-heading,
       .page-header,
       .trust-intro {
@@ -731,7 +744,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
         margin-right: auto;
       }
 
-      /* Breadcrumb centralizado mantendo os espaços naturais */
       .main-content nav,
       .breadcrumb {
         display: flex;
@@ -749,7 +761,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
         margin-left: 0.25rem;
       }
 
-      /* Cartão Padrão Unificado */
       .card {
         background: var(--bg-secondary);
         border: 1px solid var(--border-color);
@@ -764,7 +775,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
         box-shadow: var(--shadow-md);
       }
 
-      /* Cartões de Vitrine / Listagem de Ferramentas */
       a.card,
       .tools-grid .card,
       .category-grid .card,
@@ -799,7 +809,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
         flex-grow: 1;
       }
 
-      /* Padronização Global dos Cartões Coloridos de Ferramentas */
       .tool-card {
         --tool-color: #2563eb;
         --tool-bg: rgba(37, 99, 235, 0.1);
@@ -843,7 +852,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
         color: var(--tool-color) !important;
       }
 
-      /* Botões Globais Unificados */
       .btn {
         display: inline-flex;
         align-items: center;
@@ -865,7 +873,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
         opacity: 0.9;
       }
 
-      /* Campos de Formulário Globais */
       input[type="number"],
       input[type="text"],
       input[type="date"],
@@ -890,22 +897,17 @@ const currentDate = new Date().toLocaleDateString(lang, {
         color: var(--text-primary);
       }
 
-      /* =========================================================
-         RESPONSIVIDADE E OTIMIZAÇÃO PARA DISPOSITIVOS MÓVEIS
-         ========================================================= */
       @media (max-width: 768px) {
         .container {
           padding: 0 1rem;
         }
 
-        /* Barra Superior (Top Bar) empilhada e compacta */
         .top-bar-container {
           flex-direction: column;
           gap: 0.35rem;
           text-align: center;
         }
 
-        /* Cabeçalho ajustado para telas estreitas */
         .site-header {
           padding: 0.65rem 0;
         }
@@ -914,7 +916,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
           height: 46px;
         }
 
-        /* Ticker de indicadores em formato rolável horizontal no mobile */
         .header-container {
           flex-wrap: wrap;
         }
@@ -936,7 +937,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
           display: none;
         }
 
-        /* Ajustes de espaçamento e tipografia no miolo */
         .main-content {
           padding: 1.75rem 0;
         }
@@ -954,13 +954,11 @@ const currentDate = new Date().toLocaleDateString(lang, {
           padding: 1.25rem;
         }
 
-        /* Botões com área de toque confortável no mobile */
         .btn {
           width: 100%;
           padding: 0.85rem 1rem;
         }
 
-        /* Evita zoom automático no iOS ao focar em campos de formulário */
         input[type="number"],
         input[type="text"],
         input[type="date"],
@@ -968,125 +966,6 @@ const currentDate = new Date().toLocaleDateString(lang, {
           font-size: 16px;
         }
       }
-    
-  .lang-switcher {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.3rem;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.04em;
-  }
-
-  .lang-link {
-    color: rgba(255, 255, 255, 0.72);
-    text-decoration: none;
-    padding: 0.1rem 0.25rem;
-    border-radius: 4px;
-    transition: color 0.15s ease, background-color 0.15s ease;
-  }
-
-  .lang-link:hover {
-    color: #ffffff;
-    background: rgba(255, 255, 255, 0.1);
-  }
-
-  .lang-link.active {
-    color: var(--chrome-accent, #facc15);
-    background: rgba(255, 255, 255, 0.12);
-  }
-
-  .lang-sep {
-    opacity: 0.45;
-  }
-</style>
-  
-  <script is:inline>
-    document.addEventListener('click', function (e) {
-      const target = e.target && e.target.closest ? e.target.closest('[data-set-lang]') : null;
-      if (target) {
-        const chosen = target.getAttribute('data-set-lang');
-        if (chosen) {
-          document.cookie = 'lang_pref=' + encodeURIComponent(chosen) + '; path=/; max-age=31536000; SameSite=Lax';
-        }
-      }
-    });
-  </script>
-
-  <script is:inline>
-    (function () {
-      const hasEnCookie = document.cookie.split(';').some((c) => c.trim() === 'lang_pref=en');
-      const isEnPath = window.location.pathname.startsWith('/en/');
-      if (!hasEnCookie && !isEnPath) return;
-
-      document.documentElement.lang = 'en';
-
-      const phraseMap = new Map([
-        ['Calcular', 'Calculate'],
-        ['Limpar', 'Clear'],
-        ['Simular', 'Simulate'],
-        ['Copiar', 'Copy'],
-        ['Copiado!', 'Copied!'],
-        ['Resultado', 'Result'],
-        ['Resultados', 'Results'],
-        ['Valor Inicial', 'Initial Amount'],
-        ['Aporte Mensal', 'Monthly Contribution'],
-        ['Taxa de Juros', 'Interest Rate'],
-        ['Período', 'Period'],
-        ['Meses', 'Months'],
-        ['Anos', 'Years'],
-        ['Total Investido', 'Total Invested'],
-        ['Total em Juros', 'Total Interest'],
-        ['Valor Final Total', 'Final Total Balance'],
-        ['Calculadora de Juros Compostos', 'Compound Interest Calculator'],
-        ['Calculadora de Porcentagem', 'Percentage Calculator'],
-        ['Calculadora de Regra de Três', 'Rule of Three Calculator'],
-        ['Calculadora de Financiamento Imobiliário', 'Mortgage Calculator'],
-        ['Simulador de Investimentos', 'Investment Simulator'],
-        ['Calculadora de Independência Financeira', 'Financial Independence (FIRE) Calculator'],
-        ['Calculadora de Empréstimo', 'Loan Payment Calculator'],
-        ['Calculadora de Desconto', 'Discount Calculator'],
-        ['Calculadora Científica', 'Scientific Calculator'],
-        ['Calculadora Padrão', 'Standard Calculator'],
-        ['Conversor de Temperatura', 'Temperature Converter'],
-        ['Calculadora de Dias Úteis', 'Business Days Calculator'],
-        ['Calculadora de Biometria e IMC', 'BMI & Biometrics Calculator'],
-        ['Gerador de Senhas Seguras', 'Secure Password Generator'],
-        ['Contador de Texto e Caracteres', 'Word & Character Counter'],
-        ['Calculadora de Precificação e Markup', 'Markup & Pricing Calculator'],
-        ['Calculadora de Valor Hora', 'Hourly Rate Calculator'],
-        ['Início', 'Home'],
-        ['Finanças', 'Finance'],
-        ['Matemática', 'Math'],
-        ['Trabalhista', 'Labor (BR)'],
-        ['Conversores', 'Converters'],
-        ['Saúde', 'Health'],
-        ['Ferramentas', 'Tools'],
-        ['Guias', 'Guides'],
-        ['Contato', 'Contact'],
-        ['Privacidade', 'Privacy'],
-      ]);
-
-      function translateTextNodes(root) {
-        if (!root) return;
-        const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
-        let node;
-        while ((node = walker.nextNode())) {
-          const raw = node.nodeValue;
-          if (!raw) continue;
-          const trimmed = raw.trim();
-          if (phraseMap.has(trimmed)) {
-            node.nodeValue = raw.replace(trimmed, phraseMap.get(trimmed));
-          }
-        }
-      }
-
-      if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', () => translateTextNodes(document.body));
-      } else {
-        translateTextNodes(document.body);
-      }
-    })();
-  </script>
-</body>
+    </style>
+  </body>
 </html>

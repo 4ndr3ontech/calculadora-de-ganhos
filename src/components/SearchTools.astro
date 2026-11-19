@@ -1,7 +1,6 @@
 ---
 import { TOOLS_DATA } from '../data/tools';
 import { getLangFromUrl } from '../i18n/ui';
-import { TOOLS_EN } from '../i18n/tools-en';
 
 const lang = getLangFromUrl(new URL(Astro.request.url));
 const isEn = lang === 'en';
@@ -17,8 +16,6 @@ const catEnMap: Record<string, string> = {
 const localizedTools = isEn
   ? TOOLS_DATA.filter((t) => t.status === 'active' && t.category !== 'Trabalhista').map((t) => ({
       ...t,
-      name: TOOLS_EN[t.id]?.name || t.name,
-      description: TOOLS_EN[t.id]?.description || t.description,
       category: catEnMap[t.category] || t.category,
     }))
   : TOOLS_DATA;
