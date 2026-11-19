@@ -312,16 +312,25 @@ const currentDate = new Date().toLocaleDateString(lang, {
           }
         } catch {}
 
-        // 5. Ibovespa em tempo real (Brapi índice IBOV público)
+        // 5. Ibovespa em tempo real via Cloudflare Edge (/api/ibov) com fallback local
         try {
-          const ibovRes = await fetch('https://brapi.dev/api/quote/IBOV');
+          let pts = 0;
+          const ibovRes = await fetch('/api/ibov');
           if (ibovRes.ok) {
             const ibovData = await ibovRes.json();
-            const pts = Math.round(Number(ibovData?.results?.[0]?.regularMarketPrice));
-            const ibovEl = document.getElementById('ticker-ibov');
-            if (ibovEl && !isNaN(pts) && pts > 0) {
-              ibovEl.textContent = `${pts.toLocaleString('pt-BR')} pts`;
+            pts = Math.round(Number(ibovData?.pts));
+          } else {
+            const yahooUrl = encodeURIComponent('https://query1.finance.yahoo.com/v8/finance/chart/%5EBVSP?interval=1d&range=1d');
+            const fallbackRes = await fetch(`https://api.allorigins.win/get?url=${yahooUrl}`);
+            if (fallbackRes.ok) {
+              const wrapper = await fallbackRes.json();
+              const parsed = JSON.parse(wrapper.contents || '{}');
+              pts = Math.round(Number(parsed?.chart?.result?.[0]?.meta?.regularMarketPrice));
             }
+          }
+          const ibovEl = document.getElementById('ticker-ibov');
+          if (ibovEl && !isNaN(pts) && pts > 0) {
+            ibovEl.textContent = `${pts.toLocaleString('pt-BR')} pts`;
           }
         } catch {}
       }
