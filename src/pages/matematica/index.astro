@@ -322,7 +322,7 @@ const tools = getToolsByCategory('Matemática');
 <script>
   const searchInput = document.querySelector<HTMLInputElement>('#tool-search');
   const toolCards = Array.from(
-    document.querySelectorAll<HTMLAnchorElement>('.tool-card')
+    document.querySelectorAll<HTMLAnchorElement>('#tools-grid .featured-tool-card')
   );
   const noResults = document.querySelector<HTMLElement>('#no-results');
 
@@ -343,6 +343,7 @@ const tools = getToolsByCategory('Matemática');
       const matches = content.includes(query);
 
       card.hidden = !matches;
+      card.style.display = matches ? '' : 'none';
 
       if (matches) visibleCount++;
     });
