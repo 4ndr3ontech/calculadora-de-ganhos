@@ -1,0 +1,64 @@
+---
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+let posts: any[] = [];
+try {
+  posts = await getCollection("guias");
+} catch {}
+---
+
+<BaseLayout
+  title="Guides & Educational Articles — Calculadora de Ganhos"
+  description="Practical financial, math, and career guides to help you understand calculations and make smarter decisions."
+>
+  <section class="en-guides-hero">
+    <div class="container">
+      <nav class="en-breadcrumb" aria-label="Breadcrumb">
+        <a href="/en/">Home</a>
+        <span>/</span>
+        <span>Guides</span>
+      </nav>
+      <h1>Guides & Educational Articles</h1>
+      <p>Clear explanations, formulas, and practical walkthroughs for everyday financial and mathematical decisions.</p>
+    </div>
+  </section>
+
+  <section class="en-guides-list">
+    <div class="container">
+      <div class="en-guides-grid">
+        {posts.length > 0 ? posts.map((post) => (
+          <a href={`/guias/${post.slug}/`} class="guide-card">
+            <span class="guide-badge">Guide</span>
+            <h2>{post.data.title}</h2>
+            <p>{post.data.description}</p>
+            <span class="guide-cta">Read guide →</span>
+          </a>
+        )) : (
+          <a href="/guias/" class="guide-card">
+            <span class="guide-badge">Editorial</span>
+            <h2>Browse All Portal Guides</h2>
+            <p>Access step-by-step financial planning, compound interest, and payroll guides.</p>
+            <span class="guide-cta">Open guides →</span>
+          </a>
+        )}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .en-guides-hero { text-align: center; padding: 2.75rem 1.25rem 2.25rem; background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%); border-bottom: 1px solid var(--border-color); }
+  .en-breadcrumb { display: inline-flex; align-items: center; gap: 0.45rem; font-size: 0.82rem; color: var(--text-muted); margin-bottom: 0.85rem; }
+  .en-breadcrumb a { color: var(--color-primary); text-decoration: none; font-weight: 600; }
+  .en-guides-hero h1 { font-size: clamp(1.75rem, 3.5vw, 2.5rem); font-weight: 850; color: var(--text-primary); margin: 0 auto 0.65rem; }
+  .en-guides-hero p { max-width: 600px; margin: 0 auto; color: var(--text-secondary); font-size: 1rem; line-height: 1.6; }
+  .en-guides-list { padding: 2.75rem 1.25rem 4rem; }
+  .en-guides-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 1.25rem; }
+  .guide-card { display: flex; flex-direction: column; align-items: flex-start; padding: 1.4rem; background: var(--bg-primary); border: 1px solid var(--border-color); border-radius: var(--radius-md); text-decoration: none; transition: transform 0.2s ease, border-color 0.2s ease; }
+  .guide-card:hover { transform: translateY(-3px); border-color: var(--color-primary); }
+  .guide-badge { padding: 0.2rem 0.65rem; border-radius: 999px; background: rgba(16, 185, 129, 0.12); color: #059669; font-size: 0.72rem; font-weight: 750; text-transform: uppercase; margin-bottom: 0.85rem; }
+  .guide-card h2 { font-size: 1.12rem; font-weight: 750; color: var(--text-primary); margin: 0 0 0.5rem; }
+  .guide-card p { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.55; margin: 0 0 1.25rem; flex-grow: 1; }
+  .guide-cta { font-size: 0.86rem; font-weight: 700; color: var(--color-primary); }
+</style>

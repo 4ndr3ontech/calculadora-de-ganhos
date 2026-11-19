@@ -1,5 +1,34 @@
 ---
 import { TOOLS_DATA } from '../data/tools';
+import { getLangFromUrl } from '../i18n/ui';
+import { TOOLS_EN } from '../i18n/tools-en';
+
+const lang = getLangFromUrl(new URL(Astro.request.url));
+const isEn = lang === 'en';
+
+const catEnMap: Record<string, string> = {
+  'Finanças': 'Finance',
+  'Matemática': 'Math',
+  'Conversores': 'Converters',
+  'Saúde': 'Health',
+  'Ferramentas': 'Tools',
+};
+
+const localizedTools = isEn
+  ? TOOLS_DATA.filter((t) => t.status === 'active' && t.category !== 'Trabalhista').map((t) => ({
+      ...t,
+      name: TOOLS_EN[t.id]?.name || t.name,
+      description: TOOLS_EN[t.id]?.description || t.description,
+      category: catEnMap[t.category] || t.category,
+    }))
+  : TOOLS_DATA;
+
+const placeholderText = isEn
+  ? 'What do you want to calculate? (e.g., compound interest, percentage...)'
+  : 'O que você deseja calcular? (ex: juros compostos, salário líquido...)';
+const ariaLabelText = isEn
+  ? 'Search calculators and tools'
+  : 'Pesquisar ferramentas e calculadoras';
 ---
 
 <div class="search-wrapper" role="search">
@@ -11,8 +40,8 @@ import { TOOLS_DATA } from '../data/tools';
     <input 
       type="search" 
       id="tool-search-input" 
-      placeholder="O que você deseja calcular? (ex: juros compostos, salário líquido...)" 
-      aria-label="Pesquisar ferramentas e calculadoras"
+      placeholder={placeholderText} 
+      aria-label={ariaLabelText}
       aria-autocomplete="list"
       aria-controls="search-results"
       autocomplete="off"
@@ -21,7 +50,7 @@ import { TOOLS_DATA } from '../data/tools';
   <div id="search-results" class="search-results-dropdown" role="listbox"></div>
 </div>
 
-<script define:vars={{ toolsIndex: TOOLS_DATA }}>
+<script define:vars={{ toolsIndex: localizedTools, isEn }}>
   function setupToolSearch() {
     const input = document.getElementById('tool-search-input');
     const dropdown = document.getElementById('search-results');
@@ -41,9 +70,9 @@ import { TOOLS_DATA } from '../data/tools';
       const c = normalize(cat);
       if (c.includes("trabalh")) return "blue";
       if (c.includes("finan")) return "green";
-      if (c.includes("matem")) return "purple";
-      if (c.includes("saude")) return "pink";
-      if (c.includes("convers")) return "cyan";
+      if (c.includes("matem") || c === "math") return "purple";
+      if (c.includes("saude") || c === "health") return "pink";
+      if (c.includes("convers") || c === "converters") return "cyan";
       return "orange";
     }
 
@@ -89,7 +118,7 @@ import { TOOLS_DATA } from '../data/tools';
         `).join('');
         dropdown.classList.add('active');
       } else {
-        dropdown.innerHTML = `<div class="search-no-results">Nenhuma ferramenta encontrada para "${e.target.value}"</div>`;
+        dropdown.innerHTML = `<div class="search-no-results">${isEn ? "No calculator found for" : "Nenhuma ferramenta encontrada para"} "${e.target.value}"</div>`;
         dropdown.classList.add('active');
       }
     });

@@ -1,5 +1,8 @@
 ---
+import { getLangFromUrl } from '../i18n/ui';
 const currentYear = new Date().getFullYear();
+const lang = getLangFromUrl(new URL(Astro.request.url));
+const isEn = lang === 'en';
 ---
 
 <footer class="site-footer">
@@ -11,46 +14,47 @@ const currentYear = new Date().getFullYear();
           <img src="/images/logo.svg" alt="Calculadora de Ganhos" class="footer-logo-img" width="220" height="64" loading="lazy" />
         </a>
         <p class="footer-desc">
-          Portal brasileiro gratuito de calculadoras inteligentes, simuladores financeiros,
-          trabalhistas e utilidades práticas para apoiar suas decisões cotidianas com clareza.
+          {isEn
+            ? "Free online portal of smart calculators, financial simulators, math tools, and everyday utilities to support clearer decisions."
+            : "Portal brasileiro gratuito de calculadoras inteligentes, simuladores financeiros, trabalhistas e utilidades práticas para apoiar suas decisões cotidianas com clareza."}
         </p>
         <p class="footer-contact-info">
-          Contato editorial: <a href="/contato/">Fale conosco</a>
+          {isEn ? "Editorial contact: " : "Contato editorial: "}<a href="/contato/">{isEn ? "Contact us" : "Fale conosco"}</a>
         </p>
       </div>
 
       <!-- Coluna 2: Todas as Categorias do Portal -->
       <nav class="footer-col" aria-label="Calculadoras">
-        <h4>Calculadoras</h4>
+        <h4>{isEn ? "Calculators" : "Calculadoras"}</h4>
         <ul>
-          <li><a href="/financas/">Finanças e Investimentos</a></li>
-          <li><a href="/trabalhista/">Calculadoras Trabalhistas</a></li>
-          <li><a href="/matematica/">Matemática e Cálculos</a></li>
-          <li><a href="/conversores/">Conversores e Utilitários</a></li>
-          <li><a href="/saude/biometria/">Saúde e Biometria</a></li>
-          <li><a href="/ferramentas/">Ferramentas Digitais</a></li>
+          <li><a href={isEn ? "/en/financas/" : "/financas/"}>{isEn ? "Finance & Investing" : "Finanças e Investimentos"}</a></li>
+          <li><a href={isEn ? "/en/trabalhista/" : "/trabalhista/"}>{isEn ? "Labor & Payroll" : "Calculadoras Trabalhistas"}</a></li>
+          <li><a href={isEn ? "/en/matematica/" : "/matematica/"}>{isEn ? "Math & Calculations" : "Matemática e Cálculos"}</a></li>
+          <li><a href={isEn ? "/en/conversores/" : "/conversores/"}>{isEn ? "Converters & Utilities" : "Conversores e Utilitários"}</a></li>
+          <li><a href={isEn ? "/en/saude/" : "/saude/biometria/"}>{isEn ? "Health & Biometrics" : "Saúde e Biometria"}</a></li>
+          <li><a href={isEn ? "/en/ferramentas/" : "/ferramentas/"}>{isEn ? "Digital Tools" : "Ferramentas Digitais"}</a></li>
         </ul>
       </nav>
 
       <!-- Coluna 3: Institucional e Editorial -->
       <nav class="footer-col" aria-label="Institucional">
-        <h4>Institucional</h4>
+        <h4>{isEn ? "About" : "Institucional"}</h4>
         <ul>
-          <li><a href="/sobre/">Sobre Nós</a></li>
-          <li><a href="/politica-editorial/">Política Editorial</a></li>
-          <li><a href="/guias/">Guias e Artigos</a></li>
-          <li><a href="/contato/">Contato</a></li>
+          <li><a href="/sobre/">{isEn ? "About Us" : "Sobre Nós"}</a></li>
+          <li><a href="/politica-editorial/">{isEn ? "Editorial Policy" : "Política Editorial"}</a></li>
+          <li><a href={isEn ? "/en/guias/" : "/guias/"}>{isEn ? "Guides & Articles" : "Guias e Artigos"}</a></li>
+          <li><a href="/contato/">{isEn ? "Contact" : "Contato"}</a></li>
         </ul>
       </nav>
 
       <!-- Coluna 4: Legal, Privacidade e LGPD -->
       <nav class="footer-col" aria-label="Legal e Privacidade">
-        <h4>Legal e Privacidade</h4>
+        <h4>{isEn ? "Legal & Privacy" : "Legal e Privacidade"}</h4>
         <ul>
-          <li><a href="/privacidade/">Política de Privacidade</a></li>
-          <li><a href="/termos/">Termos de Uso</a></li>
-          <li><a href="/cookies/">Política de Cookies</a></li>
-          <li><a href="/acessibilidade/">Acessibilidade</a></li>
+          <li><a href="/privacidade/">{isEn ? "Privacy Policy" : "Política de Privacidade"}</a></li>
+          <li><a href="/termos/">{isEn ? "Terms of Use" : "Termos de Uso"}</a></li>
+          <li><a href="/cookies/">{isEn ? "Cookie Policy" : "Política de Cookies"}</a></li>
+          <li><a href="/acessibilidade/">{isEn ? "Accessibility" : "Acessibilidade"}</a></li>
         </ul>
       </nav>
     </div>
@@ -59,17 +63,29 @@ const currentYear = new Date().getFullYear();
     <div class="footer-disclaimer" role="note">
       <div class="disclaimer-badge" aria-hidden="true">ⓘ</div>
       <p>
-        <strong>Aviso Legal e Isenção de Responsabilidade:</strong> As calculadoras, simuladores e conteúdos
-        publicados no <strong>Calculadora de Ganhos</strong> têm caráter estritamente informativo e educacional.
-        Os resultados apresentados são estimativas baseadas nos dados inseridos pelo usuário e nas regras vigentes,
-        não substituindo a orientação individualizada de contadores, advogados, médicos ou consultores financeiros.
+        {isEn ? (
+          <>
+            <strong>Legal Notice & Disclaimer:</strong> The calculators, simulators, and content published on{" "}
+            <strong>Calculadora de Ganhos</strong> are strictly for informational and educational purposes.
+            Results are estimates based on user inputs and do not replace professional advice from certified accountants,
+            lawyers, physicians, or financial advisors.
+          </>
+        ) : (
+          <>
+            <strong>Aviso Legal e Isenção de Responsabilidade:</strong> As calculadoras, simuladores e conteúdos
+            publicados no <strong>Calculadora de Ganhos</strong> têm caráter estritamente informativo e educacional.
+            Os resultados apresentados são estimativas baseadas nos dados inseridos pelo usuário e nas regras vigentes,
+            não substituindo a orientação individualizada de contadores, advogados, médicos ou consultores financeiros.
+          </>
+        )}
       </p>
     </div>
 
     <!-- Barra Inferior de Direitos Autorais -->
     <div class="footer-bottom">
-      <p>© {currentYear} Calculadora de Ganhos (calculadoradeganhos.com.br). Todos os direitos reservados.</p>
-      <p class="footer-lgpd">Este site utiliza cookies para melhorar a experiência de navegação e exibir anúncios relevantes conforme a LGPD.</p>
+      <p>© {currentYear} Calculadora de Ganhos (calculadoradeganhos.com.br). {isEn ? "All rights reserved." : "Todos os direitos reservados."}</p>
+      <p class="footer-lgpd">{isEn ? "This website uses cookies to enhance browsing experience and display relevant ads." : "Este site utiliza cookies para melhorar a experiência de navegação e exibir anúncios relevantes conforme a LGPD."}</p>
+      <p class="footer-dev">{isEn ? "Developed by " : "Desenvolvido por "}<span>4NDR3ONTECH</span></p>
     </div>
   </div>
 </footer>
@@ -320,5 +336,18 @@ const currentYear = new Date().getFullYear();
     .footer-col a:hover {
       transform: none;
     }
+  }
+
+  .footer-dev {
+    margin-top: 0.4rem;
+    font-size: 0.62rem;
+    letter-spacing: 0.06em;
+    opacity: 0.5;
+  }
+
+  .footer-dev span {
+    font-size: 0.88em;
+    font-weight: 600;
+    letter-spacing: 0.08em;
   }
 </style>

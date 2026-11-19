@@ -1,21 +1,35 @@
 ---
-const pathname = new URL(Astro.request.url).pathname;
+import { getLangFromUrl, useTranslations } from '../i18n/ui';
 
-const navItems = [
-  { label: 'Início', href: '/' },
-  { label: 'Finanças', href: '/financas/' },
-  { label: 'Matemática', href: '/matematica/' },
-  { label: 'Trabalhista', href: '/trabalhista/' },
-  { label: 'Conversores', href: '/conversores/' },
-  { label: 'Saúde', href: '/saude/' },
-  { label: 'Ferramentas', href: '/ferramentas/' },
-  { label: 'Guias', href: '/guias/' },
-];
+const pathname = new URL(Astro.request.url).pathname;
+const lang = getLangFromUrl(new URL(Astro.request.url));
+const t = useTranslations(lang);
+
+const navItems = lang === 'en'
+  ? [
+      { label: 'Home', href: '/en/' },
+      { label: 'Finance', href: '/en/financas/' },
+      { label: 'Math', href: '/en/matematica/' },
+      { label: 'Labor', href: '/en/trabalhista/' },
+      { label: 'Converters', href: '/en/conversores/' },
+      { label: 'Health', href: '/en/saude/' },
+      { label: 'Tools', href: '/en/ferramentas/' },
+      { label: 'Guides', href: '/en/guias/' },
+    ]
+  : [
+      { label: t('nav.home'), href: '/' },
+      { label: t('nav.finance'), href: '/financas/' },
+      { label: t('nav.math'), href: '/matematica/' },
+      { label: t('nav.labor'), href: '/trabalhista/' },
+      { label: t('nav.converters'), href: '/conversores/' },
+      { label: t('nav.health'), href: '/saude/' },
+      { label: t('nav.tools'), href: '/ferramentas/' },
+      { label: t('nav.guides'), href: '/guias/' },
+    ];
 ---
 
-<nav class="site-nav" aria-label="Navegação Principal">
+<nav class="site-nav" aria-label={t('nav.aria')}>
   <div class="container nav-container">
-    <!-- Cabeçalho Mobile com Botão Hambúrguer à Esquerda e Título Centralizado -->
     <div class="mobile-nav-header">
       <button
         id="mobile-menu-btn"
@@ -23,7 +37,7 @@ const navItems = [
         class="hamburger-btn"
         aria-expanded="false"
         aria-controls="main-nav-list"
-        aria-label="Abrir menu de navegação"
+        aria-label="Menu"
       >
         <svg class="icon-menu" xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/>
@@ -32,15 +46,14 @@ const navItems = [
           <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
         </svg>
       </button>
-      <span class="mobile-nav-title">Categorias e Calculadoras</span>
+      <span class="mobile-nav-title">{t('nav.mobileTitle')}</span>
     </div>
 
-    <!-- Lista Completa das 8 Abas -->
     <ul id="main-nav-list" class="nav-list">
       {navItems.map((item) => {
         const isActive =
-          item.href === '/'
-            ? pathname === '/'
+          item.href === '/' || item.href === '/en/'
+            ? pathname === item.href
             : pathname.startsWith(item.href);
 
         return (
@@ -68,9 +81,7 @@ const navItems = [
     btn.onclick = () => {
       const isOpen = btn.getAttribute('aria-expanded') === 'true';
       const nextState = !isOpen;
-
       btn.setAttribute('aria-expanded', String(nextState));
-      btn.setAttribute('aria-label', nextState ? 'Fechar menu de navegação' : 'Abrir menu de navegação');
       menu.classList.toggle('open', nextState);
     };
   }
@@ -80,146 +91,25 @@ const navItems = [
 </script>
 
 <style>
-  .site-nav {
-    background-color: var(--chrome-bg-alt);
-    border-bottom: 1px solid var(--chrome-border);
-    width: 100%;
-  }
-
-  .nav-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  /* Oculta o cabeçalho mobile no Desktop */
-  .mobile-nav-header {
-    display: none;
-  }
-
-  .nav-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    gap: 0.2rem;
-  }
-
-  .nav-link {
-    display: block;
-    padding: 0.85rem 0.95rem;
-    color: var(--chrome-text);
-    text-decoration: none;
-    font-weight: 600;
-    font-size: 0.88rem;
-    white-space: nowrap;
-    border-bottom: 3px solid transparent;
-    transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease;
-  }
-
-  .nav-link:hover {
-    color: var(--chrome-accent);
-    background-color: rgba(255, 255, 255, 0.05);
-  }
-
-  .nav-link.active {
-    color: var(--chrome-accent) !important;
-    border-bottom-color: var(--chrome-accent);
-  }
-
-  /* =========================================================
-     MENU HAMBÚRGUER NO MOBILE E TABLET (Telas <= 860px)
-     ========================================================= */
+  .site-nav { background-color: var(--chrome-bg-alt); border-bottom: 1px solid var(--chrome-border); width: 100%; }
+  .nav-container { display: flex; justify-content: center; align-items: center; }
+  .mobile-nav-header { display: none; }
+  .nav-list { display: flex; flex-wrap: wrap; justify-content: center; list-style: none; margin: 0; padding: 0; gap: 0.2rem; }
+  .nav-link { display: block; padding: 0.85rem 0.95rem; color: var(--chrome-text); text-decoration: none; font-weight: 600; font-size: 0.88rem; white-space: nowrap; border-bottom: 3px solid transparent; transition: color 0.2s ease, border-color 0.2s ease, background-color 0.2s ease; }
+  .nav-link:hover { color: var(--chrome-accent); background-color: rgba(255, 255, 255, 0.05); }
+  .nav-link.active { color: var(--chrome-accent) !important; border-bottom-color: var(--chrome-accent); }
   @media (max-width: 860px) {
-    .nav-container {
-      flex-direction: column;
-      align-items: stretch;
-    }
-
-    .mobile-nav-header {
-      position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 52px;
-      padding: 0.4rem 0;
-    }
-
-    .mobile-nav-title {
-      font-size: 0.85rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      color: var(--chrome-muted);
-      text-align: center;
-      padding: 0 48px;
-    }
-
-    .hamburger-btn {
-      position: absolute;
-      left: 0;
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid var(--chrome-border);
-      color: var(--chrome-text);
-      border-radius: var(--radius-sm);
-      width: 40px;
-      height: 40px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: background 0.2s ease, border-color 0.2s ease;
-    }
-
-    .hamburger-btn:hover {
-      background: rgba(255, 255, 255, 0.16);
-      border-color: var(--chrome-accent);
-    }
-
-    .hamburger-btn .icon-close {
-      display: none;
-    }
-
-    .hamburger-btn[aria-expanded="true"] .icon-menu {
-      display: none;
-    }
-
-    .hamburger-btn[aria-expanded="true"] .icon-close {
-      display: block;
-    }
-
-    /* Lista recolhida por padrão no mobile, com todas as 8 abas centralizadas */
-    .nav-list {
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      padding: 0.5rem 0 0.75rem;
-      border-top: 1px solid var(--chrome-border);
-      gap: 0.25rem;
-    }
-
-    .nav-list.open {
-      display: flex;
-    }
-
-    .nav-item {
-      width: 100%;
-    }
-
-    .nav-link {
-      padding: 0.75rem 1rem;
-      border-bottom: 2px solid transparent;
-      border-radius: var(--radius-sm);
-      text-align: center;
-      font-size: 0.92rem;
-    }
-
-    .nav-link.active {
-      background-color: rgba(255, 255, 255, 0.08);
-      border-bottom-color: var(--chrome-accent);
-    }
+    .nav-container { flex-direction: column; align-items: stretch; }
+    .mobile-nav-header { position: relative; display: flex; justify-content: center; align-items: center; min-height: 52px; padding: 0.4rem 0; }
+    .mobile-nav-title { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--chrome-muted); text-align: center; padding: 0 48px; }
+    .hamburger-btn { position: absolute; left: 0; background: rgba(255, 255, 255, 0.08); border: 1px solid var(--chrome-border); color: var(--chrome-text); border-radius: var(--radius-sm); width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; }
+    .hamburger-btn .icon-close { display: none; }
+    .hamburger-btn[aria-expanded="true"] .icon-menu { display: none; }
+    .hamburger-btn[aria-expanded="true"] .icon-close { display: block; }
+    .nav-list { display: none; flex-direction: column; align-items: center; width: 100%; padding: 0.5rem 0 0.75rem; border-top: 1px solid var(--chrome-border); gap: 0.25rem; }
+    .nav-list.open { display: flex; }
+    .nav-item { width: 100%; }
+    .nav-link { padding: 0.75rem 1rem; border-bottom: 2px solid transparent; border-radius: var(--radius-sm); text-align: center; font-size: 0.92rem; }
+    .nav-link.active { background-color: rgba(255, 255, 255, 0.08); border-bottom-color: var(--chrome-accent); }
   }
 </style>
