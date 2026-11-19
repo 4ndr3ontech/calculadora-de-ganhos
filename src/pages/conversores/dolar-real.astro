@@ -1,0 +1,1329 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Conversor de Dólar para Real Hoje (USD/BRL) em Tempo Real | Calculadora de Ganhos"
+  description="Converta Dólar Americano (USD) para Real Brasileiro (BRL) e vice-versa com cotação comercial atualizada em tempo real, cálculo de IOF e spread bancário."
+>
+  <div class="page-container">
+
+    <!-- NAVEGAÇÃO -->
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <a href="/">Início</a>
+      <span aria-hidden="true">›</span>
+      <a href="/conversores/">Conversores</a>
+      <span aria-hidden="true">›</span>
+      <span aria-current="page">Dólar e Real</span>
+    </nav>
+
+    <!-- APRESENTAÇÃO -->
+    <header class="page-header">
+      <span class="category-label">CONVERSORES E CÂMBIO</span>
+
+      <h1>Conversor de Dólar para Real Hoje</h1>
+
+      <p class="page-description">
+        Converta valores entre Real Brasileiro (BRL) e Dólar Americano (USD)
+        com cotação comercial em tempo real. Simule também compras internacionais
+        com IOF e spread bancário ou ajuste a taxa manualmente.
+      </p>
+
+      <a href="#manual" class="manual-jump-link">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+          <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+        </svg>
+        <span>Ver manual completo de utilização</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M12 5v14"/>
+          <path d="m19 12-7 7-7-7"/>
+        </svg>
+      </a>
+    </header>
+
+    <!-- CONVERSOR -->
+    <section class="calculator-section" aria-labelledby="converter-title">
+      <div class="calculator-grid">
+
+        <!-- ENTRADA -->
+        <div class="card calculator-card">
+          <div class="section-heading">
+            <span class="icon-badge" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="1" x2="12" y2="23"/>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+              </svg>
+            </span>
+
+            <div>
+              <h2 id="converter-title">Converter Moeda</h2>
+              <p id="usd-live-status">Buscando cotação comercial atualizada...</p>
+            </div>
+          </div>
+
+          <div class="fx-form">
+            <div class="fx-row">
+              <label for="fx-direction">Direção da conversão</label>
+              <div class="fx-direction-bar">
+                <select id="fx-direction" class="fx-select">
+                  <option value="USD_TO_BRL">Dólar (USD $) → Real (BRL R$)</option>
+                  <option value="BRL_TO_USD">Real (BRL R$) → Dólar (USD $)</option>
+                </select>
+                <button type="button" id="fx-swap-btn" class="fx-swap-btn" title="Inverter moedas" aria-label="Inverter moedas">
+                  ⇄
+                </button>
+              </div>
+            </div>
+
+            <div class="fx-row">
+              <label for="fx-amount" id="fx-amount-label">Valor em Dólar (USD $)</label>
+              <input
+                type="number"
+                id="fx-amount"
+                class="fx-input"
+                value="100"
+                min="0"
+                step="0.01"
+                inputmode="decimal"
+              />
+            </div>
+
+            <div class="fx-row">
+              <div class="fx-rate-header">
+                <label for="fx-rate">Cotação Comercial (1 USD em BRL)</label>
+                <button type="button" id="fx-refresh-btn" class="fx-mini-btn">↻ Atualizar cotação</button>
+              </div>
+              <input
+                type="number"
+                id="fx-rate"
+                class="fx-input"
+                value="5.6700"
+                min="0.0001"
+                step="0.0001"
+                inputmode="decimal"
+              />
+            </div>
+
+            <div class="fx-extras">
+              <label class="fx-checkbox-label">
+                <input type="checkbox" id="fx-include-fees" />
+                <span>Simular compra internacional (IOF + Spread bancário)</span>
+              </label>
+
+              <div id="fx-fees-box" class="fx-fees-grid" hidden>
+                <div>
+                  <label for="fx-iof">IOF (%)</label>
+                  <input type="number" id="fx-iof" class="fx-input" value="3.50" min="0" max="20" step="0.01" />
+                </div>
+                <div>
+                  <label for="fx-spread">Spread do Banco (%)</label>
+                  <input type="number" id="fx-spread" class="fx-input" value="4.00" min="0" max="20" step="0.1" />
+                </div>
+              </div>
+            </div>
+
+            <div class="fx-quick-amounts">
+              <span>Atalhos:</span>
+              <button type="button" data-quick-val="1">1</button>
+              <button type="button" data-quick-val="10">10</button>
+              <button type="button" data-quick-val="50">50</button>
+              <button type="button" data-quick-val="100">100</button>
+              <button type="button" data-quick-val="500">500</button>
+              <button type="button" data-quick-val="1000">1.000</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- RESULTADO -->
+        <div class="card result-card" aria-live="polite">
+          <div class="fx-result-hero">
+            <span class="fx-result-badge" id="fx-result-badge">DÓLAR COMERCIAL HOJE</span>
+            <div class="fx-result-main" id="fx-result-value">R$ 567,00</div>
+            <p class="fx-result-sub" id="fx-result-sub">US$ 100,00 × R$ 5,6700</p>
+          </div>
+
+          <div class="fx-metrics">
+            <div class="fx-metric-box">
+              <span>Compra (Bid)</span>
+              <strong id="fx-bid">R$ 5,6700</strong>
+            </div>
+            <div class="fx-metric-box">
+              <span>Venda (Ask)</span>
+              <strong id="fx-ask">R$ 5,6720</strong>
+            </div>
+            <div class="fx-metric-box">
+              <span>Variação (24h)</span>
+              <strong id="fx-pct">0,00%</strong>
+            </div>
+            <div class="fx-metric-box">
+              <span>1 Real vale</span>
+              <strong id="fx-inverse">US$ 0,1764</strong>
+            </div>
+          </div>
+
+          <div id="fx-fees-summary" class="fx-fees-summary" hidden>
+            <div class="fx-fee-line">
+              <span>Valor base comercial:</span>
+              <strong id="fx-base-brl">R$ 567,00</strong>
+            </div>
+            <div class="fx-fee-line">
+              <span>Spread bancário estimado:</span>
+              <strong id="fx-spread-brl">R$ 22,68</strong>
+            </div>
+            <div class="fx-fee-line">
+              <span>IOF estimado:</span>
+              <strong id="fx-iof-brl">R$ 20,64</strong>
+            </div>
+            <div class="fx-fee-line is-total">
+              <span>Custo efetivo total (VET):</span>
+              <strong id="fx-vet-rate">R$ 6,1032 / USD</strong>
+            </div>
+          </div>
+
+          <button type="button" id="fx-copy-btn" class="fx-copy-btn">Copiar resultado</button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- MANUAL E EXPLICAÇÃO -->
+    <section id="manual" class="manual-section">
+      <div class="card manual-card">
+        <h2>Como funciona a conversão entre Dólar e Real</h2>
+        <p>
+          A cotação exibida por padrão utiliza o <strong>Dólar Comercial</strong>, que é a referência oficial do mercado financeiro para importações, exportações e transferências internacionais.
+        </p>
+
+        <h3>Fórmulas utilizadas</h3>
+        <ul>
+          <li><strong>Dólar para Real:</strong> <code>Valor em BRL = Valor em USD × Cotação do Dólar</code></li>
+          <li><strong>Real para Dólar:</strong> <code>Valor em USD = Valor em BRL ÷ Cotação do Dólar</code></li>
+          <li><strong>Custo Efetivo com Cartão (VET):</strong> <code>Cotação × (1 + Spread) × (1 + IOF)</code></li>
+        </ul>
+
+        <h3>Perguntas Frequentes</h3>
+        <div class="faq-list">
+          <details class="faq-item">
+            <summary>Qual a diferença entre Dólar Comercial e Dólar Turismo?</summary>
+            <p>O Dólar Comercial é a taxa base interbancária usada em operações financeiras e comércio exterior. Já o Dólar Turismo inclui custos operacionais, margem da instituição (spread) e impostos (IOF) para compra de papel-moeda ou gastos em cartões internacionais.</p>
+          </details>
+          <details class="faq-item">
+            <summary>Com que frequência a cotação é atualizada?</summary>
+            <p>Durante o horário comercial de funcionamento do mercado de câmbio (segunda a sexta-feira), a cotação é atualizada automaticamente a cada poucos minutos a partir de feeds públicos do mercado financeiro.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</BaseLayout>
+
+<script>
+  function setupUsdConverter() {
+    const dirEl = document.getElementById("fx-direction") as HTMLSelectElement | null;
+    const swapBtn = document.getElementById("fx-swap-btn");
+    const amountEl = document.getElementById("fx-amount") as HTMLInputElement | null;
+    const amountLabelEl = document.getElementById("fx-amount-label");
+    const rateEl = document.getElementById("fx-rate") as HTMLInputElement | null;
+    const refreshBtn = document.getElementById("fx-refresh-btn");
+    const statusEl = document.getElementById("usd-live-status");
+
+    const includeFeesEl = document.getElementById("fx-include-fees") as HTMLInputElement | null;
+    const feesBoxEl = document.getElementById("fx-fees-box");
+    const iofEl = document.getElementById("fx-iof") as HTMLInputElement | null;
+    const spreadEl = document.getElementById("fx-spread") as HTMLInputElement | null;
+
+    const resultBadgeEl = document.getElementById("fx-result-badge");
+    const resultValueEl = document.getElementById("fx-result-value");
+    const resultSubEl = document.getElementById("fx-result-sub");
+
+    const bidEl = document.getElementById("fx-bid");
+    const askEl = document.getElementById("fx-ask");
+    const pctEl = document.getElementById("fx-pct");
+    const inverseEl = document.getElementById("fx-inverse");
+
+    const feesSummaryEl = document.getElementById("fx-fees-summary");
+    const baseBrlEl = document.getElementById("fx-base-brl");
+    const spreadBrlEl = document.getElementById("fx-spread-brl");
+    const iofBrlEl = document.getElementById("fx-iof-brl");
+    const vetRateEl = document.getElementById("fx-vet-rate");
+    const copyBtn = document.getElementById("fx-copy-btn");
+
+    if (!dirEl || !amountEl || !rateEl || !resultValueEl) return;
+
+    function fmtBRL(v: number) {
+      return v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    }
+
+    function fmtUSD(v: number) {
+      return v.toLocaleString("en-US", { style: "currency", currency: "USD" });
+    }
+
+    function calculate() {
+      const dir = dirEl!.value;
+      const amount = Math.max(0, parseFloat(amountEl!.value) || 0);
+      const rate = Math.max(0.0001, parseFloat(rateEl!.value) || 5.67);
+      const useFees = Boolean(includeFeesEl?.checked);
+      const iofPct = useFees ? Math.max(0, parseFloat(iofEl?.value || "0") || 0) / 100 : 0;
+      const spreadPct = useFees ? Math.max(0, parseFloat(spreadEl?.value || "0") || 0) / 100 : 0;
+
+      if (feesBoxEl) feesBoxEl.hidden = !useFees;
+      if (feesSummaryEl) feesSummaryEl.hidden = !useFees;
+
+      const effectiveRate = rate * (1 + spreadPct) * (1 + iofPct);
+
+      if (dir === "USD_TO_BRL") {
+        if (amountLabelEl) amountLabelEl.textContent = "Valor em Dólar (USD $)";
+        if (resultBadgeEl) resultBadgeEl.textContent = useFees ? "TOTAL ESTIMADO COM IOF + SPREAD" : "VALOR CONVERTIDO EM REAIS";
+
+        const baseBrl = amount * rate;
+        const withSpreadBrl = amount * rate * (1 + spreadPct);
+        const spreadCost = withSpreadBrl - baseBrl;
+        const iofCost = withSpreadBrl * iofPct;
+        const finalBrl = baseBrl + spreadCost + iofCost;
+
+        resultValueEl!.textContent = fmtBRL(finalBrl);
+        if (resultSubEl) {
+          resultSubEl.textContent = useFees
+            ? `${fmtUSD(amount)} × VET R$ ${effectiveRate.toFixed(4).replace(".", ",")}`
+            : `${fmtUSD(amount)} × R$ ${rate.toFixed(4).replace(".", ",")}`;
+        }
+
+        if (useFees && baseBrlEl && spreadBrlEl && iofBrlEl && vetRateEl) {
+          baseBrlEl.textContent = fmtBRL(baseBrl);
+          spreadBrlEl.textContent = fmtBRL(spreadCost);
+          iofBrlEl.textContent = fmtBRL(iofCost);
+          vetRateEl.textContent = `R$ ${effectiveRate.toFixed(4).replace(".", ",")} / USD`;
+        }
+      } else {
+        if (amountLabelEl) amountLabelEl.textContent = "Valor em Real (BRL R$)";
+        if (resultBadgeEl) resultBadgeEl.textContent = useFees ? "DÓLAR LÍQUIDO APÓS IOF + SPREAD" : "VALOR CONVERTIDO EM DÓLARES";
+
+        const finalUsd = amount / effectiveRate;
+        resultValueEl!.textContent = fmtUSD(finalUsd);
+        if (resultSubEl) {
+          resultSubEl.textContent = `${fmtBRL(amount)} ÷ R$ ${effectiveRate.toFixed(4).replace(".", ",")}`;
+        }
+
+        if (useFees && baseBrlEl && spreadBrlEl && iofBrlEl && vetRateEl) {
+          const baseUsd = amount / rate;
+          baseBrlEl.textContent = fmtUSD(baseUsd);
+          spreadBrlEl.textContent = `-${fmtUSD(baseUsd - amount / (rate * (1 + spreadPct)))}`;
+          iofBrlEl.textContent = `-${fmtUSD(amount / (rate * (1 + spreadPct)) - finalUsd)}`;
+          vetRateEl.textContent = `R$ ${effectiveRate.toFixed(4).replace(".", ",")} / USD`;
+        }
+      }
+
+      if (inverseEl) {
+        inverseEl.textContent = `US$ ${(1 / rate).toFixed(4)}`;
+      }
+    }
+
+    async function fetchLiveRate() {
+      if (statusEl) statusEl.textContent = "Atualizando cotação ao vivo...";
+      let quote: { bid: number; ask: number; pctChange: number; source: string } | null = null;
+
+      try {
+        const edgeRes = await fetch("/api/usd");
+        if (edgeRes.ok) {
+          quote = await edgeRes.json();
+        }
+      } catch {}
+
+      if (!quote) {
+        try {
+          const directRes = await fetch("https://economia.awesomeapi.com.br/json/last/USD-BRL");
+          if (directRes.ok) {
+            const d = await directRes.json();
+            const u = d?.USDBRL;
+            if (u && parseFloat(u.bid) > 0) {
+              quote = {
+                bid: parseFloat(u.bid),
+                ask: parseFloat(u.ask) || parseFloat(u.bid),
+                pctChange: parseFloat(u.pctChange) || 0,
+                source: "AwesomeAPI",
+              };
+            }
+          }
+        } catch {}
+      }
+
+      if (quote && quote.bid > 0) {
+        rateEl!.value = quote.bid.toFixed(4);
+        if (bidEl) bidEl.textContent = `R$ ${quote.bid.toFixed(4).replace(".", ",")}`;
+        if (askEl) askEl.textContent = `R$ ${quote.ask.toFixed(4).replace(".", ",")}`;
+        if (pctEl) {
+          const sign = quote.pctChange > 0 ? "+" : "";
+          pctEl.textContent = `${sign}${quote.pctChange.toFixed(2).replace(".", ",")}%`;
+          pctEl.style.color = quote.pctChange >= 0 ? "#10b981" : "#ef4444";
+        }
+        const nowStr = new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" });
+        if (statusEl) statusEl.textContent = `Cotação comercial atualizada às ${nowStr} (${quote.source})`;
+      } else {
+        if (statusEl) statusEl.textContent = "Usando cotação de referência (editável manualmente)";
+      }
+
+      calculate();
+    }
+
+    dirEl.addEventListener("change", calculate);
+    amountEl.addEventListener("input", calculate);
+    rateEl.addEventListener("input", calculate);
+    includeFeesEl?.addEventListener("change", calculate);
+    iofEl?.addEventListener("input", calculate);
+    spreadEl?.addEventListener("input", calculate);
+
+    swapBtn?.addEventListener("click", () => {
+      dirEl.value = dirEl.value === "USD_TO_BRL" ? "BRL_TO_USD" : "USD_TO_BRL";
+      calculate();
+    });
+
+    refreshBtn?.addEventListener("click", fetchLiveRate);
+
+    document.querySelectorAll("[data-quick-val]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const val = btn.getAttribute("data-quick-val");
+        if (val && amountEl) {
+          amountEl.value = val;
+          calculate();
+        }
+      });
+    });
+
+    copyBtn?.addEventListener("click", async () => {
+      if (!resultValueEl) return;
+      try {
+        await navigator.clipboard.writeText(`${resultValueEl.textContent} (${resultSubEl?.textContent || ""})`);
+        const orig = copyBtn.textContent;
+        copyBtn.textContent = "Copiado!";
+        setTimeout(() => { copyBtn.textContent = orig; }, 1800);
+      } catch {}
+    });
+
+    fetchLiveRate();
+  }
+
+  setupUsdConverter();
+  document.addEventListener("astro:after-swap", setupUsdConverter);
+</script>
+
+<style>
+    .page-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.5rem 0 3rem;
+      color: var(--text-primary);
+    }
+
+    .breadcrumb {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.55rem;
+      align-items: center;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      margin-bottom: 1.75rem;
+    }
+
+    .breadcrumb a {
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .breadcrumb a:hover {
+      color: var(--color-primary);
+    }
+
+    .breadcrumb [aria-current="page"] {
+      color: var(--text-primary);
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .category-label {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.09em;
+      color: var(--color-primary);
+      margin-bottom: 0.8rem;
+    }
+
+    .page-header h1 {
+      font-size: clamp(2rem, 5vw, 2.7rem);
+      line-height: 1.2;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 1rem;
+    }
+
+    .page-description {
+      max-width: 780px;
+      margin: 0 auto 1.25rem;
+      font-size: 1.08rem;
+      line-height: 1.8;
+      color: var(--text-secondary);
+    }
+
+    .manual-jump-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      padding: 0.5rem 1.05rem;
+      border-radius: 999px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      color: var(--color-primary);
+      font-size: 0.85rem;
+      font-weight: 650;
+      text-decoration: none;
+      transition: border-color 0.2s ease, transform 0.2s ease;
+    }
+
+    .manual-jump-link:hover {
+      border-color: var(--color-primary);
+      transform: translateY(-1px);
+    }
+
+    .icon-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+      flex-shrink: 0;
+    }
+
+    .icon-badge-amber {
+      background: rgba(217, 119, 6, 0.12);
+      color: #d97706;
+    }
+
+    :global([data-theme="dark"]) .icon-badge {
+      background: rgba(16, 185, 129, 0.14);
+    }
+
+    :global([data-theme="dark"]) .icon-badge-amber {
+      background: rgba(251, 191, 36, 0.14);
+      color: #fbbf24;
+    }
+
+    .tip-title,
+    .disclaimer-title {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-right: 0.25rem;
+      vertical-align: middle;
+      color: var(--color-primary);
+    }
+
+    /* CONVERSOR */
+
+    .calculator-section {
+      margin-bottom: 4rem;
+    }
+
+    .calculator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+      align-items: stretch;
+    }
+
+    .card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg, 14px);
+      padding: 1.6rem;
+    }
+
+    .results-card {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .section-heading {
+      display: flex;
+      gap: 0.85rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .section-heading h2 {
+      font-size: 1.2rem;
+      font-weight: 750;
+      color: var(--color-primary);
+      margin: 0 0 0.2rem;
+    }
+
+    .section-heading p {
+      color: var(--text-secondary);
+      font-size: 0.85rem;
+      margin: 0;
+    }
+
+    .form-group {
+      margin-bottom: 1.3rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 650;
+      margin-bottom: 0.5rem;
+    }
+
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 0.85rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm, 8px);
+      background: var(--bg-primary);
+      color: var(--text-primary);
+      font: inherit;
+      min-height: 46px;
+    }
+
+    .form-group input:focus-visible,
+    .form-group select:focus-visible,
+    .btn:focus-visible {
+      outline: 3px solid var(--color-primary);
+      outline-offset: 3px;
+    }
+
+    .form-group small {
+      display: block;
+      margin-top: 0.4rem;
+      color: var(--text-secondary);
+      font-size: 0.8rem;
+      line-height: 1.5;
+    }
+
+    .btn {
+      width: 100%;
+      border: 0;
+      padding: 0.95rem;
+      border-radius: var(--radius-sm, 8px);
+      font-weight: 750;
+      font-size: 1rem;
+      cursor: pointer;
+      background: var(--color-primary);
+      color: #ffffff;
+      transition: opacity 0.2s;
+    }
+
+    .btn:hover {
+      opacity: 0.9;
+    }
+
+    .calculator-tip {
+      margin-top: 1.3rem;
+      padding: 0.9rem;
+      border-radius: 8px;
+      background: rgba(6, 95, 70, 0.08);
+      font-size: 0.85rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .temperature-result {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .temperature-result:last-child {
+      border-bottom: none;
+    }
+
+    .temperature-result span {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+    }
+
+    .temperature-result strong {
+      font-size: 1.25rem;
+      color: var(--color-primary);
+      font-weight: 800;
+      text-align: right;
+    }
+
+    .result-disclaimer {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: rgba(6, 95, 70, 0.08);
+      border-radius: 8px;
+      font-size: 0.83rem;
+      line-height: 1.6;
+      color: var(--text-secondary);
+    }
+
+    .error-message {
+      margin-top: 0.8rem;
+      color: #dc2626;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .error-message[hidden] {
+      display: none;
+    }
+
+    /* MANUAL */
+
+    .manual-section {
+      max-width: 900px;
+      margin: 0 auto;
+      padding-top: 2.5rem;
+      border-top: 1px solid var(--border-color);
+      scroll-margin-top: 25px;
+    }
+
+    .manual-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .manual-header h2 {
+      font-size: clamp(1.7rem, 4vw, 2.1rem);
+      font-weight: 800;
+      margin-bottom: 0.8rem;
+    }
+
+    .manual-header p {
+      max-width: 720px;
+      margin: 0 auto;
+      color: var(--text-secondary);
+      line-height: 1.8;
+    }
+
+    .manual-card {
+      margin-bottom: 2rem;
+      padding: 1.6rem;
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      background: var(--bg-secondary);
+    }
+
+    .manual-card h2 {
+      font-size: 1.35rem;
+      line-height: 1.4;
+      font-weight: 750;
+      margin-bottom: 1rem;
+      letter-spacing: -0.02em;
+      text-align: center;
+    }
+
+    .manual-card h3 {
+      font-size: 1.05rem;
+      font-weight: 750;
+      margin: 1.4rem 0 0.6rem;
+    }
+
+    .manual-card p {
+      color: var(--text-secondary);
+      line-height: 1.85;
+      margin-bottom: 1rem;
+    }
+
+    .manual-card ul {
+      padding-left: 1.4rem;
+      margin: 1rem 0 1.3rem;
+    }
+
+    .manual-card li {
+      color: var(--text-secondary);
+      line-height: 1.8;
+      margin-bottom: 0.55rem;
+    }
+
+    .info-box,
+    .warning-box {
+      padding: 1.1rem;
+      margin: 1.3rem 0 0;
+      border-radius: 9px;
+      line-height: 1.7;
+      font-size: 0.92rem;
+      color: var(--text-secondary);
+    }
+
+    .info-box {
+      background: rgba(6, 95, 70, 0.08);
+      border-left: 4px solid var(--color-primary);
+    }
+
+    .warning-box {
+      background: rgba(217, 119, 6, 0.09);
+      border-left: 4px solid #d97706;
+    }
+
+    .info-box p,
+    .warning-box p {
+      margin: 0.4rem 0 0;
+    }
+
+    .scale-card {
+      display: flex;
+      gap: 1.2rem;
+      align-items: flex-start;
+      padding: 1.3rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .scale-card:last-of-type {
+      border-bottom: none;
+    }
+
+    .scale-symbol {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-width: 65px;
+      height: 65px;
+      border-radius: 12px;
+      background: rgba(6, 95, 70, 0.1);
+      color: var(--color-primary);
+      font-size: 1.5rem;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    .scale-card h3 {
+      margin-top: 0;
+    }
+
+    .field-explanation,
+    .result-explanation {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .field-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 38px;
+      height: 38px;
+      border-radius: 9px;
+      background: rgba(6, 95, 70, 0.12);
+      color: var(--color-primary);
+      font-weight: 800;
+    }
+
+    .field-explanation h3,
+    .result-explanation h3 {
+      margin-top: 0;
+    }
+
+    .field-explanation p,
+    .result-explanation p {
+      margin-bottom: 0.5rem;
+    }
+
+    /* PASSO A PASSO */
+
+    .step-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1.3rem;
+      margin-top: 1.5rem;
+    }
+
+    .step-item {
+      display: flex;
+      gap: 1rem;
+      align-items: flex-start;
+    }
+
+    .step-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--color-primary);
+      color: #ffffff;
+      font-weight: 800;
+    }
+
+    .step-item h3 {
+      margin: 0 0 0.4rem;
+    }
+
+    .step-item p {
+      margin: 0;
+    }
+
+    /* FÓRMULAS */
+
+    .formula-box {
+      margin: 0.8rem 0 1rem;
+      padding: 1.1rem;
+      border-radius: 8px;
+      background: rgba(6, 95, 70, 0.08);
+      border: 1px solid var(--border-color);
+      overflow-x: auto;
+      text-align: center;
+    }
+
+    .formula-box span {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: var(--color-primary);
+      white-space: nowrap;
+    }
+
+    /* EXEMPLOS */
+
+    .example-card {
+      padding: 1.2rem;
+      border: 1px solid var(--border-color);
+      border-radius: 9px;
+      background: var(--bg-primary);
+      margin: 1.2rem 0;
+    }
+
+    .example-label {
+      color: var(--color-primary);
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+    }
+
+    .example-card h3 {
+      margin: 0.5rem 0 0.8rem;
+    }
+
+    .example-values {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.6rem;
+      margin: 1rem 0;
+    }
+
+    .example-values div {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+      padding: 0.8rem;
+      background: rgba(6, 95, 70, 0.08);
+      border-radius: 8px;
+    }
+
+    .example-values span {
+      color: var(--text-secondary);
+      font-size: 0.78rem;
+    }
+
+    .example-values strong {
+      color: var(--color-primary);
+      font-size: 0.95rem;
+    }
+
+    .example-conclusion {
+      padding-top: 0.8rem;
+      border-top: 1px solid var(--border-color);
+      margin-bottom: 0 !important;
+    }
+
+    /* PERGUNTAS FREQUENTES */
+
+    .faq-section details {
+      border-bottom: 1px solid var(--border-color);
+      padding: 1rem 0;
+    }
+
+    .faq-section details:last-of-type {
+      border-bottom: none;
+    }
+
+    .faq-section summary {
+      cursor: pointer;
+      font-weight: 700;
+      line-height: 1.6;
+      list-style-position: inside;
+    }
+
+    .faq-section summary:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 4px;
+      border-radius: 3px;
+    }
+
+    .faq-section details p {
+      margin: 0.8rem 0 0;
+    }
+
+    .final-card {
+      border-top: 3px solid var(--color-primary);
+    }
+
+    .institutional-links {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 1.2rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .institutional-links a {
+      color: var(--color-primary);
+      font-weight: 650;
+      text-decoration: none;
+    }
+
+    .institutional-links a:hover {
+      text-decoration: underline;
+    }
+
+    a:focus-visible {
+      outline: 2px solid var(--color-primary);
+      outline-offset: 4px;
+    }
+
+    @media (max-width: 768px) {
+      .calculator-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .example-values {
+        grid-template-columns: 1fr;
+      }
+
+      .scale-card {
+        gap: 0.8rem;
+      }
+
+      .scale-symbol {
+        min-width: 48px;
+        height: 48px;
+        font-size: 1.2rem;
+      }
+
+      .institutional-links {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.7rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .card,
+      .manual-card {
+        padding: 1.15rem;
+      }
+
+      .manual-card h2 {
+        font-size: 1.2rem;
+      }
+
+      .temperature-result strong {
+        font-size: 1.05rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  
+  .fx-form { display: flex; flex-direction: column; gap: 1.1rem; }
+  .fx-row { display: flex; flex-direction: column; gap: 0.4rem; }
+  .fx-row label { font-size: 0.85rem; font-weight: 650; color: var(--text-secondary); }
+  .fx-direction-bar { display: flex; gap: 0.5rem; }
+  .fx-select, .fx-input {
+    width: 100%;
+    padding: 0.75rem 0.9rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-secondary);
+    color: var(--text-primary);
+    font-size: 1rem;
+    font-weight: 600;
+  }
+  .fx-swap-btn {
+    padding: 0 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-sm);
+    background: var(--bg-secondary);
+    color: var(--color-primary);
+    font-size: 1.2rem;
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .fx-rate-header { display: flex; justify-content: space-between; align-items: center; }
+  .fx-mini-btn {
+    background: none;
+    border: none;
+    color: var(--color-primary);
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .fx-extras { padding-top: 0.4rem; border-top: 1px solid var(--border-color); }
+  .fx-checkbox-label { display: flex; align-items: center; gap: 0.55rem; font-size: 0.85rem; font-weight: 600; color: var(--text-primary); cursor: pointer; }
+  .fx-fees-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin-top: 0.75rem; }
+  .fx-fees-grid[hidden] { display: none; }
+  .fx-quick-amounts { display: flex; flex-wrap: wrap; align-items: center; gap: 0.4rem; margin-top: 0.25rem; }
+  .fx-quick-amounts span { font-size: 0.78rem; color: var(--text-muted); font-weight: 650; }
+  .fx-quick-amounts button {
+    padding: 0.3rem 0.65rem;
+    border: 1px solid var(--border-color);
+    border-radius: 999px;
+    background: var(--bg-secondary);
+    color: var(--text-secondary);
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .fx-quick-amounts button:hover { border-color: var(--color-primary); color: var(--color-primary); }
+
+  .fx-result-hero {
+    padding: 1.35rem;
+    border-radius: var(--radius-md);
+    background: color-mix(in srgb, var(--color-primary) 10%, var(--bg-secondary));
+    border: 1px solid color-mix(in srgb, var(--color-primary) 30%, var(--border-color));
+    text-align: center;
+    margin-bottom: 1.1rem;
+  }
+  .fx-result-badge { font-size: 0.72rem; font-weight: 800; letter-spacing: 0.06em; color: var(--color-primary); }
+  .fx-result-main { font-size: clamp(1.85rem, 3.5vw, 2.45rem); font-weight: 850; color: var(--text-primary); margin: 0.35rem 0; font-variant-numeric: tabular-nums; }
+  .fx-result-sub { margin: 0; font-size: 0.85rem; color: var(--text-secondary); }
+
+  .fx-metrics { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.75rem; margin-bottom: 1rem; }
+  .fx-metric-box { padding: 0.85rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-secondary); }
+  .fx-metric-box span { display: block; font-size: 0.74rem; color: var(--text-muted); margin-bottom: 0.2rem; }
+  .fx-metric-box strong { font-size: 0.96rem; color: var(--text-primary); font-variant-numeric: tabular-nums; }
+
+  .fx-fees-summary { padding: 0.9rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-secondary); margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.45rem; }
+  .fx-fees-summary[hidden] { display: none; }
+  .fx-fee-line { display: flex; justify-content: space-between; font-size: 0.84rem; color: var(--text-secondary); }
+  .fx-fee-line.is-total { padding-top: 0.45rem; border-top: 1px solid var(--border-color); color: var(--text-primary); font-weight: 750; }
+
+  .fx-copy-btn {
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    border-radius: var(--radius-sm);
+    background: var(--color-primary);
+    color: #fff;
+    font-size: 0.9rem;
+    font-weight: 750;
+    cursor: pointer;
+  }
+  .manual-section { margin-top: 2rem; }
+  .manual-card { padding: 1.75rem; }
+  .manual-card h2 { margin-top: 0; }
+  .faq-list { display: flex; flex-direction: column; gap: 0.65rem; margin-top: 0.75rem; }
+  .faq-item { padding: 0.85rem 1rem; border: 1px solid var(--border-color); border-radius: var(--radius-sm); background: var(--bg-secondary); }
+  .faq-item summary { font-weight: 700; cursor: pointer; }
+  .faq-item p { margin: 0.65rem 0 0; font-size: 0.88rem; color: var(--text-secondary); }
+</style>
+
+  <!-- MECANISMO DE CONVERSÃO -->
+  <script>
+    const ABSOLUTE_ZERO_C = -273.15;
+    const ABSOLUTE_ZERO_F = -459.67;
+    const MINIMUM_K = 0;
+
+    const formatTemperature = (number: number): string => {
+      return number.toLocaleString('pt-BR', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    };
+
+    function runCalc() {
+      const valueInput =
+        document.getElementById('temp-val') as HTMLInputElement | null;
+
+      const scaleInput =
+        document.getElementById('temp-scale') as HTMLSelectElement | null;
+
+      const errorElement = document.getElementById('calc-error');
+
+      const resultC = document.getElementById('res-c');
+      const resultF = document.getElementById('res-f');
+      const resultK = document.getElementById('res-k');
+
+      if (
+        !valueInput ||
+        !scaleInput ||
+        !errorElement ||
+        !resultC ||
+        !resultF ||
+        !resultK
+      ) {
+        return;
+      }
+
+      const rawValue = valueInput.value.trim();
+      const scale = scaleInput.value;
+
+      const showError = (message: string) => {
+        // Limpa resultados anteriores para evitar exibir
+        // valores que não correspondem à entrada atual.
+        resultC.textContent = '—';
+        resultF.textContent = '—';
+        resultK.textContent = '—';
+
+        errorElement.textContent = message;
+        errorElement.hidden = false;
+      };
+
+      const clearError = () => {
+        errorElement.textContent = '';
+        errorElement.hidden = true;
+      };
+
+      clearError();
+
+      if (rawValue === '') {
+        showError(
+          'Informe uma temperatura para realizar a conversão.'
+        );
+        return;
+      }
+
+      const value = Number(rawValue);
+
+      if (!Number.isFinite(value)) {
+        showError('Informe um valor numérico válido.');
+        return;
+      }
+
+      let c: number;
+      let f: number;
+      let k: number;
+
+      // Conversão a partir da escala selecionada.
+      if (scale === 'C') {
+        c = value;
+        f = (value * 9 / 5) + 32;
+        k = value + 273.15;
+
+      } else if (scale === 'F') {
+        f = value;
+        c = (value - 32) * 5 / 9;
+        k = (value - 32) * 5 / 9 + 273.15;
+
+      } else if (scale === 'K') {
+        k = value;
+        c = value - 273.15;
+        f = (value * 9 / 5) - 459.67;
+
+      } else {
+        showError('Selecione uma escala de temperatura válida.');
+        return;
+      }
+
+      // Verificação de resultados numéricos.
+      if (![c, f, k].every(Number.isFinite)) {
+        showError(
+          'Não foi possível processar esse valor. Informe uma temperatura dentro do intervalo numérico permitido.'
+        );
+        return;
+      }
+
+      // Validação do zero absoluto em todas as escalas.
+      const tolerance = 1e-9;
+
+      if (
+        c < ABSOLUTE_ZERO_C - tolerance ||
+        f < ABSOLUTE_ZERO_F - tolerance ||
+        k < MINIMUM_K - tolerance
+      ) {
+        let minimumMessage = '';
+
+        if (scale === 'C') {
+          minimumMessage = 'O limite mínimo é -273,15 °C.';
+        } else if (scale === 'F') {
+          minimumMessage = 'O limite mínimo é -459,67 °F.';
+        } else {
+          minimumMessage = 'O limite mínimo é 0 K.';
+        }
+
+        showError(
+          `A temperatura informada está abaixo do zero absoluto. ${minimumMessage}`
+        );
+        return;
+      }
+
+      // Corrige pequenas diferenças de ponto flutuante no limite.
+      if (Math.abs(k) < tolerance) {
+        k = 0;
+        c = ABSOLUTE_ZERO_C;
+        f = ABSOLUTE_ZERO_F;
+      }
+
+      // Atualiza os três resultados.
+      resultC.textContent = `${formatTemperature(c)} °C`;
+      resultF.textContent = `${formatTemperature(f)} °F`;
+      resultK.textContent = `${formatTemperature(k)} K`;
+    }
+
+    function initTemperatureConverter() {
+      const calcButton = document.getElementById('calc-btn');
+      const valueInput = document.getElementById('temp-val');
+      const scaleInput = document.getElementById('temp-scale');
+
+      if (!calcButton || !valueInput || !scaleInput) {
+        return;
+      }
+
+      // Evita registrar eventos repetidos na mesma página.
+      if (calcButton.dataset.initialized === 'true') {
+        runCalc();
+        return;
+      }
+
+      calcButton.addEventListener('click', runCalc);
+      valueInput.addEventListener('input', runCalc);
+      scaleInput.addEventListener('change', runCalc);
+
+      calcButton.dataset.initialized = 'true';
+
+      // Exibe os resultados iniciais.
+      runCalc();
+    }
+
+    // Inicialização normal da página.
+    initTemperatureConverter();
+
+    // Compatibilidade com navegação do Astro View Transitions.
+    document.addEventListener(
+      'astro:page-load',
+      initTemperatureConverter
+    );
+  </script>
+
+</BaseLayout>

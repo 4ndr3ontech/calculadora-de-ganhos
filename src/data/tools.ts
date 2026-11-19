@@ -344,6 +344,18 @@ export const TOOLS_DATA: Tool[] = [
 
   // Conversores (Ativos)
   {
+    id: 'dolar-real',
+    name: 'Conversor de Dólar para Real (Tempo Real)',
+    slug: 'dolar-real',
+    description: 'Converta Dólar (USD) para Real (BRL) e vice-versa com cotação comercial ao vivo, IOF e spread.',
+    category: 'Conversores',
+    icon: 'dollar-sign',
+    featured: true,
+    keywords: ['dolar', 'real', 'cambio', 'usd', 'brl', 'cotacao', 'iof'],
+    route: '/conversores/dolar-real/',
+    status: 'active'
+  },
+  {
     id: 'conversor-temperatura',
     name: 'Conversor de Temperatura',
     slug: 'conversor-temperatura',

@@ -192,6 +192,11 @@ export const TOOLS_EN: Record<string, { name: string; description: string; badge
     description: "Clean, fast everyday calculator with keyboard support.",
     badge: "Basic",
   },
+  "dolar-real": {
+    name: "USD to BRL Live Currency Converter",
+    description: "Convert US Dollars (USD) to Brazilian Reais (BRL) with live commercial exchange rates and fee simulation.",
+    badge: "Live FX",
+  },
   "temperatura": {
     name: "Temperature Converter",
     description: "Convert Celsius, Fahrenheit, and Kelvin instantaneously.",
