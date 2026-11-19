@@ -37,6 +37,16 @@ import { TOOLS_DATA } from '../data/tools';
         .trim();
     }
 
+    function getCategoryColor(cat) {
+      const c = normalize(cat);
+      if (c.includes("trabalh")) return "blue";
+      if (c.includes("finan")) return "green";
+      if (c.includes("matem")) return "purple";
+      if (c.includes("saude")) return "pink";
+      if (c.includes("convers")) return "cyan";
+      return "orange";
+    }
+
     function updateHighlight(items) {
       items.forEach((item, index) => {
         if (index === selectedIndex) {
@@ -69,7 +79,7 @@ import { TOOLS_DATA } from '../data/tools';
 
       if (filtered.length > 0) {
         dropdown.innerHTML = filtered.map((item, index) => `
-          <a href="${item.route}" class="search-result-item" role="option" id="search-item-${index}">
+          <a href="${item.route}" class="search-result-item color-${getCategoryColor(item.category)}" role="option" id="search-item-${index}">
             <div class="search-result-top">
               <span class="search-result-title">${item.name}</span>
               <span class="search-result-badge">${item.category}</span>
@@ -123,6 +133,7 @@ import { TOOLS_DATA } from '../data/tools';
     width: 100%;
     max-width: 680px;
     margin: 0 auto;
+    text-align: left;
   }
 
   .search-box {
@@ -180,7 +191,7 @@ import { TOOLS_DATA } from '../data/tools';
     top: calc(100% + 8px);
     left: 0;
     width: 100%;
-    background: var(--bg-secondary);
+    background: var(--bg-primary);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
@@ -189,63 +200,84 @@ import { TOOLS_DATA } from '../data/tools';
     z-index: 60;
     display: none;
     box-sizing: border-box;
+    text-align: left;
   }
 
   .search-results-dropdown.active {
     display: block;
   }
 
-  .search-result-item {
+  :global(.search-result-item) {
+    --res-color: #059669;
+    --res-bg: rgba(16, 185, 129, 0.12);
     display: flex;
     flex-direction: column;
+    align-items: flex-start;
     gap: 0.25rem;
     padding: 0.85rem 1.1rem;
     color: var(--text-primary);
-    text-decoration: none;
+    text-decoration: none !important;
     border-bottom: 1px solid var(--border-color);
-    transition: background-color 0.15s ease;
+    border-left: 3px solid transparent;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
   }
 
-  .search-result-item:last-child {
+  :global(.search-result-item:last-child) {
     border-bottom: none;
   }
 
-  .search-result-item:hover,
-  .search-result-item.is-highlighted {
-    background-color: color-mix(in srgb, var(--color-primary) 10%, var(--bg-secondary));
+  :global(.search-result-item.color-blue)   { --res-color: #2563eb; --res-bg: rgba(37, 99, 235, 0.12); }
+  :global(.search-result-item.color-green)  { --res-color: #059669; --res-bg: rgba(16, 185, 129, 0.12); }
+  :global(.search-result-item.color-purple) { --res-color: #8b5cf6; --res-bg: rgba(139, 92, 246, 0.12); }
+  :global(.search-result-item.color-orange) { --res-color: #ea580c; --res-bg: rgba(234, 88, 12, 0.12); }
+  :global(.search-result-item.color-cyan)   { --res-color: #0891b2; --res-bg: rgba(8, 145, 178, 0.12); }
+  :global(.search-result-item.color-pink)   { --res-color: #db2777; --res-bg: rgba(219, 39, 119, 0.12); }
+
+  :global(.search-result-item:hover),
+  :global(.search-result-item.is-highlighted) {
+    background-color: color-mix(in srgb, var(--res-color) 8%, var(--bg-primary));
+    border-left-color: var(--res-color);
   }
 
-  .search-result-top {
+  :global(.search-result-top) {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
     gap: 0.5rem;
   }
 
-  .search-result-title {
+  :global(.search-result-title) {
     font-size: 0.94rem;
     font-weight: 750;
-    color: var(--color-primary);
+    color: var(--text-primary);
+    transition: color 0.15s ease;
   }
 
-  .search-result-badge {
-    padding: 0.12rem 0.5rem;
+  :global(.search-result-item:hover .search-result-title),
+  :global(.search-result-item.is-highlighted .search-result-title) {
+    color: var(--res-color);
+  }
+
+  :global(.search-result-badge) {
+    padding: 0.15rem 0.55rem;
     border-radius: 999px;
-    background: color-mix(in srgb, var(--color-primary) 12%, transparent);
-    color: var(--color-primary);
+    background: var(--res-bg);
+    color: var(--res-color);
     font-size: 0.68rem;
     font-weight: 750;
     text-transform: uppercase;
     letter-spacing: 0.04em;
+    flex-shrink: 0;
   }
 
-  .search-result-desc {
+  :global(.search-result-desc) {
     font-size: 0.82rem;
     color: var(--text-secondary);
     line-height: 1.5;
   }
 
-  .search-no-results {
+  :global(.search-no-results) {
     padding: 1.25rem;
     text-align: center;
     color: var(--text-muted);
